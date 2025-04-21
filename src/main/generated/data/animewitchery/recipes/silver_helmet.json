@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "n": {
+      "item": "animewitchery:silveringot"
+    }
+  },
+  "pattern": [
+    "   ",
+    "nnn",
+    "n n"
+  ],
+  "result": {
+    "item": "animewitchery:silver_helmet"
+  },
+  "show_notification": true
+}

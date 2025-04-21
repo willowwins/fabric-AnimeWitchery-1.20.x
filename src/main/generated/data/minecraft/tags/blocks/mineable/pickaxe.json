@@ -1,0 +1,18 @@
+{
+  "replace": false,
+  "values": [
+    "animewitchery:charcoal_block",
+    "animewitchery:silver_block",
+    "animewitchery:silver_ore",
+    "animewitchery:deepslate_silver_ore",
+    "minecraft:reinforced_deepslate",
+    "animewitchery:silver_button",
+    "animewitchery:silver_trapdoor",
+    "animewitchery:silver_door",
+    "animewitchery:silver_fence",
+    "animewitchery:silver_fence_gate",
+    "animewitchery:silver_wall",
+    "animewitchery:silver_stars",
+    "animewitchery:silver_slab"
+  ]
+}

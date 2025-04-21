@@ -1,0 +1,10 @@
+// 1.20.1	2025-04-19T17:46:55.3804743	Anime Witchery/Tags for minecraft:block
+8c91c5e307e769f1412915303ee6f201403034c6 data\minecraft\tags\blocks\fence_gates.json
+42fd299852f1de2e86f7b4b7682cfb957f83a2cf data\minecraft\tags\blocks\mineable\pickaxe.json
+d10ec02f35a344e7b03042a7ee19b68fbeec3e88 data\minecraft\tags\blocks\needs_stone_tool.json
+bee89f2afe7edeaf9f8f35e0c36dd7a3249cec27 data\minecraft\tags\blocks\fences.json
+5e2955b69630448fd3b0761dc71c3e61578a77b3 data\animewitchery\tags\blocks\metal_detector_detectable_blocks.json
+8a23702b05296c8af5014d6aa6e9265ded85c7d9 data\fabric\tags\blocks\needs_tool_level_4.json
+81254add294b1769ad13bdfcca5ecc9516c54654 data\minecraft\tags\blocks\needs_iron_tool.json
+813fbb5df643e0a2e7e7d66d10352a8b9ee17faf data\minecraft\tags\blocks\walls.json
+e3425c92a70b98ecde8e3af1200ee292738b533a data\fabric\tags\blocks\needs_tool_level_5.json

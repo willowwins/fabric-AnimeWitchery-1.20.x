@@ -1,0 +1,187 @@
+package net.willowins.animewitchery.datagen;
+
+import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
+import net.fabricmc.fabric.api.datagen.v1.provider.FabricRecipeProvider;
+import net.minecraft.block.Blocks;
+import net.minecraft.data.server.recipe.RecipeJsonProvider;
+import net.minecraft.data.server.recipe.ShapedRecipeJsonBuilder;
+import net.minecraft.data.server.recipe.ShapelessRecipeJsonBuilder;
+import net.minecraft.item.ItemConvertible;
+import net.minecraft.item.Items;
+import net.minecraft.recipe.Ingredient;
+import net.minecraft.recipe.book.RecipeCategory;
+import net.minecraft.registry.tag.TagKey;
+import net.minecraft.util.Identifier;
+import net.willowins.animewitchery.block.ModBlocks;
+import net.willowins.animewitchery.item.ModItems;
+import org.jetbrains.annotations.Nullable;
+
+import java.util.List;
+import java.util.function.Consumer;
+
+public class ModRecipeProvider extends FabricRecipeProvider {
+    private static final List<ItemConvertible> SILVER_SMELTABLES = List.of(ModItems.RAWSILVER,
+            ModBlocks.SILVER_ORE, ModBlocks.DEEPSLATE_SILVER_ORE);
+    public ModRecipeProvider(FabricDataOutput output) {
+        super(output);
+    }
+
+    @Override
+    public void generate(Consumer<RecipeJsonProvider> exporter) {
+        offerSmelting(exporter, SILVER_SMELTABLES, RecipeCategory.MISC, ModItems.SILVER,
+                0.7f, 200, "silver");
+        offerBlasting(exporter, SILVER_SMELTABLES, RecipeCategory.MISC, ModItems.SILVER,
+                0.7f, 100, "silver");
+
+        offerShapelessRecipe(exporter, ModItems.SILVERNUGGET, ModItems.SILVER, "MISC", 9);
+
+        offerReversibleCompactingRecipes(exporter, RecipeCategory.BUILDING_BLOCKS, ModItems.SILVER, RecipeCategory.DECORATIONS, ModBlocks.SILVER_BLOCK);
+
+        offerReversibleCompactingRecipes(exporter, RecipeCategory.BUILDING_BLOCKS, Items.CHARCOAL, RecipeCategory.MISC, ModBlocks.CHARCOAL_BLOCK);
+
+
+
+        ShapedRecipeJsonBuilder.create(RecipeCategory.MISC, ModBlocks.SOUND_BLOCK, 1)
+                .pattern("nnn")
+                .pattern("non")
+                .pattern("nnn")
+                .input('n', Items.NOTE_BLOCK)
+                .input('o',Items.MUSIC_DISC_OTHERSIDE)
+                .criterion(hasItem(Items.NOTE_BLOCK), conditionsFromItem(Items.NOTE_BLOCK))
+                .criterion(hasItem(Items.MUSIC_DISC_OTHERSIDE), conditionsFromItem(Items.MUSIC_DISC_OTHERSIDE))
+                .offerTo(exporter, new Identifier(getRecipeName(ModBlocks.SOUND_BLOCK)));
+
+        ShapedRecipeJsonBuilder.create(RecipeCategory.MISC, Blocks.BUDDING_AMETHYST, 1)
+                .pattern("nnn")
+                .pattern("non")
+                .pattern("nnn")
+                .input('n', Blocks.AMETHYST_BLOCK)
+                .input('o',Items.AMETHYST_SHARD)
+                .criterion(hasItem(Blocks.AMETHYST_BLOCK), conditionsFromItem(Blocks.AMETHYST_BLOCK))
+                .criterion(hasItem(Items.AMETHYST_SHARD), conditionsFromItem(Items.AMETHYST_SHARD))
+                .offerTo(exporter, new Identifier(getRecipeName(Blocks.BUDDING_AMETHYST)));
+
+        ShapedRecipeJsonBuilder.create(RecipeCategory.MISC, ModItems.SILVERSPOOL, 1)
+                .pattern("nnn")
+                .pattern("non")
+                .pattern("nnn")
+                .input('n', ModItems.SILVERNUGGET)
+                .input('o',ModItems.SPOOL)
+                .criterion(hasItem(ModItems.SPOOL), conditionsFromItem(ModItems.SPOOL))
+                .criterion(hasItem(ModItems.SILVERNUGGET), conditionsFromItem(ModItems.SILVERNUGGET))
+                .offerTo(exporter, new Identifier(getRecipeName(ModItems.SILVERSPOOL)));
+
+        ShapedRecipeJsonBuilder.create(RecipeCategory.MISC, ModItems.SPOOL, 9)
+                .pattern("nnn")
+                .pattern(" o ")
+                .pattern("nnn")
+                .input('n',Blocks.SPRUCE_SLAB)
+                .input('o',Items.STICK)
+                .criterion(hasItem(Blocks.SPRUCE_SLAB), conditionsFromItem(Blocks.SPRUCE_SLAB))
+                .criterion(hasItem(Items.STICK), conditionsFromItem(Items.STICK))
+                .offerTo(exporter, new Identifier(getRecipeName(ModItems.SPOOL)));
+
+        ShapelessRecipeJsonBuilder.create(RecipeCategory.MISC, Items.QUARTZ, 1)
+                .input(Items.AMETHYST_SHARD)
+                .input(Items.WHITE_DYE)
+                .group("Quartz")
+                .criterion(hasItem(Items.AMETHYST_SHARD), conditionsFromItem(Items.AMETHYST_SHARD))
+                .criterion(hasItem(Items.WHITE_DYE), conditionsFromItem(Items.WHITE_DYE))
+                .offerTo(exporter, new Identifier(getRecipeName(Items.QUARTZ)));
+
+            offerShapelessRecipe(exporter, Items.GLOW_INK_SAC, Items.GLOW_BERRIES, "MISC", 1);
+
+            offerShapelessRecipe(exporter, ModBlocks.SILVER_BUTTON, ModItems.SILVERNUGGET, "REDSTONE", 2);
+
+            createPressurePlateRecipe(RecipeCategory.REDSTONE, ModBlocks.SILVER_PRESSURE_PLATE, Ingredient.ofItems(ModItems.SILVER))
+                    .criterion(hasItem(ModItems.SILVER),conditionsFromItem(ModItems.SILVER))
+                    .offerTo(exporter, new Identifier(getRecipeName(ModBlocks.SILVER_PRESSURE_PLATE)));
+
+            createTrapdoorRecipe(ModBlocks.SILVER_TRAPDOOR , Ingredient.ofItems(ModItems.SILVER))
+                    .criterion(hasItem(ModItems.SILVER), conditionsFromItem(ModItems.SILVER))
+                .offerTo(exporter, new Identifier(getRecipeName(ModBlocks.SILVER_TRAPDOOR)));
+
+
+            createSlabRecipe(RecipeCategory.BUILDING_BLOCKS, ModBlocks.SILVER_SLAB, Ingredient.ofItems(ModBlocks.SILVER_BLOCK))
+                    .criterion(hasItem(ModBlocks.SILVER_BLOCK), conditionsFromItem(ModBlocks.SILVER_BLOCK))
+                    .offerTo(exporter, new Identifier(getRecipeName(ModBlocks.SILVER_SLAB)));
+
+            createDoorRecipe(ModBlocks.SILVER_DOOR, Ingredient.ofItems(ModItems.SILVER))
+                    .criterion(hasItem(ModItems.SILVER), conditionsFromItem(ModItems.SILVER))
+                    .offerTo(exporter, new Identifier(getRecipeName(ModBlocks.SILVER_DOOR)));
+
+            createFenceRecipe(ModBlocks.SILVER_FENCE, Ingredient.ofItems(ModItems.SILVER))
+                    .criterion(hasItem(ModItems.SILVER), conditionsFromItem(ModItems.SILVER))
+                    .offerTo(exporter, new Identifier(getRecipeName(ModBlocks.SILVER_FENCE)));
+
+            createFenceGateRecipe(ModBlocks.SILVER_FENCE_GATE, Ingredient.ofItems(ModItems.SILVER))
+                    .criterion(hasItem(ModItems.SILVER), conditionsFromItem(ModItems.SILVER))
+                    .offerTo(exporter, new Identifier(getRecipeName(ModBlocks.SILVER_FENCE_GATE)));
+
+            offerWallRecipe(exporter,RecipeCategory.BUILDING_BLOCKS,ModBlocks.SILVER_WALL, ModBlocks.SILVER_BLOCK);
+
+            createStairsRecipe(ModBlocks.SILVER_STAIRS, Ingredient.ofItems(ModBlocks.SILVER_BLOCK))
+                    .criterion(hasItem(ModBlocks.SILVER_BLOCK), conditionsFromItem(ModBlocks.SILVER_BLOCK))
+                    .offerTo(exporter, new Identifier(getRecipeName(ModBlocks.SILVER_STAIRS)));
+
+        ShapedRecipeJsonBuilder.create(RecipeCategory.MISC, ModItems.SILVER_PICKAXE, 1)
+                .pattern("nnn")
+                .pattern(" o ")
+                .pattern(" o ")
+                .input('n',ModItems.SILVER)
+                .input('o',Items.STICK)
+                .criterion(hasItem(ModItems.SILVER), conditionsFromItem(ModItems.SILVER))
+                .criterion(hasItem(Items.STICK), conditionsFromItem(Items.STICK))
+                .offerTo(exporter, new Identifier(getRecipeName(ModItems.SILVER_PICKAXE)));
+
+        ShapedRecipeJsonBuilder.create(RecipeCategory.COMBAT, ModItems.NEEDLE, 1)
+                .pattern("  n")
+                .pattern("on ")
+                .pattern("oo ")
+                .input('n',ModItems.SILVER)
+                .input('o',ModItems.SILVERNUGGET)
+                .criterion(hasItem(ModItems.SILVER), conditionsFromItem(ModItems.SILVER))
+                .criterion(hasItem(ModItems.SILVERNUGGET), conditionsFromItem(ModItems.SILVERNUGGET))
+                .offerTo(exporter, new Identifier(getRecipeName(ModItems.NEEDLE)));
+
+
+
+        ShapedRecipeJsonBuilder.create(RecipeCategory.COMBAT, ModItems.SILVER_HELMET, 1)
+                .pattern("   ")
+                .pattern("nnn")
+                .pattern("n n")
+                .input('n',ModItems.SILVER)
+                .criterion(hasItem(ModItems.SILVER), conditionsFromItem(ModItems.SILVER))
+                .offerTo(exporter, new Identifier(getRecipeName(ModItems.SILVER_HELMET)));
+
+        ShapedRecipeJsonBuilder.create(RecipeCategory.COMBAT, ModItems.SILVER_CHESTPLATE, 1)
+                .pattern("n n")
+                .pattern("nnn")
+                .pattern("nnn")
+                .input('n',ModItems.SILVER)
+                .criterion(hasItem(ModItems.SILVER), conditionsFromItem(ModItems.SILVER))
+                .offerTo(exporter, new Identifier(getRecipeName(ModItems.SILVER_CHESTPLATE)));
+
+        ShapedRecipeJsonBuilder.create(RecipeCategory.COMBAT, ModItems.SILVER_LEGGINGS, 1)
+                .pattern("nnn")
+                .pattern("n n")
+                .pattern("n n")
+                .input('n',ModItems.SILVER)
+                .criterion(hasItem(ModItems.SILVER), conditionsFromItem(ModItems.SILVER))
+                .offerTo(exporter, new Identifier(getRecipeName(ModItems.SILVER_LEGGINGS)));
+
+        ShapedRecipeJsonBuilder.create(RecipeCategory.COMBAT, ModItems.SILVER_BOOTS, 1)
+                .pattern("   ")
+                .pattern("n n")
+                .pattern("n n")
+                .input('n',ModItems.SILVER)
+                .criterion(hasItem(ModItems.SILVER), conditionsFromItem(ModItems.SILVER))
+                .offerTo(exporter, new Identifier(getRecipeName(ModItems.SILVER_BOOTS)));
+
+
+        }
+
+
+
+    }
+

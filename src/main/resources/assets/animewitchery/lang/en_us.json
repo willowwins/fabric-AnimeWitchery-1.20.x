@@ -1,0 +1,48 @@
+{
+  "item.animewitchery.silveringot": "Silver Ingot",
+  "item.animewitchery.silvernugget": "Silver Nugget",
+  "item.animewitchery.rawsilver": "Raw Silver",
+  "item.animewitchery.spool": "Empty Spool",
+  "item.animewitchery.silverspool": "Spool of Silver Thread",
+
+  "item.animewitchery.lemon": "Lemon",
+  "item.animewitchery.lemon_seeds": "Lemon Seeds",
+  "item.animewitchery.strawberry": "Strawberry",
+  "item.animewitchery.strawberry_seeds": "Strawberry Seeds",
+
+
+  "item.animewitchery.needle": "Silver Needle",
+
+  "item.animewitchery.silver_helmet": "Silver Helmet",
+  "item.animewitchery.silver_chestplate": "Silver Chestplate",
+  "item.animewitchery.silver_leggings": "Silver Leggings",
+  "item.animewitchery.silver_boots": "Silver Boots",
+
+  "item.animewitchery.silver_pickaxe": "Silver Pickaxe",
+
+  "item.animewitchery.metal_detector": "All Seeing Eye",
+
+  "block.animewitchery.sound_block": "Block of Music",
+
+  "block.animewitchery.charcoal_block": "Charcoal Block",
+  "block.animewitchery.silver_block": "Block of Silver",
+  "block.animewitchery.silver_ore": "Silver Ore",
+  "block.animewitchery.deepslate_silver_ore": "Deepslate Silver Ore",
+
+  "block.animewitchery.silver_stairs": "Silver Stairs",
+  "block.animewitchery.silver_slab": "Silver Slab",
+  "block.animewitchery.silver_button": "Silver Button",
+  "block.animewitchery.silver_pressure_plate": "Silver Pressure Plate",
+  "block.animewitchery.silver_fence": "Silver Fence",
+  "block.animewitchery.silver_fence_gate": "Silver Fence Gate",
+  "block.animewitchery.silver_wall": "Silver Wall",
+  "block.animewitchery.silver_door": "Silver Door",
+  "block.animewitchery.silver_trapdoor": "Silver Trapdoor",
+
+
+
+
+  "tooltip.animewitchery.metal_detector.tooltip": "finds valuables with a vision beyond your own",
+
+  "itemgroup.silver": "Anime Witchery"
+}
