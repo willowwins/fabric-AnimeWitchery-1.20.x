@@ -23,6 +23,14 @@ public class ModItemGroups {
 
                         entries.add(ModItems.LEMON);
                         entries.add(ModItems.STRAWBERRY);
+                        entries.add(ModItems.TART_CRUST);
+                        entries.add(ModItems.UNBAKED_LEMON_TART);
+                        entries.add(ModItems.UNBAKED_STRAWBERRY_TART);
+                        entries.add(ModItems.STRAWBERRY_TART);
+                        entries.add(ModItems.LEMON_TART);
+
+
+
 
                         entries.add(ModItems.STRAWBERRY_SEEDS);
                         entries.add(ModItems.LEMON_SEEDS);

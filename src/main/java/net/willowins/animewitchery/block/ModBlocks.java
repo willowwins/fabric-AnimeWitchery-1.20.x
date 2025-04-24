@@ -23,7 +23,7 @@ public class ModBlocks {
     public static final Block SOUND_BLOCK =registerBlock("sound_block",
             new SoundBlock(FabricBlockSettings.copyOf(Blocks.JUKEBOX)));
 
-    public static final Block SILVER_STAIRS =registerBlock("silver_stars",
+    public static final Block SILVER_STAIRS =registerBlock("silver_stairs",
             new StairsBlock(ModBlocks.SILVER_BLOCK.getDefaultState(),FabricBlockSettings.copyOf(Blocks.IRON_BLOCK)));
     public static final Block SILVER_SLAB =registerBlock("silver_slab",
             new SlabBlock(FabricBlockSettings.copyOf(Blocks.IRON_BLOCK)));
