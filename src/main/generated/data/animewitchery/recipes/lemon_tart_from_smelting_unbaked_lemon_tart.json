@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:smelting",
+  "category": "food",
+  "cookingtime": 200,
+  "experience": 0.7,
+  "group": "tart",
+  "ingredient": {
+    "item": "animewitchery:unbaked_lemon_tart"
+  },
+  "result": "animewitchery:lemon_tart"
+}

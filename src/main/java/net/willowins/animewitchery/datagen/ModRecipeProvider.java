@@ -22,6 +22,11 @@ import java.util.function.Consumer;
 public class ModRecipeProvider extends FabricRecipeProvider {
     private static final List<ItemConvertible> SILVER_SMELTABLES = List.of(ModItems.RAWSILVER,
             ModBlocks.SILVER_ORE, ModBlocks.DEEPSLATE_SILVER_ORE);
+
+    private static final List<ItemConvertible> LEMON_COOKABLES = List.of(ModItems.UNBAKED_LEMON_TART);
+
+    private static final List<ItemConvertible> STRAWBERRY_COOKABLES = List.of(ModItems.UNBAKED_STRAWBERRY_TART);
+
     public ModRecipeProvider(FabricDataOutput output) {
         super(output);
     }
@@ -33,12 +38,17 @@ public class ModRecipeProvider extends FabricRecipeProvider {
         offerBlasting(exporter, SILVER_SMELTABLES, RecipeCategory.MISC, ModItems.SILVER,
                 0.7f, 100, "silver");
 
+        offerSmelting(exporter, LEMON_COOKABLES, RecipeCategory.FOOD, ModItems.LEMON_TART,
+                0.7f, 200, "tart");
+
+        offerSmelting(exporter, STRAWBERRY_COOKABLES, RecipeCategory.FOOD, ModItems.STRAWBERRY_TART,
+                0.7f, 200, "tart");
+
         offerShapelessRecipe(exporter, ModItems.SILVERNUGGET, ModItems.SILVER, "MISC", 9);
 
         offerReversibleCompactingRecipes(exporter, RecipeCategory.BUILDING_BLOCKS, ModItems.SILVER, RecipeCategory.DECORATIONS, ModBlocks.SILVER_BLOCK);
 
         offerReversibleCompactingRecipes(exporter, RecipeCategory.BUILDING_BLOCKS, Items.CHARCOAL, RecipeCategory.MISC, ModBlocks.CHARCOAL_BLOCK);
-
 
 
         ShapedRecipeJsonBuilder.create(RecipeCategory.MISC, ModBlocks.SOUND_BLOCK, 1)
@@ -177,6 +187,38 @@ public class ModRecipeProvider extends FabricRecipeProvider {
                 .input('n',ModItems.SILVER)
                 .criterion(hasItem(ModItems.SILVER), conditionsFromItem(ModItems.SILVER))
                 .offerTo(exporter, new Identifier(getRecipeName(ModItems.SILVER_BOOTS)));
+
+        ShapedRecipeJsonBuilder.create(RecipeCategory.MISC, ModItems.TART_CRUST, 1)
+                .pattern("nnn")
+                .pattern("non")
+                .pattern("nnn")
+                .input('n', Items.WHEAT)
+                .input('o',Items.WATER_BUCKET)
+                .criterion(hasItem(Items.WHEAT), conditionsFromItem(Items.WHEAT))
+                .criterion(hasItem(Items.WATER_BUCKET), conditionsFromItem(Items.WATER_BUCKET))
+                .offerTo(exporter, new Identifier(getRecipeName(ModItems.TART_CRUST)));
+
+        ShapedRecipeJsonBuilder.create(RecipeCategory.MISC, ModItems.UNBAKED_LEMON_TART, 1)
+                .pattern("nnn")
+                .pattern("non")
+                .pattern("nnn")
+                .input('n', ModItems.LEMON)
+                .input('o',ModItems.TART_CRUST)
+                .criterion(hasItem(ModItems.LEMON), conditionsFromItem(ModItems.LEMON))
+                .criterion(hasItem(ModItems.TART_CRUST), conditionsFromItem(ModItems.TART_CRUST))
+                .offerTo(exporter, new Identifier(getRecipeName(ModItems.UNBAKED_LEMON_TART)));
+
+        ShapedRecipeJsonBuilder.create(RecipeCategory.MISC, ModItems.UNBAKED_STRAWBERRY_TART, 1)
+                .pattern("nnn")
+                .pattern("non")
+                .pattern("nnn")
+                .input('n', ModItems.STRAWBERRY)
+                .input('o',ModItems.TART_CRUST)
+                .criterion(hasItem(ModItems.STRAWBERRY), conditionsFromItem(ModItems.STRAWBERRY))
+                .criterion(hasItem(ModItems.TART_CRUST), conditionsFromItem(ModItems.TART_CRUST))
+                .offerTo(exporter, new Identifier(getRecipeName(ModItems.UNBAKED_STRAWBERRY_TART)));
+
+
 
 
         }
