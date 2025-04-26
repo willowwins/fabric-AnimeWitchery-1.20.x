@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "n": {
+      "item": "minecraft:yellow_dye"
+    },
+    "o": {
+      "item": "minecraft:wheat_seeds"
+    }
+  },
+  "pattern": [
+    "no "
+  ],
+  "result": {
+    "item": "animewitchery:lemon_seeds"
+  },
+  "show_notification": true
+}
