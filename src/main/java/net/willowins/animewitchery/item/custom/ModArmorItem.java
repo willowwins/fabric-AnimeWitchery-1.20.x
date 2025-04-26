@@ -1,6 +1,8 @@
 package net.willowins.animewitchery.item.custom;
 
 import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.ImmutableMultimap;
+import com.google.common.collect.Multimap;
 import net.willowins.animewitchery.item.ModArmorMaterials;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.effect.StatusEffectInstance;
@@ -15,10 +17,12 @@ import java.util.Map;
 
 
 public class ModArmorItem extends ArmorItem {
-    private static final Map<ArmorMaterial, StatusEffectInstance> MATERIAL_TO_EFFECT_MAP =
-            (new ImmutableMap.Builder<ArmorMaterial, StatusEffectInstance>())
-                    .put(ModArmorMaterials.SILVER, new StatusEffectInstance(StatusEffects.SATURATION, 400, 1,
-                            false, false, false)).build();
+    private static final Multimap<ArmorMaterial, StatusEffectInstance> MATERIAL_TO_EFFECT_MAP =
+            (new ImmutableMultimap.Builder<ArmorMaterial, StatusEffectInstance>())
+                    .put(ModArmorMaterials.SILVER, new StatusEffectInstance(StatusEffects.SATURATION, 400, 0,
+                            false, false, false))
+                    .put(ModArmorMaterials.SILVER, new StatusEffectInstance(StatusEffects.GLOWING, 400, 0,
+            false, false, false)).build();
 
     public ModArmorItem(ArmorMaterial material, Type type, Settings settings) {
         super(material, type, settings);
@@ -36,7 +40,7 @@ public class ModArmorItem extends ArmorItem {
     }
 
     private void evaluateArmorEffects(PlayerEntity player) {
-        for (Map.Entry<ArmorMaterial, StatusEffectInstance> entry : MATERIAL_TO_EFFECT_MAP.entrySet()) {
+        for (Map.Entry<ArmorMaterial, StatusEffectInstance> entry : MATERIAL_TO_EFFECT_MAP.entries()) {
             ArmorMaterial mapArmorMaterial = entry.getKey();
             StatusEffectInstance mapStatusEffect = entry.getValue();
 

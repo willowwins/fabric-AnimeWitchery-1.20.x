@@ -37,10 +37,6 @@ public class ModItemGroups {
 
                         entries.add(ModItems.NEEDLE);
 
-                        entries.add(ModItems.SILVER_HELMET);
-                        entries.add(ModItems.SILVER_CHESTPLATE);
-                        entries.add(ModItems.SILVER_LEGGINGS);
-                        entries.add(ModItems.SILVER_BOOTS);
 
                         entries.add(ModItems.SILVER_PICKAXE);
 

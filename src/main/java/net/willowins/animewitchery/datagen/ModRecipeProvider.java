@@ -218,6 +218,25 @@ public class ModRecipeProvider extends FabricRecipeProvider {
                 .criterion(hasItem(ModItems.TART_CRUST), conditionsFromItem(ModItems.TART_CRUST))
                 .offerTo(exporter, new Identifier(getRecipeName(ModItems.UNBAKED_STRAWBERRY_TART)));
 
+        ShapedRecipeJsonBuilder.create(RecipeCategory.MISC, ModItems.STRAWBERRY_SEEDS, 1)
+                .pattern("no ")
+                .input('n', Items.RED_DYE)
+                .input('o',Items.WHEAT_SEEDS)
+                .criterion(hasItem(Items.RED_DYE), conditionsFromItem(Items.RED_DYE))
+                .criterion(hasItem(Items.WHEAT_SEEDS), conditionsFromItem(Items.WHEAT_SEEDS))
+                .offerTo(exporter, new Identifier(getRecipeName(ModItems.STRAWBERRY_SEEDS)));
+
+        ShapedRecipeJsonBuilder.create(RecipeCategory.MISC, ModItems.LEMON_SEEDS, 1)
+                .pattern("no ")
+                .input('n', Items.YELLOW_DYE)
+                .input('o',Items.WHEAT_SEEDS)
+                .criterion(hasItem(Items.YELLOW_DYE), conditionsFromItem(Items.YELLOW_DYE))
+                .criterion(hasItem(Items.WHEAT_SEEDS), conditionsFromItem(Items.WHEAT_SEEDS))
+                .offerTo(exporter, new Identifier(getRecipeName(ModItems.LEMON_SEEDS)));
+
+
+
+
 
 
 
