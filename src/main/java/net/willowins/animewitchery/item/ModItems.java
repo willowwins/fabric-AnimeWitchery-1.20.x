@@ -23,7 +23,7 @@ public class ModItems {
             new MetalDetectorItem(new FabricItemSettings().maxDamage(300)));
 
     public static final Item NEEDLE =registerItem("needle",
-            new SwordItem(ModToolMaterial.SILVER,1,-2.5f,new FabricItemSettings().maxCount(1)));
+            new SwordItem(ModToolMaterial.SILVER,3,-2.2f,new FabricItemSettings().maxCount(1)));
 
     public static final Item SILVER_PICKAXE =registerItem("silver_pickaxe",
             new PickaxeItem(ModToolMaterial.SILVER,0, -3f,new FabricItemSettings()));

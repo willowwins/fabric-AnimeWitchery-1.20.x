@@ -146,46 +146,56 @@ public class ModRecipeProvider extends FabricRecipeProvider {
 
         ShapedRecipeJsonBuilder.create(RecipeCategory.COMBAT, ModItems.NEEDLE, 1)
                 .pattern("  n")
-                .pattern("on ")
+                .pattern("os ")
                 .pattern("oo ")
                 .input('n',ModItems.SILVER)
                 .input('o',ModItems.SILVERNUGGET)
+                .input('s',Items.NETHERITE_SWORD)
                 .criterion(hasItem(ModItems.SILVER), conditionsFromItem(ModItems.SILVER))
                 .criterion(hasItem(ModItems.SILVERNUGGET), conditionsFromItem(ModItems.SILVERNUGGET))
+                .criterion(hasItem(Items.NETHERITE_SWORD), conditionsFromItem(Items.NETHERITE_SWORD))
                 .offerTo(exporter, new Identifier(getRecipeName(ModItems.NEEDLE)));
 
 
 
         ShapedRecipeJsonBuilder.create(RecipeCategory.COMBAT, ModItems.SILVER_HELMET, 1)
                 .pattern("   ")
-                .pattern("nnn")
+                .pattern("ndn")
                 .pattern("n n")
                 .input('n',ModItems.SILVER)
+                .input('d',Items.DIAMOND_HELMET)
                 .criterion(hasItem(ModItems.SILVER), conditionsFromItem(ModItems.SILVER))
+                .criterion(hasItem(Items.DIAMOND_HELMET), conditionsFromItem(Items.DIAMOND_HELMET))
                 .offerTo(exporter, new Identifier(getRecipeName(ModItems.SILVER_HELMET)));
 
         ShapedRecipeJsonBuilder.create(RecipeCategory.COMBAT, ModItems.SILVER_CHESTPLATE, 1)
                 .pattern("n n")
-                .pattern("nnn")
+                .pattern("ndn")
                 .pattern("nnn")
                 .input('n',ModItems.SILVER)
+                .input('d',Items.DIAMOND_CHESTPLATE)
                 .criterion(hasItem(ModItems.SILVER), conditionsFromItem(ModItems.SILVER))
+                .criterion(hasItem(Items.DIAMOND_CHESTPLATE), conditionsFromItem(Items.DIAMOND_CHESTPLATE))
                 .offerTo(exporter, new Identifier(getRecipeName(ModItems.SILVER_CHESTPLATE)));
 
         ShapedRecipeJsonBuilder.create(RecipeCategory.COMBAT, ModItems.SILVER_LEGGINGS, 1)
-                .pattern("nnn")
+                .pattern("ndn")
                 .pattern("n n")
                 .pattern("n n")
                 .input('n',ModItems.SILVER)
+                .input('d',Items.DIAMOND_LEGGINGS)
                 .criterion(hasItem(ModItems.SILVER), conditionsFromItem(ModItems.SILVER))
+                .criterion(hasItem(Items.DIAMOND_LEGGINGS), conditionsFromItem(Items.DIAMOND_LEGGINGS))
                 .offerTo(exporter, new Identifier(getRecipeName(ModItems.SILVER_LEGGINGS)));
 
         ShapedRecipeJsonBuilder.create(RecipeCategory.COMBAT, ModItems.SILVER_BOOTS, 1)
                 .pattern("   ")
-                .pattern("n n")
+                .pattern("ndn")
                 .pattern("n n")
                 .input('n',ModItems.SILVER)
+                .input('d',Items.DIAMOND_BOOTS)
                 .criterion(hasItem(ModItems.SILVER), conditionsFromItem(ModItems.SILVER))
+                .criterion(hasItem(Items.DIAMOND_BOOTS), conditionsFromItem(Items.DIAMOND_BOOTS))
                 .offerTo(exporter, new Identifier(getRecipeName(ModItems.SILVER_BOOTS)));
 
         ShapedRecipeJsonBuilder.create(RecipeCategory.MISC, ModItems.TART_CRUST, 1)

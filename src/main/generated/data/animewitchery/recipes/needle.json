@@ -7,11 +7,14 @@
     },
     "o": {
       "item": "animewitchery:silvernugget"
+    },
+    "s": {
+      "item": "minecraft:netherite_sword"
     }
   },
   "pattern": [
     "  n",
-    "on ",
+    "os ",
     "oo "
   ],
   "result": {

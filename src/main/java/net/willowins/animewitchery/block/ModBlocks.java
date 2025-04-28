@@ -13,6 +13,7 @@ import net.minecraft.util.math.intprovider.UniformIntProvider;
 import net.willowins.animewitchery.AnimeWitchery;
 import net.willowins.animewitchery.block.custom.LemonCropBlock;
 import net.willowins.animewitchery.block.custom.SoundBlock;
+import net.willowins.animewitchery.block.custom.SoundBlock2;
 import net.willowins.animewitchery.block.custom.StrawberryCropBlock;
 
 public class ModBlocks {
@@ -22,6 +23,9 @@ public class ModBlocks {
 
     public static final Block SOUND_BLOCK =registerBlock("sound_block",
             new SoundBlock(FabricBlockSettings.copyOf(Blocks.JUKEBOX)));
+
+    public static final Block SOUND_BLOCK2 =registerBlock("sound_block2",
+            new SoundBlock2(FabricBlockSettings.copyOf(Blocks.JUKEBOX)));
 
     public static final Block SILVER_STAIRS =registerBlock("silver_stairs",
             new StairsBlock(ModBlocks.SILVER_BLOCK.getDefaultState(),FabricBlockSettings.copyOf(Blocks.IRON_BLOCK)));

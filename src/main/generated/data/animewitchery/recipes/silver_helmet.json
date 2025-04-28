@@ -2,13 +2,16 @@
   "type": "minecraft:crafting_shaped",
   "category": "equipment",
   "key": {
+    "d": {
+      "item": "minecraft:diamond_helmet"
+    },
     "n": {
       "item": "animewitchery:silveringot"
     }
   },
   "pattern": [
     "   ",
-    "nnn",
+    "ndn",
     "n n"
   ],
   "result": {

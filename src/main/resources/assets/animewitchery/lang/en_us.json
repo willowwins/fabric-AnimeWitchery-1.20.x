@@ -29,6 +29,8 @@
   "item.animewitchery.metal_detector": "All Seeing Eye",
 
   "block.animewitchery.sound_block": "Block of Music",
+  "block.animewitchery.sound_block2": "Block of Hilarity",
+
 
   "block.animewitchery.charcoal_block": "Charcoal Block",
   "block.animewitchery.silver_block": "Block of Silver",
@@ -45,7 +47,7 @@
   "block.animewitchery.silver_door": "Silver Door",
   "block.animewitchery.silver_trapdoor": "Silver Trapdoor",
 
-
+  "sounds.animewitchery.hatsune_miku_lemon": "Hatsune Miku Suffers",
 
 
   "tooltip.animewitchery.metal_detector.tooltip": "finds valuables with a vision beyond your own",

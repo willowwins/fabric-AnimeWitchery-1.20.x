@@ -2,13 +2,16 @@
   "type": "minecraft:crafting_shaped",
   "category": "equipment",
   "key": {
+    "d": {
+      "item": "minecraft:diamond_chestplate"
+    },
     "n": {
       "item": "animewitchery:silveringot"
     }
   },
   "pattern": [
     "n n",
-    "nnn",
+    "ndn",
     "nnn"
   ],
   "result": {

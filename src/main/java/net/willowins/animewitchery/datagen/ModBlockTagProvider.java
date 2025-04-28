@@ -32,6 +32,10 @@ public class ModBlockTagProvider extends FabricTagProvider.BlockTagProvider {
                 .forceAddTag(BlockTags.COPPER_ORES)
                 .forceAddTag(BlockTags.REDSTONE_ORES);
 
+        getOrCreateTagBuilder(BlockTags.AXE_MINEABLE)
+                .add(ModBlocks.SOUND_BLOCK2)
+                .add(ModBlocks.SOUND_BLOCK);
+
         getOrCreateTagBuilder(BlockTags.PICKAXE_MINEABLE)
                 .add(ModBlocks.CHARCOAL_BLOCK)
                 .add(ModBlocks.SILVER_BLOCK)
