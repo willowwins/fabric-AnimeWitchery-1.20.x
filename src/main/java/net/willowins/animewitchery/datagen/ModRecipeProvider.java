@@ -109,6 +109,14 @@ public class ModRecipeProvider extends FabricRecipeProvider {
                 .criterion(hasItem(Items.WHITE_DYE), conditionsFromItem(Items.WHITE_DYE))
                 .offerTo(exporter, new Identifier(getRecipeName(Items.QUARTZ)));
 
+        ShapelessRecipeJsonBuilder.create(RecipeCategory.MISC, Items.AMETHYST_SHARD, 1)
+                .input(Items.QUARTZ)
+                .input(Items.PURPLE_DYE)
+                .group("Quartz")
+                .criterion(hasItem(Items.QUARTZ_BLOCK), conditionsFromItem(Items.QUARTZ))
+                .criterion(hasItem(Items.PURPLE_DYE), conditionsFromItem(Items.PURPLE_DYE))
+                .offerTo(exporter, new Identifier(getRecipeName(Items.AMETHYST_SHARD)));
+
             offerShapelessRecipe(exporter, Items.GLOW_INK_SAC, Items.GLOW_BERRIES, "MISC", 1);
 
             offerShapelessRecipe(exporter, ModBlocks.SILVER_BUTTON, ModItems.SILVERNUGGET, "REDSTONE", 2);
