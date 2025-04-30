@@ -61,6 +61,16 @@ public class ModRecipeProvider extends FabricRecipeProvider {
                 .criterion(hasItem(Items.MUSIC_DISC_OTHERSIDE), conditionsFromItem(Items.MUSIC_DISC_OTHERSIDE))
                 .offerTo(exporter, new Identifier(getRecipeName(ModBlocks.SOUND_BLOCK)));
 
+        ShapedRecipeJsonBuilder.create(RecipeCategory.MISC, ModBlocks.SOUND_BLOCK2, 1)
+                .pattern("nnn")
+                .pattern("non")
+                .pattern("nnn")
+                .input('n', Items.NOTE_BLOCK)
+                .input('o',ModItems.LEMON)
+                .criterion(hasItem(Items.NOTE_BLOCK), conditionsFromItem(Items.NOTE_BLOCK))
+                .criterion(hasItem(ModItems.LEMON), conditionsFromItem(ModItems.LEMON))
+                .offerTo(exporter, new Identifier(getRecipeName(ModBlocks.SOUND_BLOCK2)));
+
         ShapedRecipeJsonBuilder.create(RecipeCategory.MISC, Blocks.BUDDING_AMETHYST, 1)
                 .pattern("nnn")
                 .pattern("non")

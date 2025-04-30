@@ -22,7 +22,10 @@ public class ModArmorItem extends ArmorItem {
                     .put(ModArmorMaterials.SILVER, new StatusEffectInstance(StatusEffects.SATURATION, 400, 0,
                             false, false, false))
                     .put(ModArmorMaterials.SILVER, new StatusEffectInstance(StatusEffects.GLOWING, 400, 0,
-            false, false, false)).build();
+            false, false, false))
+                    .put(ModArmorMaterials.SILVER, new StatusEffectInstance(StatusEffects.WEAKNESS, 800, 1,
+                            false, false, false)).build();
+
 
     public ModArmorItem(ArmorMaterial material, Type type, Settings settings) {
         super(material, type, settings);
