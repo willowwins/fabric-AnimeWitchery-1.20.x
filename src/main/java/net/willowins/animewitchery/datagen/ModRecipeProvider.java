@@ -262,6 +262,15 @@ public class ModRecipeProvider extends FabricRecipeProvider {
                 .criterion(hasItem(Items.WHEAT_SEEDS), conditionsFromItem(Items.WHEAT_SEEDS))
                 .offerTo(exporter, new Identifier(getRecipeName(ModItems.LEMON_SEEDS)));
 
+        ShapedRecipeJsonBuilder.create(RecipeCategory.MISC, Items.BUNDLE, 1)
+                .pattern("  o")
+                .pattern(" n ")
+                .input('n', Items.LEATHER)
+                .input('o',Items.STRING)
+                .criterion(hasItem(Items.LEATHER), conditionsFromItem(Items.LEATHER))
+                .criterion(hasItem(Items.STRING), conditionsFromItem(Items.STRING))
+                .offerTo(exporter, new Identifier(getRecipeName(Items.BUNDLE)));
+
 
 
 
