@@ -113,7 +113,7 @@ public class ModRecipeProvider extends FabricRecipeProvider {
                 .input(Items.QUARTZ)
                 .input(Items.PURPLE_DYE)
                 .group("Quartz")
-                .criterion(hasItem(Items.QUARTZ_BLOCK), conditionsFromItem(Items.QUARTZ))
+                .criterion(hasItem(Items.QUARTZ), conditionsFromItem(Items.QUARTZ))
                 .criterion(hasItem(Items.PURPLE_DYE), conditionsFromItem(Items.PURPLE_DYE))
                 .offerTo(exporter, new Identifier(getRecipeName(Items.AMETHYST_SHARD)));
 
