@@ -1,0 +1,45 @@
+{
+  "type": "animewitchery:paradiselostdim_type",
+  "generator": {
+    "type": "minecraft:noise",
+    "settings": "minecraft:overworld",
+    "biome_source": {
+      "type": "minecraft:multi_noise",
+      "biomes": [
+        {
+          "biome": "minecraft:snowy_taiga",
+          "parameters": {
+            "temperature": -1,
+            "humidity": 1,
+            "continentalness": -2,
+            "erosion": 2,
+            "weirdness": [
+              -1,
+              1
+            ],
+            "depth": 1,
+            "offset": 0
+          }
+        },
+        {
+          "biome": "minecraft:snowy_slopes",
+          "parameters": {
+            "temperature": 2,
+            "humidity": -2,
+            "continentalness": 2,
+            "erosion": 0,
+            "weirdness": 0,
+            "depth": 0,
+            "offset": 0
+          }
+        }
+      ]
+    },
+    "layers": [
+      {
+        "block": "minecraft:bedrock",
+        "height": 8
+      }
+    ]
+  }
+}

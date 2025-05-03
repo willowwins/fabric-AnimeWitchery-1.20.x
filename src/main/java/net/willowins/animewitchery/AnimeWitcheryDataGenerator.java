@@ -7,6 +7,7 @@ import net.minecraft.registry.RegistryKeys;
 import net.willowins.animewitchery.datagen.*;
 import net.willowins.animewitchery.world.ModConfiguredFeatures;
 import net.willowins.animewitchery.world.ModPlacedFeatures;
+import net.willowins.animewitchery.world.dimension.ModDimensions;
 
 public class AnimeWitcheryDataGenerator implements DataGeneratorEntrypoint {
 	@Override
@@ -25,6 +26,7 @@ public class AnimeWitcheryDataGenerator implements DataGeneratorEntrypoint {
 	@Override
 	public void buildRegistry(RegistryBuilder registryBuilder) {
 		registryBuilder.addRegistry(RegistryKeys.CONFIGURED_FEATURE, ModConfiguredFeatures::bootstrap);
+		registryBuilder.addRegistry(RegistryKeys.DIMENSION_TYPE, ModDimensions::bootstrapType);
 		registryBuilder.addRegistry(RegistryKeys.PLACED_FEATURE, ModPlacedFeatures::boostrap);
 	}
 }
