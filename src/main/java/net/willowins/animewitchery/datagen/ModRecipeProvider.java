@@ -50,7 +50,6 @@ public class ModRecipeProvider extends FabricRecipeProvider {
 
         offerReversibleCompactingRecipes(exporter, RecipeCategory.BUILDING_BLOCKS, Items.CHARCOAL, RecipeCategory.MISC, ModBlocks.CHARCOAL_BLOCK);
 
-
         ShapedRecipeJsonBuilder.create(RecipeCategory.MISC, ModBlocks.SOUND_BLOCK, 1)
                 .pattern("nnn")
                 .pattern("non")
