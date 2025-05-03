@@ -1,4 +1,4 @@
-// 1.20.1	2025-05-02T17:52:30.4264589	Anime Witchery/Recipes
+// 1.20.1	2025-05-02T17:59:57.6502278	Anime Witchery/Recipes
 a7f562d0aea9a9e07bb2f8e68c2a35c02f94a482 data\animewitchery\advancements\recipes\redstone\silver_door.json
 2bf8b5e95b97dd4c365d1e33d55c9174e22f8489 data\animewitchery\recipes\sound_block.json
 6ff6c1b2ece951826745b560fb3db876b7ef01f2 data\animewitchery\recipes\unbaked_strawberry_tart.json
@@ -74,8 +74,8 @@ b2cf804eaf36aea2dd1c8e35ae3a4904560af2a1 data\animewitchery\recipes\charcoal.jso
 3e7a2e8baab5df981d5442abcda0222b736474e5 data\animewitchery\advancements\recipes\food\lemon_tart_from_smelting_unbaked_lemon_tart.json
 875bd04653bc596cf0ac74dbfea83ee2ad1df68b data\animewitchery\advancements\recipes\misc\sound_block.json
 c1a71057a721fb65d2f66d5dc81310fb6644c51c data\animewitchery\advancements\recipes\misc\unbaked_strawberry_tart.json
-5785d66deec527c58388e18cdc083d61b7f85d08 data\animewitchery\recipes\silver_button_from_silvernugget.json
 a052c2e3010014c5ded27ba7c0d77b2b891441f5 data\animewitchery\advancements\recipes\misc\silver_button_from_silvernugget.json
+5785d66deec527c58388e18cdc083d61b7f85d08 data\animewitchery\recipes\silver_button_from_silvernugget.json
 501559f793bd6003b7c7a2753039a839bb3ecd80 data\animewitchery\recipes\silver_stairs.json
 0337ca5e99691338e86cae230dfbf9aad7a56d86 data\animewitchery\recipes\lemon_seeds.json
 8d8863f42b9288497c747afe188e65a159e338b3 data\animewitchery\recipes\silver_slab.json

@@ -1,7 +1,7 @@
-// 1.20.1	2025-05-02T17:52:30.4294592	Anime Witchery/World Gen
+// 1.20.1	2025-05-02T17:59:57.6532279	Anime Witchery/World Gen
 d6fa4c218e5c883ccdd8c1455611ea0257c0f5d9 data\animewitchery\worldgen\placed_feature\end_mod_ore_placed.json
 412224aadd91e011cca939cec0b71f2a040eada4 data\animewitchery\worldgen\placed_feature\nether_mod_ore_placed.json
-228a416b3da443a8d8cef1ccde7fc4c12bf1d108 data\animewitchery\worldgen\configured_feature\silver_ore.json
 1a1b6349332605d82266102aa9d25fe0c62bf642 data\animewitchery\worldgen\configured_feature\nether_mod_ore.json
+228a416b3da443a8d8cef1ccde7fc4c12bf1d108 data\animewitchery\worldgen\configured_feature\silver_ore.json
 2c1b27531c7f5be6185752b560ed4f2c45c0bb85 data\animewitchery\worldgen\placed_feature\silver_ore_placed.json
 ef908e3b7cbf0df88edd1a13c31376aa0e88fdf7 data\animewitchery\worldgen\configured_feature\end_mod_ore.json
