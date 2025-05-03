@@ -11,15 +11,18 @@ import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.intprovider.UniformIntProvider;
 import net.willowins.animewitchery.AnimeWitchery;
-import net.willowins.animewitchery.block.custom.LemonCropBlock;
-import net.willowins.animewitchery.block.custom.SoundBlock;
-import net.willowins.animewitchery.block.custom.SoundBlock2;
-import net.willowins.animewitchery.block.custom.StrawberryCropBlock;
+import net.willowins.animewitchery.block.custom.*;
 
 public class ModBlocks {
 
     public static final Block SILVER_BLOCK =registerBlock("silver_block",
             new Block(FabricBlockSettings.copyOf(Blocks.IRON_BLOCK)));
+
+    public static final Block EFFIGY_FOUNTAIN =registerBlock("effigy_fountain",
+            new EffigyFountainBlock(FabricBlockSettings.copyOf(Blocks.STONE)));
+
+    public static final Block ACTIVE_EFFIGY_FOUNTAIN =registerBlock("active_effigy_fountain",
+            new ActiveEffigyFountainBlock(FabricBlockSettings.copyOf(Blocks.STONE)));
 
     public static final Block SOUND_BLOCK =registerBlock("sound_block",
             new SoundBlock(FabricBlockSettings.copyOf(Blocks.JUKEBOX)));

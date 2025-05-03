@@ -10,7 +10,9 @@ import net.willowins.animewitchery.block.ModBlocks;
 import net.willowins.animewitchery.item.ModItemGroups;
 import net.willowins.animewitchery.item.ModItems;
 import net.willowins.animewitchery.sound.ModSounds;
+import net.willowins.animewitchery.util.ModCustomTrades;
 import net.willowins.animewitchery.util.ModLootTableModifiers;
+import net.willowins.animewitchery.villager.ModVillagers;
 import net.willowins.animewitchery.world.dimension.ModDimensions;
 import net.willowins.animewitchery.world.gen.ModWorldGeneration;
 import org.slf4j.Logger;
@@ -28,6 +30,9 @@ public class AnimeWitchery implements ModInitializer {
 		ModBlocks.registerModBlocks();
 
 		ModLootTableModifiers.modifyLootTables();
+		ModCustomTrades.registerCustomTrades();
+
+		ModVillagers.registerVillagers();
 
 		ModSounds.registerSounds();
 		LOGGER.info("Hello Fabric world!");

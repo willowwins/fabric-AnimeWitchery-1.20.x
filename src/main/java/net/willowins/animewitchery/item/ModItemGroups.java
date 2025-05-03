@@ -48,6 +48,7 @@ public class ModItemGroups {
                         entries.add(ModBlocks.SOUND_BLOCK2);
                         entries.add(ModBlocks.SILVER_BLOCK);
                         entries.add(ModBlocks.SILVER_ORE);
+                        entries.add(ModBlocks.EFFIGY_FOUNTAIN);
                         entries.add(ModBlocks.DEEPSLATE_SILVER_ORE);
 
                         entries.add(ModBlocks.SILVER_BUTTON);

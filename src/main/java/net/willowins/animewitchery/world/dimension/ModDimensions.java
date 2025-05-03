@@ -32,12 +32,12 @@ public class ModDimensions {
                 1.0, // coordinateScale
                 true, // bedWorks
                 false, // respawnAnchorWorks
-                0, // minY
+                -64, // minY
                 256, // height
                 256, // logicalHeight
                 BlockTags.WITHER_IMMUNE, // immune to wither
                 DimensionTypes.OVERWORLD_ID, // effectsLocation
-                0f, // ambientLight
+                0.5f, // ambientLight
                 new DimensionType.MonsterSettings(false, false, UniformIntProvider.create(0, 0), 0)));
     }
 }

@@ -38,6 +38,8 @@ public class ModBlockTagProvider extends FabricTagProvider.BlockTagProvider {
 
         getOrCreateTagBuilder(BlockTags.PICKAXE_MINEABLE)
                 .add(ModBlocks.CHARCOAL_BLOCK)
+                .add(ModBlocks.EFFIGY_FOUNTAIN)
+                .add(ModBlocks.ACTIVE_EFFIGY_FOUNTAIN)
                 .add(ModBlocks.SILVER_BLOCK)
                 .add(ModBlocks.SILVER_ORE)
                 .add(ModBlocks.DEEPSLATE_SILVER_ORE)
@@ -53,6 +55,8 @@ public class ModBlockTagProvider extends FabricTagProvider.BlockTagProvider {
 
         getOrCreateTagBuilder(BlockTags.NEEDS_IRON_TOOL)
                 .add(ModBlocks.SILVER_BLOCK)
+                .add(ModBlocks.ACTIVE_EFFIGY_FOUNTAIN)
+                .add(ModBlocks.EFFIGY_FOUNTAIN)
                 .add(ModBlocks.SILVER_ORE)
                 .add(ModBlocks.DEEPSLATE_SILVER_ORE)
                 .add(ModBlocks.SILVER_BUTTON)
