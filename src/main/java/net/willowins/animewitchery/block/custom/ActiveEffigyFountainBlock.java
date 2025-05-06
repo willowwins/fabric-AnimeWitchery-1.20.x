@@ -5,8 +5,13 @@ import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Items;
+import net.minecraft.nbt.NbtCompound;
+import net.minecraft.nbt.NbtElement;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.sound.SoundCategory;
+import net.minecraft.sound.SoundEvent;
+import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
@@ -16,6 +21,7 @@ import net.minecraft.util.math.random.Random;
 import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldAccess;
 import net.willowins.animewitchery.block.ModBlocks;
 import net.willowins.animewitchery.item.ModItems;
 
@@ -44,6 +50,8 @@ public class ActiveEffigyFountainBlock extends Block {
                 world.setBlockState(pos, ModBlocks.EFFIGY_FOUNTAIN.getDefaultState());
             }
         }
+
+
         return ActionResult.SUCCESS;}
 
 
@@ -51,7 +59,11 @@ public class ActiveEffigyFountainBlock extends Block {
     public void scheduledTick(BlockState state, ServerWorld world, BlockPos pos, Random random) {
         super.scheduledTick(state, world, pos, random);
 
-        asNearbyPlayers(world, 20, pos);
+        if (EffigyFountainBlock.active) {
+            asNearbyPlayers(world, 20, pos);
+        } else {
+            world.setBlockState(pos, ModBlocks.EFFIGY_FOUNTAIN.getDefaultState());
+        }
         world.scheduleBlockTick(pos, this, 10);
 
     }
@@ -64,6 +76,12 @@ public class ActiveEffigyFountainBlock extends Block {
         }
     }
 
+    @Override
+    public void onBroken(WorldAccess world, BlockPos pos, BlockState state) {
+        EffigyFountainBlock.active = false;
+        world.playSound(null, pos, SoundEvents.BLOCK_BEACON_DEACTIVATE, SoundCategory.BLOCKS);
+        super.onBroken(world, pos, state);
+    }
 
     private void asNearbyPlayers(World world, double radius, BlockPos pos) {
         if (!(world instanceof ServerWorld serverWorld)) return;
