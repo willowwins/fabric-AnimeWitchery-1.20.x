@@ -27,8 +27,9 @@ public class ModCustomTrades {
                 factories -> {
                     factories.add((entity, random) -> new TradeOffer(
                             new ItemStack(Items.EMERALD,16),
+                            new ItemStack(Items.NETHERITE_INGOT,1),
                             new ItemStack(Items.TOTEM_OF_UNDYING,1),
-                            5,12,0.2f
+                            5,12,0.6f
                     ));
 
 

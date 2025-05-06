@@ -55,8 +55,6 @@ public class ModBlockTagProvider extends FabricTagProvider.BlockTagProvider {
 
         getOrCreateTagBuilder(BlockTags.NEEDS_IRON_TOOL)
                 .add(ModBlocks.SILVER_BLOCK)
-                .add(ModBlocks.ACTIVE_EFFIGY_FOUNTAIN)
-                .add(ModBlocks.EFFIGY_FOUNTAIN)
                 .add(ModBlocks.SILVER_ORE)
                 .add(ModBlocks.DEEPSLATE_SILVER_ORE)
                 .add(ModBlocks.SILVER_BUTTON)
@@ -74,7 +72,9 @@ public class ModBlockTagProvider extends FabricTagProvider.BlockTagProvider {
         getOrCreateTagBuilder(TagKey.of(RegistryKeys.BLOCK, new Identifier("fabric","needs_tool_level_4")));
 
         getOrCreateTagBuilder(TagKey.of(RegistryKeys.BLOCK, new Identifier("fabric","needs_tool_level_5")))
-                .add(Blocks.REINFORCED_DEEPSLATE);
+                .add(Blocks.REINFORCED_DEEPSLATE)
+                .add(ModBlocks.ACTIVE_EFFIGY_FOUNTAIN)
+                .add(ModBlocks.EFFIGY_FOUNTAIN);
 
 
         getOrCreateTagBuilder(BlockTags.FENCES)

@@ -33,13 +33,14 @@ public class ModModelProvider extends FabricModelProvider {
         silverPool.fenceGate(ModBlocks.SILVER_FENCE_GATE);
         silverPool.wall(ModBlocks.SILVER_WALL);
 
+        blockStateModelGenerator.registerSimpleState(ModBlocks.EFFIGY_FOUNTAIN);
+        blockStateModelGenerator.registerSimpleState(ModBlocks.ACTIVE_EFFIGY_FOUNTAIN);
+
         blockStateModelGenerator.registerDoor(ModBlocks.SILVER_DOOR);
         blockStateModelGenerator.registerTrapdoor(ModBlocks.SILVER_TRAPDOOR);
 
         blockStateModelGenerator.registerCrop(ModBlocks.STRAWBERRY_CROP, StrawberryCropBlock.AGE, 0, 1, 2, 3);
         blockStateModelGenerator.registerCrop(ModBlocks.LEMON_CROP, LemonCropBlock.AGE, 0, 1, 2, 3, 4, 5, 6, 7, 8);
-
-
     }
 
     @Override

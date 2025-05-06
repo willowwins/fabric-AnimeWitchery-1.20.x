@@ -19,10 +19,10 @@ public class ModBlocks {
             new Block(FabricBlockSettings.copyOf(Blocks.IRON_BLOCK)));
 
     public static final Block EFFIGY_FOUNTAIN =registerBlock("effigy_fountain",
-            new EffigyFountainBlock(FabricBlockSettings.copyOf(Blocks.STONE)));
+            new EffigyFountainBlock(FabricBlockSettings.copyOf(Blocks.STONE).nonOpaque()));
 
     public static final Block ACTIVE_EFFIGY_FOUNTAIN =registerBlock("active_effigy_fountain",
-            new ActiveEffigyFountainBlock(FabricBlockSettings.copyOf(Blocks.STONE)));
+            new ActiveEffigyFountainBlock(FabricBlockSettings.copyOf(Blocks.STONE).nonOpaque()));
 
     public static final Block SOUND_BLOCK =registerBlock("sound_block",
             new SoundBlock(FabricBlockSettings.copyOf(Blocks.JUKEBOX)));

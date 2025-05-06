@@ -39,9 +39,6 @@ public class MetalDetectorItem extends Item {
                     outputValuableCoordinates(positionClicked.down(i), player,state.getBlock());
                     foundBlock = true;
 
-                    context.getWorld().playSound(null, positionClicked, ModSounds.LEMON_HATSUNE_MIKU,
-                            SoundCategory.BLOCKS,1f,1f);
-                    
                     break;
 
                 }

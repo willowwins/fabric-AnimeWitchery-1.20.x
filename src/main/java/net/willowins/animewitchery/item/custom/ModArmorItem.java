@@ -13,7 +13,9 @@ import net.minecraft.item.ArmorMaterial;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
+import java.rmi.server.UID;
 import java.util.Map;
+import java.util.UUID;
 
 
 public class ModArmorItem extends ArmorItem {
@@ -23,7 +25,14 @@ public class ModArmorItem extends ArmorItem {
                             false, false, false))
                     .put(ModArmorMaterials.SILVER, new StatusEffectInstance(StatusEffects.GLOWING, 400, 0,
             false, false, false))
-                    .put(ModArmorMaterials.SILVER, new StatusEffectInstance(StatusEffects.WEAKNESS, 800, 1,
+                    .put(ModArmorMaterials.SILVER, new StatusEffectInstance(StatusEffects.WEAKNESS, 800, 255,
+                            false, false, false)).build();
+
+    private static final Multimap<ArmorMaterial, StatusEffectInstance> MATERIAL_TO_EFFECT_MAP2 =
+            (new ImmutableMultimap.Builder<ArmorMaterial, StatusEffectInstance>())
+                    .put(ModArmorMaterials.SILVER, new StatusEffectInstance(StatusEffects.SATURATION, 400, 0,
+                            false, false, false))
+                    .put(ModArmorMaterials.SILVER, new StatusEffectInstance(StatusEffects.GLOWING, 400, 0,
                             false, false, false)).build();
 
 
@@ -47,11 +56,12 @@ public class ModArmorItem extends ArmorItem {
             ArmorMaterial mapArmorMaterial = entry.getKey();
             StatusEffectInstance mapStatusEffect = entry.getValue();
 
-            if(hasCorrectArmorOn(mapArmorMaterial, player)) {
+                if (hasCorrectArmorOn(mapArmorMaterial, player)) {
                 addStatusEffectForMaterial(player, mapArmorMaterial, mapStatusEffect);
             }
         }
     }
+
 
     private void addStatusEffectForMaterial(PlayerEntity player, ArmorMaterial mapArmorMaterial, StatusEffectInstance mapStatusEffect) {
         boolean hasPlayerEffect = player.hasStatusEffect(mapStatusEffect.getEffectType());

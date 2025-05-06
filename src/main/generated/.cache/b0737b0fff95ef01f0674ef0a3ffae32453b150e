@@ -1,10 +1,10 @@
-// 1.20.1	2025-05-02T21:26:18.5432349	Anime Witchery/Tags for minecraft:block
-e3425c92a70b98ecde8e3af1200ee292738b533a data\fabric\tags\blocks\needs_tool_level_5.json
+// 1.20.1	2025-05-06T12:10:01.0653875	Anime Witchery/Tags for minecraft:block
+23c22fcbc1572fc4a69b380699a2ccd7e7fcb0a6 data\fabric\tags\blocks\needs_tool_level_5.json
 55c36f1579be634c10c24410dab8b2ddb04cb519 data\minecraft\tags\blocks\mineable\axe.json
-813fbb5df643e0a2e7e7d66d10352a8b9ee17faf data\minecraft\tags\blocks\walls.json
 8c91c5e307e769f1412915303ee6f201403034c6 data\minecraft\tags\blocks\fence_gates.json
-7c49f506c1f9632f6a13a1b81c387e7d2721ac27 data\minecraft\tags\blocks\mineable\pickaxe.json
+813fbb5df643e0a2e7e7d66d10352a8b9ee17faf data\minecraft\tags\blocks\walls.json
 8a23702b05296c8af5014d6aa6e9265ded85c7d9 data\fabric\tags\blocks\needs_tool_level_4.json
+9b5506f2003cca48899e7d6c1ee17c243702d357 data\minecraft\tags\blocks\mineable\pickaxe.json
 d10ec02f35a344e7b03042a7ee19b68fbeec3e88 data\minecraft\tags\blocks\needs_stone_tool.json
 5e2955b69630448fd3b0761dc71c3e61578a77b3 data\animewitchery\tags\blocks\metal_detector_detectable_blocks.json
 bee89f2afe7edeaf9f8f35e0c36dd7a3249cec27 data\minecraft\tags\blocks\fences.json
