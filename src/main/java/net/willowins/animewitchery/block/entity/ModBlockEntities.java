@@ -1,6 +1,8 @@
 package net.willowins.animewitchery.block.entity;
 
+import com.mojang.datafixers.types.Type;
 import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
+import net.minecraft.block.Block;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
@@ -16,8 +18,7 @@ public class ModBlockEntities {
 
     public static final BlockEntityType<ActiveEffigyFountainBlockEntity> ACTIVE_EFFIGY_FOUNTAIN_BLOCK_ENTITY =
             Registry.register(Registries.BLOCK_ENTITY_TYPE, new Identifier(AnimeWitchery.MOD_ID, "active_effigy_fountain_be"),
-                    FabricBlockEntityTypeBuilder.create(ActiveEffigyFountainBlockEntity::new,
-                            ModBlocks.ACTIVE_EFFIGY_FOUNTAIN).build());
+                    FabricBlockEntityTypeBuilder.create(ActiveEffigyFountainBlockEntity::new,new Block[]{ModBlocks.ACTIVE_EFFIGY_FOUNTAIN}).build((Type)null));
 
     public static void registerBlockEntities(){
         AnimeWitchery.LOGGER.info("Registering Block Entities For ", AnimeWitchery.MOD_ID);

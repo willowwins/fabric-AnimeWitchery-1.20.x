@@ -4,39 +4,28 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.screen.PropertyDelegate;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
+import software.bernie.geckolib.animatable.GeoBlockEntity;
+import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
+import software.bernie.geckolib.core.animation.AnimatableManager;
+import software.bernie.geckolib.core.animation.AnimationController;
+import software.bernie.geckolib.core.animation.RawAnimation;
+import software.bernie.geckolib.util.GeckoLibUtil;
 
-public class ActiveEffigyFountainBlockEntity extends BlockEntity{
-
-
-    protected final PropertyDelegate propertyDelegate;
-    private int progress =0;
-    private int maxProgress =72;
+public class ActiveEffigyFountainBlockEntity extends BlockEntity implements GeoBlockEntity {
+    private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
 
     public ActiveEffigyFountainBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntities.ACTIVE_EFFIGY_FOUNTAIN_BLOCK_ENTITY, pos, state);
-        this.propertyDelegate = new PropertyDelegate() {
-            @Override
-            public int get(int index) {
-                return switch (index){
-                    case 0 -> ActiveEffigyFountainBlockEntity.this.progress;
-                    case 1 -> ActiveEffigyFountainBlockEntity.this.maxProgress;
-                    default -> 0;
-                };
-            }
-
-            @Override
-            public void set(int index, int value) {
-                switch (index){
-                    case 0 -> ActiveEffigyFountainBlockEntity.this.progress = value;
-                    case 1 -> ActiveEffigyFountainBlockEntity.this.maxProgress = value;
-                }
-            }
-
-            @Override
-            public int size() {
-                return 2;
-            }
-        };
     }
 
+    @Override
+    public void registerControllers(AnimatableManager.ControllerRegistrar controllerRegistrar) {
+        controllerRegistrar.add(new AnimationController<>(this, "Idle", 0, state -> state.setAndContinue(RawAnimation.begin().thenLoop("idle"))));
+    }
+
+    @Override
+    public AnimatableInstanceCache getAnimatableInstanceCache() {
+        return cache;
+    }
 }

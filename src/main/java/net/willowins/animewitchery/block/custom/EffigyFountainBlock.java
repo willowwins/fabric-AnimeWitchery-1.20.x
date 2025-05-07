@@ -1,7 +1,9 @@
 package net.willowins.animewitchery.block.custom;
 
 
+import net.minecraft.block.entity.BeaconBlockEntity;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.LightningEntity;
 import net.minecraft.entity.SpawnReason;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -53,14 +55,24 @@ public class EffigyFountainBlock extends Block {
                     lastEffigyPos = pos;
                     effigyworld = world;
                     if (player.getStackInHand(hand).isOf(Items.NETHER_STAR)) {
-                        EntityType.LIGHTNING_BOLT.spawn((ServerWorld) world, pos, SpawnReason.EVENT);
+                        LightningEntity lightningEntity = EntityType.LIGHTNING_BOLT.create(world);
+                        if (lightningEntity != null) {
+                            lightningEntity.setCosmetic(true);
+                            lightningEntity.setPos(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5);
+                            world.spawnEntity(lightningEntity);
+                        }
                         player.sendMessage(Text.literal("A NEW HAND TOUCHES THE BEACON"), true);
                         world.setBlockState(pos, ModBlocks.ACTIVE_EFFIGY_FOUNTAIN.getDefaultState());
                         player.damage(player.getDamageSources().cramming(), 2);
                         player.getStackInHand(hand).decrement(1);
                         player.giveItemStack(new ItemStack(ModItems.METAL_DETECTOR, 1));
                     } else {
-                        EntityType.LIGHTNING_BOLT.spawn((ServerWorld) world, pos, SpawnReason.EVENT);
+                        LightningEntity lightningEntity = EntityType.LIGHTNING_BOLT.create(world);
+                        if (lightningEntity != null) {
+                            lightningEntity.setCosmetic(true);
+                            lightningEntity.setPos(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5);
+                            world.spawnEntity(lightningEntity);
+                        }
                         player.sendMessage(Text.literal("A NEW HAND TOUCHES THE BEACON"), true);
                         world.setBlockState(pos, ModBlocks.ACTIVE_EFFIGY_FOUNTAIN.getDefaultState());
                         player.damage(player.getDamageSources().cramming(), 2);
@@ -68,7 +80,7 @@ public class EffigyFountainBlock extends Block {
                 } else {
                     if (!world.isClient) {
                         player.sendMessage(Text.literal("Please wait, a fountain is currently active"));
-                        player.sendMessage(Text.literal(ticks/20 + "/" + 3600), true);
+                        player.sendMessage(Text.literal(ticks/20 + "/" + 36000), true);
                     }
                 }
             }

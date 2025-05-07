@@ -1,6 +1,10 @@
 package net.willowins.animewitchery.block.custom;
 
 import net.minecraft.block.*;
+import net.minecraft.block.entity.BeaconBlockEntity;
+import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.block.entity.BlockEntityTicker;
+import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
@@ -23,11 +27,14 @@ import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldAccess;
 import net.willowins.animewitchery.block.ModBlocks;
+import net.willowins.animewitchery.block.entity.ActiveEffigyFountainBlockEntity;
+import net.willowins.animewitchery.block.entity.ModBlockEntities;
 import net.willowins.animewitchery.item.ModItems;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public class ActiveEffigyFountainBlock extends Block {
+public class ActiveEffigyFountainBlock extends BlockWithEntity implements BlockEntityProvider {
     private static final VoxelShape SHAPE = Block.createCuboidShape(0, 0, 0, 16, 32, 16);
 
     public ActiveEffigyFountainBlock(Settings settings) {
@@ -38,10 +45,12 @@ public class ActiveEffigyFountainBlock extends Block {
     public VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
         return SHAPE;
     }
-    @Override
+
     public BlockRenderType getRenderType(BlockState state) {
-        return BlockRenderType.MODEL;
+        return BlockRenderType.ENTITYBLOCK_ANIMATED;
     }
+
+
     @Override
     public ActionResult onUse(BlockState state, World world, BlockPos pos,
                               PlayerEntity player, Hand hand, BlockHitResult hit) {
@@ -105,5 +114,12 @@ public class ActiveEffigyFountainBlock extends Block {
         }
 
 
+    }
+
+
+
+    @Override
+    public @Nullable BlockEntity createBlockEntity(BlockPos pos, BlockState state) {
+        return ModBlockEntities.ACTIVE_EFFIGY_FOUNTAIN_BLOCK_ENTITY.instantiate(pos, state);
     }
 }
