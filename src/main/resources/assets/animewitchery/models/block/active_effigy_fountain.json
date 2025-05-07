@@ -3,37 +3,11 @@
 	"texture_size": [69, 96],
 	"textures": {
 		"1": "animewitchery:block/inside_circle",
-		"2": "animewitchery:block/big circle",
+		"2": "animewitchery:block/big_circle",
 		"3": "animewitchery:block/active_effigy_fountain",
 		"particle": "animewitchery:block/active_effigy_fountain"
 	},
 	"elements": [
-		{
-			"from": [-16, 9, -16],
-			"to": [32, 9, 32],
-			"rotation": {"angle": 0, "axis": "y", "origin": [8, 9, 8]},
-			"faces": {
-				"north": {"uv": [0, 0, 2, 0], "texture": "#missing"},
-				"east": {"uv": [0, 0, 2, 0], "texture": "#missing"},
-				"south": {"uv": [0, 0, 2, 0], "texture": "#missing"},
-				"west": {"uv": [0, 0, 2, 0], "texture": "#missing"},
-				"up": {"uv": [0, 0, 16, 16], "texture": "#2"},
-				"down": {"uv": [0, 16, 16, 0], "texture": "#2"}
-			}
-		},
-		{
-			"from": [-16, 26, -16],
-			"to": [32, 26, 32],
-			"rotation": {"angle": 0, "axis": "y", "origin": [8, 26, 8]},
-			"faces": {
-				"north": {"uv": [0, 0, 2, 0], "texture": "#missing"},
-				"east": {"uv": [0, 0, 2, 0], "texture": "#missing"},
-				"south": {"uv": [0, 0, 2, 0], "texture": "#missing"},
-				"west": {"uv": [0, 0, 2, 0], "texture": "#missing"},
-				"up": {"uv": [0, 0, 16, 16], "texture": "#1"},
-				"down": {"uv": [0, 0, 16, 16], "texture": "#1"}
-			}
-		},
 		{
 			"from": [-4, 0, -4],
 			"to": [20, 2, 20],
@@ -526,26 +500,91 @@
 				"up": {"uv": [10, 0.5, 10.66667, 0], "texture": "#3"},
 				"down": {"uv": [10, 0, 10.66667, 0.5], "texture": "#3"}
 			}
+		},
+		{
+			"from": [-16, 26, -16],
+			"to": [32, 26, 32],
+			"rotation": {"angle": 0, "axis": "y", "origin": [8, 26, 8]},
+			"faces": {
+				"north": {"uv": [0, 0, 2, 0], "texture": "#missing"},
+				"east": {"uv": [0, 0, 2, 0], "texture": "#missing"},
+				"south": {"uv": [0, 0, 2, 0], "texture": "#missing"},
+				"west": {"uv": [0, 0, 2, 0], "texture": "#missing"},
+				"up": {"uv": [0, 0, 16, 16], "texture": "#1"},
+				"down": {"uv": [0, 0, 16, 16], "texture": "#1"}
+			}
+		},
+		{
+			"from": [-16, 9, -16],
+			"to": [32, 9, 32],
+			"rotation": {"angle": 0, "axis": "y", "origin": [8, 9, 8]},
+			"faces": {
+				"north": {"uv": [0, 0, 2, 0], "texture": "#missing"},
+				"east": {"uv": [0, 0, 2, 0], "texture": "#missing"},
+				"south": {"uv": [0, 0, 2, 0], "texture": "#missing"},
+				"west": {"uv": [0, 0, 2, 0], "texture": "#missing"},
+				"up": {"uv": [0, 0, 16, 16], "texture": "#2"},
+				"down": {"uv": [0, 16, 16, 0], "texture": "#2"}
+			}
 		}
 	],
 	"groups": [
 		{
-			"name": "outside",
-			"origin": [0, 0, 0],
-			"color": 0,
-			"children": [0]
-		},
-		{
-			"name": "inside",
-			"origin": [0, 0, 0],
-			"color": 0,
-			"children": [1]
-		},
-		{
 			"name": "VoxelShapes",
 			"origin": [4.3, 29.5, 8],
 			"color": 0,
-			"children": [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39]
+			"children": [
+				0,
+				1,
+				2,
+				3,
+				4,
+				5,
+				6,
+				7,
+				8,
+				9,
+				10,
+				11,
+				12,
+				13,
+				14,
+				15,
+				16,
+				17,
+				18,
+				19,
+				20,
+				21,
+				22,
+				23,
+				24,
+				25,
+				26,
+				27,
+				28,
+				29,
+				30,
+				31,
+				32,
+				33,
+				34,
+				35,
+				36,
+				37,
+				{
+					"name": "inside",
+					"origin": [0, 0, 0],
+					"color": 0,
+					"children": [38]
+				},
+				{
+					"name": "outside",
+					"origin": [0, 0, 0],
+					"color": 0,
+					"children": [39]
+				}
+			]
 		}
 	]
 }
