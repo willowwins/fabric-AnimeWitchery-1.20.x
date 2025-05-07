@@ -20,7 +20,7 @@ public class ItemRendererMixin {
         if (stack.isOf(ModItems.NEEDLE) && renderMode != ModelTransformationMode.GUI) {
             return ((ItemRendererAccessor) this).mccourse$getModels().getModelManager().getModel(new ModelIdentifier(AnimeWitchery.MOD_ID, "needle3d", "inventory"));
         }
-        if (stack.isOf(ModItems.HEALING_STAFF) && (renderMode == ModelTransformationMode.GUI) || renderMode == ModelTransformationMode.GROUND) {
+        if (stack.isOf(ModItems.HEALING_STAFF) && (renderMode == ModelTransformationMode.GUI || renderMode == ModelTransformationMode.GROUND)) {
             return ((ItemRendererAccessor) this).mccourse$getModels().getModelManager().getModel(new ModelIdentifier(AnimeWitchery.MOD_ID, "healing_staff_2d", "inventory"));
         }
         return value;
