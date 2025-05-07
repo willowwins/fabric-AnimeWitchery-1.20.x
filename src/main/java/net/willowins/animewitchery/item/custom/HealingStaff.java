@@ -111,15 +111,14 @@ public class HealingStaff extends Item implements GeoItem {
         for (PlayerEntity target : player) {
             if (target != user) {
                 if (hasEquipped(target, ModItems.SILVER_PENDANT)) {
-                    target.addStatusEffect(new StatusEffectInstance(StatusEffects.RESISTANCE, 80, 1));
-                    target.addStatusEffect(new StatusEffectInstance(StatusEffects.FIRE_RESISTANCE, 80, 1));
-                    target.addStatusEffect(new StatusEffectInstance(StatusEffects.SATURATION, 80, 1));
-                    target.addStatusEffect(new StatusEffectInstance(StatusEffects.GLOWING, 80, 0));
+                    target.addStatusEffect(new StatusEffectInstance(StatusEffects.RESISTANCE, 100, 1));
+                    target.addStatusEffect(new StatusEffectInstance(StatusEffects.FIRE_RESISTANCE, 100, 1));
+                    target.addStatusEffect(new StatusEffectInstance(StatusEffects.SATURATION, 100, 1));
+                    target.addStatusEffect(new StatusEffectInstance(StatusEffects.GLOWING, 100, 0));
                 } else {
-                    target.addStatusEffect(new StatusEffectInstance(StatusEffects.POISON, 80, 1));
-                    target.addStatusEffect(new StatusEffectInstance(StatusEffects.WITHER, 80, 1));
-                    target.addStatusEffect(new StatusEffectInstance(StatusEffects.HUNGER, 80, 1));
-                    target.addStatusEffect(new StatusEffectInstance(StatusEffects.GLOWING, 80, 0));
+                    target.addStatusEffect(new StatusEffectInstance(StatusEffects.POISON, 100, 1));
+                    target.addStatusEffect(new StatusEffectInstance(StatusEffects.HUNGER, 100, 1));
+                    target.addStatusEffect(new StatusEffectInstance(StatusEffects.GLOWING, 100, 0));
 
                 }
             }
@@ -127,13 +126,13 @@ public class HealingStaff extends Item implements GeoItem {
 
         for (MobEntity entity : mobs) {
             if (entity.isUndead()){
-                entity.addStatusEffect(new StatusEffectInstance(StatusEffects.REGENERATION, 80, 255));
+                entity.addStatusEffect(new StatusEffectInstance(StatusEffects.REGENERATION, 120, 255));
 
             } else {
-                entity.addStatusEffect(new StatusEffectInstance(StatusEffects.POISON, 80, 255));
+                entity.addStatusEffect(new StatusEffectInstance(StatusEffects.POISON, 120, 255));
             }
-            entity.addStatusEffect(new StatusEffectInstance(StatusEffects.WITHER, 80, 255));
-            entity.addStatusEffect(new StatusEffectInstance(StatusEffects.GLOWING, 80, 0));
+            entity.addStatusEffect(new StatusEffectInstance(StatusEffects.WITHER, 120, 255));
+            entity.addStatusEffect(new StatusEffectInstance(StatusEffects.GLOWING, 120, 0));
 
         }
 
