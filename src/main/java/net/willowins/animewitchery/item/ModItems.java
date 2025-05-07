@@ -7,10 +7,13 @@ import net.minecraft.item.*;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.Rarity;
 import net.willowins.animewitchery.AnimeWitchery;
 import net.willowins.animewitchery.block.ModBlocks;
+import net.willowins.animewitchery.item.custom.HealingStaff;
 import net.willowins.animewitchery.item.custom.MetalDetectorItem;
 import net.willowins.animewitchery.item.custom.ModArmorItem;
+import net.willowins.animewitchery.item.custom.SilverPendant;
 
 public class ModItems {
     public static final Item SILVER =registerItem("silveringot", new Item(new FabricItemSettings()));
@@ -57,6 +60,10 @@ public class ModItems {
 
     public static final Item LEMON_SEEDS = registerItem("lemon_seeds",
             new AliasedBlockItem(ModBlocks.LEMON_CROP, new FabricItemSettings()));
+
+    public static final Item SILVER_PENDANT =registerItem("silver_pendant", new SilverPendant(new FabricItemSettings().maxCount(1).rarity(Rarity.RARE)));
+    public static final Item HEALING_STAFF =registerItem("healing_staff", new HealingStaff(new FabricItemSettings().maxCount(1).rarity(Rarity.RARE)));
+
 
     private static void addItemsToIngredientItemGroup(FabricItemGroupEntries entries){
         entries.add(SILVER);

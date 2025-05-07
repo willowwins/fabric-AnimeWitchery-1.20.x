@@ -1,11 +1,11 @@
-// 1.20.1	2025-05-06T21:27:30.1427222	Anime Witchery/Block Loot Tables
+// 1.20.1	2025-05-07T20:35:26.3867703	Anime Witchery/Block Loot Tables
 78268c23833213bf45108d6f6bffd33be9080b75 data\minecraft\loot_tables\blocks\reinforced_deepslate.json
 9bec1f332d7c0676add2f55dd534479fb74e5c76 data\animewitchery\loot_tables\blocks\silver_wall.json
 4cb57c5d7445b531c3ef8109efd6a1b0c861d470 data\animewitchery\loot_tables\blocks\sound_block.json
 8bfdcc49204c97f06e57f13ee89ac7dbc2daf9df data\animewitchery\loot_tables\blocks\lemon_crop.json
 fee2efb2bd350f9fa8f364c9ac3b66ea50327da8 data\animewitchery\loot_tables\blocks\silver_ore.json
-abc458e9e5bd9dc4a54370afab23701971d3c01f data\animewitchery\loot_tables\blocks\silver_slab.json
 c16074dc1d74a2a1d5523cb90a13f7af45a46320 data\animewitchery\loot_tables\blocks\strawberry_crop.json
+abc458e9e5bd9dc4a54370afab23701971d3c01f data\animewitchery\loot_tables\blocks\silver_slab.json
 1bb473e11ccf5a409c08ece221d9278b4c8b1b3e data\animewitchery\loot_tables\blocks\silver_pressure_plate.json
 0658956ee367b206b659e7b55c103ba422916353 data\animewitchery\loot_tables\blocks\deepslate_silver_ore.json
 c8d43f32b7adcb5336cbbf37ad2170616ac18b5d data\animewitchery\loot_tables\blocks\silver_button.json

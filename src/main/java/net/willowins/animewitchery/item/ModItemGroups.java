@@ -64,6 +64,9 @@ public class ModItemGroups {
                         entries.add(ModBlocks.SILVER_SLAB);
                         entries.add(ModBlocks.SILVER_STAIRS);
 
+                        entries.add(ModItems.SILVER_PENDANT);
+                        entries.add(ModItems.HEALING_STAFF);
+
 
                     } ).build());
 

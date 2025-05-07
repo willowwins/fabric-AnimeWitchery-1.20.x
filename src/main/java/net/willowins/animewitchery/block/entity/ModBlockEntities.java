@@ -1,7 +1,5 @@
 package net.willowins.animewitchery.block.entity;
 
-import com.google.common.collect.ImmutableMultimap;
-import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.registry.Registries;
@@ -9,8 +7,6 @@ import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;
 import net.willowins.animewitchery.AnimeWitchery;
 import net.willowins.animewitchery.block.ModBlocks;
-import net.willowins.animewitchery.block.custom.ActiveEffigyFountainBlock;
-import net.willowins.animewitchery.block.custom.EffigyFountainBlock;
 
 public class ModBlockEntities {
     public static final BlockEntityType<EffigyFountainBlockEntity> EFFIGY_FOUNTAIN_BLOCK_ENTITY =
