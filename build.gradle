@@ -44,6 +44,50 @@ dependencies {
 
 
 }
+//geckolib
+repositories {
+	// Add repositories to retrieve artifacts from in here.
+	// You should only use this when depending on other mods because
+	// Loom adds the essential maven repositories to download Minecraft and libraries from automatically.
+	// See https://docs.gradle.org/current/userguide/declaring_repositories.html
+	// for more information about repositories.
+	// This is the repositories block in your build.gradle. NOT the one in publishing, or in buildscript. If it does not exist already, create it.
+	maven {
+		name = 'GeckoLib'
+		url 'https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/'
+		content {
+			includeGroupByRegex("software\\.bernie.*")
+			includeGroup("com.eliotlash.mclib")
+		}
+
+
+	}
+
+
+	dependencies {
+
+		modImplementation("software.bernie.geckolib:geckolib-fabric-${minecraft_version}:${geckolib_version}")
+		implementation("com.eliotlash.mclib:mclib:20")
+
+
+
+	}
+}
+
+repositories {
+	maven {
+		name = "TerraformersMC"
+		url = "https://maven.terraformersmc.com/"
+	}
+	maven {
+		name = "Ladysnake Libs"
+		url = 'https://maven.ladysnake.org/releases'
+	}
+}
+
+dependencies {
+	modImplementation "dev.emi:trinkets:${trinkets_version}"
+}
 
 processResources {
 	inputs.property "version", project.version
