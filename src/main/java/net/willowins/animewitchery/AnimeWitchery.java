@@ -63,7 +63,7 @@ public class AnimeWitchery implements ModInitializer {
 		ServerTickEvents.END_SERVER_TICK.register(minecraftServer -> {
 			if (EffigyFountainBlock.active) {
 				EffigyFountainBlock.ticks++;
-				if (EffigyFountainBlock.ticks == 20*3600) {
+				if (EffigyFountainBlock.ticks == 20*36000) {
 					World world = EffigyFountainBlock.effigyworld;
 					BlockPos blockPos = EffigyFountainBlock.lastEffigyPos;
 					world.setBlockState(blockPos, ModBlocks.EFFIGY_FOUNTAIN.getDefaultState());

@@ -78,7 +78,7 @@ public class HealingStaff extends Item implements GeoItem {
 
 
     private static float getPullProgress(int useTicks, ItemStack stack) {
-        float f = (float)useTicks / 25;
+        float f = (float)useTicks / 10;
         if (f > 1.0F) {
             f = 1.0F;
         }
@@ -132,7 +132,7 @@ public class HealingStaff extends Item implements GeoItem {
                 entity.addStatusEffect(new StatusEffectInstance(StatusEffects.POISON, 120, 255));
             }
             entity.addStatusEffect(new StatusEffectInstance(StatusEffects.WITHER, 120, 255));
-            entity.addStatusEffect(new StatusEffectInstance(StatusEffects.GLOWING, 120, 0));
+            entity.addStatusEffect(new StatusEffectInstance(StatusEffects.GLOWING, 120, 0 ));
 
         }
 

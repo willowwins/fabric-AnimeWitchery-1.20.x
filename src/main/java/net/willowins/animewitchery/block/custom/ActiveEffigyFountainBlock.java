@@ -69,7 +69,7 @@ public class ActiveEffigyFountainBlock extends BlockWithEntity implements BlockE
         super.scheduledTick(state, world, pos, random);
 
         if (EffigyFountainBlock.active) {
-            asNearbyPlayers(world, 20, pos);
+            asNearbyPlayers(world, 60, pos);
         } else {
             world.setBlockState(pos, ModBlocks.EFFIGY_FOUNTAIN.getDefaultState());
         }
@@ -105,10 +105,10 @@ public class ActiveEffigyFountainBlock extends BlockWithEntity implements BlockE
 
         for (PlayerEntity target : player) {
             if (!target.getInventory().contains(Items.BEDROCK.getDefaultStack())) {
-                target.addStatusEffect(new StatusEffectInstance(StatusEffects.RESISTANCE,300,255));
-                target.addStatusEffect(new StatusEffectInstance(StatusEffects.FIRE_RESISTANCE,300,255));
-                target.addStatusEffect(new StatusEffectInstance(StatusEffects.SATURATION,300,5));
-                target.addStatusEffect(new StatusEffectInstance(StatusEffects.GLOWING,300,0));
+                target.addStatusEffect(new StatusEffectInstance(StatusEffects.RESISTANCE,300,255,false,false));
+                target.addStatusEffect(new StatusEffectInstance(StatusEffects.FIRE_RESISTANCE,300,255,false,false));
+                target.addStatusEffect(new StatusEffectInstance(StatusEffects.SATURATION,300,5,false,false));
+                target.addStatusEffect(new StatusEffectInstance(StatusEffects.GLOWING,300,0,false,false));
                 ((ServerWorld) world).spawnParticles(ParticleTypes.ENCHANT, target.getX(), target.getY()+1, target.getZ(), 10, 0.5,0.5,0.5, 0.1);
             }
         }
