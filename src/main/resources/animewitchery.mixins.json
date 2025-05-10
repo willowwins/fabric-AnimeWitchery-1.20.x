@@ -3,12 +3,14 @@
   "package": "net.willowins.animewitchery.mixin",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
-    "ExampleMixin"
+    "ExampleMixin",
+    "LivingEntityMixin"
   ],
   "client": [
     "ItemRendererAccessor",
     "ItemRendererMixin",
-    "ModelLoaderMixin"
+    "ModelLoaderMixin",
+    "PlayerEntityRendererMixin"
   ],
   "injectors": {
     "defaultRequire": 1
