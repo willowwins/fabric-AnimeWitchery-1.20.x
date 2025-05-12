@@ -13,6 +13,8 @@ import net.minecraft.util.math.intprovider.UniformIntProvider;
 import net.willowins.animewitchery.AnimeWitchery;
 import net.willowins.animewitchery.block.custom.*;
 
+import java.util.Objects;
+
 public class ModBlocks {
 
     public static final Block SILVER_BLOCK =registerBlock("silver_block",
@@ -68,9 +70,14 @@ public class ModBlocks {
     public static final Block LEMON_CROP = Registry.register(Registries.BLOCK, new Identifier(AnimeWitchery.MOD_ID, "lemon_crop"),
             new LemonCropBlock(FabricBlockSettings.copyOf(Blocks.SPRUCE_SAPLING)));
 
+    public static final Block FLOAT_BLOCK = registerBlock("float_block",
+            new FloatBlock(FabricBlockSettings.copyOf(Blocks.BARRIER)));
+
 
     private static Block registerBlock(String name, Block block){
-        registerBlockItem(name, block);
+        if (!Objects.equals(name, "float_block")) {
+            registerBlockItem(name, block);
+        }
         return Registry.register(Registries.BLOCK, new Identifier(AnimeWitchery.MOD_ID, name), block);
     }
 

@@ -9,6 +9,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.willowins.animewitchery.block.ModBlocks;
 import net.willowins.animewitchery.enchantments.ModEnchantments;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -30,7 +31,7 @@ public class LivingEntityMixin {
     }
 
     private void createPlatform(World world, BlockPos pos) {
-        BlockState blockState = Blocks.GLASS.getDefaultState();
+        BlockState blockState = ModBlocks.FLOAT_BLOCK.getDefaultState();
         BlockPos blockPos = new BlockPos(pos.getX()-1, pos.getY()-1, pos.getZ()-1);
         for (int x = 0; x < 3; x++) {
             for (int z = 0; z < 3; z++) {
