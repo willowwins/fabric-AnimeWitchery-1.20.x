@@ -24,7 +24,7 @@ public class ModBlocks {
             new EffigyFountainBlock(FabricBlockSettings.copyOf(Blocks.STONE).nonOpaque()));
 
     public static final Block ACTIVE_EFFIGY_FOUNTAIN =registerBlock("active_effigy_fountain",
-            new ActiveEffigyFountainBlock(FabricBlockSettings.copyOf(Blocks.STONE).nonOpaque()));
+            new ActiveEffigyFountainBlock(FabricBlockSettings.copyOf(Blocks.STONE).nonOpaque().hardness(-1f)));
 
     public static final Block SOUND_BLOCK =registerBlock("sound_block",
             new SoundBlock(FabricBlockSettings.copyOf(Blocks.JUKEBOX)));

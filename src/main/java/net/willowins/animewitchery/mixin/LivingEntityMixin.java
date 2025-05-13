@@ -24,7 +24,7 @@ public class LivingEntityMixin {
         PlayerEntity player = (PlayerEntity) (Object) this;
         ItemStack boots = player.getEquippedStack(EquipmentSlot.FEET);
         if (EnchantmentHelper.getLevel(ModEnchantments.BOOT_ENCHANT, boots) > 0) {
-            if (player.isSneaking()) {
+            if (player.isSprinting()) {
                 createPlatform(player.getWorld(), player.getBlockPos());
             }
         }
