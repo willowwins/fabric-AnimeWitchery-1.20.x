@@ -114,6 +114,7 @@ public class HealingStaff extends Item implements GeoItem {
                     target.addStatusEffect(new StatusEffectInstance(StatusEffects.RESISTANCE, 100, 1));
                     target.addStatusEffect(new StatusEffectInstance(StatusEffects.FIRE_RESISTANCE, 100, 1));
                     target.addStatusEffect(new StatusEffectInstance(StatusEffects.SATURATION, 100, 1));
+                    target.addStatusEffect(new StatusEffectInstance(StatusEffects.REGENERATION, 50, 0));
                     target.addStatusEffect(new StatusEffectInstance(StatusEffects.GLOWING, 100, 0));
                 } else {
                     target.addStatusEffect(new StatusEffectInstance(StatusEffects.POISON, 100, 1));

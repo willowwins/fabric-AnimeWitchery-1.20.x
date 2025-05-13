@@ -10,6 +10,7 @@ import net.minecraft.client.render.RenderLayer;
 import net.willowins.animewitchery.block.ModBlocks;
 import net.willowins.animewitchery.block.custom.EffigyFountainBlock;
 import net.willowins.animewitchery.block.entity.ModBlockEntities;
+import net.willowins.animewitchery.block.entity.renderer.ActiveBindingSpellRenderer;
 import net.willowins.animewitchery.block.entity.renderer.ActiveEffigyFountainRenderer;
 
 public class AnimeWitcheryClient implements ClientModInitializer {
@@ -17,6 +18,7 @@ public class AnimeWitcheryClient implements ClientModInitializer {
     public void onInitializeClient() {
         BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.SILVER_DOOR, RenderLayer.getCutout());
         BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.ACTIVE_EFFIGY_FOUNTAIN, RenderLayer.getCutout());
+        BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.ACTIVE_BINDING_SPELL, RenderLayer.getCutout());
         BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.SILVER_TRAPDOOR, RenderLayer.getCutout());
 
         BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.STRAWBERRY_CROP, RenderLayer.getCutout());
@@ -25,7 +27,7 @@ public class AnimeWitcheryClient implements ClientModInitializer {
 
 
         BlockEntityRendererRegistry.register(ModBlockEntities.ACTIVE_EFFIGY_FOUNTAIN_BLOCK_ENTITY, (context) -> new ActiveEffigyFountainRenderer());
-
+        BlockEntityRendererRegistry.register(ModBlockEntities.ACTIVE_BINDING_SPELL_BLOCK_ENTITY, (context) -> new ActiveBindingSpellRenderer());
 
     }
 }
