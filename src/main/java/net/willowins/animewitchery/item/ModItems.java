@@ -10,10 +10,7 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.Rarity;
 import net.willowins.animewitchery.AnimeWitchery;
 import net.willowins.animewitchery.block.ModBlocks;
-import net.willowins.animewitchery.item.custom.HealingStaff;
-import net.willowins.animewitchery.item.custom.MetalDetectorItem;
-import net.willowins.animewitchery.item.custom.ModArmorItem;
-import net.willowins.animewitchery.item.custom.SilverPendant;
+import net.willowins.animewitchery.item.custom.*;
 
 public class ModItems {
     public static final Item SILVER =registerItem("silveringot", new Item(new FabricItemSettings()));
@@ -26,7 +23,7 @@ public class ModItems {
             new MetalDetectorItem(new FabricItemSettings().maxDamage(300)));
 
     public static final Item NEEDLE =registerItem("needle",
-            new SwordItem(ModToolMaterial.SILVER,3,-2.2f,new FabricItemSettings().maxCount(1)));
+            new NeedleItem(ModToolMaterial.SILVER,3,-2.2f,new FabricItemSettings().maxCount(1)));
 
     public static final Item SILVER_PICKAXE =registerItem("silver_pickaxe",
             new PickaxeItem(ModToolMaterial.SILVER,0, -3f,new FabricItemSettings()));
