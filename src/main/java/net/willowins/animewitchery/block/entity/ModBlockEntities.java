@@ -24,6 +24,10 @@ public class ModBlockEntities {
             Registry.register(Registries.BLOCK_ENTITY_TYPE, new Identifier(AnimeWitchery.MOD_ID, "active_binding_spell_be"),
                     FabricBlockEntityTypeBuilder.create(ActiveBindingSpellBlockEntity::new,new Block[]{ModBlocks.ACTIVE_BINDING_SPELL}).build((Type)null));
 
+    public static final BlockEntityType<BindingSpellBlockEntity> BINDING_SPELL_BLOCK_ENTITY =
+            Registry.register(Registries.BLOCK_ENTITY_TYPE, new Identifier(AnimeWitchery.MOD_ID, "binding_spell_be"),
+                    FabricBlockEntityTypeBuilder.create(BindingSpellBlockEntity::new,new Block[]{ModBlocks.BINDING_SPELL}).build((Type)null));
+
     public static void registerBlockEntities(){
         AnimeWitchery.LOGGER.info("Registering Block Entities For ", AnimeWitchery.MOD_ID);
     }

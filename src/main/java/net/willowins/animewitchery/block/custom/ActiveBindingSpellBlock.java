@@ -2,6 +2,7 @@ package net.willowins.animewitchery.block.custom;
 
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
@@ -49,9 +50,13 @@ public class ActiveBindingSpellBlock extends BlockWithEntity implements BlockEnt
                               PlayerEntity player, Hand hand, BlockHitResult hit) {
         if (!world.isClient){
             if(player.isHolding(ModItems.SILVER)) {
-                world.setBlockState(pos, ModBlocks.SILVER_PRESSURE_PLATE.getDefaultState());
-            }
+                world.setBlockState(pos, ModBlocks.BINDING_SPELL.getDefaultState());
+                world.playSound(null, pos, SoundEvents.BLOCK_BEACON_DEACTIVATE, SoundCategory.BLOCKS);
+            }else {
+                world.playSound(null,pos,SoundEvents.BLOCK_SAND_STEP,SoundCategory.BLOCKS);
+                }
         }
+
         return ActionResult.SUCCESS;}
 
 
@@ -69,7 +74,7 @@ public class ActiveBindingSpellBlock extends BlockWithEntity implements BlockEnt
     @Override
     public void onBlockAdded(BlockState state, World world, BlockPos pos, BlockState oldState, boolean notify) {
         if (!world.isClient) {
-            world.scheduleBlockTick(pos, this, 1);
+            world.scheduleBlockTick(pos, this, 20);
         }
     }
 
@@ -102,8 +107,6 @@ public class ActiveBindingSpellBlock extends BlockWithEntity implements BlockEnt
 
 
     }
-
-
 
     @Override
     public @Nullable BlockEntity createBlockEntity(BlockPos pos, BlockState state) {
