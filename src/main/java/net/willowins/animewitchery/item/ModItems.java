@@ -14,6 +14,8 @@ import net.willowins.animewitchery.item.custom.*;
 
 public class ModItems {
     public static final Item SILVER =registerItem("silveringot", new Item(new FabricItemSettings()));
+    public static final Item BLAZE_SACK =registerItem("blaze_powder_bag", new Item(new FabricItemSettings()));
+    public static final Item ALCHEMICAL_CATALYST =registerItem("alchemical_catalyst", new Item(new FabricItemSettings()));
     public static final Item SILVERNUGGET =registerItem("silvernugget", new Item(new FabricItemSettings()));
         public static final Item RAWSILVER =registerItem("rawsilver", new Item(new FabricItemSettings()));
     public static final Item SPOOL =registerItem("spool", new Item(new FabricItemSettings()));

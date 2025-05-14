@@ -60,6 +60,16 @@ public class ModRecipeProvider extends FabricRecipeProvider {
                 .criterion(hasItem(Items.MUSIC_DISC_OTHERSIDE), conditionsFromItem(Items.MUSIC_DISC_OTHERSIDE))
                 .offerTo(exporter, new Identifier(getRecipeName(ModBlocks.SOUND_BLOCK)));
 
+        ShapedRecipeJsonBuilder.create(RecipeCategory.MISC, ModItems.BLAZE_SACK, 1)
+                .pattern("nnn")
+                .pattern("non")
+                .pattern("nnn")
+                .input('n', Items.BLAZE_POWDER)
+                .input('o',Items.BUNDLE)
+                .criterion(hasItem(Items.BLAZE_POWDER), conditionsFromItem(Items.BLAZE_POWDER))
+                .criterion(hasItem(Items.BUNDLE), conditionsFromItem(Items.BUNDLE))
+                .offerTo(exporter, new Identifier(getRecipeName(ModItems.BLAZE_SACK)));
+
         ShapedRecipeJsonBuilder.create(RecipeCategory.MISC, ModBlocks.SOUND_BLOCK2, 1)
                 .pattern("nnn")
                 .pattern("non")

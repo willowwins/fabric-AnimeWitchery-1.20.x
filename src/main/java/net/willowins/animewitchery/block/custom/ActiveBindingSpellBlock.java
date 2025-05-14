@@ -2,7 +2,6 @@ package net.willowins.animewitchery.block.custom;
 
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
@@ -11,7 +10,6 @@ import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
-import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
@@ -30,7 +28,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 
 public class ActiveBindingSpellBlock extends BlockWithEntity implements BlockEntityProvider {
-    private static final VoxelShape SHAPE = Block.createCuboidShape(0, 0, 0, 16, 2, 16);
+    private static final VoxelShape SHAPE = Block.createCuboidShape(0, 0, 0, 16, 1, 16);
 
     public ActiveBindingSpellBlock(Settings settings) {
         super(settings);
@@ -49,25 +47,26 @@ public class ActiveBindingSpellBlock extends BlockWithEntity implements BlockEnt
     @Override
     public ActionResult onUse(BlockState state, World world, BlockPos pos,
                               PlayerEntity player, Hand hand, BlockHitResult hit) {
-        if (!world.isClient){
-            if(player.getStackInHand(hand).isOf(ModItems.SILVER)) {
-                world.setBlockState(pos, ModBlocks.BINDING_SPELL.getDefaultState());
+        if (!world.isClient) {
+            if (player.getStackInHand(hand).isOf(ModItems.SILVER)) {
+                world.setBlockState(pos, Blocks.AIR.getDefaultState());
                 world.playSound(null, pos, SoundEvents.BLOCK_BEACON_DEACTIVATE, SoundCategory.BLOCKS);
-            }else {
-                world.playSound(null,pos,SoundEvents.BLOCK_SAND_STEP,SoundCategory.BLOCKS);
-                }
+            } else {
+                world.playSound(null, pos, SoundEvents.BLOCK_SAND_STEP, SoundCategory.BLOCKS);
+            }
         }
 
-        return ActionResult.SUCCESS;}
+        return ActionResult.SUCCESS;
+    }
 
 
     @Override
     public void scheduledTick(BlockState state, ServerWorld world, BlockPos pos, Random random) {
         super.scheduledTick(state, world, pos, random);
 
-            asNearbyPlayers(world, .5f, pos);
+        asNearbyPlayers(world, .5f, pos);
 
-        world.scheduleBlockTick(pos, this,1);
+        world.scheduleBlockTick(pos, this, 1);
 
     }
 
@@ -98,12 +97,15 @@ public class ActiveBindingSpellBlock extends BlockWithEntity implements BlockEnt
 
         for (PlayerEntity target : player) {
             if (!target.getInventory().contains(Items.BEDROCK.getDefaultStack())) {
-                target.teleport(pos.getX()+0.5, pos.getY(), pos.getZ()+0.5);
+                target.teleport(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5);
+                target.addStatusEffect(new StatusEffectInstance(StatusEffects.RESISTANCE, 10, 255, false, false));
+                target.addStatusEffect(new StatusEffectInstance(StatusEffects.FIRE_RESISTANCE, 10, 255, false, false));
+                target.addStatusEffect(new StatusEffectInstance(StatusEffects.SATURATION, 10, 5, false, false));
+                ((ServerWorld) world).spawnParticles(ParticleTypes.PORTAL, target.getX(), target.getY() + 1, target.getZ(), 1, 0.5, 0.5, 0.5, 0.1);
             }
         }
-
-
     }
+
 
     @Override
     public @Nullable BlockEntity createBlockEntity(BlockPos pos, BlockState state) {

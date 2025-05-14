@@ -24,7 +24,7 @@ import org.jetbrains.annotations.Nullable;
 
 
 public class BindingSpellBlock extends BlockWithEntity {
-    private static final VoxelShape SHAPE = Block.createCuboidShape(0, 0, 0, 16, 2, 16);
+    private static final VoxelShape SHAPE = Block.createCuboidShape(0, 0, 0, 16, 1, 16);
 
     public BindingSpellBlock(Settings settings) {
         super(settings);
@@ -46,13 +46,13 @@ public class BindingSpellBlock extends BlockWithEntity {
 
     @Override
     public BlockRenderType getRenderType(BlockState state) {
-        return BlockRenderType.MODEL;
+        return BlockRenderType.ENTITYBLOCK_ANIMATED;
     }
-
 
     @Override
     public void onEntityCollision(BlockState state, World world, BlockPos pos, Entity entity) {
         super.onEntityCollision(state, world, pos, entity);
+
         if (!world.isClient){
             world.setBlockState(pos, ModBlocks.ACTIVE_BINDING_SPELL.getDefaultState());
         }
