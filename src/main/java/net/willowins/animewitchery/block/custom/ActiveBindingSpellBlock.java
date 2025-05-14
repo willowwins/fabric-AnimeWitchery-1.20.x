@@ -11,6 +11,7 @@ import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
+import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
@@ -49,7 +50,7 @@ public class ActiveBindingSpellBlock extends BlockWithEntity implements BlockEnt
     public ActionResult onUse(BlockState state, World world, BlockPos pos,
                               PlayerEntity player, Hand hand, BlockHitResult hit) {
         if (!world.isClient){
-            if(player.isHolding(ModItems.SILVER)) {
+            if(player.getStackInHand(hand).isOf(ModItems.SILVER)) {
                 world.setBlockState(pos, ModBlocks.BINDING_SPELL.getDefaultState());
                 world.playSound(null, pos, SoundEvents.BLOCK_BEACON_DEACTIVATE, SoundCategory.BLOCKS);
             }else {
@@ -74,7 +75,7 @@ public class ActiveBindingSpellBlock extends BlockWithEntity implements BlockEnt
     @Override
     public void onBlockAdded(BlockState state, World world, BlockPos pos, BlockState oldState, boolean notify) {
         if (!world.isClient) {
-            world.scheduleBlockTick(pos, this, 20);
+            world.scheduleBlockTick(pos, this, 0);
         }
     }
 
@@ -97,11 +98,7 @@ public class ActiveBindingSpellBlock extends BlockWithEntity implements BlockEnt
 
         for (PlayerEntity target : player) {
             if (!target.getInventory().contains(Items.BEDROCK.getDefaultStack())) {
-                target.addStatusEffect(new StatusEffectInstance(StatusEffects.RESISTANCE,300,255,false,false));
-                target.addStatusEffect(new StatusEffectInstance(StatusEffects.FIRE_RESISTANCE,300,255,false,false));
-                target.addStatusEffect(new StatusEffectInstance(StatusEffects.SATURATION,300,5,false,false));
-                target.addStatusEffect(new StatusEffectInstance(StatusEffects.SLOWNESS,20,255,true,true));
-                ((ServerWorld) world).spawnParticles(ParticleTypes.PORTAL, target.getX(), target.getY()+1, target.getZ(), 1, 0.5,0.5,0.5, 0.1);
+                target.teleport(pos.getX()+0.5, pos.getY(), pos.getZ()+0.5);
             }
         }
 

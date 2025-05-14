@@ -53,10 +53,11 @@ public class BindingSpellBlock extends BlockWithEntity {
     @Override
     public void onEntityCollision(BlockState state, World world, BlockPos pos, Entity entity) {
         super.onEntityCollision(state, world, pos, entity);
-        if (world.isClient){
+        if (!world.isClient){
             world.setBlockState(pos, ModBlocks.ACTIVE_BINDING_SPELL.getDefaultState());
         }
     }
+
     @Override
     public @Nullable BlockEntity createBlockEntity(BlockPos pos, BlockState state) {
         return ModBlockEntities.BINDING_SPELL_BLOCK_ENTITY.instantiate(pos, state);
