@@ -30,8 +30,18 @@ public class AmetystClusterMixin {
                 player.getOffHandStack().decrement(1);
 
 
-            }
+            }else if (player.getMainHandStack().isOf(Blocks.CRYING_OBSIDIAN.asItem())&& player.getOffHandStack().isOf(Blocks.CHISELED_QUARTZ_BLOCK.asItem())){
+                world.setBlockState(pos, Blocks.AIR.getDefaultState());
+                player.giveItemStack(new ItemStack(ModItems.STAFF_HEAD, 1));
+                player.getMainHandStack().decrement(1);
+                player.getOffHandStack().decrement(1);
+
+            }else if(player.getMainHandStack().isOf(ModItems.SILVERSPOOL)){
+                world.setBlockState(pos, Blocks.AIR.getDefaultState());
+                player.giveItemStack(new ItemStack(ModItems.SILVER_PENDANT, 1));
+                player.getMainHandStack().decrement(1);
+                player.getOffHandStack().decrement(1);
         }
     }
 
-}
+}}

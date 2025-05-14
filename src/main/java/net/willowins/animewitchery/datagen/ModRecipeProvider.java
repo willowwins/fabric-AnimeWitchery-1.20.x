@@ -280,6 +280,16 @@ public class ModRecipeProvider extends FabricRecipeProvider {
                 .criterion(hasItem(Items.STRING), conditionsFromItem(Items.STRING))
                 .offerTo(exporter, new Identifier(getRecipeName(Items.BUNDLE)));
 
+        ShapedRecipeJsonBuilder.create(RecipeCategory.MISC, ModItems.HEALING_STAFF, 1)
+                .pattern("  n")
+                .pattern(" o ")
+                .pattern("o  ")
+                .input('n', ModItems.STAFF_HEAD)
+                .input('o',Items.STICK)
+                .criterion(hasItem(ModItems.STAFF_HEAD), conditionsFromItem(ModItems.STAFF_HEAD))
+                .criterion(hasItem(Items.STICK), conditionsFromItem(Items.STICK))
+                .offerTo(exporter, new Identifier(getRecipeName(ModItems.HEALING_STAFF)));
+
 
 
 
