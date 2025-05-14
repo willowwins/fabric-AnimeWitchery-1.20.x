@@ -37,6 +37,7 @@ public class ModBlocks {
 
     public static final Block SILVER_STAIRS =registerBlock("silver_stairs",
             new StairsBlock(ModBlocks.SILVER_BLOCK.getDefaultState(),FabricBlockSettings.copyOf(Blocks.IRON_BLOCK)));
+
     public static final Block SILVER_SLAB =registerBlock("silver_slab",
             new SlabBlock(FabricBlockSettings.copyOf(Blocks.IRON_BLOCK)));
 
