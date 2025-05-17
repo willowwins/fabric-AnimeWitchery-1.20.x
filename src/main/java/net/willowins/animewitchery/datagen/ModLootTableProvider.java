@@ -35,6 +35,7 @@ public class ModLootTableProvider extends FabricBlockLootTableProvider {
 
 
         addDrop(ModBlocks.EFFIGY_FOUNTAIN,ModBlocks.EFFIGY_FOUNTAIN);
+        addDrop(ModBlocks.DECORATIVE_FOUNTAIN,ModBlocks.DECORATIVE_FOUNTAIN);
         addDrop(ModBlocks.ACTIVE_EFFIGY_FOUNTAIN,ModBlocks.EFFIGY_FOUNTAIN);
         addDrop(ModBlocks.SILVER_ORE, copperlikeOreDrops(ModBlocks.SILVER_ORE, ModItems.RAWSILVER));
         addDrop(ModBlocks.DEEPSLATE_SILVER_ORE, copperlikeOreDrops(ModBlocks.DEEPSLATE_SILVER_ORE, ModItems.RAWSILVER));

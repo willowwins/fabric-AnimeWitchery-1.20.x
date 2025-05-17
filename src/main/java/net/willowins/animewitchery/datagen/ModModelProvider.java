@@ -34,6 +34,7 @@ public class ModModelProvider extends FabricModelProvider {
         silverPool.wall(ModBlocks.SILVER_WALL);
 
         blockStateModelGenerator.registerSimpleState(ModBlocks.EFFIGY_FOUNTAIN);
+        blockStateModelGenerator.registerSimpleState(ModBlocks.DECORATIVE_FOUNTAIN);
         blockStateModelGenerator.registerSimpleState(ModBlocks.ACTIVE_EFFIGY_FOUNTAIN);
 
         blockStateModelGenerator.registerDoor(ModBlocks.SILVER_DOOR);

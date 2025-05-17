@@ -284,15 +284,19 @@ public class ModRecipeProvider extends FabricRecipeProvider {
                 .criterion(hasItem(Items.STICK), conditionsFromItem(Items.STICK))
                 .offerTo(exporter, new Identifier(getRecipeName(ModItems.HEALING_STAFF)));
 
-
-
-
-
-
-
+        ShapedRecipeJsonBuilder.create(RecipeCategory.MISC, ModBlocks.DECORATIVE_FOUNTAIN.asItem(), 1)
+                .pattern(" s ")
+                .pattern("wsw")
+                .pattern("oco")
+                .input('w', Items.WATER_BUCKET)
+                .input('o',Blocks.STONE_BRICK_SLAB)
+                .input('2',Blocks.STONE_BRICK_WALL)
+                .input('c',Blocks.CHISELED_STONE_BRICKS)
+                .criterion(hasItem(Items.WATER_BUCKET), conditionsFromItem(Items.WATER_BUCKET))
+                .criterion(hasItem(Items.STONE_BRICK_SLAB), conditionsFromItem(Items.STONE_BRICK_SLAB))
+                .criterion(hasItem(Items.STONE_BRICK_SLAB), conditionsFromItem(Items.STONE_BRICK_WALL))
+                .criterion(hasItem(Items.STONE_BRICK_SLAB), conditionsFromItem(Items.CHISELED_STONE_BRICKS))
+                .offerTo(exporter, new Identifier(getRecipeName(ModBlocks.DECORATIVE_FOUNTAIN.asItem())));
         }
-
-
-
     }
 

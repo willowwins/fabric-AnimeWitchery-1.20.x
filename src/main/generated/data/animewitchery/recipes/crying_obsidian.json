@@ -3,17 +3,19 @@
   "category": "misc",
   "key": {
     "n": {
-      "item": "minecraft:yellow_dye"
+      "item": "minecraft:amethyst_shard"
     },
     "o": {
-      "item": "minecraft:wheat_seeds"
+      "item": "minecraft:obsidian"
     }
   },
   "pattern": [
-    "no "
+    "nnn",
+    "non",
+    "nnn"
   ],
   "result": {
-    "item": "animewitchery:lemon_seeds"
+    "item": "minecraft:crying_obsidian"
   },
   "show_notification": true
 }

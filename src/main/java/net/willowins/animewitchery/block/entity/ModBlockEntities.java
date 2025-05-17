@@ -16,6 +16,11 @@ public class ModBlockEntities {
                     FabricBlockEntityTypeBuilder.create(EffigyFountainBlockEntity::new,
                             ModBlocks.EFFIGY_FOUNTAIN).build());
 
+    public static final BlockEntityType<DecorativeFountainBlockEntity> DECORATIVE_FOUNTAIN_BLOCK_ENTITY =
+            Registry.register(Registries.BLOCK_ENTITY_TYPE, new Identifier(AnimeWitchery.MOD_ID, "decorative_fountain_be"),
+                    FabricBlockEntityTypeBuilder.create(DecorativeFountainBlockEntity::new,
+                            ModBlocks.DECORATIVE_FOUNTAIN).build());
+
     public static final BlockEntityType<ActiveEffigyFountainBlockEntity> ACTIVE_EFFIGY_FOUNTAIN_BLOCK_ENTITY =
             Registry.register(Registries.BLOCK_ENTITY_TYPE, new Identifier(AnimeWitchery.MOD_ID, "active_effigy_fountain_be"),
                     FabricBlockEntityTypeBuilder.create(ActiveEffigyFountainBlockEntity::new,new Block[]{ModBlocks.ACTIVE_EFFIGY_FOUNTAIN}).build((Type)null));
