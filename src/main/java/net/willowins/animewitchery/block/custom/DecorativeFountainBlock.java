@@ -33,7 +33,7 @@ public class DecorativeFountainBlock extends Block {
     @Override
     public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
         if (!world.isClient) {
-            world.playSound(player, pos, SoundEvents.AMBIENT_UNDERWATER_LOOP, SoundCategory.BLOCKS,1f,1f);
+            world.playSound(player, pos, SoundEvents.BLOCK_WATER_AMBIENT, SoundCategory.BLOCKS,1f,1f);
             }
         return ActionResult.SUCCESS;
     }
