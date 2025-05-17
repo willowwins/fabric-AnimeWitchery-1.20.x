@@ -255,21 +255,15 @@ public class ModRecipeProvider extends FabricRecipeProvider {
                 .criterion(hasItem(ModItems.TART_CRUST), conditionsFromItem(ModItems.TART_CRUST))
                 .offerTo(exporter, new Identifier(getRecipeName(ModItems.UNBAKED_STRAWBERRY_TART)));
 
-        ShapedRecipeJsonBuilder.create(RecipeCategory.MISC, ModItems.STRAWBERRY_SEEDS, 1)
-                .pattern("no ")
-                .input('n', Items.RED_DYE)
-                .input('o',Items.WHEAT_SEEDS)
-                .criterion(hasItem(Items.RED_DYE), conditionsFromItem(Items.RED_DYE))
-                .criterion(hasItem(Items.WHEAT_SEEDS), conditionsFromItem(Items.WHEAT_SEEDS))
-                .offerTo(exporter, new Identifier(getRecipeName(ModItems.STRAWBERRY_SEEDS)));
-
-        ShapedRecipeJsonBuilder.create(RecipeCategory.MISC, ModItems.LEMON_SEEDS, 1)
-                .pattern("no ")
-                .input('n', Items.YELLOW_DYE)
-                .input('o',Items.WHEAT_SEEDS)
-                .criterion(hasItem(Items.YELLOW_DYE), conditionsFromItem(Items.YELLOW_DYE))
-                .criterion(hasItem(Items.WHEAT_SEEDS), conditionsFromItem(Items.WHEAT_SEEDS))
-                .offerTo(exporter, new Identifier(getRecipeName(ModItems.LEMON_SEEDS)));
+        ShapedRecipeJsonBuilder.create(RecipeCategory.MISC, Blocks.CRYING_OBSIDIAN, 1)
+                .pattern("nnn")
+                .pattern("non")
+                .pattern("nnn")
+                .input('n', Items.AMETHYST_SHARD)
+                .input('o',Blocks.OBSIDIAN)
+                .criterion(hasItem(Items.AMETHYST_SHARD), conditionsFromItem(Items.AMETHYST_SHARD))
+                .criterion(hasItem(Blocks.OBSIDIAN), conditionsFromItem(Blocks.OBSIDIAN))
+                .offerTo(exporter, new Identifier(getRecipeName(Blocks.CRYING_OBSIDIAN)));
 
         ShapedRecipeJsonBuilder.create(RecipeCategory.MISC, Items.BUNDLE, 1)
                 .pattern("  o")

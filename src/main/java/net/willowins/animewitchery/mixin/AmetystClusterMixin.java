@@ -1,6 +1,7 @@
 package net.willowins.animewitchery.mixin;
 
 import net.minecraft.block.AbstractBlock;
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.player.PlayerEntity;
@@ -38,7 +39,7 @@ public class AmetystClusterMixin {
 
             }else if(player.getMainHandStack().isOf(ModItems.SILVERSPOOL)){
                 world.setBlockState(pos, Blocks.AIR.getDefaultState());
-                player.giveItemStack(new ItemStack(ModItems.SILVER_PENDANT, 1));
+                Block.dropStack(world,pos,new ItemStack(ModItems.SILVER_PENDANT,1));
                 player.getMainHandStack().decrement(1);
                 player.getOffHandStack().decrement(1);
         }
