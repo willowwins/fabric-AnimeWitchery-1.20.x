@@ -1,6 +1,7 @@
 package net.willowins.animewitchery.mixin;
 
 import net.minecraft.block.AbstractBlock;
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.player.PlayerEntity;
@@ -24,7 +25,8 @@ public class StonePressurePlateMixin {
     private void onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit, CallbackInfoReturnable<ActionResult> cir) {
         if (world.getBlockState(pos).isOf(Blocks.STONE_PRESSURE_PLATE) && !world.isClient) {
             if (player.getMainHandStack().isOf(ModItems.ALCHEMICAL_CATALYST)){
-                world.setBlockState(pos,ModBlocks.BINDING_SPELL.getDefaultState());
+                Block.dropStack(world,pos,new ItemStack(ModBlocks.BINDING_SPELL.asItem(),1));
+                world.setBlockState(pos, Blocks.AIR.getDefaultState());
                 player.getMainHandStack().decrement(1);
                 player.getOffHandStack().decrement(1);
 

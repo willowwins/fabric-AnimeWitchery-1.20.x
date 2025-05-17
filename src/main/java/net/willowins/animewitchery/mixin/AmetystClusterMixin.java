@@ -26,14 +26,14 @@ public class AmetystClusterMixin {
         if (world.getBlockState(pos).isOf(Blocks.AMETHYST_CLUSTER) && !world.isClient) {
             if (player.getMainHandStack().isOf(ModItems.BLAZE_SACK)){
                 world.setBlockState(pos, Blocks.AIR.getDefaultState());
-                player.giveItemStack(new ItemStack(ModItems.ALCHEMICAL_CATALYST, 8));
+                Block.dropStack(world,pos,new ItemStack(ModItems.ALCHEMICAL_CATALYST,8));
                 player.getMainHandStack().decrement(1);
                 player.getOffHandStack().decrement(1);
 
 
             }else if (player.getMainHandStack().isOf(Blocks.CRYING_OBSIDIAN.asItem())&& player.getOffHandStack().isOf(Blocks.CHISELED_QUARTZ_BLOCK.asItem())){
                 world.setBlockState(pos, Blocks.AIR.getDefaultState());
-                player.giveItemStack(new ItemStack(ModItems.STAFF_HEAD, 1));
+                Block.dropStack(world,pos,new ItemStack(ModItems.STAFF_HEAD,1));
                 player.getMainHandStack().decrement(1);
                 player.getOffHandStack().decrement(1);
 
