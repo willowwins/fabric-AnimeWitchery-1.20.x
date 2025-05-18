@@ -54,8 +54,9 @@ public class BindingSpellBlock extends BlockWithEntity {
         super.onEntityCollision(state, world, pos, entity);
 
         if (!world.isClient){
+            if(entity.isPlayer()){
             world.setBlockState(pos, ModBlocks.ACTIVE_BINDING_SPELL.getDefaultState());
-        }
+        }}
     }
 
     @Override

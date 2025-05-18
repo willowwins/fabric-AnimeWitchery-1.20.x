@@ -1,6 +1,7 @@
 package net.willowins.animewitchery.mixin;
 
 import net.minecraft.block.AbstractBlock;
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.player.PlayerEntity;
@@ -25,20 +26,20 @@ public class AmetystClusterMixin {
         if (world.getBlockState(pos).isOf(Blocks.AMETHYST_CLUSTER) && !world.isClient) {
             if (player.getMainHandStack().isOf(ModItems.BLAZE_SACK)){
                 world.setBlockState(pos, Blocks.AIR.getDefaultState());
-                player.giveItemStack(new ItemStack(ModItems.ALCHEMICAL_CATALYST, 8));
+                Block.dropStack(world,pos,new ItemStack(ModItems.ALCHEMICAL_CATALYST,8));
                 player.getMainHandStack().decrement(1);
                 player.getOffHandStack().decrement(1);
 
 
             }else if (player.getMainHandStack().isOf(Blocks.CRYING_OBSIDIAN.asItem())&& player.getOffHandStack().isOf(Blocks.CHISELED_QUARTZ_BLOCK.asItem())){
                 world.setBlockState(pos, Blocks.AIR.getDefaultState());
-                player.giveItemStack(new ItemStack(ModItems.STAFF_HEAD, 1));
+                Block.dropStack(world,pos,new ItemStack(ModItems.STAFF_HEAD,1));
                 player.getMainHandStack().decrement(1);
                 player.getOffHandStack().decrement(1);
 
             }else if(player.getMainHandStack().isOf(ModItems.SILVERSPOOL)){
                 world.setBlockState(pos, Blocks.AIR.getDefaultState());
-                player.giveItemStack(new ItemStack(ModItems.SILVER_PENDANT, 1));
+                Block.dropStack(world,pos,new ItemStack(ModItems.SILVER_PENDANT,1));
                 player.getMainHandStack().decrement(1);
                 player.getOffHandStack().decrement(1);
         }

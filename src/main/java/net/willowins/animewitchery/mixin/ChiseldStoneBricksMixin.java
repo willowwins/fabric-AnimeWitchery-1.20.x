@@ -1,6 +1,7 @@
 package net.willowins.animewitchery.mixin;
 
 import net.minecraft.block.AbstractBlock;
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.player.PlayerEntity;
@@ -25,7 +26,7 @@ public class ChiseldStoneBricksMixin {
         if (world.getBlockState(pos).isOf(Blocks.CHISELED_STONE_BRICKS) && !world.isClient) {
             if (player.getMainHandStack().isOf(ModItems.ALCHEMICAL_CATALYST)){
                 world.setBlockState(pos,Blocks.AIR.getDefaultState());
-                player.giveItemStack(new ItemStack(ModBlocks.EFFIGY_FOUNTAIN, 1));
+                Block.dropStack(world,pos,new ItemStack(ModBlocks.EFFIGY_FOUNTAIN.asItem(),1));
                 player.getMainHandStack().decrement(1);
                 player.getOffHandStack().decrement(1);
 

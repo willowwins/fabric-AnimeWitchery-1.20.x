@@ -23,6 +23,9 @@ public class ModBlocks {
     public static final Block EFFIGY_FOUNTAIN =registerBlock("effigy_fountain",
             new EffigyFountainBlock(FabricBlockSettings.copyOf(Blocks.STONE).nonOpaque()));
 
+    public static final Block DECORATIVE_FOUNTAIN =registerBlock("decorative_fountain",
+            new DecorativeFountainBlock(FabricBlockSettings.copyOf(Blocks.STONE).nonOpaque()));
+
 public static final Block BINDING_SPELL =registerBlock("binding_spell",
             new BindingSpellBlock(FabricBlockSettings.copyOf(Blocks.STONE).nonOpaque().hardness(-1f)));
 

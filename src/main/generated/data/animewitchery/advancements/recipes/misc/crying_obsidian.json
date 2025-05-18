@@ -1,12 +1,24 @@
 {
   "parent": "minecraft:recipes/root",
   "criteria": {
-    "has_red_dye": {
+    "has_amethyst_shard": {
       "conditions": {
         "items": [
           {
             "items": [
-              "minecraft:red_dye"
+              "minecraft:amethyst_shard"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_obsidian": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "minecraft:obsidian"
             ]
           }
         ]
@@ -15,33 +27,21 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "minecraft:strawberry_seeds"
+        "recipe": "minecraft:crying_obsidian"
       },
       "trigger": "minecraft:recipe_unlocked"
-    },
-    "has_wheat_seeds": {
-      "conditions": {
-        "items": [
-          {
-            "items": [
-              "minecraft:wheat_seeds"
-            ]
-          }
-        ]
-      },
-      "trigger": "minecraft:inventory_changed"
     }
   },
   "requirements": [
     [
-      "has_red_dye",
-      "has_wheat_seeds",
+      "has_amethyst_shard",
+      "has_obsidian",
       "has_the_recipe"
     ]
   ],
   "rewards": {
     "recipes": [
-      "minecraft:strawberry_seeds"
+      "minecraft:crying_obsidian"
     ]
   },
   "sends_telemetry_event": false
