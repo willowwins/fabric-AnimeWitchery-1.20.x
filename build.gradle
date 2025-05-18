@@ -89,6 +89,23 @@ dependencies {
 	modImplementation "dev.emi:trinkets:${trinkets_version}"
 }
 
+repositories {
+	maven {url = 'https://maven.blamejared.com/' }
+	maven {url = "https://mvn.devos.one/releases/" }
+	maven {url = "https://api.modrinth.com/maven" }
+	maven {url = "https://maven.theillusivec4.top/"}
+	maven {url = "https://maven.jamieswhiteshirt.com/libs-release"}
+}
+
+dependencies {
+	modImplementation("team.lodestar.lodestone:lodestone:${project.minecraft_version}-${project.lodestone_version}-fabric")
+	//For this you also need the following
+	modImplementation("dev.onyxstudios.cardinal-components-api:cardinal-components-base:${project.cca_version}")
+	modImplementation("dev.onyxstudios.cardinal-components-api:cardinal-components-entity:${project.cca_version}")
+	modImplementation("dev.onyxstudios.cardinal-components-api:cardinal-components-world:${project.cca_version}")
+
+}
+
 processResources {
 	inputs.property "version", project.version
 

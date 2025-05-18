@@ -1,5 +1,7 @@
 package net.willowins.animewitchery.item.custom;
 
+import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffectInstance;
@@ -8,7 +10,9 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.network.PacketByteBuf;
 import net.minecraft.particle.ParticleTypes;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.Text;
 import net.minecraft.util.Hand;
@@ -18,6 +22,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import net.willowins.animewitchery.networking.ModPackets;
 
 import java.util.List;
 
@@ -55,11 +60,21 @@ public class RailgunItem extends Item {
     }
 
     private void shootLaser(Vec3d look, World world, Vec3d pos, PlayerEntity owner) {
-        for (int i = 0; i < 16; i++) {
+        for (int i = 0; i < 50; i++) {
             findEntities(world, 2, new BlockPos((int) (pos.getX() + (i*look.x)), (int) (pos.getY() + (i*look.y)), (int) (pos.getZ() + (i*look.z))), owner);
         }
-        for (int i = 0; i < 160; i++) {
-            world.addParticle(ParticleTypes.CLOUD, (pos.getX() + (((double) i /10)*look.x)), (pos.getY() + (((double) i /10)*look.y)), (pos.getZ() + (((double) i /10)*look.z)), 0, 0, 0);
+        for (PlayerEntity player : world.getPlayers()) {
+            if (player instanceof ServerPlayerEntity serverPlayer) {
+                for (int i = 10; i < 500; i++) {
+                    ServerPlayNetworking.send(serverPlayer, ModPackets.LASER_BEAM, new PacketByteBuf(PacketByteBufs
+                            .create()
+                            .writeDouble((pos.getX() + (((double) i / 10) * look.x)))
+                            .writeDouble((pos.getY() + (((double) i / 10) * look.y)))
+                            .writeDouble((pos.getZ() + (((double) i / 10) * look.z)))
+                    ));
+                    world.addParticle(ParticleTypes.CLOUD, (pos.getX() + (((double) i / 10) * look.x)), (pos.getY() + (((double) i / 10) * look.y)), (pos.getZ() + (((double) i / 10) * look.z)), 0, 0, 0);
+                }
+            }
         }
     }
 

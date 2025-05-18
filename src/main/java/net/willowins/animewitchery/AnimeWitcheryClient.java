@@ -13,6 +13,7 @@ import net.willowins.animewitchery.block.entity.ModBlockEntities;
 import net.willowins.animewitchery.block.entity.renderer.ActiveBindingSpellRenderer;
 import net.willowins.animewitchery.block.entity.renderer.ActiveEffigyFountainRenderer;
 import net.willowins.animewitchery.block.entity.renderer.BindingSpellRenderer;
+import net.willowins.animewitchery.networking.ModPackets;
 
 public class AnimeWitcheryClient implements ClientModInitializer {
     @Override
@@ -31,6 +32,8 @@ public class AnimeWitcheryClient implements ClientModInitializer {
         BlockEntityRendererRegistry.register(ModBlockEntities.ACTIVE_EFFIGY_FOUNTAIN_BLOCK_ENTITY, (context) -> new ActiveEffigyFountainRenderer());
         BlockEntityRendererRegistry.register(ModBlockEntities.ACTIVE_BINDING_SPELL_BLOCK_ENTITY, (context) -> new ActiveBindingSpellRenderer());
         BlockEntityRendererRegistry.register(ModBlockEntities.BINDING_SPELL_BLOCK_ENTITY, (context) -> new BindingSpellRenderer());
+
+        ModPackets.registerS2CPackets();
 
     }
 }
