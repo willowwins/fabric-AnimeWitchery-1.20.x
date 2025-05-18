@@ -63,6 +63,7 @@ public class ModItems {
 
     public static final Item SILVER_PENDANT =registerItem("silver_pendant", new SilverPendant(new FabricItemSettings().maxCount(1).rarity(Rarity.RARE)));
     public static final Item HEALING_STAFF =registerItem("healing_staff", new HealingStaff(new FabricItemSettings().maxCount(1).rarity(Rarity.RARE)));
+    public static final Item RAILGUN =registerItem("railgun", new RailgunItem(new FabricItemSettings().maxCount(1).rarity(Rarity.RARE)));
 
 
     private static void addItemsToIngredientItemGroup(FabricItemGroupEntries entries){
