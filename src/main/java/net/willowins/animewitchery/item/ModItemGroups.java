@@ -66,6 +66,7 @@ public class ModItemGroups {
 
                         entries.add(ModItems.SILVER_PENDANT);
                         entries.add(ModItems.HEALING_STAFF);
+                        entries.add(ModItems.RAILGUN);
 
 
                     } ).build());
