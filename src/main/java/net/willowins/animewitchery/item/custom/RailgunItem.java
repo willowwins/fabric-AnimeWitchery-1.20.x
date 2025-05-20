@@ -2,14 +2,13 @@ package net.willowins.animewitchery.item.custom;
 
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
+import net.minecraft.block.Blocks;
+import net.minecraft.client.render.item.BuiltinModelItemRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.effect.StatusEffectInstance;
-import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -22,12 +21,24 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import net.willowins.animewitchery.item.renderer.RailgunRenderer;
 import net.willowins.animewitchery.networking.ModPackets;
+import software.bernie.geckolib.animatable.GeoItem;
+import software.bernie.geckolib.animatable.client.RenderProvider;
+import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
+import software.bernie.geckolib.core.animation.AnimatableManager;
+import software.bernie.geckolib.core.animation.AnimationController;
+import software.bernie.geckolib.core.animation.RawAnimation;
+import software.bernie.geckolib.util.GeckoLibUtil;
 
 import java.util.List;
+import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 
-public class RailgunItem extends Item {
+public class RailgunItem extends Item implements GeoItem {
+    AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
+    private final Supplier<Object> renderProvider = GeoItem.makeRenderer(this);
     public RailgunItem(Settings settings) {
         super(settings);
     }
@@ -37,6 +48,12 @@ public class RailgunItem extends Item {
         ItemStack itemStack = user.getStackInHand(hand);
         user.setCurrentHand(hand);
         return TypedActionResult.consume(itemStack);
+    }
+
+    @Override
+    public void onStoppedUsing(ItemStack stack, World world, LivingEntity user, int remainingUseTicks) {
+        stack.getOrCreateNbt().putFloat("charge", 0.0f);
+        super.onStoppedUsing(stack, world, user, remainingUseTicks);
     }
 
     @Override
@@ -53,6 +70,19 @@ public class RailgunItem extends Item {
                         shootLaser(player.getRotationVector(), world, player.getPos().add(0,1,0), player);
                         player.stopUsingItem();
                     }
+                    if (stack.getOrCreateNbt().getFloat("charge") > 0.0f) {
+                         for (PlayerEntity playerEntity : world.getPlayers()) {
+                             if (playerEntity instanceof ServerPlayerEntity serverPlayer) {
+                                 ServerPlayNetworking.send(serverPlayer, ModPackets.LASER_CHARGE, new PacketByteBuf(PacketByteBufs
+                                         .create()
+                                         .writeDouble((player.getX() + (1.25) * player.getRotationVector().x))
+                                         .writeDouble((player.getY() + 1.5 + (1.25) * player.getRotationVector().y))
+                                         .writeDouble((player.getZ() + (1.25) * player.getRotationVector().z))
+                                         .writeFloat(stack.getOrCreateNbt().getFloat("charge"))
+                                 ));
+                             }
+                         }
+                    }
                 }
             }
         }
@@ -60,12 +90,25 @@ public class RailgunItem extends Item {
     }
 
     private void shootLaser(Vec3d look, World world, Vec3d pos, PlayerEntity owner) {
-        for (int i = 0; i < 50; i++) {
-            findEntities(world, 2, new BlockPos((int) (pos.getX() + (i*look.x)), (int) (pos.getY() + (i*look.y)), (int) (pos.getZ() + (i*look.z))), owner);
+        for (int i = 0; i < 100; i++) {
+            findEntities(world, 1, new BlockPos((int) (pos.getX() + (i*look.x)), (int) (pos.getY() + (i*look.y)), (int) (pos.getZ() + (i*look.z))), owner);
+            if (!world.getBlockState(new BlockPos((int) (pos.getX() + (i*look.x)), (int) (pos.getY() + (i*look.y)), (int) (pos.getZ() + (i*look.z)))).isOf(Blocks.AIR)) {
+                for (PlayerEntity playerEntity : world.getPlayers()) {
+                    if (playerEntity instanceof ServerPlayerEntity serverPlayerEntity) {
+                        ServerPlayNetworking.send(serverPlayerEntity, ModPackets.LASER_HIT, new PacketByteBuf(PacketByteBufs
+                                .create()
+                                .writeDouble((pos.getX() + (i*look.x - 2*look.x)))
+                                .writeDouble((pos.getY() + (i*look.y - 2*look.y)))
+                                .writeDouble((pos.getZ() + (i*look.z - 2* look.z)))
+                        ));
+                    }
+                }
+                break;
+            }
         }
         for (PlayerEntity player : world.getPlayers()) {
             if (player instanceof ServerPlayerEntity serverPlayer) {
-                for (int i = 10; i < 500; i++) {
+                for (int i = 10; i < 1000; i++) {
                     ServerPlayNetworking.send(serverPlayer, ModPackets.LASER_BEAM, new PacketByteBuf(PacketByteBufs
                             .create()
                             .writeDouble((pos.getX() + (((double) i / 10) * look.x)))
@@ -73,6 +116,10 @@ public class RailgunItem extends Item {
                             .writeDouble((pos.getZ() + (((double) i / 10) * look.z)))
                     ));
                     world.addParticle(ParticleTypes.CLOUD, (pos.getX() + (((double) i / 10) * look.x)), (pos.getY() + (((double) i / 10) * look.y)), (pos.getZ() + (((double) i / 10) * look.z)), 0, 0, 0);
+                    if (!world.getBlockState(new BlockPos((int) (pos.getX() + (((double) i /10)*look.x)), (int) (pos.getY() + (((double) i /10)*look.y)), (int) (pos.getZ() + (((double) i /10)*look.z)))).isOf(Blocks.AIR)) {
+
+                        break;
+                    }
                 }
             }
         }
@@ -115,6 +162,36 @@ public class RailgunItem extends Item {
 
     @Override
     public UseAction getUseAction(ItemStack stack) {
-        return UseAction.BOW;
+        return UseAction.NONE;
+    }
+
+    @Override
+    public void createRenderer(Consumer<Object> consumer) {
+        consumer.accept(new RenderProvider() {
+            private RailgunRenderer renderer;
+
+            public BuiltinModelItemRenderer getCustomRenderer() {
+                if (this.renderer == null) {
+                    this.renderer = new RailgunRenderer();
+                }
+
+                return this.renderer;
+            }
+        });
+    }
+
+    @Override
+    public Supplier<Object> getRenderProvider() {
+        return this.renderProvider;
+    }
+
+    @Override
+    public void registerControllers(AnimatableManager.ControllerRegistrar controllerRegistrar) {
+        controllerRegistrar.add(new AnimationController<>(this, "Idle", 0, state -> state.setAndContinue(RawAnimation.begin().thenLoop("idle"))));
+    }
+
+    @Override
+    public AnimatableInstanceCache getAnimatableInstanceCache() {
+        return cache;
     }
 }

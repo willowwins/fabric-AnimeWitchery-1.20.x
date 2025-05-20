@@ -36,7 +36,7 @@ public class LaserBeamPacket {
                         .enableNoClip()
                         .setForceSpawn(true)
                         .setShouldCull(false)
-                        .spawn(handler.getWorld(), x+( ( 0.25 * Math.random()) - ( ( 0.25 * Math.random() ))) , y , z+ ( ( 0.25 * Math.random()) - ( 0.25 * Math.random() )) )
+                        .spawn(handler.getWorld(), x+( ( 0.25 * Math.random()) - ( ( 0.25 * Math.random() ))) , y+0.5 , z+ ( ( 0.25 * Math.random()) - ( 0.25 * Math.random() )) )
                 ;
 
         }
