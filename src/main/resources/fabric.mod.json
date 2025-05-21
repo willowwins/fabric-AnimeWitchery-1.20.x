@@ -5,7 +5,7 @@
 	"name": "Anime Witchery",
 	"description": "a silly mod about magic based off of thr makers prefrence",
 	"authors": [
-		"willow,"
+		"willow,Dino,Error303"
 	],
 	"contact": {
 		"homepage": "https://fabricmc.net/",
@@ -32,6 +32,9 @@
 		"fabricloader": ">=0.16.10",
 		"minecraft": "~1.20.1",
 		"java": ">=17",
+		"geckolib": "*",
+		"lodestone": "*",
+		"trinkets": "*",
 		"fabric-api": "*"
 	},
 	"suggests": {

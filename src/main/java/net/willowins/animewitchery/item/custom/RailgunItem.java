@@ -66,7 +66,7 @@ public class RailgunItem extends Item implements GeoItem {
                     stack.getOrCreateNbt().putFloat("charge", getPullProgress(i));
 
                     if (stack.getOrCreateNbt().getFloat("charge") == 1.0f) {
-                        player.getItemCooldownManager().set(this, 100);
+                        player.getItemCooldownManager().set(this, 30);
                         shootLaser(player.getRotationVector(), world, player.getPos().add(0,1,0), player);
                         player.stopUsingItem();
                     }
