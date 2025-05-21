@@ -10,6 +10,7 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.Rarity;
 import net.willowins.animewitchery.AnimeWitchery;
 import net.willowins.animewitchery.block.ModBlocks;
+import net.willowins.animewitchery.item.armor.RailGunnerArmorItem;
 import net.willowins.animewitchery.item.custom.*;
 
 public class ModItems {
@@ -39,6 +40,15 @@ public class ModItems {
             new ArmorItem(ModArmorMaterials.SILVER,ArmorItem.Type.LEGGINGS,new FabricItemSettings()));
     public static final Item SILVER_BOOTS =registerItem("silver_boots",
             new ArmorItem(ModArmorMaterials.SILVER,ArmorItem.Type.BOOTS,new FabricItemSettings()));
+
+    public static final Item RAILGUNNER_HELMET =registerItem("railgunner_helmet",
+            new RailGunnerArmorItem(ModArmorMaterials.SILVER,ArmorItem.Type.HELMET,new FabricItemSettings()));
+    public static final Item RAILGUNNER_CHESTPLATE =registerItem("railgunner_chestplate",
+            new RailGunnerArmorItem(ModArmorMaterials.SILVER,ArmorItem.Type.CHESTPLATE,new FabricItemSettings()));
+    public static final Item RAILGUNNER_LEGGINGS =registerItem("railgunner_leggings",
+            new RailGunnerArmorItem(ModArmorMaterials.SILVER,ArmorItem.Type.LEGGINGS,new FabricItemSettings()));
+    public static final Item RAILGUNNER_BOOTS =registerItem("railgunner_boots",
+            new RailGunnerArmorItem(ModArmorMaterials.SILVER,ArmorItem.Type.BOOTS,new FabricItemSettings()));
 
 
     public static final Item LEMON =registerItem("lemon", new Item(new FabricItemSettings().food(ModFoodComponents.LEMON)));

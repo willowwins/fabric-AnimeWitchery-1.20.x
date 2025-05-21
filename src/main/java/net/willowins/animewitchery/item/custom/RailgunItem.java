@@ -23,6 +23,7 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.willowins.animewitchery.item.renderer.RailgunRenderer;
 import net.willowins.animewitchery.networking.ModPackets;
+import net.willowins.animewitchery.particle.ModParticles;
 import software.bernie.geckolib.animatable.GeoItem;
 import software.bernie.geckolib.animatable.client.RenderProvider;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
@@ -58,6 +59,7 @@ public class RailgunItem extends Item implements GeoItem {
 
     @Override
     public void inventoryTick(ItemStack stack, World world, Entity entity, int slot, boolean selected) {
+
         if (entity instanceof PlayerEntity player) {
             if (!world.isClient) {
                 if (player.getMainHandStack().isOf(this) && player.isUsingItem()) {
@@ -90,6 +92,17 @@ public class RailgunItem extends Item implements GeoItem {
     }
 
     private void shootLaser(Vec3d look, World world, Vec3d pos, PlayerEntity owner) {
+        if (world instanceof  ServerWorld serverWorld) {
+            for (int i = 1; i <= 3; i++) {
+                serverWorld.spawnParticles(ModParticles.LASER_PARTICLE,
+                        (pos.getX() + (4 * i * look.x)),
+                        (pos.getY() + (4 * i * look.y)),
+                        (pos.getZ() + (4 * i * look.z)),
+                        1,
+                        0, 0, 0, 0
+                );
+            }
+        }
         for (int i = 0; i < 100; i++) {
             findEntities(world, 1, new BlockPos((int) (pos.getX() + (i*look.x)), (int) (pos.getY() + (i*look.y)), (int) (pos.getZ() + (i*look.z))), owner);
             if (!world.getBlockState(new BlockPos((int) (pos.getX() + (i*look.x)), (int) (pos.getY() + (i*look.y)), (int) (pos.getZ() + (i*look.z)))).isOf(Blocks.AIR)) {
@@ -99,7 +112,7 @@ public class RailgunItem extends Item implements GeoItem {
                                 .create()
                                 .writeDouble((pos.getX() + (i*look.x - 2*look.x)))
                                 .writeDouble((pos.getY() + (i*look.y - 2*look.y)))
-                                .writeDouble((pos.getZ() + (i*look.z - 2* look.z)))
+                                .writeDouble((pos.getZ() + (i*look.z - 2*look.z)))
                         ));
                     }
                 }

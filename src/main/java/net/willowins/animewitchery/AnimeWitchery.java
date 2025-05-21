@@ -16,6 +16,7 @@ import net.willowins.animewitchery.block.entity.ModBlockEntities;
 import net.willowins.animewitchery.enchantments.ModEnchantments;
 import net.willowins.animewitchery.item.ModItemGroups;
 import net.willowins.animewitchery.item.ModItems;
+import net.willowins.animewitchery.particle.ModParticles;
 import net.willowins.animewitchery.sound.ModSounds;
 import net.willowins.animewitchery.util.ModCustomTrades;
 import net.willowins.animewitchery.util.ModLootTableModifiers;
@@ -44,6 +45,8 @@ public class AnimeWitchery implements ModInitializer {
 		ModBlockEntities.registerBlockEntities();
 
 		ModEnchantments.init();
+
+		ModParticles.registerParticles();
 
 		LOGGER.info("Hello Fabric world!");
 
