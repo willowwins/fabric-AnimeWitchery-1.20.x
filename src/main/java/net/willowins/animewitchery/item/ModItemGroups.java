@@ -34,7 +34,6 @@ public class ModItemGroups {
 
                         entries.add(ModItems.NEEDLE);
 
-
                         entries.add(ModItems.SILVER_PICKAXE);
 
                         entries.add(ModItems.RAILGUNNER_HELMET);
@@ -80,7 +79,6 @@ public class ModItemGroups {
                         entries.add(ModItems.HEALING_STAFF);
                         entries.add(ModItems.RAILGUN);
                         } ).build());
-
 
     public static void registerItemGroups(){
         AnimeWitchery.LOGGER.info("registering Item Groups For " +AnimeWitchery.MOD_ID);
