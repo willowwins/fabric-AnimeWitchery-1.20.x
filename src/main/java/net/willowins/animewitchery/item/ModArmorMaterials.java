@@ -2,6 +2,7 @@ package net.willowins.animewitchery.item;
 
 import net.minecraft.item.ArmorItem;
 import net.minecraft.item.ArmorMaterial;
+import net.minecraft.item.Items;
 import net.minecraft.recipe.Ingredient;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
@@ -12,8 +13,8 @@ import java.util.function.Supplier;
 public enum ModArmorMaterials implements ArmorMaterial {
     SILVER("silver",25,new int[] { 3,8,6,3},10,
             SoundEvents.ITEM_ARMOR_EQUIP_GOLD, 0.5f, .5f, () -> Ingredient.ofItems(ModItems.SILVER)),
-    RAILGUNNER("railgunner",25,new int[] { 3,8,6,3},10,
-    SoundEvents.ITEM_ARMOR_EQUIP_GOLD, 0.5f, .5f, () -> Ingredient.ofItems(ModItems.SILVER));
+    RAILGUNNER("railgunner",250,new int[] { 3,8,6,3},8,
+    SoundEvents.ITEM_ARMOR_EQUIP_NETHERITE, 3f, .1f, () -> Ingredient.ofItems(Items.NETHERITE_INGOT));
 
 
 
