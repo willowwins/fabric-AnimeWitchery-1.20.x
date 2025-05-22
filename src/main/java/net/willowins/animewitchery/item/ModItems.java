@@ -42,13 +42,13 @@ public class ModItems {
             new ArmorItem(ModArmorMaterials.SILVER,ArmorItem.Type.BOOTS,new FabricItemSettings()));
 
     public static final Item RAILGUNNER_HELMET =registerItem("railgunner_helmet",
-            new RailGunnerArmorItem(ModArmorMaterials.SILVER,ArmorItem.Type.HELMET,new FabricItemSettings()));
+            new RailGunnerArmorItem(ModArmorMaterials.RAILGUNNER,ArmorItem.Type.HELMET,new FabricItemSettings()));
     public static final Item RAILGUNNER_CHESTPLATE =registerItem("railgunner_chestplate",
-            new RailGunnerArmorItem(ModArmorMaterials.SILVER,ArmorItem.Type.CHESTPLATE,new FabricItemSettings()));
+            new RailGunnerArmorItem(ModArmorMaterials.RAILGUNNER,ArmorItem.Type.CHESTPLATE,new FabricItemSettings()));
     public static final Item RAILGUNNER_LEGGINGS =registerItem("railgunner_leggings",
-            new RailGunnerArmorItem(ModArmorMaterials.SILVER,ArmorItem.Type.LEGGINGS,new FabricItemSettings()));
+            new RailGunnerArmorItem(ModArmorMaterials.RAILGUNNER,ArmorItem.Type.LEGGINGS,new FabricItemSettings()));
     public static final Item RAILGUNNER_BOOTS =registerItem("railgunner_boots",
-            new RailGunnerArmorItem(ModArmorMaterials.SILVER,ArmorItem.Type.BOOTS,new FabricItemSettings()));
+            new RailGunnerArmorItem(ModArmorMaterials.RAILGUNNER,ArmorItem.Type.BOOTS,new FabricItemSettings()));
 
 
     public static final Item LEMON =registerItem("lemon", new Item(new FabricItemSettings().food(ModFoodComponents.LEMON)));

@@ -159,7 +159,7 @@ public class RailgunItem extends Item implements GeoItem {
     }
 
     private static float getPullProgress(int useTicks) {
-        float f = (float)useTicks / 100;
+        float f = (float)useTicks / 50;
         if (f > 1.0F) {
             f = 1.0F;
         }

@@ -3,6 +3,7 @@ package net.willowins.animewitchery.item.custom;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
+import net.minecraft.item.ArmorMaterials;
 import net.willowins.animewitchery.item.ModArmorMaterials;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.effect.StatusEffectInstance;
@@ -24,12 +25,20 @@ public class ModArmorItem extends ArmorItem {
                     .put(ModArmorMaterials.SILVER, new StatusEffectInstance(StatusEffects.SATURATION, 400, 0,
                             false, false, false))
                     .put(ModArmorMaterials.SILVER, new StatusEffectInstance(StatusEffects.GLOWING, 400, 0,
-            false, false, false))
+                    false, false, false))
                     .put(ModArmorMaterials.SILVER, new StatusEffectInstance(StatusEffects.WEAKNESS, 800, 255,
                             false, false, false))
                     .put(ModArmorMaterials.SILVER, new StatusEffectInstance(StatusEffects.SATURATION, 400, 0,
                             false, false, false))
                     .put(ModArmorMaterials.SILVER, new StatusEffectInstance(StatusEffects.GLOWING, 400, 0,
+                            false, false, false))
+                    .put(ArmorMaterials.NETHERITE, new StatusEffectInstance(StatusEffects.FIRE_RESISTANCE, 40, 0,
+                            false, false, false))
+                    .put(ArmorMaterials.GOLD, new StatusEffectInstance(StatusEffects.GLOWING, 40, 0,
+                            false, false, false))
+                    .put(ModArmorMaterials.RAILGUNNER, new StatusEffectInstance(StatusEffects.SPEED, 20, 2,
+                            false, false, false))
+                    .put(ModArmorMaterials.RAILGUNNER, new StatusEffectInstance(StatusEffects.WEAKNESS, 20, 255,
                             false, false, false)).build();
 
 
