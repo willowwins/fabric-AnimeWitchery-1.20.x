@@ -29,9 +29,6 @@ public class ModItemGroups {
                         entries.add(ModItems.STRAWBERRY_TART);
                         entries.add(ModItems.LEMON_TART);
 
-
-
-
                         entries.add(ModItems.STRAWBERRY_SEEDS);
                         entries.add(ModItems.LEMON_SEEDS);
 
@@ -40,6 +37,20 @@ public class ModItemGroups {
 
                         entries.add(ModItems.SILVER_PICKAXE);
 
+                        entries.add(ModItems.RAILGUNNER_HELMET);
+                        entries.add(ModItems.RAILGUNNER_CHESTPLATE);
+                        entries.add(ModItems.RAILGUNNER_LEGGINGS);
+                        entries.add(ModItems.RAILGUNNER_BOOTS);
+
+                        entries.add(ModItems.BLAZE_SACK);
+                        entries.add(ModItems.ALCHEMICAL_CATALYST);
+
+                        entries.add(ModBlocks.BINDING_SPELL);
+
+                        entries.add(ModItems.SILVER_HELMET);
+                        entries.add(ModItems.SILVER_CHESTPLATE);
+                        entries.add(ModItems.SILVER_LEGGINGS);
+                        entries.add(ModItems.SILVER_BOOTS);
 
                         entries.add(ModItems.METAL_DETECTOR);
 
@@ -49,6 +60,7 @@ public class ModItemGroups {
                         entries.add(ModBlocks.SILVER_BLOCK);
                         entries.add(ModBlocks.SILVER_ORE);
                         entries.add(ModBlocks.EFFIGY_FOUNTAIN);
+                        entries.add(ModBlocks.DECORATIVE_FOUNTAIN);
                         entries.add(ModBlocks.DEEPSLATE_SILVER_ORE);
 
                         entries.add(ModBlocks.SILVER_BUTTON);
@@ -67,9 +79,7 @@ public class ModItemGroups {
                         entries.add(ModItems.SILVER_PENDANT);
                         entries.add(ModItems.HEALING_STAFF);
                         entries.add(ModItems.RAILGUN);
-
-
-                    } ).build());
+                        } ).build());
 
 
     public static void registerItemGroups(){
