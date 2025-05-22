@@ -31,7 +31,7 @@ public class LaserChargePacket {
                 double xr = ( ( 0.1 * Math.random()) - ( ( 0.1 * Math.random() )));
                 double zr = ( ( 0.1 * Math.random()) - ( ( 0.1 * Math.random() )));
                 WorldParticleBuilder.create(LodestoneParticleRegistry.WISP_PARTICLE)
-                        .setScaleData(GenericParticleData.create(charge,0.0f).build())
+                        .setScaleData(GenericParticleData.create(charge/2,0.0f).build())
                         .setTransparencyData(GenericParticleData.create(1.5f, 0f).build())
                         .setColorData(ColorParticleData.create(startingColor, endingColor).setCoefficient(1.4f).setEasing(Easing.BOUNCE_IN_OUT).build())
                         .setSpinData(SpinParticleData.create((float) (0.2f+(xr*2)), (float) (0.4f+(zr*2))).setSpinOffset((handler.getWorld().getTime() * 0.2f) % 6.28f).setEasing(Easing.QUARTIC_IN).build())
@@ -56,17 +56,17 @@ public class LaserChargePacket {
                         .setTransparencyData(GenericParticleData.create(1.5f, 0f).build())
                         .setColorData(ColorParticleData.create(startingColor, endingColor).setCoefficient(1.4f).setEasing(Easing.BOUNCE_IN_OUT).build())
                         .setSpinData(SpinParticleData.create((float) (0.2f+(xr*2)), (float) (0.4f+(zr*2))).setSpinOffset((handler.getWorld().getTime() * 0.2f) % 6.28f).setEasing(Easing.QUARTIC_IN).build())
-                        .setLifetime(20)
-                        .addMotion(-xr, -yr, -zr)
+                        .setLifetime(10)
+                        .addMotion(-xr/2, -yr/2, -zr/2)
                         .enableNoClip()
                         .setForceSpawn(true)
                         .setShouldCull(false)
-                        .spawn(handler.getWorld(), x+xr , y+yr , z+zr )
+                        .spawn(handler.getWorld(), x+xr*3 , y+yr*3 , z+zr*3 )
                 ;
 
             }
         if (Math.abs(x - client.player.getPos().x) <= 200 && Math.abs(z - client.player.getPos().z) <= 200) {
-            ScreenshakeHandler.addScreenshake(new ScreenshakeInstance(10).setIntensity(charge));
+            ScreenshakeHandler.addScreenshake(new ScreenshakeInstance(10).setIntensity(charge/10));
         }
     });
     }

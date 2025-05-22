@@ -5,14 +5,20 @@ import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.block.Blocks;
 import net.minecraft.client.render.item.BuiltinModelItemRenderer;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.SpawnReason;
+import net.minecraft.entity.effect.StatusEffectInstance;
+import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketByteBuf;
+import net.minecraft.network.packet.s2c.play.StopSoundS2CPacket;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.sound.SoundCategory;
 import net.minecraft.text.Text;
 import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
@@ -24,6 +30,7 @@ import net.minecraft.world.World;
 import net.willowins.animewitchery.item.renderer.RailgunRenderer;
 import net.willowins.animewitchery.networking.ModPackets;
 import net.willowins.animewitchery.particle.ModParticles;
+import net.willowins.animewitchery.sound.ModSounds;
 import software.bernie.geckolib.animatable.GeoItem;
 import software.bernie.geckolib.animatable.client.RenderProvider;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
@@ -48,12 +55,21 @@ public class RailgunItem extends Item implements GeoItem {
     public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
         ItemStack itemStack = user.getStackInHand(hand);
         user.setCurrentHand(hand);
+        if (world instanceof ServerWorld serverWorld) {
+            serverWorld.playSound(null, user.getX(), user.getY(), user.getZ(), ModSounds.LASER_CHARGE, SoundCategory.PLAYERS, 1, 1);
+        }
         return TypedActionResult.consume(itemStack);
     }
 
     @Override
     public void onStoppedUsing(ItemStack stack, World world, LivingEntity user, int remainingUseTicks) {
         stack.getOrCreateNbt().putFloat("charge", 0.0f);
+        for (PlayerEntity player : world.getPlayers()) {
+            if (player instanceof ServerPlayerEntity serverPlayer) {
+                StopSoundS2CPacket stopSoundS2CPacket = new StopSoundS2CPacket(ModSounds.LASER_CHARGE.getId(), SoundCategory.PLAYERS);
+                serverPlayer.networkHandler.sendPacket(stopSoundS2CPacket);
+            }
+        }
         super.onStoppedUsing(stack, world, user, remainingUseTicks);
     }
 
@@ -82,9 +98,20 @@ public class RailgunItem extends Item implements GeoItem {
                                          .writeDouble((player.getZ() + (1.25) * player.getRotationVector().z))
                                          .writeFloat(stack.getOrCreateNbt().getFloat("charge"))
                                  ));
+
                              }
                          }
+                        for (int z = 0; z < 100; z++) {
+                            Vec3d pos = player.getPos();
+                            Vec3d look = player.getRotationVector();
+                            glowEntities(world, 1.5, new BlockPos((int) (pos.getX() + (z*look.x)), (int) (pos.getY() + (z*look.y)), (int) (pos.getZ() + (z*look.z))), player);
+                            if (!world.getBlockState(new BlockPos((int) (pos.getX() + (z*look.x)), (int) (pos.getY() + (z*look.y)), (int) (pos.getZ() + (z*look.z)))).isOf(Blocks.AIR)) {
+                                break;
+                            }
+                        }
                     }
+                } else {
+                    stack.getOrCreateNbt().putFloat("charge", 0.0f);
                 }
             }
         }
@@ -92,6 +119,9 @@ public class RailgunItem extends Item implements GeoItem {
     }
 
     private void shootLaser(Vec3d look, World world, Vec3d pos, PlayerEntity owner) {
+        if (world instanceof ServerWorld serverWorld) {
+            serverWorld.playSound(null, owner.getX(), owner.getY(), owner.getZ(), ModSounds.LASER_SHOOT, SoundCategory.PLAYERS, 1, 1);
+        }
         if (world instanceof  ServerWorld serverWorld) {
             for (int i = 1; i <= 3; i++) {
                 serverWorld.spawnParticles(ModParticles.LASER_PARTICLE,
@@ -104,7 +134,7 @@ public class RailgunItem extends Item implements GeoItem {
             }
         }
         for (int i = 0; i < 100; i++) {
-            findEntities(world, 1, new BlockPos((int) (pos.getX() + (i*look.x)), (int) (pos.getY() + (i*look.y)), (int) (pos.getZ() + (i*look.z))), owner);
+            findEntities(world, 1.5, new BlockPos((int) (pos.getX() + (i*look.x)), (int) (pos.getY() + (i*look.y)), (int) (pos.getZ() + (i*look.z))), owner);
             if (!world.getBlockState(new BlockPos((int) (pos.getX() + (i*look.x)), (int) (pos.getY() + (i*look.y)), (int) (pos.getZ() + (i*look.z)))).isOf(Blocks.AIR)) {
                 for (PlayerEntity playerEntity : world.getPlayers()) {
                     if (playerEntity instanceof ServerPlayerEntity serverPlayerEntity) {
@@ -152,6 +182,26 @@ public class RailgunItem extends Item implements GeoItem {
         for (LivingEntity target : player) {
             if (target != owner) {
                 target.kill();
+            }
+        }
+
+
+    }
+
+    private void glowEntities(World world, double radius, BlockPos pos, PlayerEntity owner) {
+        if (!(world instanceof ServerWorld serverWorld)) return;
+
+        Box box = new Box(
+                pos.getX() - radius, pos.getY() - radius, pos.getZ() - radius,
+                pos.getX() + radius, pos.getY() + radius, pos.getZ() + radius
+        );
+
+        List<LivingEntity> player = serverWorld.getEntitiesByClass(LivingEntity.class, box, entity -> true);
+
+
+        for (LivingEntity target : player) {
+            if (target != owner) {
+                target.addStatusEffect(new StatusEffectInstance(StatusEffects.GLOWING, 20, 0));
             }
         }
 

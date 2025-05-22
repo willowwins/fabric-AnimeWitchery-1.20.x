@@ -62,7 +62,7 @@ public class LaserHitPacket {
                 ;
 
             }
-            for (int i = 0; i < 100; i++) {
+            for (int i = 0; i < 200; i++) {
                 Color startingColor = new Color(21, 5, 198);
                 Color endingColor = new Color(246, 10, 255);
                 double xr = ( ( 1 * Math.random()) - ( ( 1 * Math.random() )));
@@ -73,7 +73,7 @@ public class LaserHitPacket {
                         .setTransparencyData(GenericParticleData.create(1.5f, 0f).build())
                         .setColorData(ColorParticleData.create(startingColor, endingColor).setCoefficient(1.4f).setEasing(Easing.BOUNCE_IN_OUT).build())
                         .setSpinData(SpinParticleData.create((float) (0.2f+(xr*2)), (float) (0.4f+(zr*2))).setSpinOffset((handler.getWorld().getTime() * 0.2f) % 6.28f).setEasing(Easing.QUARTIC_IN).build())
-                        .setLifetime(20)
+                        .setLifetime(40)
                         .addMotion(xr, yr, zr)
                         .enableNoClip()
                         .setForceSpawn(true)

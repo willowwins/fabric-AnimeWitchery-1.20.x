@@ -4,6 +4,17 @@
     "sounds": [
       "animewitchery:hatsune_miku_lemon"
     ]
+  },
+  "laser_charge": {
+    "subtitle": "sounds.animewitchery.laser_charge",
+    "sounds": [
+      "animewitchery:laser_charge"
+    ]
+  },
+  "laser_shoot": {
+    "subtitle": "sounds.animewitchery.laser_shoot",
+    "sounds": [
+      "animewitchery:laser_shoot"
+    ]
   }
-
 }
