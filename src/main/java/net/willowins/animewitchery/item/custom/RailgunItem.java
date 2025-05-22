@@ -119,6 +119,8 @@ public class RailgunItem extends Item implements GeoItem {
     }
 
     private void shootLaser(Vec3d look, World world, Vec3d pos, PlayerEntity owner) {
+        owner.setVelocity(owner.getRotationVector().multiply(-3,-3,-3));
+        owner.velocityModified = true;
         if (world instanceof ServerWorld serverWorld) {
             serverWorld.playSound(null, owner.getX(), owner.getY(), owner.getZ(), ModSounds.LASER_SHOOT, SoundCategory.PLAYERS, 1, 1);
         }
@@ -209,7 +211,7 @@ public class RailgunItem extends Item implements GeoItem {
     }
 
     private static float getPullProgress(int useTicks) {
-        float f = (float)useTicks / 50;
+        float f = (float)useTicks / 100;
         if (f > 1.0F) {
             f = 1.0F;
         }
