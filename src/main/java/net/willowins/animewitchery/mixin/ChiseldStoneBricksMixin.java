@@ -25,8 +25,7 @@ public class ChiseldStoneBricksMixin {
     private void onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit, CallbackInfoReturnable<ActionResult> cir) {
         if (world.getBlockState(pos).isOf(Blocks.CHISELED_STONE_BRICKS) && !world.isClient) {
             if (player.getMainHandStack().isOf(ModItems.ALCHEMICAL_CATALYST)){
-                world.setBlockState(pos,Blocks.AIR.getDefaultState());
-                Block.dropStack(world,pos,new ItemStack(ModBlocks.EFFIGY_FOUNTAIN.asItem(),1));
+                world.setBlockState(pos,ModBlocks.ALCHEMY_TABLE.getDefaultState());
                 player.getMainHandStack().decrement(1);
                 player.getOffHandStack().decrement(1);
 

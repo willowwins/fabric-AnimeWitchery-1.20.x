@@ -50,7 +50,7 @@ public class ModCustomTrades {
         TradeOfferHelper.registerVillagerOffers(ModVillagers.SOUND_MASTER,2,
                 factories -> {
                     factories.add((entity, random) -> new TradeOffer(
-                            new ItemStack(Items.POTION.,1),
+                            new ItemStack(Items.MAGMA_CREAM,2),
                             new ItemStack(Items.AMETHYST_SHARD,4),
                             new ItemStack(ModItems.FIRE_RES_CRYSTAL,4),
                             100,1,0f
