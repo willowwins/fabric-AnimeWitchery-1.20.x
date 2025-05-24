@@ -51,9 +51,10 @@ public class ModItems {
             new RailGunnerArmorItem(ModArmorMaterials.RAILGUNNER,ArmorItem.Type.BOOTS,new FabricItemSettings()));
 
 
-    public static final Item LEMON =registerItem("lemon",
-            new Item(new FabricItemSettings().food(ModFoodComponents.LEMON)));
+    public static final Item LEMON =registerItem("lemon", new Item(new FabricItemSettings().food(ModFoodComponents.LEMON)));
 
+    public static final Item FIRE_RES_CRYSTAL =registerItem("fire_res_crystal",
+            new FireResCrystalItem(new FabricItemSettings()));
 
     public static final Item STRAWBERRY =registerItem("strawberry", new Item(new FabricItemSettings().food(ModFoodComponents.STRAWBERRY)));
 

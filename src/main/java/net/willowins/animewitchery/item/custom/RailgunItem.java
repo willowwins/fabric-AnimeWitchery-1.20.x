@@ -203,7 +203,7 @@ public class RailgunItem extends Item implements GeoItem {
 
         for (LivingEntity target : player) {
             if (target != owner) {
-                target.addStatusEffect(new StatusEffectInstance(StatusEffects.GLOWING, 20, 0));
+                target.addStatusEffect(new StatusEffectInstance(StatusEffects.GLOWING, 20, 0,false,false));
             }
         }
 

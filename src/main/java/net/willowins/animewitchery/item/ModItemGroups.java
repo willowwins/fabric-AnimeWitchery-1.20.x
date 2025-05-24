@@ -43,6 +43,7 @@ public class ModItemGroups {
 
                         entries.add(ModItems.BLAZE_SACK);
                         entries.add(ModItems.ALCHEMICAL_CATALYST);
+                        entries.add(ModItems.FIRE_RES_CRYSTAL);
 
                         entries.add(ModBlocks.BINDING_SPELL);
 
