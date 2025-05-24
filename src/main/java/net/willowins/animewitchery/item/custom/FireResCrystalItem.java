@@ -32,9 +32,11 @@ public class FireResCrystalItem extends Item {
             if(user.getMainHandStack().isOf(FireResCrystalItem.this)){
                 user.getMainHandStack().decrement(1);
                 user.addStatusEffect(new StatusEffectInstance(StatusEffects.FIRE_RESISTANCE,2400,1,true,true));
+                user.getItemCooldownManager().set(user.getMainHandStack().getItem(),1200);
             } else if (user.getOffHandStack().isOf(FireResCrystalItem.this)) {
                 user.getOffHandStack().decrement(1);
                 user.addStatusEffect(new StatusEffectInstance(StatusEffects.FIRE_RESISTANCE,2400,1,true,true));
+                user.getItemCooldownManager().set(user.getOffHandStack().getItem(),1200);
             }
         return super.use(world, user, hand);
     }
