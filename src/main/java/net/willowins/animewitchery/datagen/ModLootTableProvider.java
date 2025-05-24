@@ -49,6 +49,7 @@ public class ModLootTableProvider extends FabricBlockLootTableProvider {
         addDrop(ModBlocks.SILVER_STAIRS);
         addDrop(Blocks.REINFORCED_DEEPSLATE);
 
+
         addDrop(ModBlocks.SILVER_DOOR, doorDrops(ModBlocks.SILVER_DOOR));
         addDrop(ModBlocks.SILVER_SLAB, slabDrops(ModBlocks.SILVER_SLAB));
 

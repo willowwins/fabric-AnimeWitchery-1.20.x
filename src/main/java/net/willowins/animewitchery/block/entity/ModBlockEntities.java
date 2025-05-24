@@ -33,6 +33,10 @@ public class ModBlockEntities {
             Registry.register(Registries.BLOCK_ENTITY_TYPE, new Identifier(AnimeWitchery.MOD_ID, "binding_spell_be"),
                     FabricBlockEntityTypeBuilder.create(BindingSpellBlockEntity::new,new Block[]{ModBlocks.BINDING_SPELL}).build((Type)null));
 
+ public static final BlockEntityType<AlchemyTableBlockEntity> ALCHEMY_TABLE_BLOCK_ENTITY =
+            Registry.register(Registries.BLOCK_ENTITY_TYPE, new Identifier(AnimeWitchery.MOD_ID, "alchemy_table_be"),
+                    FabricBlockEntityTypeBuilder.create(AlchemyTableBlockEntity::new,new Block[]{ModBlocks.ALCHEMY_TABLE}).build((Type)null));
+
     public static void registerBlockEntities(){
         AnimeWitchery.LOGGER.info("Registering Block Entities For ", AnimeWitchery.MOD_ID);
     }

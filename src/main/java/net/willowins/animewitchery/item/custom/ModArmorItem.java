@@ -32,8 +32,6 @@ public class ModArmorItem extends ArmorItem {
                             false, false, false))
                     .put(ModArmorMaterials.SILVER, new StatusEffectInstance(StatusEffects.GLOWING, 400, 0,
                             false, false, false))
-                    .put(ArmorMaterials.NETHERITE, new StatusEffectInstance(StatusEffects.FIRE_RESISTANCE, 40, 0,
-                            false, false, false))
                     .put(ArmorMaterials.GOLD, new StatusEffectInstance(StatusEffects.GLOWING, 40, 0,
                             false, false, false))
                     .put(ModArmorMaterials.RAILGUNNER, new StatusEffectInstance(StatusEffects.SPEED, 20, 2,

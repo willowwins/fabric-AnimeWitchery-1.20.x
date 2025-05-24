@@ -16,6 +16,8 @@ private static final Identifier NETHER_FORTRESS_ID =
         new Identifier("minecraft","chests/nether_bridge");
     private static final Identifier WITHER_SKELETON_ID =
             new Identifier("minecraft","entities/wither_skeleton");
+    private static final Identifier GL_BAT_ID =
+            new Identifier("geckolib","entities/bat");
     private static final Identifier CREEPER_ID =
             new Identifier("minecraft","entities/creeper");
     public static void modifyLootTables() {
