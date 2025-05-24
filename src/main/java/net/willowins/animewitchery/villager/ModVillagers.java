@@ -16,7 +16,7 @@ import net.willowins.animewitchery.block.ModBlocks;
 
 public class ModVillagers {
     public static final RegistryKey<PointOfInterestType> SOUND_POI_KEY = poiKey("soundpoi");
-    public static final PointOfInterestType SOUND_POI = registerPoi("soundpoi", ModBlocks.SOUND_BLOCK);
+    public static final PointOfInterestType SOUND_POI = registerPoi("soundpoi", ModBlocks.ALCHEMY_TABLE);
 
     public static final VillagerProfession SOUND_MASTER = registerProfession("sound_master",SOUND_POI_KEY);
 

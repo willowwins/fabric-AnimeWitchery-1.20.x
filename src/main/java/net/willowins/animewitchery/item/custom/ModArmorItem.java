@@ -1,9 +1,7 @@
 package net.willowins.animewitchery.item.custom;
 
-import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
-import net.minecraft.item.ArmorMaterials;
 import net.willowins.animewitchery.item.ModArmorMaterials;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.effect.StatusEffectInstance;
@@ -14,9 +12,7 @@ import net.minecraft.item.ArmorMaterial;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
-import java.rmi.server.UID;
 import java.util.Map;
-import java.util.UUID;
 
 
 public class ModArmorItem extends ArmorItem {
@@ -31,8 +27,6 @@ public class ModArmorItem extends ArmorItem {
                     .put(ModArmorMaterials.SILVER, new StatusEffectInstance(StatusEffects.SATURATION, 400, 0,
                             false, false, false))
                     .put(ModArmorMaterials.SILVER, new StatusEffectInstance(StatusEffects.GLOWING, 400, 0,
-                            false, false, false))
-                    .put(ArmorMaterials.GOLD, new StatusEffectInstance(StatusEffects.GLOWING, 40, 0,
                             false, false, false))
                     .put(ModArmorMaterials.RAILGUNNER, new StatusEffectInstance(StatusEffects.SPEED, 20, 2,
                             false, false, false))
