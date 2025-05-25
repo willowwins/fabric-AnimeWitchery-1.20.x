@@ -1,9 +1,9 @@
-// 1.20.1	2025-05-17T17:25:13.2993711	Anime Witchery/Block Loot Tables
-8bfdcc49204c97f06e57f13ee89ac7dbc2daf9df data\animewitchery\loot_tables\blocks\lemon_crop.json
+// 1.20.1	2025-05-25T12:17:54.7346827	Anime Witchery/Block Loot Tables
 15e55cac51f29b35ed798a9bd994bbbeb8961d10 data\animewitchery\loot_tables\blocks\decorative_fountain.json
+8bfdcc49204c97f06e57f13ee89ac7dbc2daf9df data\animewitchery\loot_tables\blocks\lemon_crop.json
 c8d43f32b7adcb5336cbbf37ad2170616ac18b5d data\animewitchery\loot_tables\blocks\silver_button.json
-9d0ffb31239ba45f59a83788efad0d2e5c2521e3 data\animewitchery\loot_tables\blocks\effigy_fountain.json
 fee2efb2bd350f9fa8f364c9ac3b66ea50327da8 data\animewitchery\loot_tables\blocks\silver_ore.json
+9d0ffb31239ba45f59a83788efad0d2e5c2521e3 data\animewitchery\loot_tables\blocks\effigy_fountain.json
 0658956ee367b206b659e7b55c103ba422916353 data\animewitchery\loot_tables\blocks\deepslate_silver_ore.json
 78268c23833213bf45108d6f6bffd33be9080b75 data\minecraft\loot_tables\blocks\reinforced_deepslate.json
 4cb57c5d7445b531c3ef8109efd6a1b0c861d470 data\animewitchery\loot_tables\blocks\sound_block.json

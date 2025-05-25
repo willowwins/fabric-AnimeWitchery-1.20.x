@@ -1,16 +1,12 @@
 package net.willowins.animewitchery.block.custom;
 
-
-import net.minecraft.block.entity.BeaconBlockEntity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LightningEntity;
-import net.minecraft.entity.SpawnReason;
+
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.Text;
 
-import net.minecraft.util.math.Vec3d;
 import net.willowins.animewitchery.block.ModBlocks;
 import net.willowins.animewitchery.item.ModItems;
 import net.minecraft.block.*;
