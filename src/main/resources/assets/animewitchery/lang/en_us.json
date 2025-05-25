@@ -20,20 +20,26 @@
 
   "item.animewitchery.needle": "Silver Needle",
 
-  "item.animewitchery.silver_helmet": "Silver Helmet",
-  "item.animewitchery.silver_chestplate": "Silver Chestplate",
-  "item.animewitchery.silver_leggings": "Silver Leggings",
-  "item.animewitchery.silver_boots": "Silver Boots",
+  "item.animewitchery.silver_helmet": "§bSilver Helmet",
+  "item.animewitchery.silver_chestplate": "§bSilver Chestplate",
+  "item.animewitchery.silver_leggings": "§bSilver Leggings",
+  "item.animewitchery.silver_boots": "§bSilver Boots",
 
   "item.animewitchery.silver_pickaxe": "Silver Pickaxe",
 
-  "item.animewitchery.metal_detector": "All Seeing Eye",
+  "item.animewitchery.metal_detector": "§5All Seeing Eye",
 
-  "item.animewitchery.silver_pendant": "Silver Pendant",
-  "item.animewitchery.healing_staff": "Healing Staff",
-  "item.animewitchery.railgun": "RailGun",
+  "item.animewitchery.silver_pendant": "§bSilver Pendant",
+  "item.animewitchery.healing_staff": "§bHealing Staff",
+  "item.animewitchery.railgun": "§5RailGun",
+  "item.animewitchery.overheated_fuel_rod": "§5OverHeated §bFuel Rod",
+  "item.animewitchery.fuel_rod": "§bFuel Rod",
+  "item.animewitchery.railgunner_helmet": "§5RailGunner Helmet",
+  "item.animewitchery.railgunner_chestplate": "§5RailGunner Chestplate",
+  "item.animewitchery.railgunner_leggings": "§5RailGunner Leggings",
+  "item.animewitchery.railgunner_boots": "§5RailGunner Boots",
 
-  "item.animewitchery.alchemical_catalyst": "Alchemical Catalyst",
+  "item.animewitchery.alchemical_catalyst": "§5Alchemical §zCatalyst",
   "item.animewitchery.blaze_powder_bag": "Blaze Powder Sack",
   "item.animewitchery.staff_head": "Staff head",
 

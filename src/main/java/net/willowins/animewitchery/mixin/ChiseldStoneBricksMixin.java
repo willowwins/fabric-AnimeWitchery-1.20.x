@@ -6,6 +6,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
@@ -27,9 +28,12 @@ public class ChiseldStoneBricksMixin {
             if (player.getMainHandStack().isOf(ModItems.ALCHEMICAL_CATALYST)){
                 world.setBlockState(pos,ModBlocks.ALCHEMY_TABLE.getDefaultState());
                 player.getMainHandStack().decrement(1);
-                player.getOffHandStack().decrement(1);
 
 
+            } else if (player.getMainHandStack().isOf(ModItems.SILVER_PENDANT)) {
+                world.setBlockState(pos,Blocks.AIR.getDefaultState());
+                Block.dropStack(world,pos,new ItemStack(ModBlocks.EFFIGY_FOUNTAIN.asItem(),1));
+                player.getMainHandStack().decrement(1);
             }
         }
     }

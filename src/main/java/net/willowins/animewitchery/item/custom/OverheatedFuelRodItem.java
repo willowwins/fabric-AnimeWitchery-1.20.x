@@ -6,7 +6,10 @@ import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
-public class OverheatedFuelRodItem   {
+public class OverheatedFuelRodItem  extends Item{
+    public OverheatedFuelRodItem(Settings settings) {
+    super(settings);
+}
 
 
 
