@@ -1,10 +1,10 @@
 {
-  "item.animewitchery.silveringot": "Silver Ingot",
-  "item.animewitchery.silvernugget": "Silver Nugget",
-  "item.animewitchery.rawsilver": "Raw Silver",
+  "item.animewitchery.silveringot": "§bSilver Ingot",
+  "item.animewitchery.silvernugget": "§bSilver Nugget",
+  "item.animewitchery.rawsilver": "§bRaw Silver",
   "item.animewitchery.spool": "Empty Spool",
-  "item.animewitchery.silverspool": "Spool of Silver Thread",
-  "item.animewitchery.fire_res_crystal": "Fire Resistance Crystal",
+  "item.animewitchery.silverspool": "§bSpool of Silver Thread",
+  "item.animewitchery.fire_res_crystal": "§bFire Resistance Crystal",
 
   "item.animewitchery.lemon": "Lemon",
   "item.animewitchery.lemon_seeds": "Lemon Seeds",
@@ -18,58 +18,63 @@
 
   "entity.minecraft.villager.sound_master": "alchemist",
 
-  "item.animewitchery.needle": "Silver Needle",
+  "item.animewitchery.needle": "§bSilver Needle",
 
   "item.animewitchery.silver_helmet": "§bSilver Helmet",
   "item.animewitchery.silver_chestplate": "§bSilver Chestplate",
   "item.animewitchery.silver_leggings": "§bSilver Leggings",
   "item.animewitchery.silver_boots": "§bSilver Boots",
 
-  "item.animewitchery.silver_pickaxe": "Silver Pickaxe",
+  "item.animewitchery.silver_pickaxe": "§bSilver Pickaxe",
 
   "item.animewitchery.metal_detector": "§5All Seeing Eye",
 
   "item.animewitchery.silver_pendant": "§bSilver Pendant",
   "item.animewitchery.healing_staff": "§bHealing Staff",
   "item.animewitchery.railgun": "§5RailGun",
-  "item.animewitchery.overheated_fuel_rod": "§5OverHeated §bFuel Rod",
+  "item.animewitchery.overheated_fuel_rod": "§6OverHeated §bFuel Rod",
   "item.animewitchery.fuel_rod": "§bFuel Rod",
   "item.animewitchery.railgunner_helmet": "§5RailGunner Helmet",
   "item.animewitchery.railgunner_chestplate": "§5RailGunner Chestplate",
   "item.animewitchery.railgunner_leggings": "§5RailGunner Leggings",
   "item.animewitchery.railgunner_boots": "§5RailGunner Boots",
 
-  "item.animewitchery.alchemical_catalyst": "§5Alchemical §zCatalyst",
-  "item.animewitchery.blaze_powder_bag": "Blaze Powder Sack",
-  "item.animewitchery.staff_head": "Staff head",
+  "item.animewitchery.alchemical_catalyst": "§5Alchemical §6Catalyst",
+  "item.animewitchery.blaze_powder_bag": " §6Blaze Powder Sack",
+  "item.animewitchery.staff_head": "§5Staff head",
+  "item.animewitchery.deep_dark_deep_dish": "§1Deep Dark Deep Dish",
 
   "block.animewitchery.sound_block": "Block of Music",
   "block.animewitchery.sound_block2": "Block of Hilarity",
 
-  "block.animewitchery.active_effigy_fountain": "Active Effigy Fountain",
-  "block.animewitchery.effigy_fountain": "Effigy Fountain",
-  "block.animewitchery.decorative_fountain": "Decorative Fountain",
+  "block.animewitchery.binding_spell": "§5Binding Spell",
+  "block.animewitchery.active_effigy_fountain": "§bActive Effigy Fountain",
+  "block.animewitchery.effigy_fountain": "§bEffigy Fountain",
+  "block.animewitchery.decorative_fountain": "§bDecorative Fountain",
   "block.animewitchery.charcoal_block": "Charcoal Block",
-  "block.animewitchery.silver_block": "Block of Silver",
+  "block.animewitchery.silver_block": "§bBlock of Silver",
   "block.animewitchery.silver_ore": "Silver Ore",
   "block.animewitchery.deepslate_silver_ore": "Deepslate Silver Ore",
+  "block.animewitchery.alchemy_table": "§5Alchemy Table",
 
-  "enchantment.animewitchery.boot_enchant": "PlaneWalker",
+  "enchantment.animewitchery.boot_enchant": "§5PlaneWalker",
 
-  "block.animewitchery.silver_stairs": "Silver Stairs",
-  "block.animewitchery.silver_slab": "Silver Slab",
-  "block.animewitchery.silver_button": "Silver Button",
-  "block.animewitchery.silver_pressure_plate": "Silver Pressure Plate",
-  "block.animewitchery.silver_fence": "Silver Fence",
-  "block.animewitchery.silver_fence_gate": "Silver Fence Gate",
-  "block.animewitchery.silver_wall": "Silver Wall",
-  "block.animewitchery.silver_door": "Silver Door",
-  "block.animewitchery.silver_trapdoor": "Silver Trapdoor",
+  "block.animewitchery.silver_stairs": "§bSilver Stairs",
+  "block.animewitchery.silver_slab": "§bSilver Slab",
+  "block.animewitchery.silver_button": "§bSilver Button",
+  "block.animewitchery.silver_pressure_plate": "§bSilver Pressure Plate",
+  "block.animewitchery.silver_fence": "§bSilver Fence",
+  "block.animewitchery.silver_fence_gate": "§bSilver Fence Gate",
+  "block.animewitchery.silver_wall": "§bSilver Wall",
+  "block.animewitchery.silver_door": "§bSilver Door",
+  "block.animewitchery.silver_trapdoor": "§bSilver Trapdoor",
 
-  "sounds.animewitchery.hatsune_miku_lemon": "Hatsune Miku Suffers",
+  "sounds.animewitchery.hatsune_miku_lemon": "§bHatsune Miku Suffers",
+  "sounds.animewitchery.laser_charge": "§5Railgun Charges",
+  "sounds.animewitchery.laser_shoot": "§5Railgun Fires",
 
 
   "tooltip.animewitchery.metal_detector.tooltip": "finds valuables with a vision beyond your own",
 
-  "itemgroup.silver": "Anime Witchery"
+  "itemgroup.silver": "§5Anime Witchery"
 }

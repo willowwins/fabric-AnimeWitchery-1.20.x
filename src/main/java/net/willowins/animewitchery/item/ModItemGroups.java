@@ -43,6 +43,7 @@ public class ModItemGroups {
 
                         entries.add(ModItems.BLAZE_SACK);
                         entries.add(ModItems.ALCHEMICAL_CATALYST);
+                        entries.add(ModItems.DEEP_DARK_DEEP_DISH);
                         entries.add(ModItems.FIRE_RES_CRYSTAL);
                         entries.add(ModItems.OVERHEATED_FUEL_ROD);
                         entries.add(ModItems.FUEL_ROD);

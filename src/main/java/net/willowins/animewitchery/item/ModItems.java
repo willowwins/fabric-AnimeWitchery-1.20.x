@@ -62,6 +62,9 @@ public class ModItems {
     public static final Item FUEL_ROD =registerItem("fuel_rod",
             new FuelRodItem(new FabricItemSettings().maxCount(1)));
 
+    public static final Item DEEP_DARK_DEEP_DISH =registerItem("deep_dark_deep_dish",
+            new DeepDarkDeepDishItem(new FabricItemSettings().maxCount(1)));
+
     public static final Item STRAWBERRY =registerItem("strawberry", new Item(new FabricItemSettings().food(ModFoodComponents.STRAWBERRY)));
 
     public static final Item TART_CRUST =registerItem("tart_crust", new Item(new FabricItemSettings().food(ModFoodComponents.TART_CRUST)));

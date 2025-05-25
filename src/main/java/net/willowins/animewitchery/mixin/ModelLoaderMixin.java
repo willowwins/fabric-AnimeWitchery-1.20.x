@@ -25,5 +25,10 @@ public abstract class ModelLoaderMixin {
     public void addNeedle(BlockColors blockColors, Profiler profiler, Map<Identifier, JsonUnbakedModel> jsonUnbakedModels, Map<Identifier, List<ModelLoader.SourceTrackedData>> blockStates, CallbackInfo ci) {
         this.addModel(new ModelIdentifier(AnimeWitchery.MOD_ID, "needle3d", "inventory"));
         this.addModel(new ModelIdentifier(AnimeWitchery.MOD_ID, "healing_staff_2d", "inventory"));
+        this.addModel(new ModelIdentifier(AnimeWitchery.MOD_ID, "railgunner_helmet_2d", "inventory"));
+        this.addModel(new ModelIdentifier(AnimeWitchery.MOD_ID, "railgunner_chestplate_2d", "inventory"));
+        this.addModel(new ModelIdentifier(AnimeWitchery.MOD_ID, "railgunner_leggings_2d", "inventory"));
+        this.addModel(new ModelIdentifier(AnimeWitchery.MOD_ID, "railgunner_boots_2d", "inventory"));
+        this.addModel(new ModelIdentifier(AnimeWitchery.MOD_ID, "binding_spell_2d", "inventory"));
     }
 }
