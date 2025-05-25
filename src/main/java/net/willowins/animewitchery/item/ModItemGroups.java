@@ -28,6 +28,7 @@ public class ModItemGroups {
                         entries.add(ModItems.UNBAKED_STRAWBERRY_TART);
                         entries.add(ModItems.STRAWBERRY_TART);
                         entries.add(ModItems.LEMON_TART);
+                        entries.add(ModItems.LEMON_TART);
 
                         entries.add(ModItems.STRAWBERRY_SEEDS);
                         entries.add(ModItems.LEMON_SEEDS);
@@ -54,6 +55,7 @@ public class ModItemGroups {
                         entries.add(ModItems.SILVER_CHESTPLATE);
                         entries.add(ModItems.SILVER_LEGGINGS);
                         entries.add(ModItems.SILVER_BOOTS);
+                        entries.add(ModItems.SILVER_TEMPLATE);
 
                         entries.add(ModItems.METAL_DETECTOR);
 
