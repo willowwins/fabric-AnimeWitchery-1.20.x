@@ -28,6 +28,18 @@ public class ItemRendererMixin {
         if (stack.isOf(ModItems.HEALING_STAFF) && (renderMode == ModelTransformationMode.GUI || renderMode == ModelTransformationMode.GROUND)) {
             return ((ItemRendererAccessor) this).mccourse$getModels().getModelManager().getModel(new ModelIdentifier(AnimeWitchery.MOD_ID, "healing_staff_2d", "inventory"));
         }
+        if (stack.isOf(ModItems.RAILGUNNER_HELMET) && (renderMode == ModelTransformationMode.GUI || renderMode == ModelTransformationMode.GROUND)) {
+            return ((ItemRendererAccessor) this).mccourse$getModels().getModelManager().getModel(new ModelIdentifier(AnimeWitchery.MOD_ID, "railgunner_helmet_2d", "inventory"));
+        }
+        if (stack.isOf(ModItems.RAILGUNNER_CHESTPLATE) && (renderMode == ModelTransformationMode.GUI || renderMode == ModelTransformationMode.GROUND)) {
+            return ((ItemRendererAccessor) this).mccourse$getModels().getModelManager().getModel(new ModelIdentifier(AnimeWitchery.MOD_ID, "railgunner_chestplate_2d", "inventory"));
+        }
+        if (stack.isOf(ModItems.RAILGUNNER_LEGGINGS) && (renderMode == ModelTransformationMode.GUI || renderMode == ModelTransformationMode.GROUND)) {
+            return ((ItemRendererAccessor) this).mccourse$getModels().getModelManager().getModel(new ModelIdentifier(AnimeWitchery.MOD_ID, "railgunner_leggings_2d", "inventory"));
+        }
+        if (stack.isOf(ModItems.RAILGUNNER_BOOTS) && (renderMode == ModelTransformationMode.GUI || renderMode == ModelTransformationMode.GROUND)) {
+            return ((ItemRendererAccessor) this).mccourse$getModels().getModelManager().getModel(new ModelIdentifier(AnimeWitchery.MOD_ID, "railgunner_boots_2d", "inventory"));
+        }
         return value;
     }
 }
