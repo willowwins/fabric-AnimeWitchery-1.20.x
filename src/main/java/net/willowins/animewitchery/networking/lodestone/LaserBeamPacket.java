@@ -40,7 +40,7 @@ public class LaserBeamPacket {
                 ;
 
         }
-        if (Math.abs(x - client.player.getPos().x) <= 200 && Math.abs(z - client.player.getPos().z) <= 200) {
+        if (Math.abs(x - client.player.getPos().x) <= 30 && Math.abs(z - client.player.getPos().z) <= 30) {
             ScreenshakeHandler.addScreenshake(new ScreenshakeInstance(10).setIntensity(2));
         }
     });

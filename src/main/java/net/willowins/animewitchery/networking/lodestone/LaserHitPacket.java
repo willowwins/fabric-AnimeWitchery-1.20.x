@@ -82,7 +82,7 @@ public class LaserHitPacket {
                 ;
 
             }
-        if (Math.abs(x - client.player.getPos().x) <= 200 && Math.abs(z - client.player.getPos().z) <= 200) {
+        if (Math.abs(x - client.player.getPos().x) <= 20 && Math.abs(z - client.player.getPos().z) <= 20) {
             ScreenshakeHandler.addScreenshake(new ScreenshakeInstance(5).setIntensity(0.1f));
         }
     });

@@ -15,6 +15,7 @@ import net.willowins.animewitchery.block.entity.renderer.ActiveEffigyFountainRen
 import net.willowins.animewitchery.block.entity.renderer.AlchemyTableRenderer;
 import net.willowins.animewitchery.block.entity.renderer.BindingSpellRenderer;
 import net.willowins.animewitchery.networking.ModPackets;
+import net.willowins.animewitchery.particle.ModParticles;
 
 public class AnimeWitcheryClient implements ClientModInitializer {
     @Override
@@ -35,6 +36,8 @@ public class AnimeWitcheryClient implements ClientModInitializer {
         BlockEntityRendererRegistry.register(ModBlockEntities.ACTIVE_BINDING_SPELL_BLOCK_ENTITY, (context) -> new ActiveBindingSpellRenderer());
         BlockEntityRendererRegistry.register(ModBlockEntities.BINDING_SPELL_BLOCK_ENTITY, (context) -> new BindingSpellRenderer());
         BlockEntityRendererRegistry.register(ModBlockEntities.ALCHEMY_TABLE_BLOCK_ENTITY, (context) -> new AlchemyTableRenderer());
+
+        ModParticles.registerParticles();
 
         ModPackets.registerS2CPackets();
 
