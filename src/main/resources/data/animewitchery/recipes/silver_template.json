@@ -1,13 +1,13 @@
 {
   "type": "minecraft:crafting_shaped",
   "category": "misc",
-  "group": "animewitchery",
+  "group": "templates",
   "key": {
     "#": {
-      "item": "amimewitchery:silveringot"
+      "item": "animewitchery:silveringot"
     },
     "a": {
-      "item": "amimewitchery:rawsilver"
+      "item": "animewitchery:rawsilver"
     }
   },
   "pattern": [
@@ -16,7 +16,7 @@
     "###"
   ],
   "result": {
-    "item": "amimewitchery:silver_template"
+    "item": "animewitchery:silver_template"
   },
   "show_notification": true
 }

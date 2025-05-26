@@ -28,7 +28,7 @@ public class ModItemGroups {
                         entries.add(ModItems.UNBAKED_STRAWBERRY_TART);
                         entries.add(ModItems.STRAWBERRY_TART);
                         entries.add(ModItems.LEMON_TART);
-                        entries.add(ModItems.LEMON_TART);
+                        
 
                         entries.add(ModItems.STRAWBERRY_SEEDS);
                         entries.add(ModItems.LEMON_SEEDS);
