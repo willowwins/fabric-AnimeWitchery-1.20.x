@@ -9,6 +9,8 @@
     "LivingEntityMixin",
     "StonePressurePlateMixin",
     "UndeadMixin",
+    "NetheriteBlockMixin",
+    "BeaconMixin",
     "SkulkCatalystMixin"
   ],
   "client": [
