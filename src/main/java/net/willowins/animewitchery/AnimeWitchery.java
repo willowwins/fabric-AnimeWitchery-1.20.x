@@ -46,6 +46,7 @@ public class AnimeWitchery implements ModInitializer {
 
 		ModEnchantments.init();
 
+		ModParticles.registerParticles();
 
 
 		LOGGER.info("Hello Fabric world!");

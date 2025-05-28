@@ -18,7 +18,6 @@ public class ModParticles {
     }
 
     public static void registerParticles() {
-        ParticleFactoryRegistry.getInstance().register(LASER_PARTICLE, ShockwaveParticle.Factory::new);
         AnimeWitchery.LOGGER.info("Registering Particles for " + AnimeWitchery.MOD_ID);
     }
 }
