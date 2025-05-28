@@ -13,6 +13,7 @@ import net.minecraft.world.World;
 import net.willowins.animewitchery.block.ModBlocks;
 import net.willowins.animewitchery.block.custom.EffigyFountainBlock;
 import net.willowins.animewitchery.block.entity.ModBlockEntities;
+import net.willowins.animewitchery.effect.ModEffect;
 import net.willowins.animewitchery.enchantments.ModEnchantments;
 import net.willowins.animewitchery.item.ModItemGroups;
 import net.willowins.animewitchery.item.ModItems;
@@ -47,6 +48,8 @@ public class AnimeWitchery implements ModInitializer {
 		ModEnchantments.init();
 
 		ModParticles.registerParticles();
+
+		ModEffect.registerEffects();
 
 
 		LOGGER.info("Hello Fabric world!");

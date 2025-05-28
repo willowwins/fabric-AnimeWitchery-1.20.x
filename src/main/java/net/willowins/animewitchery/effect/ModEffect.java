@@ -1,0 +1,21 @@
+package net.willowins.animewitchery.effect;
+
+import net.minecraft.entity.attribute.EntityAttributes;
+import net.minecraft.entity.effect.StatusEffect;
+import net.minecraft.entity.effect.StatusEffectCategory;
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.Registry;
+import net.minecraft.util.Identifier;
+import net.willowins.animewitchery.AnimeWitchery;
+
+public class ModEffect {
+    public static final StatusEffect BOUND = registerStatusEffect("bound",
+            new BoundEffect(StatusEffectCategory.BENEFICIAL,0x000099));
+
+    public static StatusEffect registerStatusEffect(String name, StatusEffect statusEffect){
+        return Registry.register(Registries.STATUS_EFFECT,new Identifier(AnimeWitchery.MOD_ID, name), statusEffect);
+    }
+    public static void registerEffects(){
+        AnimeWitchery.LOGGER.info("Registering Mod Effects For " + AnimeWitchery.MOD_ID);
+    }
+}

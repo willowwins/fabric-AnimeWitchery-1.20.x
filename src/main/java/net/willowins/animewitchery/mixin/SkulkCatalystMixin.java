@@ -32,8 +32,6 @@ public class SkulkCatalystMixin {
                 world.setBlockState(pos,Blocks.AIR.getDefaultState());
                 player.getMainHandStack().decrement(1);
                 Block.dropStack(world,pos,new ItemStack(ModItems.DEEP_DARK_DEEP_DISH.asItem(),1));
-
         }
     }
-
 }}

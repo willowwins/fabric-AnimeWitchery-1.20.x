@@ -1,13 +1,13 @@
 {
   "type": "minecraft:smithing_transform",
   "addition": {
-    "item": "minecraft:silveringot"
+    "item": "animewitchery:silveringot"
   },
   "base": {
-    "item": "minecraft:iron_pickaxe"
+    "item": "minecraft:diamond_leggings"
   },
   "result": {
-    "item": "animewitchery:silver_pickaxe"
+    "item": "animewitchery:silver_leggings"
   },
   "template": {
     "item": "animewitchery:silver_template"
