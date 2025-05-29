@@ -23,6 +23,7 @@ public class ModItems {
         public static final Item RAWSILVER =registerItem("rawsilver", new Item(new FabricItemSettings()));
     public static final Item SPOOL =registerItem("spool", new Item(new FabricItemSettings()));
     public static final Item SILVERSPOOL =registerItem("silverspool", new Item(new FabricItemSettings()));
+    public static final Item WEATHERITEM =registerItem("weatheritem", new WeatherItem(new FabricItemSettings()));
 
     public static final Item METAL_DETECTOR =registerItem("metal_detector",
             new MetalDetectorItem(new FabricItemSettings().maxDamage(300)));

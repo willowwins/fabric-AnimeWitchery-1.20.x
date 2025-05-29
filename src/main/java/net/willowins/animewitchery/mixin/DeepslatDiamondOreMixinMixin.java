@@ -33,7 +33,7 @@ public class DeepslatDiamondOreMixinMixin {
                 world.playSound(null, pos, SoundEvents.BLOCK_STONE_BREAK, SoundCategory.BLOCKS, 1f,1f);
 
 
-            } else if (player.getOffHandStack().isOf(Items.COPPER_INGOT)) {
+            } else if (player.getOffHandStack().isOf(Items.CHARCOAL)) {
                 Block.dropStack(world,pos,new ItemStack(Blocks.DEEPSLATE_DIAMOND_ORE.asItem(),1));
                 player.getOffHandStack().decrement(1);
                 world.playSound(null, pos, SoundEvents.BLOCK_STONE_BREAK, SoundCategory.BLOCKS, 1f,1f);

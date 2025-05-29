@@ -20,6 +20,7 @@ public class ModItemGroups {
                         entries.add(ModItems.SILVERSPOOL);
                         entries.add(ModItems.SPOOL);
                         entries.add(ModItems.RAWSILVER);
+                        entries.add(ModItems.WEATHERITEM);
 
                         entries.add(ModItems.LEMON);
                         entries.add(ModItems.STRAWBERRY);

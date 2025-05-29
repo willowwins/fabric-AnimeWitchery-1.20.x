@@ -14,7 +14,8 @@
     "SkulkCatalystMixin",
     "DeepslatDiamondOreMixinMixin",
     "ShroomlightMixin",
-    "GuildedBlackstoneMixin"
+    "GuildedBlackstoneMixin",
+    "PlayerEntityMixin"
   ],
   "client": [
     "ItemRendererAccessor",

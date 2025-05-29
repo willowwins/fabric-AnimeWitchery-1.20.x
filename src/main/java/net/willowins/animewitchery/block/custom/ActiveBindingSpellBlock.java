@@ -22,6 +22,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldAccess;
 import net.willowins.animewitchery.block.ModBlocks;
 import net.willowins.animewitchery.block.entity.ModBlockEntities;
+import net.willowins.animewitchery.effect.ModEffect;
 import net.willowins.animewitchery.item.ModItems;
 import org.jetbrains.annotations.Nullable;
 
@@ -64,7 +65,7 @@ public class ActiveBindingSpellBlock extends BlockWithEntity implements BlockEnt
     public void scheduledTick(BlockState state, ServerWorld world, BlockPos pos, Random random) {
         super.scheduledTick(state, world, pos, random);
 
-        asNearbyPlayers(world, .5f, pos);
+        asNearbyPlayers(world, .7f, pos);
 
         world.scheduleBlockTick(pos, this, 1);
 
@@ -98,9 +99,7 @@ public class ActiveBindingSpellBlock extends BlockWithEntity implements BlockEnt
         for (PlayerEntity target : player) {
             if (!target.getInventory().contains(Items.BEDROCK.getDefaultStack())) {
                 target.teleport(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5);
-                target.addStatusEffect(new StatusEffectInstance(StatusEffects.RESISTANCE, 10, 255, false, false));
-                target.addStatusEffect(new StatusEffectInstance(StatusEffects.FIRE_RESISTANCE, 10, 255, false, false));
-                target.addStatusEffect(new StatusEffectInstance(StatusEffects.SATURATION, 10, 5, false, false));
+                target.addStatusEffect(new StatusEffectInstance(ModEffect.BOUND, 10, 0, false, true));
                 ((ServerWorld) world).spawnParticles(ParticleTypes.PORTAL, target.getX(), target.getY() + 1, target.getZ(), 1, 0.5, 0.5, 0.5, 0.1);
             }
         }

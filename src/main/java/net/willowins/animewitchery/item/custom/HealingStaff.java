@@ -112,10 +112,8 @@ public class HealingStaff extends Item implements GeoItem {
         for (PlayerEntity target : player) {
             if (target != user) {
                 if (hasEquipped(target, ModItems.SILVER_PENDANT)) {
-                    target.addStatusEffect(new StatusEffectInstance(StatusEffects.RESISTANCE, 100, 1));
-                    target.addStatusEffect(new StatusEffectInstance(StatusEffects.FIRE_RESISTANCE, 100, 1));
-                    target.addStatusEffect(new StatusEffectInstance(StatusEffects.SATURATION, 100, 1));
-                    target.addStatusEffect(new StatusEffectInstance(StatusEffects.REGENERATION, 50, 0));
+                    target.addStatusEffect(new StatusEffectInstance(StatusEffects.FIRE_RESISTANCE, 120, 1));
+                    target.addStatusEffect(new StatusEffectInstance(StatusEffects.SATURATION, 120, 1));
                 } else {
                     target.addStatusEffect(new StatusEffectInstance(ModEffect.MARKED, 100, 0));
                     target.addStatusEffect(new StatusEffectInstance(StatusEffects.HUNGER, 100, 1));
@@ -132,7 +130,9 @@ public class HealingStaff extends Item implements GeoItem {
             } else {
                 entity.addStatusEffect(new StatusEffectInstance(StatusEffects.POISON, 120, 255));
             }
-            entity.addStatusEffect(new StatusEffectInstance(StatusEffects.WITHER, 120, 255));
+            entity.addStatusEffect(new StatusEffectInstance(StatusEffects.WITHER, 20, 255));
+            entity.addStatusEffect(new StatusEffectInstance(ModEffect.MARKED, 120, 255));
+            entity.addStatusEffect(new StatusEffectInstance(ModEffect.BOUND, 120, 255));
             entity.addStatusEffect(new StatusEffectInstance(StatusEffects.GLOWING, 120, 0 ));
 
         }

@@ -36,7 +36,7 @@ public class AmetystClusterMixin {
                 player.getMainHandStack().decrement(1);
                 player.getOffHandStack().decrement(1);
 
-            }else if(player.getMainHandStack().isOf(ModItems.SILVERSPOOL)){
+            }else if(player.getMainHandStack().isOf(ModItems.SILVERSPOOL)&& player.getOffHandStack().isOf(ModItems.HEALING_STAFF)){
                 world.setBlockState(pos, Blocks.AIR.getDefaultState());
                 Block.dropStack(world,pos,new ItemStack(ModItems.SILVER_PENDANT,1));
                 player.getMainHandStack().decrement(1);
