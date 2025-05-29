@@ -27,6 +27,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import net.willowins.animewitchery.effect.ModEffect;
+import net.willowins.animewitchery.item.ModItems;
 import net.willowins.animewitchery.item.renderer.RailgunRenderer;
 import net.willowins.animewitchery.networking.ModPackets;
 import net.willowins.animewitchery.particle.ModParticles;
@@ -78,6 +80,7 @@ public class RailgunItem extends Item implements GeoItem {
 
         if (entity instanceof PlayerEntity player) {
             if (!world.isClient) {
+                if(player.getOffHandStack().isOf(ModItems.FUEL_ROD)){
                 if (player.getMainHandStack().isOf(this) && player.isUsingItem()) {
                     int i = this.getMaxUseTime(stack) - player.getItemUseTimeLeft();
                     player.sendMessage(Text.of(String.valueOf(getPullProgress(i))), true);
@@ -100,7 +103,7 @@ public class RailgunItem extends Item implements GeoItem {
                                  ));
 
                              }
-                         }
+                         }}
                         for (int z = 0; z < 100; z++) {
                             Vec3d pos = player.getPos();
                             Vec3d look = player.getRotationVector();
@@ -121,6 +124,8 @@ public class RailgunItem extends Item implements GeoItem {
     private void shootLaser(Vec3d look, World world, Vec3d pos, PlayerEntity owner) {
         owner.setVelocity(owner.getRotationVector().multiply(-3,-3,-3));
         owner.velocityModified = true;
+        owner.getOffHandStack().decrement(1);
+        owner.giveItemStack(ModItems.OVERHEATED_FUEL_ROD.getDefaultStack());
         if (world instanceof ServerWorld serverWorld) {
             serverWorld.playSound(null, owner.getX(), owner.getY(), owner.getZ(), ModSounds.LASER_SHOOT, SoundCategory.PLAYERS, 1, 1);
         }
@@ -183,7 +188,8 @@ public class RailgunItem extends Item implements GeoItem {
 
         for (LivingEntity target : player) {
             if (target != owner) {
-                target.kill();
+                target.damage(target.getDamageSources().magic(),15.0f);
+                target.addStatusEffect(new StatusEffectInstance(ModEffect.MARKED, 200, 0));
             }
         }
 
@@ -215,6 +221,7 @@ public class RailgunItem extends Item implements GeoItem {
         if (f > 1.0F) {
             f = 1.0F;
         }
+
 
         return f;
     }

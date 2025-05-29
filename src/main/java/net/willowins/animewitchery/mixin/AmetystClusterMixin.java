@@ -28,7 +28,6 @@ public class AmetystClusterMixin {
                 world.setBlockState(pos, Blocks.AIR.getDefaultState());
                 Block.dropStack(world,pos,new ItemStack(ModItems.ALCHEMICAL_CATALYST,8));
                 player.getMainHandStack().decrement(1);
-                player.getOffHandStack().decrement(1);
 
 
             }else if (player.getMainHandStack().isOf(Blocks.CRYING_OBSIDIAN.asItem())&& player.getOffHandStack().isOf(Blocks.CHISELED_QUARTZ_BLOCK.asItem())){
@@ -41,8 +40,7 @@ public class AmetystClusterMixin {
                 world.setBlockState(pos, Blocks.AIR.getDefaultState());
                 Block.dropStack(world,pos,new ItemStack(ModItems.SILVER_PENDANT,1));
                 player.getMainHandStack().decrement(1);
-                player.getOffHandStack().decrement(1);
         }
     }
-
-}}
+}
+}

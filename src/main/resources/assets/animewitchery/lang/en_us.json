@@ -74,6 +74,9 @@
   "sounds.animewitchery.laser_charge": "§5Railgun Charges",
   "sounds.animewitchery.laser_shoot": "§5Railgun Fires",
 
+  "effect.animewitchery.bound": "§1Bound",
+  "effect.animewitchery.marked": "§4Marked",
+
 
   "tooltip.animewitchery.metal_detector.tooltip": "finds valuables with a vision beyond your own",
 

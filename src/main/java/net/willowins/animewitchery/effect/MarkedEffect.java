@@ -9,8 +9,10 @@ public class MarkedEffect extends StatusEffect {
 
     @Override
     public void applyUpdateEffect(LivingEntity entity, int amplifier) {
+        if(entity.getHealth()>1){
         entity.damage(entity.getDamageSources().magic(),1.0f);
         super.applyUpdateEffect(entity, amplifier);
+    }
     }
 
     @Override

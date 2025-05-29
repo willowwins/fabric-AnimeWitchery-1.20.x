@@ -12,6 +12,9 @@ public class ModEffect {
     public static final StatusEffect BOUND = registerStatusEffect("bound",
             new BoundEffect(StatusEffectCategory.BENEFICIAL,0x000099));
 
+    public static final StatusEffect MARKED = registerStatusEffect("marked",
+            new MarkedEffect(StatusEffectCategory.NEUTRAL,0x672c12));
+
     public static StatusEffect registerStatusEffect(String name, StatusEffect statusEffect){
         return Registry.register(Registries.STATUS_EFFECT,new Identifier(AnimeWitchery.MOD_ID, name), statusEffect);
     }

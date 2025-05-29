@@ -11,7 +11,10 @@
     "UndeadMixin",
     "NetheriteBlockMixin",
     "BeaconMixin",
-    "SkulkCatalystMixin"
+    "SkulkCatalystMixin",
+    "DeepslatDiamondOreMixinMixin",
+    "ShroomlightMixin",
+    "GuildedBlackstoneMixin"
   ],
   "client": [
     "ItemRendererAccessor",

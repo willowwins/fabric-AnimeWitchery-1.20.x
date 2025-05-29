@@ -51,7 +51,8 @@ public class ItemRendererMixin {
         }
         if (stack.isOf(ModBlocks.BINDING_SPELL.asItem()) && (renderMode == ModelTransformationMode.GUI || renderMode == ModelTransformationMode.GROUND||
                 renderMode == ModelTransformationMode.FIRST_PERSON_RIGHT_HAND||renderMode == ModelTransformationMode.FIRST_PERSON_LEFT_HAND||
-                renderMode == ModelTransformationMode.THIRD_PERSON_LEFT_HAND||renderMode == ModelTransformationMode.THIRD_PERSON_RIGHT_HAND)){
+                renderMode == ModelTransformationMode.THIRD_PERSON_LEFT_HAND||renderMode == ModelTransformationMode.THIRD_PERSON_RIGHT_HAND||
+                renderMode == ModelTransformationMode.FIXED)){
             return ((ItemRendererAccessor) this).mccourse$getModels().getModelManager().getModel(new ModelIdentifier(AnimeWitchery.MOD_ID, "binding_spell_2d", "inventory"));
         }
         return value;

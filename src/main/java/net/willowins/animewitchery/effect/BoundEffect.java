@@ -14,7 +14,7 @@ public class BoundEffect extends StatusEffect {
 
     @Override
     public void applyUpdateEffect(LivingEntity entity, int amplifier) {
-        entity.setMovementSpeed(0f);
+        entity.setMovementSpeed(0.0f);//Please disable item use here <3
        entity.setGlowing(false);
        super.applyUpdateEffect(entity, amplifier);
     }

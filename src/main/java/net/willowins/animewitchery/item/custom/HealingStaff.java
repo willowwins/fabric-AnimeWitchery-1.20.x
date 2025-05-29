@@ -23,6 +23,7 @@ import net.minecraft.util.UseAction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
 import net.minecraft.world.World;
+import net.willowins.animewitchery.effect.ModEffect;
 import net.willowins.animewitchery.item.ModItems;
 import net.willowins.animewitchery.item.renderer.HealingStaffRenderer;
 import net.willowins.animewitchery.sound.ModSounds;
@@ -115,9 +116,8 @@ public class HealingStaff extends Item implements GeoItem {
                     target.addStatusEffect(new StatusEffectInstance(StatusEffects.FIRE_RESISTANCE, 100, 1));
                     target.addStatusEffect(new StatusEffectInstance(StatusEffects.SATURATION, 100, 1));
                     target.addStatusEffect(new StatusEffectInstance(StatusEffects.REGENERATION, 50, 0));
-                    target.addStatusEffect(new StatusEffectInstance(StatusEffects.GLOWING, 100, 0));
                 } else {
-                    target.addStatusEffect(new StatusEffectInstance(StatusEffects.POISON, 100, 1));
+                    target.addStatusEffect(new StatusEffectInstance(ModEffect.MARKED, 100, 0));
                     target.addStatusEffect(new StatusEffectInstance(StatusEffects.HUNGER, 100, 1));
                     target.addStatusEffect(new StatusEffectInstance(StatusEffects.GLOWING, 100, 0));
 
