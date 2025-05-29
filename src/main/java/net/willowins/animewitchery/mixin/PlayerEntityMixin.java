@@ -32,12 +32,12 @@ public class PlayerEntityMixin {
 
                 if (!mainHand.isEmpty()) {
                     Item mainItem = mainHand.getItem();
-                    player.getItemCooldownManager().set(mainItem, 100); // 5 seconds
+                    player.getItemCooldownManager().set(mainItem, 20); // 5 seconds
                 }
 
                 if (!offHand.isEmpty()) {
                     Item offItem = offHand.getItem();
-                    player.getItemCooldownManager().set(offItem, 100);
+                    player.getItemCooldownManager().set(offItem, 20);
                 }
 
             }
