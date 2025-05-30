@@ -37,6 +37,7 @@ public class ModBlockEntities {
             Registry.register(Registries.BLOCK_ENTITY_TYPE, new Identifier(AnimeWitchery.MOD_ID, "alchemy_table_be"),
                     FabricBlockEntityTypeBuilder.create(AlchemyTableBlockEntity::new,new Block[]{ModBlocks.ALCHEMY_TABLE}).build((Type)null));
 
+
     public static void registerBlockEntities(){
         AnimeWitchery.LOGGER.info("Registering Block Entities For ", AnimeWitchery.MOD_ID);
     }

@@ -64,6 +64,8 @@ public class ModItemGroups {
                         entries.add(ModBlocks.SOUND_BLOCK);
                         entries.add(ModBlocks.SOUND_BLOCK2);
                         entries.add(ModBlocks.SILVER_BLOCK);
+                        entries.add(ModBlocks.PARTICLE_BLOCK);
+                        entries.add(ModBlocks.PARTICLE_SINK_BLOCK);
                         entries.add(ModBlocks.SILVER_ORE);
                         entries.add(ModBlocks.EFFIGY_FOUNTAIN);
                         entries.add(ModBlocks.DECORATIVE_FOUNTAIN);

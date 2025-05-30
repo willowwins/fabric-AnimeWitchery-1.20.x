@@ -20,6 +20,11 @@ public class ModBlocks {
     public static final Block SILVER_BLOCK =registerBlock("silver_block",
             new Block(FabricBlockSettings.copyOf(Blocks.IRON_BLOCK)));
 
+    public static final Block PARTICLE_BLOCK =registerBlock("particle_block",
+            new ParticleBeamBlock());
+    public static final Block PARTICLE_SINK_BLOCK =registerBlock("particle_sink_block",
+            new ParticleSinkBlock());
+
     public static final Block EFFIGY_FOUNTAIN =registerBlock("effigy_fountain",
             new EffigyFountainBlock(FabricBlockSettings.copyOf(Blocks.STONE).nonOpaque()));
 

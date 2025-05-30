@@ -2,7 +2,6 @@ package net.willowins.animewitchery;
 
 import net.fabricmc.api.ModInitializer;
 
-import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.fabricmc.fabric.api.registry.FuelRegistry;
 import net.kyrptonaught.customportalapi.api.CustomPortalBuilder;
@@ -29,6 +28,7 @@ import org.slf4j.LoggerFactory;
 public class AnimeWitchery implements ModInitializer {
 	public static final String MOD_ID = "animewitchery";
 	public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
+
 
 	@Override
 	public void onInitialize() {
