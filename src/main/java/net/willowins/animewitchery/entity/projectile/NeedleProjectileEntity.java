@@ -12,6 +12,7 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.willowins.animewitchery.effect.ModEffect;
 import net.willowins.animewitchery.entity.ModEntities;
+import net.willowins.animewitchery.item.ModItems;
 import software.bernie.geckolib.core.animatable.GeoAnimatable;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.core.animation.*;
@@ -80,7 +81,7 @@ public class NeedleProjectileEntity extends PersistentProjectileEntity implement
 
     @Override
     protected ItemStack asItemStack() {
-        return null;
+        return new ItemStack(ModItems.NEEDLE);
     }
 
 

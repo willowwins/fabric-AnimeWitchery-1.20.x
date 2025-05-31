@@ -45,7 +45,6 @@ public abstract class LivingEntityMixin2 {
 
                 // Play sound and particles
                 if (!world.isClient()) {
-                    ((ServerWorld) world).spawnParticles(null, player.getX(), player.getY(), player.getZ(), 0, 0, 0, 0, 0);
                     player.playSound(SoundEvents.ITEM_TOTEM_USE, 1.0F, 1.0F);
                 }
 
@@ -56,16 +55,19 @@ public abstract class LivingEntityMixin2 {
                 }
 
                 // Shockwave effect: teleport all other players without poison
-                if (!world.isClient()) {
+                if (!world.isClient) {
                     for (PlayerEntity otherPlayer : world.getPlayers()) {
-                        if (otherPlayer == player) continue; // skip totem user
+                        if (otherPlayer == player) continue;
 
-                        if (otherPlayer.hasStatusEffect(ModEffect.MARKED)) continue; // skip poisoned players
+                        if (otherPlayer.hasStatusEffect(ModEffect.MARKED)) continue;
 
                         if (otherPlayer instanceof ServerPlayerEntity serverPlayer) {
+                            if (!serverPlayer.isAlive() || serverPlayer.networkHandler == null) continue;
+
                             BlockPos spawnPos = serverPlayer.getSpawnPointPosition();
                             RegistryKey<World> spawnWorld = serverPlayer.getSpawnPointDimension();
 
+                            if (!serverPlayer.isAlive()) return;
                             if (spawnPos != null && spawnWorld != null) {
                                 ServerWorld dimension = serverPlayer.getServer().getWorld(spawnWorld);
                                 if (dimension != null) {

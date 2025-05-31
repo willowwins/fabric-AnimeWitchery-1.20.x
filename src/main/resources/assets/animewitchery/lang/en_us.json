@@ -5,6 +5,7 @@
   "item.animewitchery.spool": "Empty Spool",
   "item.animewitchery.silverspool": "§bSpool of Silver Thread",
   "item.animewitchery.fire_res_crystal": "§bFire Resistance Crystal",
+  "item.animewitchery.speed_crystal": "§1Speed Crystal",
 
   "item.animewitchery.lemon": "Lemon",
   "item.animewitchery.lemon_seeds": "Lemon Seeds",
@@ -46,6 +47,7 @@
   "item.animewitchery.staff_head": "§5Staff head",
   "item.animewitchery.deep_dark_deep_dish": "§1Deep Dark Deep Dish",
   "item.animewitchery.weatheritem": "§1Thunderous Wand",
+  "item.animewitchery.dimension": "§5Dual Faze Shifter",
 
   "block.animewitchery.sound_block": "Block of Music",
   "block.animewitchery.sound_block2": "Block of Hilarity",

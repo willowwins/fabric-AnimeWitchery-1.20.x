@@ -18,7 +18,7 @@ import net.willowins.animewitchery.AnimeWitchery;
 import java.util.OptionalLong;
 
 public class ModDimensions {
-    public static final RegistryKey<DimensionOptions>  PARADISELOSTDIM_KEY = RegistryKey.of(RegistryKeys.DIMENSION,
+    public static final RegistryKey<DimensionOptions> PARADISELOSTDIM_KEY = RegistryKey.of(RegistryKeys.DIMENSION,
             new Identifier(AnimeWitchery.MOD_ID, "paradiselostdim"));
     public static final RegistryKey<World> PARADISELOSTDIM_LEVEL_KEY = RegistryKey.of(RegistryKeys.WORLD,
             new Identifier(AnimeWitchery.MOD_ID, "paradiselostdim"));
