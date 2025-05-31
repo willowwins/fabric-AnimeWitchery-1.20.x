@@ -6,6 +6,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -44,6 +45,10 @@ public class ParticleBeamBlock extends Block {
             Box effectZone = new Box(pos).expand(1, 20, 1).offset(0.5, 0, 0.5); // centered on block
 
             // Apply upward force to entities in the effect zone
+            for (Entity entity:world.getEntitiesByClass(ItemEntity.class,effectZone,e ->true)){
+                entity.setVelocity(entity.getVelocity().x, 0.3, entity.getVelocity().z); // Adjust the upward force as needed
+                entity.velocityModified = true;
+            }
             for (Entity entity : world.getEntitiesByClass(LivingEntity.class, effectZone, e -> true)) {
                 entity.setVelocity(entity.getVelocity().x, 0.3, entity.getVelocity().z); // Adjust the upward force as needed
                 entity.velocityModified = true;

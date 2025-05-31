@@ -48,6 +48,8 @@
 
   "block.animewitchery.sound_block": "Block of Music",
   "block.animewitchery.sound_block2": "Block of Hilarity",
+  "block.animewitchery.particle_block": "Ascent Block",
+  "block.animewitchery.particle_sink_block": "Decent Block",
 
   "block.animewitchery.binding_spell": "§5Binding Spell",
   "block.animewitchery.active_effigy_fountain": "§bActive Effigy Fountain",

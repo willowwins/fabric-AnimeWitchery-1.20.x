@@ -33,13 +33,6 @@ public class AlchemyTableBlock extends BlockWithEntity {
             world.scheduleBlockTick(pos, this, 60);
         }
     }
-    @Override
-    public ActionResult onUse(BlockState state, World world, BlockPos pos,
-                              PlayerEntity player, Hand hand, BlockHitResult hit) {
-        if(player.getMainHandStack().isOf(ModItems.SILVER_PICKAXE)){
-            world.setBlockState(pos,Blocks.AIR.getDefaultState());
-    }return ActionResult.SUCCESS;}
-
 
     @Override
     public VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {

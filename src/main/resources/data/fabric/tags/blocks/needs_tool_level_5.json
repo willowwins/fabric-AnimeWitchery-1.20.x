@@ -3,6 +3,8 @@
   "values": [
     "minecraft:reinforced_deepslate",
     "animewitchery:active_effigy_fountain",
+    "animewitchery:particle_block",
+    "animewitchery:particle_sink_block",
     "animewitchery:effigy_fountain"
   ]
 }

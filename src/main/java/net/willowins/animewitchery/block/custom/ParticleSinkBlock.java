@@ -5,6 +5,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.world.ServerWorld;
@@ -33,7 +34,11 @@ public class ParticleSinkBlock extends Block {
             spawnSpiralParticles(world, pos);
 
             Box effectZone = new Box(pos).expand(1, 20, 1).offset(0.1, 0, 0.1);
-
+            for (Entity entity : world.getEntitiesByClass(ItemEntity.class, effectZone, e -> true)) {
+                entity.setVelocity(entity.getVelocity().x, -0.3, entity.getVelocity().z);
+                entity.fallDistance = 0.0f; // Prevent fall damage
+                entity.velocityModified = true;
+            }
             for (Entity entity : world.getEntitiesByClass(LivingEntity.class, effectZone, e -> true)) {
                 entity.setVelocity(entity.getVelocity().x, -0.3, entity.getVelocity().z);
                 entity.fallDistance = 0.0f; // Prevent fall damage
