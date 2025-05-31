@@ -1,20 +1,13 @@
 {
   "textures": [
-    "pants-end-mod:shock_wave_particle000",
-    "pants-end-mod:shock_wave_particle001",
-    "pants-end-mod:shock_wave_particle002",
-    "pants-end-mod:shock_wave_particle003",
-    "pants-end-mod:shock_wave_particle004",
-    "pants-end-mod:shock_wave_particle005",
-    "pants-end-mod:shock_wave_particle006",
-    "pants-end-mod:shock_wave_particle007",
-    "pants-end-mod:shock_wave_particle008",
-    "pants-end-mod:shock_wave_particle009",
-    "pants-end-mod:shock_wave_particle010",
-    "pants-end-mod:shock_wave_particle011",
-    "pants-end-mod:shock_wave_particle012",
-    "pants-end-mod:shock_wave_particle013",
-    "pants-end-mod:shock_wave_particle014",
-    "pants-end-mod:shock_wave_particle015"
+    "animewitchery:railgun_shockwave_1",
+    "animewitchery:railgun_shockwave_2",
+    "animewitchery:railgun_shockwave_3",
+    "animewitchery:railgun_shockwave_4",
+    "animewitchery:railgun_shockwave_5",
+    "animewitchery:railgun_shockwave_6",
+    "animewitchery:railgun_shockwave_7",
+    "animewitchery:railgun_shockwave_8"
+
   ]
 }

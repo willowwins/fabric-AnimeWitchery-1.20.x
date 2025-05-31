@@ -59,6 +59,7 @@ public class ModItemGroups {
                         entries.add(ModItems.SILVER_TEMPLATE);
 
                         entries.add(ModItems.METAL_DETECTOR);
+                        entries.add(ModItems.MOD_TOTEM);
 
                         entries.add(ModBlocks.CHARCOAL_BLOCK);
                         entries.add(ModBlocks.SOUND_BLOCK);

@@ -24,6 +24,7 @@ public class ModItems {
     public static final Item SPOOL =registerItem("spool", new Item(new FabricItemSettings()));
     public static final Item SILVERSPOOL =registerItem("silverspool", new Item(new FabricItemSettings()));
     public static final Item WEATHERITEM =registerItem("weatheritem", new WeatherItem(new FabricItemSettings()));
+    public static final Item MOD_TOTEM =registerItem("mod_totem", new ModTotemItem(new FabricItemSettings().maxCount(1)));
 
     public static final Item METAL_DETECTOR =registerItem("metal_detector",
             new MetalDetectorItem(new FabricItemSettings().maxDamage(300)));

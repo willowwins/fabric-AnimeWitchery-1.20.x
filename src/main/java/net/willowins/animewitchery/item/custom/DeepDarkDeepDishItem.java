@@ -23,7 +23,7 @@ public class DeepDarkDeepDishItem extends Item {
         user.setCurrentHand(hand);
         if (world instanceof ServerWorld serverWorld) {
             if(user.getHungerManager().getFoodLevel()<20 && user.experienceLevel>0){
-                user.getHungerManager().add(4,1);
+                user.getHungerManager().add(4,2);
                 user.addExperience(-12);
             serverWorld.playSound(null, user.getX(), user.getY(), user.getZ(), SoundEvents.ENTITY_GENERIC_EAT, SoundCategory.PLAYERS, 1, 1);
         }}

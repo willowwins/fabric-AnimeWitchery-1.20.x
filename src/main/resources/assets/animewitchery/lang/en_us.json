@@ -29,6 +29,7 @@
   "item.animewitchery.silver_pickaxe": "§bSilver Pickaxe",
 
   "item.animewitchery.metal_detector": "§5All Seeing Eye",
+  "item.animewitchery.mod_totem": "§bSilver §5Effigy",
 
   "item.animewitchery.silver_pendant": "§bSilver Pendant",
   "item.animewitchery.healing_staff": "§bHealing Staff",
@@ -62,6 +63,8 @@
   "block.animewitchery.alchemy_table": "§5Alchemy Table",
 
   "enchantment.animewitchery.boot_enchant": "§5PlaneWalker",
+  "enchantment.animewitchery.excavate_enchant": "§5Excavate",
+  "enchantment.animewitchery.sliver_enchant": "§5Shard",
 
   "block.animewitchery.silver_stairs": "§bSilver Stairs",
   "block.animewitchery.silver_slab": "§bSilver Slab",

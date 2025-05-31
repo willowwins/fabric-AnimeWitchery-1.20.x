@@ -2,22 +2,28 @@ package net.willowins.animewitchery;
 
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
-import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.particle.v1.ParticleFactoryRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.BlockEntityRendererRegistry;
-import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
-import net.minecraft.client.gui.screen.ingame.HandledScreens;
+import net.fabricmc.fabric.api.client.rendering.v1.EntityModelLayerRegistry;
+import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
 import net.minecraft.client.render.RenderLayer;
+import net.minecraft.util.Identifier;
 import net.willowins.animewitchery.block.ModBlocks;
-import net.willowins.animewitchery.block.custom.EffigyFountainBlock;
 import net.willowins.animewitchery.block.entity.ModBlockEntities;
 import net.willowins.animewitchery.block.entity.renderer.ActiveBindingSpellRenderer;
 import net.willowins.animewitchery.block.entity.renderer.ActiveEffigyFountainRenderer;
 import net.willowins.animewitchery.block.entity.renderer.AlchemyTableRenderer;
 import net.willowins.animewitchery.block.entity.renderer.BindingSpellRenderer;
+import net.willowins.animewitchery.entity.ModEntities;
+import net.willowins.animewitchery.entity.client.render.NeedleModel;
+import net.willowins.animewitchery.entity.client.render.NeedleProjectileRenderer;
 import net.willowins.animewitchery.networking.ModPackets;
 import net.willowins.animewitchery.particle.ModParticles;
 import net.willowins.animewitchery.particle.ShockwaveParticle;
+
+
+
+
 
 public class AnimeWitcheryClient implements ClientModInitializer {
     @Override
@@ -38,6 +44,9 @@ public class AnimeWitcheryClient implements ClientModInitializer {
         BlockEntityRendererRegistry.register(ModBlockEntities.ACTIVE_BINDING_SPELL_BLOCK_ENTITY, (context) -> new ActiveBindingSpellRenderer());
         BlockEntityRendererRegistry.register(ModBlockEntities.BINDING_SPELL_BLOCK_ENTITY, (context) -> new BindingSpellRenderer());
         BlockEntityRendererRegistry.register(ModBlockEntities.ALCHEMY_TABLE_BLOCK_ENTITY, (context) -> new AlchemyTableRenderer());
+
+        EntityRendererRegistry.register(ModEntities.NEEDLE_PROJECTILE, NeedleProjectileRenderer::new);
+
 
         ParticleFactoryRegistry.getInstance().register(ModParticles.LASER_PARTICLE, ShockwaveParticle.Factory::new);
 

@@ -15,7 +15,8 @@
     "DeepslatDiamondOreMixinMixin",
     "ShroomlightMixin",
     "GuildedBlackstoneMixin",
-    "PlayerEntityMixin"
+    "PlayerEntityMixin",
+    "LivingEntityMixin2"
   ],
   "client": [
     "ItemRendererAccessor",

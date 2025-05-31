@@ -14,6 +14,8 @@ import net.willowins.animewitchery.block.custom.EffigyFountainBlock;
 import net.willowins.animewitchery.block.entity.ModBlockEntities;
 import net.willowins.animewitchery.effect.ModEffect;
 import net.willowins.animewitchery.enchantments.ModEnchantments;
+import net.willowins.animewitchery.entity.ModEntities;
+import net.willowins.animewitchery.events.ExcavationBreakHandler;
 import net.willowins.animewitchery.item.ModItemGroups;
 import net.willowins.animewitchery.item.ModItems;
 import net.willowins.animewitchery.particle.ModParticles;
@@ -50,6 +52,10 @@ public class AnimeWitchery implements ModInitializer {
 		ModParticles.registerParticles();
 
 		ModEffect.registerEffects();
+
+		ModEntities.registerModEntities();
+
+		ExcavationBreakHandler.register();
 
 
 		LOGGER.info("Hello Fabric world!");
