@@ -1,10 +1,7 @@
 package net.willowins.animewitchery.block.custom;
 
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockRenderType;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.ShapeContext;
+import net.minecraft.block.*;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LightningEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -33,8 +30,11 @@ public class DecorativeFountainBlock extends Block {
     @Override
     public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
         if (!world.isClient) {
-            world.playSound(player, pos, SoundEvents.BLOCK_WATER_AMBIENT, SoundCategory.BLOCKS,1f,1f);
-            }
+                if (player.getOffHandStack().isOf(ModItems.RESPAWN_BEACON)&&player.getMainHandStack().isOf(Blocks.REINFORCED_DEEPSLATE.asItem())){
+                        player.getMainHandStack().decrement(1);
+                        player.getOffHandStack().decrement(1);
+                        Block.dropStack(world,pos,new ItemStack(ModItems.DIMENSION_HOPPER,1));
+                }}
         return ActionResult.SUCCESS;
     }
 

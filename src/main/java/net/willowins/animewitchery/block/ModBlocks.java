@@ -17,6 +17,10 @@ import java.util.Objects;
 
 public class ModBlocks {
 
+    public static final Block PLAYER_USE_DISPENSER = registerBlock("player_use_dispenser",
+            new PlayerUseDispenserBlock(FabricBlockSettings.copyOf(Blocks.DISPENSER)));
+
+
     public static final Block SILVER_BLOCK =registerBlock("silver_block",
             new Block(FabricBlockSettings.copyOf(Blocks.IRON_BLOCK)));
 

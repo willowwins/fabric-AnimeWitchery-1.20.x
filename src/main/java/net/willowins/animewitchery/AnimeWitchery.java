@@ -36,6 +36,8 @@ public class AnimeWitchery implements ModInitializer {
 	public void onInitialize() {
 		ModItemGroups.registerItemGroups();
 
+		ModScreenHandlers.registerAll();
+
 		ModItems.registerModItems();
 		ModBlocks.registerModBlocks();
 

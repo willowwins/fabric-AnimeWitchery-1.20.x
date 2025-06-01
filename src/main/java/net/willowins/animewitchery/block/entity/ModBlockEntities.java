@@ -23,22 +23,30 @@ public class ModBlockEntities {
 
     public static final BlockEntityType<ActiveEffigyFountainBlockEntity> ACTIVE_EFFIGY_FOUNTAIN_BLOCK_ENTITY =
             Registry.register(Registries.BLOCK_ENTITY_TYPE, new Identifier(AnimeWitchery.MOD_ID, "active_effigy_fountain_be"),
-                    FabricBlockEntityTypeBuilder.create(ActiveEffigyFountainBlockEntity::new,new Block[]{ModBlocks.ACTIVE_EFFIGY_FOUNTAIN}).build((Type)null));
+                    FabricBlockEntityTypeBuilder.create(ActiveEffigyFountainBlockEntity::new,
+                            ModBlocks.ACTIVE_EFFIGY_FOUNTAIN).build((Type) null));
 
     public static final BlockEntityType<ActiveBindingSpellBlockEntity> ACTIVE_BINDING_SPELL_BLOCK_ENTITY =
             Registry.register(Registries.BLOCK_ENTITY_TYPE, new Identifier(AnimeWitchery.MOD_ID, "active_binding_spell_be"),
-                    FabricBlockEntityTypeBuilder.create(ActiveBindingSpellBlockEntity::new,new Block[]{ModBlocks.ACTIVE_BINDING_SPELL}).build((Type)null));
+                    FabricBlockEntityTypeBuilder.create(ActiveBindingSpellBlockEntity::new,
+                            ModBlocks.ACTIVE_BINDING_SPELL).build((Type) null));
 
     public static final BlockEntityType<BindingSpellBlockEntity> BINDING_SPELL_BLOCK_ENTITY =
             Registry.register(Registries.BLOCK_ENTITY_TYPE, new Identifier(AnimeWitchery.MOD_ID, "binding_spell_be"),
-                    FabricBlockEntityTypeBuilder.create(BindingSpellBlockEntity::new,new Block[]{ModBlocks.BINDING_SPELL}).build((Type)null));
+                    FabricBlockEntityTypeBuilder.create(BindingSpellBlockEntity::new,
+                            ModBlocks.BINDING_SPELL).build((Type) null));
 
- public static final BlockEntityType<AlchemyTableBlockEntity> ALCHEMY_TABLE_BLOCK_ENTITY =
+    public static final BlockEntityType<AlchemyTableBlockEntity> ALCHEMY_TABLE_BLOCK_ENTITY =
             Registry.register(Registries.BLOCK_ENTITY_TYPE, new Identifier(AnimeWitchery.MOD_ID, "alchemy_table_be"),
-                    FabricBlockEntityTypeBuilder.create(AlchemyTableBlockEntity::new,new Block[]{ModBlocks.ALCHEMY_TABLE}).build((Type)null));
+                    FabricBlockEntityTypeBuilder.create(AlchemyTableBlockEntity::new,
+                            ModBlocks.ALCHEMY_TABLE).build((Type) null));
 
+    public static final BlockEntityType<PlayerUseDispenserBlockEntity> PLAYER_USE_DISPENSER_BLOCK_ENTITY =
+            Registry.register(Registries.BLOCK_ENTITY_TYPE, new Identifier(AnimeWitchery.MOD_ID, "player_use_dispenser_be"),
+                    FabricBlockEntityTypeBuilder.create(PlayerUseDispenserBlockEntity::new,
+                            ModBlocks.PLAYER_USE_DISPENSER).build((Type) null));
 
-    public static void registerBlockEntities(){
-        AnimeWitchery.LOGGER.info("Registering Block Entities For ", AnimeWitchery.MOD_ID);
+    public static void registerBlockEntities() {
+        AnimeWitchery.LOGGER.info("Registering Block Entities For {}", AnimeWitchery.MOD_ID);
     }
 }

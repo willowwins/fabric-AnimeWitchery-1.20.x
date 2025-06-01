@@ -6,6 +6,7 @@ import net.fabricmc.fabric.api.client.particle.v1.ParticleFactoryRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.BlockEntityRendererRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityModelLayerRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
+import net.fabricmc.fabric.api.client.screenhandler.v1.ScreenRegistry;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.util.Identifier;
 import net.willowins.animewitchery.block.ModBlocks;
@@ -20,6 +21,7 @@ import net.willowins.animewitchery.entity.client.render.NeedleProjectileRenderer
 import net.willowins.animewitchery.networking.ModPackets;
 import net.willowins.animewitchery.particle.ModParticles;
 import net.willowins.animewitchery.particle.ShockwaveParticle;
+import net.willowins.animewitchery.screen.PlayerUseDispenserScreen;
 
 
 
@@ -34,6 +36,7 @@ public class AnimeWitcheryClient implements ClientModInitializer {
         BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.BINDING_SPELL, RenderLayer.getCutout());
         BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.ALCHEMY_TABLE, RenderLayer.getCutout());
         BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.SILVER_TRAPDOOR, RenderLayer.getCutout());
+        BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.PLAYER_USE_DISPENSER, RenderLayer.getCutout());
 
         BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.STRAWBERRY_CROP, RenderLayer.getCutout());
         BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.LEMON_CROP, RenderLayer.getCutout());
@@ -49,7 +52,7 @@ public class AnimeWitcheryClient implements ClientModInitializer {
 
 
         ParticleFactoryRegistry.getInstance().register(ModParticles.LASER_PARTICLE, ShockwaveParticle.Factory::new);
-
+        ScreenRegistry.register(ModScreenHandlers.PLAYER_USE_DISPENSER_SCREEN_HANDLER, PlayerUseDispenserScreen::new);
         ModPackets.registerS2CPackets();
 
     }
