@@ -21,6 +21,7 @@ import net.willowins.animewitchery.entity.client.render.NeedleProjectileRenderer
 import net.willowins.animewitchery.networking.ModPackets;
 import net.willowins.animewitchery.particle.ModParticles;
 import net.willowins.animewitchery.particle.ShockwaveParticle;
+import net.willowins.animewitchery.screen.AutoCrafterScreen;
 import net.willowins.animewitchery.screen.PlayerUseDispenserScreen;
 
 
@@ -53,6 +54,7 @@ public class AnimeWitcheryClient implements ClientModInitializer {
 
         ParticleFactoryRegistry.getInstance().register(ModParticles.LASER_PARTICLE, ShockwaveParticle.Factory::new);
         ScreenRegistry.register(ModScreenHandlers.PLAYER_USE_DISPENSER_SCREEN_HANDLER, PlayerUseDispenserScreen::new);
+        ScreenRegistry.register(ModScreenHandlers.AUTO_CRAFTER_SCREEN_HANDLER, AutoCrafterScreen::new);
         ModPackets.registerS2CPackets();
 
     }

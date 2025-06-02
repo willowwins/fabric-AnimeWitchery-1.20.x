@@ -258,4 +258,17 @@ import java.util.UUID;
         public ScreenHandler createMenu(int syncId, net.minecraft.entity.player.PlayerInventory playerInventory, PlayerEntity player) {
             return new PlayerUseDispenserScreenHandler(syncId, playerInventory, this);
         }
+        @Override
+        public void readNbt(NbtCompound tag) {
+            super.readNbt(tag);
+            // Load inventory from NBT
+            Inventories.readNbt(tag, inventory);
+        }
+
+        @Override
+        public void writeNbt(NbtCompound tag) {
+            super.writeNbt(tag);
+            // Save inventory to NBT
+            Inventories.writeNbt(tag, inventory);
+        }
 }

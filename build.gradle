@@ -6,9 +6,7 @@ plugins {
 version = project.mod_version
 group = project.maven_group
 
-base {
-	archivesName = project.archives_base_name
-}
+base.archivesName = project.archives_base_name
 
 repositories {
 	maven { url = "https://pkgs.dev.azure.com/djtheredstoner/DevAuth/_packaging/public/maven/v1" }
@@ -23,12 +21,6 @@ repositories {
 	maven { url = "https://maven.jamieswhiteshirt.com/libs-release" }
 }
 
-fabricApi {
-	configureDataGeneration {
-		client = true
-	}
-}
-
 dependencies {
 	minecraft "com.mojang:minecraft:${project.minecraft_version}"
 	mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
@@ -39,77 +31,22 @@ dependencies {
 	modImplementation 'net.kyrptonaught:customportalapi:0.0.1-beta64-1.20'
 	include 'net.kyrptonaught:customportalapi:0.0.1-beta64-1.20'
 
-	// Geckolib dependency
+	// Geckolib and mclib
 	modImplementation "software.bernie.geckolib:geckolib-fabric-${project.minecraft_version}:${project.geckolib_version}"
 	implementation "com.eliotlash.mclib:mclib:20"
 
-	// Other dependencies
+	// Other mods and APIs
 	modImplementation "dev.emi:trinkets:${project.trinkets_version}"
 	modImplementation "team.lodestar.lodestone:lodestone:${project.minecraft_version}-${project.lodestone_version}-fabric"
 	modImplementation "dev.onyxstudios.cardinal-components-api:cardinal-components-base:${project.cca_version}"
 	modImplementation "dev.onyxstudios.cardinal-components-api:cardinal-components-entity:${project.cca_version}"
 	modImplementation "dev.onyxstudios.cardinal-components-api:cardinal-components-world:${project.cca_version}"
 }
-//geckolib
-repositories {
-	// Add repositories to retrieve artifacts from in here.
-	// You should only use this when depending on other mods because
-	// Loom adds the essential maven repositories to download Minecraft and libraries from automatically.
-	// See https://docs.gradle.org/current/userguide/declaring_repositories.html
-	// for more information about repositories.
-	// This is the repositories block in your build.gradle. NOT the one in publishing, or in buildscript. If it does not exist already, create it.
-	maven {
-		name = 'GeckoLib'
-		url 'https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/'
-		content {
-			includeGroupByRegex("software\\.bernie.*")
-			includeGroup("com.eliotlash.mclib")
-		}
 
-
+fabricApi {
+	configureDataGeneration {
+		client = true
 	}
-
-
-	dependencies {
-
-		modImplementation("software.bernie.geckolib:geckolib-fabric-1.20.1:4.4.2") // use correct version for your MC version
-		implementation("com.eliotlash.mclib:mclib:20")
-
-
-
-	}
-}
-
-repositories {
-	maven {
-		name = "TerraformersMC"
-		url = "https://maven.terraformersmc.com/"
-	}
-	maven {
-		name = "Ladysnake Libs"
-		url = 'https://maven.ladysnake.org/releases'
-	}
-}
-
-dependencies {
-	modImplementation "dev.emi:trinkets:${trinkets_version}"
-}
-
-repositories {
-	maven {url = 'https://maven.blamejared.com/' }
-	maven {url = "https://mvn.devos.one/releases/" }
-	maven {url = "https://api.modrinth.com/maven" }
-	maven {url = "https://maven.theillusivec4.top/"}
-	maven {url = "https://maven.jamieswhiteshirt.com/libs-release"}
-}
-
-dependencies {
-	modImplementation("team.lodestar.lodestone:lodestone:${project.minecraft_version}-${project.lodestone_version}-fabric")
-	//For this you also need the following
-	modImplementation("dev.onyxstudios.cardinal-components-api:cardinal-components-base:${project.cca_version}")
-	modImplementation("dev.onyxstudios.cardinal-components-api:cardinal-components-entity:${project.cca_version}")
-	modImplementation("dev.onyxstudios.cardinal-components-api:cardinal-components-world:${project.cca_version}")
-
 }
 
 processResources {
@@ -138,7 +75,7 @@ jar {
 	}
 }
 
-// configure the maven publication
+// Maven publishing configuration
 publishing {
 	publications {
 		create("mavenJava", MavenPublication) {
@@ -147,15 +84,6 @@ publishing {
 		}
 	}
 	repositories {
-		// Publishing repos here if needed
-	}
-
-
-	// See https://docs.gradle.org/current/userguide/publishing_maven.html for information on how to set up publishing.
-	repositories {
-		// Add repositories to publish to here.
-		// Notice: This block does NOT have the same function as the block in the top level.
-		// The repositories here will be used for publishing your artifact, not for
-		// retrieving dependencies.
+		// Add publishing repositories here if needed
 	}
 }
