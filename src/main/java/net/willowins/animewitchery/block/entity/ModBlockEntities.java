@@ -11,7 +11,11 @@ import net.willowins.animewitchery.AnimeWitchery;
 import net.willowins.animewitchery.block.ModBlocks;
 
 import static net.willowins.animewitchery.AnimeWitchery.MOD_ID;
-import static net.willowins.animewitchery.block.ModBlocks.AUTO_CRAFTER_BLOCK;
+import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
+import net.minecraft.block.entity.BlockEntityType;
+import net.minecraft.util.Identifier;
+import net.minecraft.registry.Registry;
+import net.minecraft.registry.Registries;
 
 public class ModBlockEntities {
     public static final BlockEntityType<EffigyFountainBlockEntity> EFFIGY_FOUNTAIN_BLOCK_ENTITY =
@@ -44,16 +48,22 @@ public class ModBlockEntities {
                     FabricBlockEntityTypeBuilder.create(AlchemyTableBlockEntity::new,
                             ModBlocks.ALCHEMY_TABLE).build((Type) null));
 
-    public static final BlockEntityType<PlayerUseDispenserBlockEntity> PLAYER_USE_DISPENSER_BLOCK_ENTITY =
-            Registry.register(Registries.BLOCK_ENTITY_TYPE, new Identifier(MOD_ID, "player_use_dispenser_be"),
-                    FabricBlockEntityTypeBuilder.create(PlayerUseDispenserBlockEntity::new,
-                            ModBlocks.PLAYER_USE_DISPENSER).build((Type) null));
 
     public static final BlockEntityType<AutoCrafterBlockEntity> AUTO_CRAFTER_BLOCK_ENTITY =
             Registry.register(
                     Registries.BLOCK_ENTITY_TYPE,
-                    new Identifier(AnimeWitchery.MOD_ID, "auto_crafter"),
+                    new Identifier(AnimeWitchery.MOD_ID, "auto_crafter_be"),
                     FabricBlockEntityTypeBuilder.create(AutoCrafterBlockEntity::new, ModBlocks.AUTO_CRAFTER_BLOCK).build(null)
+            );
+
+
+    public static final BlockEntityType<PlayerUseDispenserBlockEntity> PLAYER_USE_DISPENSER_BLOCK_ENTITY =
+            Registry.register(
+                    Registries.BLOCK_ENTITY_TYPE,
+                    new Identifier(MOD_ID, "player_use_dispenser_be"),
+                    (BlockEntityType<PlayerUseDispenserBlockEntity>) FabricBlockEntityTypeBuilder
+                            .create(PlayerUseDispenserBlockEntity::new, ModBlocks.PLAYER_USE_DISPENSER)
+                            .build(null)
             );
 
     public static void registerBlockEntities() {

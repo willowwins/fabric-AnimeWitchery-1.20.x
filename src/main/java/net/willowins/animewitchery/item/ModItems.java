@@ -29,6 +29,8 @@ public class ModItems {
     public static final Item RESPAWN_BEACON =registerItem("respawn_beacon",new RespawnTeleportItem(new FabricItemSettings().maxCount(1)));
     public static final Item DEFIANT_RIFT =registerItem("defiant_rift",new BanHammerItem(new FabricItemSettings().maxCount(1)));
     public static final Item JOB_APPLICATION =registerItem("job_application",new UnbanWandItem(new FabricItemSettings().maxCount(1)));
+    public static final Item NBT_TOOL = registerItem("nbt_preserving_tool",
+            new NBTPreservingToolItem(new FabricItemSettings().maxCount(1)));
 
     public static final Item METAL_DETECTOR =registerItem("metal_detector",
             new MetalDetectorItem(new FabricItemSettings().maxDamage(300)));

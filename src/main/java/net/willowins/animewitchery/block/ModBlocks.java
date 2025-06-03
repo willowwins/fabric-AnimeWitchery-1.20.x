@@ -18,7 +18,7 @@ import java.util.Objects;
 public class ModBlocks {
 
     public static final Block PLAYER_USE_DISPENSER = registerBlock("player_use_dispenser",
-            new PlayerUseDispenserBlock(FabricBlockSettings.copyOf(Blocks.DISPENSER)));
+            new PlayerUseDispenserBlock(FabricBlockSettings.copyOf(Blocks.COBBLESTONE)));
 
     public static final Block AUTO_CRAFTER_BLOCK = registerBlock("auto_crafter",
             new AutoCrafterBlock(FabricBlockSettings.copyOf(Blocks.IRON_BLOCK)));

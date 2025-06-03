@@ -60,6 +60,8 @@ public class ModItemGroups {
                         entries.add(ModItems.SILVER_TEMPLATE);
 
                         entries.add(ModItems.METAL_DETECTOR);
+                        entries.add(ModItems.RESPAWN_BEACON);
+                        entries.add(ModItems.DIMENSION_HOPPER);
                         entries.add(ModItems.MOD_TOTEM);
 
                         entries.add(ModBlocks.CHARCOAL_BLOCK);
@@ -73,6 +75,8 @@ public class ModItemGroups {
                         entries.add(ModBlocks.DECORATIVE_FOUNTAIN);
                         entries.add(ModBlocks.DEEPSLATE_SILVER_ORE);
                         entries.add(ModBlocks.ALCHEMY_TABLE);
+                        entries.add(ModBlocks.AUTO_CRAFTER_BLOCK);
+                        entries.add(ModBlocks.PLAYER_USE_DISPENSER);
 
                         entries.add(ModBlocks.SILVER_BUTTON);
                         entries.add(ModBlocks.SILVER_PRESSURE_PLATE);
