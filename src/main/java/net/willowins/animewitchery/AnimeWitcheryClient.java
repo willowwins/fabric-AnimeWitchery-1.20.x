@@ -7,7 +7,9 @@ import net.fabricmc.fabric.api.client.rendering.v1.BlockEntityRendererRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityModelLayerRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
 import net.fabricmc.fabric.api.client.screenhandler.v1.ScreenRegistry;
+import net.minecraft.client.gui.screen.ingame.HandledScreens;
 import net.minecraft.client.render.RenderLayer;
+import net.minecraft.screen.ScreenHandlerType;
 import net.minecraft.util.Identifier;
 import net.willowins.animewitchery.block.ModBlocks;
 import net.willowins.animewitchery.block.entity.ModBlockEntities;
@@ -21,11 +23,7 @@ import net.willowins.animewitchery.entity.client.render.NeedleProjectileRenderer
 import net.willowins.animewitchery.networking.ModPackets;
 import net.willowins.animewitchery.particle.ModParticles;
 import net.willowins.animewitchery.particle.ShockwaveParticle;
-import net.willowins.animewitchery.screen.AutoCrafterScreen;
-import net.willowins.animewitchery.screen.PlayerUseDispenserScreen;
-
-
-
+import net.willowins.animewitchery.screen.*;
 
 
 public class AnimeWitcheryClient implements ClientModInitializer {
@@ -38,10 +36,11 @@ public class AnimeWitcheryClient implements ClientModInitializer {
         BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.ALCHEMY_TABLE, RenderLayer.getCutout());
         BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.SILVER_TRAPDOOR, RenderLayer.getCutout());
 
+
+
         BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.STRAWBERRY_CROP, RenderLayer.getCutout());
         BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.LEMON_CROP, RenderLayer.getCutout());
         BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.FLOAT_BLOCK, RenderLayer.getCutout());
-        BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.PLAYER_USE_DISPENSER, RenderLayer.getCutout());
         BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.AUTO_CRAFTER_BLOCK, RenderLayer.getCutout());
 
         BlockEntityRendererRegistry.register(ModBlockEntities.ACTIVE_EFFIGY_FOUNTAIN_BLOCK_ENTITY, (context) -> new ActiveEffigyFountainRenderer());
@@ -55,6 +54,11 @@ public class AnimeWitcheryClient implements ClientModInitializer {
         ParticleFactoryRegistry.getInstance().register(ModParticles.LASER_PARTICLE, ShockwaveParticle.Factory::new);
         ScreenRegistry.register(ModScreenHandlers.PLAYER_USE_DISPENSER_SCREEN_HANDLER, PlayerUseDispenserScreen::new);
         ScreenRegistry.register(ModScreenHandlers.AUTO_CRAFTER_SCREEN_HANDLER, AutoCrafterScreen::new);
+        ScreenRegistry.register(ModScreenHandlers.ITEM_ACTION_SCREEN_HANDLER, ItemActionScreen::new);
+        ScreenRegistry.register(ModScreenHandlers.BLOCK_MINER_SCREEN_HANDLER, BlockMinerScreen::new);
+        ScreenRegistry.register(ModScreenHandlers.BLOCK_PLACER_SCREEN_HANDLER, BlockPlacerScreen::new);
+
+
         ModPackets.registerS2CPackets();
 
     }

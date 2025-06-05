@@ -9,6 +9,7 @@ import net.minecraft.inventory.CraftingInventory;
 import net.minecraft.inventory.Inventories;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.inventory.SidedInventory;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.PacketByteBuf;
@@ -27,8 +28,9 @@ import net.minecraft.world.World;
 import net.willowins.animewitchery.ModScreenHandlers;
 import net.willowins.animewitchery.screen.AutoCrafterScreenHandler;
 
-import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.IntStream;
 
 public class AutoCrafterBlockEntity extends BlockEntity implements ExtendedScreenHandlerFactory, SidedInventory {
@@ -39,9 +41,31 @@ public class AutoCrafterBlockEntity extends BlockEntity implements ExtendedScree
     private static final int[] INPUT_SLOTS = IntStream.range(0, 9).toArray();
     private static final int[] OUTPUT_SLOT = new int[]{9};
 
+    private final CraftingInventory craftingInventory = new CraftingInventory(new DummyHandler(), 3, 3);
+    private CraftingRecipe cachedRecipe = null;
+    private boolean isRecipeGridDirty = true;
+    private int craftCooldown = 0;
+
     public AutoCrafterBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntities.AUTO_CRAFTER_BLOCK_ENTITY, pos, state);
     }
+
+    private static class DummyHandler extends ScreenHandler {
+        protected DummyHandler() {
+            super(null, 0);
+        }
+
+        @Override
+        public boolean canUse(PlayerEntity player) {
+            return true;
+        }
+
+        @Override
+        public ItemStack quickMove(PlayerEntity player, int index) {
+            return ItemStack.EMPTY;
+        }
+    }
+
 
     @Override
     public Text getDisplayName() {
@@ -67,34 +91,35 @@ public class AutoCrafterBlockEntity extends BlockEntity implements ExtendedScree
     public static void tick(World world, BlockPos pos, BlockState state, AutoCrafterBlockEntity be) {
         if (world.isClient || be.isRecipeEmpty()) return;
 
-        CraftingInventory craftingInventory = new CraftingInventory(new ScreenHandler(null, 0) {
-            @Override public ItemStack quickMove(PlayerEntity player, int slot) { return ItemStack.EMPTY; }
-            @Override public boolean canUse(PlayerEntity player) { return true; }
-        }, 3, 3);
+        if (be.craftCooldown > 0) {
+            be.craftCooldown--;
+            return;
+        }
+        be.craftCooldown = 20;
 
-        for (int i = 0; i < 9; i++) {
-            craftingInventory.setStack(i, be.recipeInventory.get(i));
+        if (be.isRecipeGridDirty) {
+            for (int i = 0; i < 9; i++) {
+                be.craftingInventory.setStack(i, be.recipeInventory.get(i));
+            }
+            RecipeManager recipeManager = ((ServerWorld) world).getServer().getRecipeManager();
+            be.cachedRecipe = recipeManager.getFirstMatch(RecipeType.CRAFTING, be.craftingInventory, world).orElse(null);
+            be.isRecipeGridDirty = false;
         }
 
-        RecipeManager recipeManager = ((ServerWorld) world).getServer().getRecipeManager();
-        Optional<CraftingRecipe> recipeOpt = recipeManager.getFirstMatch(RecipeType.CRAFTING, craftingInventory, world);
-        if (recipeOpt.isEmpty()) return;
+        if (be.cachedRecipe == null) return;
 
-        CraftingRecipe recipe = recipeOpt.get();
+        be.dropNonMatchingItems(world, pos, be.cachedRecipe);
 
-        // 💥 Clean up internal inventory
-        be.dropNonMatchingItems(world, pos, recipe);
-
-        ItemStack result = recipe.craft(craftingInventory, world.getRegistryManager());
+        ItemStack result = be.cachedRecipe.craft(be.craftingInventory, world.getRegistryManager());
         if (result.isEmpty()) return;
 
         ItemStack outputStack = be.internalInventory.get(9);
         boolean canInsertOutput = outputStack.isEmpty() ||
                 (ItemStack.canCombine(outputStack, result) && outputStack.getCount() + result.getCount() <= outputStack.getMaxCount());
 
-        if (!canInsertOutput || !be.hasIngredients(recipe)) return;
+        if (!canInsertOutput || !be.hasIngredients(be.cachedRecipe)) return;
 
-        be.consumeIngredients(recipe);
+        be.consumeIngredients(be.cachedRecipe);
 
         if (outputStack.isEmpty()) {
             be.internalInventory.set(9, result.copy());
@@ -104,17 +129,19 @@ public class AutoCrafterBlockEntity extends BlockEntity implements ExtendedScree
 
         be.markDirty();
     }
+
     private void dropNonMatchingItems(World world, BlockPos pos, CraftingRecipe recipe) {
-        var validItems = recipe.getIngredients().stream()
-                .flatMap(ingredient -> Arrays.stream(ingredient.getMatchingStacks()))
-                .map(ItemStack::getItem)
-                .toList();
+        Set<Item> validItems = new HashSet<>();
+        for (var ingredient : recipe.getIngredients()) {
+            for (ItemStack stack : ingredient.getMatchingStacks()) {
+                validItems.add(stack.getItem());
+            }
+        }
 
         for (int i = 0; i < 9; i++) {
             ItemStack stack = internalInventory.get(i);
             if (!stack.isEmpty() && !validItems.contains(stack.getItem())) {
-                // Drop into the world
-                ItemScatterer.spawn(world, pos.getX(), pos.getY()+2, pos.getZ(), stack);
+                ItemScatterer.spawn(world, pos.getX(), pos.getY() + 1, pos.getZ(), stack);
                 internalInventory.set(i, ItemStack.EMPTY);
             }
         }
@@ -133,13 +160,10 @@ public class AutoCrafterBlockEntity extends BlockEntity implements ExtendedScree
             tempInventory.set(i, internalInventory.get(i).copy());
         }
 
-        var ingredients = recipe.getIngredients();
-
-        for (var ingredient : ingredients) {
+        for (var ingredient : recipe.getIngredients()) {
             if (ingredient.isEmpty()) continue;
 
             boolean matched = false;
-
             for (int j = 0; j < tempInventory.size(); j++) {
                 ItemStack stack = tempInventory.get(j);
                 if (ingredient.test(stack) && stack.getCount() > 0) {
@@ -156,11 +180,8 @@ public class AutoCrafterBlockEntity extends BlockEntity implements ExtendedScree
     }
 
     private void consumeIngredients(CraftingRecipe recipe) {
-        var ingredients = recipe.getIngredients();
-
-        for (var ingredient : ingredients) {
+        for (var ingredient : recipe.getIngredients()) {
             if (ingredient.isEmpty()) continue;
-
             for (int i = 0; i < 9; i++) {
                 ItemStack stack = internalInventory.get(i);
                 if (ingredient.test(stack) && stack.getCount() > 0) {
@@ -171,8 +192,7 @@ public class AutoCrafterBlockEntity extends BlockEntity implements ExtendedScree
         }
     }
 
-    // -- Hopper Interaction --
-
+    // Hopper interaction
     @Override
     public int[] getAvailableSlots(Direction side) {
         return side == Direction.DOWN ? OUTPUT_SLOT : INPUT_SLOTS;
@@ -180,12 +200,9 @@ public class AutoCrafterBlockEntity extends BlockEntity implements ExtendedScree
 
     @Override
     public boolean canInsert(int slot, ItemStack stack, Direction dir) {
-        if (slot < 0 || slot >= 9) return false; // only input slots 0-8
-
+        if (slot < 0 || slot >= 9) return false;
         ItemStack current = internalInventory.get(slot);
-        // Allow insertion only if slot is empty or not full and items are stackable and matching
-        return current.isEmpty()
-                || (ItemStack.canCombine(current, stack) && current.getCount() < current.getMaxCount());
+        return current.isEmpty() || (ItemStack.canCombine(current, stack) && current.getCount() < current.getMaxCount());
     }
 
     @Override
@@ -193,12 +210,9 @@ public class AutoCrafterBlockEntity extends BlockEntity implements ExtendedScree
         return dir == Direction.DOWN && slot == 9;
     }
 
-    // -- Inventory (internalInventory only) --
-
+    // Inventory interface (internalInventory only)
     @Override
-    public int size() {
-        return internalInventory.size();
-    }
+    public int size() { return internalInventory.size(); }
 
     @Override
     public boolean isEmpty() {
@@ -209,9 +223,7 @@ public class AutoCrafterBlockEntity extends BlockEntity implements ExtendedScree
     }
 
     @Override
-    public ItemStack getStack(int slot) {
-        return internalInventory.get(slot);
-    }
+    public ItemStack getStack(int slot) { return internalInventory.get(slot); }
 
     @Override
     public ItemStack removeStack(int slot, int amount) {
@@ -226,22 +238,32 @@ public class AutoCrafterBlockEntity extends BlockEntity implements ExtendedScree
         if (!result.isEmpty()) markDirty();
         return result;
     }
-
     @Override
     public void setStack(int slot, ItemStack stack) {
         if (slot >= 0 && slot < internalInventory.size()) {
             if (!stack.isEmpty()) {
-                // Clamp the count to max stack size for this item
-                int maxCount = Math.min(stack.getCount(), stack.getMaxCount());
-                ItemStack clampedStack = stack.copy();
-                clampedStack.setCount(maxCount);
-                internalInventory.set(slot, clampedStack);
+                ItemStack newStack = stack.copy();
+                newStack.setCount(Math.min(newStack.getCount(), 64));
+                internalInventory.set(slot, newStack);
             } else {
                 internalInventory.set(slot, ItemStack.EMPTY);
             }
             markDirty();
         }
     }
+
+    public void recheckRecipe() {
+        if (world instanceof ServerWorld serverWorld) {
+            for (int i = 0; i < 9; i++) {
+                craftingInventory.setStack(i, recipeInventory.get(i));
+            }
+            RecipeManager recipeManager = serverWorld.getServer().getRecipeManager();
+            cachedRecipe = recipeManager.getFirstMatch(RecipeType.CRAFTING, craftingInventory, serverWorld).orElse(null);
+            isRecipeGridDirty = false;
+            markDirty();
+        }
+    }
+
 
     @Override
     public void clear() {
@@ -250,16 +272,17 @@ public class AutoCrafterBlockEntity extends BlockEntity implements ExtendedScree
     }
 
     @Override
-    public int getMaxCountPerStack() {
-        return 64;
-    }
+    public int getMaxCountPerStack() { return 64; }
 
     public DefaultedList<ItemStack> getRecipeInventory() {
         return recipeInventory;
     }
 
-    // -- NBT Save/Load --
+    public void markRecipeDirty() {
+        this.isRecipeGridDirty = true;
+    }
 
+    // NBT Save/Load
     @Override
     public void readNbt(NbtCompound tag) {
         super.readNbt(tag);

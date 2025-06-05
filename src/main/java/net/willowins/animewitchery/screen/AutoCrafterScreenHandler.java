@@ -16,6 +16,7 @@ public class AutoCrafterScreenHandler extends ScreenHandler {
     private final Inventory recipeInventory;
 
     public AutoCrafterScreenHandler(ScreenHandlerType<?> type, int syncId, PlayerInventory playerInventory, AutoCrafterBlockEntity blockEntity) {
+
         super(type, syncId);
         this.blockEntity = blockEntity;
         this.playerInventory = playerInventory;
@@ -24,6 +25,8 @@ public class AutoCrafterScreenHandler extends ScreenHandler {
             public int size() {
                 return 9;
             }
+            public static ScreenHandlerType<AutoCrafterScreenHandler> AUTO_CRAFTER_SCREEN_HANDLER_TYPE;
+
 
             @Override
             public boolean isEmpty() {

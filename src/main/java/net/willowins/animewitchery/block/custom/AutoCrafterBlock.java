@@ -36,6 +36,20 @@ public class AutoCrafterBlock extends BlockWithEntity implements BlockEntityProv
     }
 
     @Override
+    public void neighborUpdate(BlockState state, World world, BlockPos pos, Block block, BlockPos fromPos, boolean notify) {
+        if (!world.isClient()) {
+            boolean powered = world.isReceivingRedstonePower(pos);
+            if (powered) {
+                BlockEntity blockEntity = world.getBlockEntity(pos);
+                if (blockEntity instanceof AutoCrafterBlockEntity autoCrafter) {
+                    autoCrafter.recheckRecipe(); // You'll define this method
+                }
+            }
+        }
+        super.neighborUpdate(state, world, pos, block, fromPos, notify);
+    }
+
+    @Override
     public BlockRenderType getRenderType(BlockState state) {
         return BlockRenderType.MODEL;
     }

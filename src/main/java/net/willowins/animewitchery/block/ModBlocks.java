@@ -12,16 +12,22 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.math.intprovider.UniformIntProvider;
 import net.willowins.animewitchery.AnimeWitchery;
 import net.willowins.animewitchery.block.custom.*;
+import net.willowins.animewitchery.block.custom.ItemActionBlock;
 
 import java.util.Objects;
 
 public class ModBlocks {
 
-    public static final Block PLAYER_USE_DISPENSER = registerBlock("player_use_dispenser",
-            new PlayerUseDispenserBlock(FabricBlockSettings.copyOf(Blocks.COBBLESTONE)));
-
     public static final Block AUTO_CRAFTER_BLOCK = registerBlock("auto_crafter",
             new AutoCrafterBlock(FabricBlockSettings.copyOf(Blocks.IRON_BLOCK)));
+    public static final Block BLOCK_MINER = registerBlock("block_miner",
+            new BlockMinerBlock(FabricBlockSettings.copyOf(Blocks.DISPENSER))
+    );
+ public static final Block BLOCK_PLACER = registerBlock("block_placer",
+            new BlockPlacerBlock(FabricBlockSettings.copyOf(Blocks.IRON_BLOCK)));
+
+    public static final Block INTERACTOR = registerBlock("interactor",
+            new ItemActionBlock(FabricBlockSettings.copyOf(Blocks.IRON_BLOCK)));
 
     public static final Block SILVER_BLOCK =registerBlock("silver_block",
             new Block(FabricBlockSettings.copyOf(Blocks.IRON_BLOCK)));

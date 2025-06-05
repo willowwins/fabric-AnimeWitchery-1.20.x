@@ -76,7 +76,6 @@ public class ModItemGroups {
                         entries.add(ModBlocks.DEEPSLATE_SILVER_ORE);
                         entries.add(ModBlocks.ALCHEMY_TABLE);
                         entries.add(ModBlocks.AUTO_CRAFTER_BLOCK);
-                        entries.add(ModBlocks.PLAYER_USE_DISPENSER);
 
                         entries.add(ModBlocks.SILVER_BUTTON);
                         entries.add(ModBlocks.SILVER_PRESSURE_PLATE);

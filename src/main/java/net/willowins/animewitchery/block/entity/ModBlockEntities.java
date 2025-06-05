@@ -1,6 +1,7 @@
 package net.willowins.animewitchery.block.entity;
 
 import com.mojang.datafixers.types.Type;
+import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
 import net.minecraft.block.Block;
 import net.minecraft.block.entity.BlockEntityType;
@@ -11,11 +12,7 @@ import net.willowins.animewitchery.AnimeWitchery;
 import net.willowins.animewitchery.block.ModBlocks;
 
 import static net.willowins.animewitchery.AnimeWitchery.MOD_ID;
-import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
-import net.minecraft.block.entity.BlockEntityType;
-import net.minecraft.util.Identifier;
-import net.minecraft.registry.Registry;
-import net.minecraft.registry.Registries;
+
 
 public class ModBlockEntities {
     public static final BlockEntityType<EffigyFountainBlockEntity> EFFIGY_FOUNTAIN_BLOCK_ENTITY =
@@ -56,15 +53,25 @@ public class ModBlockEntities {
                     FabricBlockEntityTypeBuilder.create(AutoCrafterBlockEntity::new, ModBlocks.AUTO_CRAFTER_BLOCK).build(null)
             );
 
-
-    public static final BlockEntityType<PlayerUseDispenserBlockEntity> PLAYER_USE_DISPENSER_BLOCK_ENTITY =
+    public static final BlockEntityType<ItemActionBlockEntity> ITEM_ACTION_BLOCK_ENTITY =
             Registry.register(
                     Registries.BLOCK_ENTITY_TYPE,
-                    new Identifier(MOD_ID, "player_use_dispenser_be"),
-                    (BlockEntityType<PlayerUseDispenserBlockEntity>) FabricBlockEntityTypeBuilder
-                            .create(PlayerUseDispenserBlockEntity::new, ModBlocks.PLAYER_USE_DISPENSER)
-                            .build(null)
+                    new Identifier(AnimeWitchery.MOD_ID, "interactor_be"),
+                    FabricBlockEntityTypeBuilder.create(ItemActionBlockEntity::new, ModBlocks.INTERACTOR).build(null)
             );
+    public static final BlockEntityType<BlockPlacerBlockEntity> BLOCK_PLACER_BLOCK_ENTITY =
+            Registry.register(
+                    Registries.BLOCK_ENTITY_TYPE,
+                    new Identifier(AnimeWitchery.MOD_ID, "block_placer"),
+                    FabricBlockEntityTypeBuilder.create(BlockPlacerBlockEntity::new, ModBlocks.BLOCK_PLACER).build(null)
+            );
+
+
+    public static final BlockEntityType<BlockMinerBlockEntity> BLOCK_MINER_BLOCK_ENTITY = Registry.register(
+            Registries.BLOCK_ENTITY_TYPE,
+            new Identifier(MOD_ID, "block_miner"),
+            FabricBlockEntityTypeBuilder.create(BlockMinerBlockEntity::new, ModBlocks.BLOCK_MINER).build(null)
+    );
 
     public static void registerBlockEntities() {
         AnimeWitchery.LOGGER.info("Registering Block Entities For {}", MOD_ID);
