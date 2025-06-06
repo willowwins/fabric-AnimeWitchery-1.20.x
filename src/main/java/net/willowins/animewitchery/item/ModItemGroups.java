@@ -63,6 +63,8 @@ public class ModItemGroups {
                         entries.add(ModItems.RESPAWN_BEACON);
                         entries.add(ModItems.DIMENSION_HOPPER);
                         entries.add(ModItems.MOD_TOTEM);
+                        entries.add(ModItems.NBT_TOOL);
+                        entries.add(ModItems.JOB_APPLICATION);
 
                         entries.add(ModBlocks.CHARCOAL_BLOCK);
                         entries.add(ModBlocks.SOUND_BLOCK);
@@ -76,6 +78,9 @@ public class ModItemGroups {
                         entries.add(ModBlocks.DEEPSLATE_SILVER_ORE);
                         entries.add(ModBlocks.ALCHEMY_TABLE);
                         entries.add(ModBlocks.AUTO_CRAFTER_BLOCK);
+                        entries.add(ModBlocks.INTERACTOR);
+                        entries.add(ModBlocks.BLOCK_MINER);
+                        entries.add(ModBlocks.BLOCK_PLACER);
 
                         entries.add(ModBlocks.SILVER_BUTTON);
                         entries.add(ModBlocks.SILVER_PRESSURE_PLATE);

@@ -9,6 +9,7 @@
   "item.animewitchery.respawn_beacon": "§5Respawn Mirror",
   "item.animewitchery.defiant_rift": "§5Defiant Rift",
   "item.animewitchery.nbt_preserving_tool": "§5Silken extractor",
+  "item.animewitchery.job_application": "§5job application",
 
   "item.animewitchery.lemon": "Lemon",
   "item.animewitchery.lemon_seeds": "Lemon Seeds",
@@ -82,6 +83,10 @@
   "block.animewitchery.silver_wall": "§bSilver Wall",
   "block.animewitchery.silver_door": "§bSilver Door",
   "block.animewitchery.silver_trapdoor": "§bSilver Trapdoor",
+  "block.animewitchery.interactor": "§bInteractor",
+  "block.animewitchery.block_placer": "§5Block Placer",
+  "block.animewitchery.block_miner": "§5Block Miner",
+
 
   "sounds.animewitchery.hatsune_miku_lemon": "§bHatsune Miku Suffers",
   "sounds.animewitchery.laser_charge": "§5Railgun Charges",
