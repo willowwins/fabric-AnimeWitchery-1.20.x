@@ -1,10 +1,10 @@
 package net.willowins.animewitchery.block.custom;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockWithEntity;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.BlockRenderType;
+import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory;
+import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.block.entity.BlockEntityTicker;
+import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.screen.NamedScreenHandlerFactory;
@@ -12,6 +12,7 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.DirectionProperty;
 import net.minecraft.state.property.Properties;
+import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
@@ -19,6 +20,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 import net.willowins.animewitchery.block.entity.BlockPlacerBlockEntity;
+import net.willowins.animewitchery.block.entity.ModBlockEntities;
 
 public class BlockPlacerBlock extends BlockWithEntity {
     public static final DirectionProperty FACING = Properties.FACING;
@@ -48,17 +50,33 @@ public class BlockPlacerBlock extends BlockWithEntity {
         return BlockRenderType.MODEL;
     }
 
-    // Open GUI on right-click
     @Override
-    public ActionResult onUse(BlockState state, World world, BlockPos pos,
-                              PlayerEntity player, Hand hand, BlockHitResult hit) {
+    public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
         if (!world.isClient) {
-            BlockEntity be = world.getBlockEntity(pos);
-            if (be instanceof NamedScreenHandlerFactory factory) {
+            BlockEntity blockEntity = world.getBlockEntity(pos);
+            if (blockEntity instanceof ExtendedScreenHandlerFactory factory) {
                 player.openHandledScreen(factory);
+            } else {
+                player.sendMessage(Text.literal("Block entity does not support screen!"), false);
             }
         }
         return ActionResult.SUCCESS;
+    }
+
+    // Optional but recommended for redstone updates
+    @Override
+    public void neighborUpdate(BlockState state, World world, BlockPos pos, Block block, BlockPos fromPos, boolean notify) {
+        super.neighborUpdate(state, world, pos, block, fromPos, notify);
+        BlockEntity be = world.getBlockEntity(pos);
+        if (be instanceof BlockPlacerBlockEntity placer && !world.isClient) {
+            BlockPlacerBlockEntity.tick(world, pos, state, placer);
+        }
+    }
+
+    // Required for ticking logic
+    @Override
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type) {
+        return world.isClient ? null : checkType(type, ModBlockEntities.BLOCK_PLACER_BLOCK_ENTITY, BlockPlacerBlockEntity::tick);
     }
 }
 

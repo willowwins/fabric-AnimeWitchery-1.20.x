@@ -5,10 +5,9 @@ import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
-import net.willowins.animewitchery.AnimeWitchery;
 
 public class BlockPlacerScreen extends HandledScreen<BlockPlacerScreenHandler> {
-    private static final Identifier TEXTURE = new Identifier(AnimeWitchery.MOD_ID, "textures/gui/block_miner.png");
+    private static final Identifier TEXTURE = new Identifier("minecraft", "textures/gui/container/dispenser.png");
 
     private final PlayerInventory playerInventory;
 
