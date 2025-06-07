@@ -5,6 +5,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
+import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.Inventories;
@@ -195,5 +196,14 @@ public class BlockMinerBlockEntity extends BlockEntity implements ExtendedScreen
     public void writeNbt(NbtCompound nbt) {
         Inventories.writeNbt(nbt, inventory);
         super.writeNbt(nbt);
+    }
+    public void dropInventory(World world, BlockPos pos) {
+        if (world == null || world.isClient()) return;
+        for (ItemStack stack : inventory) {
+            if (!stack.isEmpty()) {
+                ItemEntity itemEntity = new ItemEntity(world, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, stack);
+                world.spawnEntity(itemEntity);
+            }
+        }
     }
 }

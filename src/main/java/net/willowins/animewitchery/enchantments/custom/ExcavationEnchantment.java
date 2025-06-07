@@ -4,6 +4,9 @@ import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentTarget;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.EquipmentSlot;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.ToolItem;
+import net.minecraft.item.ToolMaterials;
 
 public class ExcavationEnchantment extends Enchantment {
 
@@ -20,4 +23,19 @@ public class ExcavationEnchantment extends Enchantment {
     protected boolean canAccept(Enchantment other) {
         return super.canAccept(other) && other != Enchantments.SILK_TOUCH;
     }
+
+    @Override
+    public boolean isCursed() {
+        return true;
+    }
+
+    @Override
+    public boolean isAcceptableItem(ItemStack stack) {
+        if (!(stack.getItem() instanceof ToolItem toolItem)) return false;
+
+        // Allow only ston >:(
+        return toolItem.getMaterial() == ToolMaterials.STONE;
+    }
+
+
 }

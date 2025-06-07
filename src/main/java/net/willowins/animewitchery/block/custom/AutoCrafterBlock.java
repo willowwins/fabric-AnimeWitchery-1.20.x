@@ -21,6 +21,7 @@ import net.minecraft.world.World;
 import net.willowins.animewitchery.block.entity.AutoCrafterBlockEntity;
 import net.minecraft.block.entity.BlockEntityTicker;
 import net.minecraft.block.BlockRenderType;
+import net.willowins.animewitchery.block.entity.ItemActionBlockEntity;
 import net.willowins.animewitchery.block.entity.ModBlockEntities;
 import net.willowins.animewitchery.screen.AutoCrafterScreenHandler;
 
@@ -34,6 +35,7 @@ public class AutoCrafterBlock extends BlockWithEntity implements BlockEntityProv
     public BlockEntity createBlockEntity(BlockPos pos, BlockState state) {
         return new AutoCrafterBlockEntity(pos, state);
     }
+
 
     @Override
     public void neighborUpdate(BlockState state, World world, BlockPos pos, Block block, BlockPos fromPos, boolean notify) {
@@ -56,11 +58,11 @@ public class AutoCrafterBlock extends BlockWithEntity implements BlockEntityProv
 
     @Override
     public void onStateReplaced(BlockState state, World world, BlockPos pos, BlockState newState, boolean moved) {
-        if (state.getBlock() != newState.getBlock()) {
-            BlockEntity blockEntity = world.getBlockEntity(pos);
-            if (blockEntity instanceof AutoCrafterBlockEntity) {
-                ItemScatterer.spawn(world, pos, (AutoCrafterBlockEntity) blockEntity);
-                world.updateComparators(pos, this);
+        if (!state.isOf(newState.getBlock())) {
+            BlockEntity be = world.getBlockEntity(pos);
+            if (be instanceof AutoCrafterBlockEntity entity) {
+                entity.dropInventory(world, pos);
+                world.removeBlockEntity(pos);
             }
             super.onStateReplaced(state, world, pos, newState, moved);
         }

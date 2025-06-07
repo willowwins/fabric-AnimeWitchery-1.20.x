@@ -4,6 +4,7 @@ import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityTicker;
+import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.Inventories;
@@ -121,5 +122,14 @@ public class BlockPlacerBlockEntity extends BlockEntity implements SidedInventor
 
     @Override public void writeScreenOpeningData(ServerPlayerEntity player, PacketByteBuf buf) {
         buf.writeBlockPos(this.pos);
+    }
+    public void dropInventory(World world, BlockPos pos) {
+        if (world == null || world.isClient()) return;
+        for (ItemStack stack : inventory) {
+            if (!stack.isEmpty()) {
+                ItemEntity itemEntity = new ItemEntity(world, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, stack);
+                world.spawnEntity(itemEntity);
+            }
+        }
     }
 }

@@ -16,6 +16,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 import net.willowins.animewitchery.block.entity.BlockMinerBlockEntity;
+import net.willowins.animewitchery.block.entity.ItemActionBlockEntity;
 import net.willowins.animewitchery.block.entity.ModBlockEntities;
 
 public class BlockMinerBlock extends BlockWithEntity implements BlockEntityProvider {
@@ -51,6 +52,17 @@ public class BlockMinerBlock extends BlockWithEntity implements BlockEntityProvi
             }
         }
         return ActionResult.SUCCESS;
+    }
+    @Override
+    public void onStateReplaced(BlockState state, World world, BlockPos pos, BlockState newState, boolean moved) {
+        if (!state.isOf(newState.getBlock())) {
+            BlockEntity be = world.getBlockEntity(pos);
+            if (be instanceof BlockMinerBlockEntity entity) {
+                entity.dropInventory(world, pos);
+                world.removeBlockEntity(pos);
+            }
+            super.onStateReplaced(state, world, pos, newState, moved);
+        }
     }
 
     @Override

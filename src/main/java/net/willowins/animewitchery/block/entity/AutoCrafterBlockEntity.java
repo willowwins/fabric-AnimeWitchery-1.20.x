@@ -3,6 +3,7 @@ package net.willowins.animewitchery.block.entity;
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.CraftingInventory;
@@ -295,5 +296,19 @@ public class AutoCrafterBlockEntity extends BlockEntity implements ExtendedScree
         super.writeNbt(tag);
         tag.put("InternalInventory", Inventories.writeNbt(new NbtCompound(), internalInventory, true));
         tag.put("RecipeInventory", Inventories.writeNbt(new NbtCompound(), recipeInventory, true));
+    }
+    public void dropInventory(World world, BlockPos pos) {
+        if (world == null || world.isClient()) return;
+        for (ItemStack stack : internalInventory) {
+            if (!stack.isEmpty()) {
+                ItemEntity itemEntity = new ItemEntity(world, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, stack);
+                world.spawnEntity(itemEntity);
+            }
+        }for (ItemStack stack : recipeInventory) {
+            if (!stack.isEmpty()) {
+                ItemEntity itemEntity = new ItemEntity(world, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, stack);
+                world.spawnEntity(itemEntity);
+            }
+        }
     }
 }

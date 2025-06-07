@@ -18,6 +18,9 @@
     "animewitchery:alchemy_table",
     "animewitchery:particle_block",
     "animewitchery:particle_sink_block",
+    "animewitchery:block_placer",
+    "animewitchery:block_miner",
+    "animewitchery:interactor",
     "animewitchery:silver_slab"
   ]
 }
