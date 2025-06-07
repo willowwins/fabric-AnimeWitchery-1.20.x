@@ -7,6 +7,7 @@ import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ToolItem;
 import net.minecraft.item.ToolMaterials;
+import net.willowins.animewitchery.item.ModToolMaterial;
 
 public class ExcavationEnchantment extends Enchantment {
 
@@ -34,8 +35,6 @@ public class ExcavationEnchantment extends Enchantment {
         if (!(stack.getItem() instanceof ToolItem toolItem)) return false;
 
         // Allow only ston >:(
-        return toolItem.getMaterial() == ToolMaterials.STONE;
+        return toolItem.getMaterial() == ToolMaterials.STONE||toolItem.getMaterial()== ModToolMaterial.SILVER;
     }
-
-
 }
