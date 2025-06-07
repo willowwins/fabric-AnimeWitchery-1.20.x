@@ -63,6 +63,7 @@ public class ModItemGroups {
                         entries.add(ModItems.RESPAWN_BEACON);
                         entries.add(ModItems.DIMENSION_HOPPER);
                         entries.add(ModItems.MOD_TOTEM);
+                        entries.add(ModItems.DEFIANT_RIFT);
                         entries.add(ModItems.NBT_TOOL);
                         entries.add(ModItems.JOB_APPLICATION);
 
