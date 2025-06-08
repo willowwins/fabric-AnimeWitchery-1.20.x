@@ -1,19 +1,21 @@
 package net.willowins.animewitchery;
 
+import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerType;
 import net.fabricmc.fabric.api.screenhandler.v1.ScreenHandlerRegistry;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.inventory.Inventory;
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.Registry;
 import net.minecraft.screen.GenericContainerScreenHandler;
 import net.minecraft.screen.ScreenHandlerType;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.willowins.animewitchery.block.entity.AutoCrafterBlockEntity;
-import net.willowins.animewitchery.block.entity.BlockMinerBlockEntity;
-import net.willowins.animewitchery.block.entity.BlockPlacerBlockEntity;
-import net.willowins.animewitchery.block.entity.ItemActionBlockEntity;
+import net.willowins.animewitchery.block.entity.*;
 import net.willowins.animewitchery.screen.*;
 import net.minecraft.entity.player.PlayerInventory;
+
+import static net.willowins.animewitchery.AnimeWitchery.MOD_ID;
 
 
 public class ModScreenHandlers {
@@ -23,7 +25,7 @@ public class ModScreenHandlers {
     public static ScreenHandlerType<GenericContainerScreenHandler> DISPENSER_HANDLER;
     public static ScreenHandlerType<BlockMinerScreenHandler> BLOCK_MINER_SCREEN_HANDLER;
     public static ScreenHandlerType<BlockPlacerScreenHandler> BLOCK_PLACER_SCREEN_HANDLER;
-
+public static ScreenHandlerType<GrowthAcceleratorScreenHandler> GROWTH_ACCELERATOR_SCREEN_HANDLER;
     public static void registerAll() {
 
 
@@ -43,6 +45,17 @@ public class ModScreenHandlers {
                     return null;
                 }
         );
+        GROWTH_ACCELERATOR_SCREEN_HANDLER =
+                Registry.register(Registries.SCREEN_HANDLER, new Identifier(MOD_ID, "growth_accelerator"),
+                        new ExtendedScreenHandlerType<>((syncId, inventory, buf) -> {
+                            BlockPos pos = buf.readBlockPos();
+                            World world = inventory.player.getWorld();
+                            BlockEntity be = world.getBlockEntity(pos);
+                            if (!(be instanceof GrowthAcceleratorBlockEntity accelerator)) {
+                                throw new IllegalStateException("Expected GrowthAcceleratorBlockEntity at " + pos);
+                            }
+                            return new GrowthAcceleratorScreenHandler(syncId, inventory, accelerator);
+                        }));
         AUTO_CRAFTER_SCREEN_HANDLER = ScreenHandlerRegistry.registerExtended(
                 new Identifier("animewitchery", "auto_crafter"),
                 (syncId, playerInventory, buf) -> {

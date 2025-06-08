@@ -15,7 +15,7 @@ import java.util.Map;
 public interface ModEnchantments {
     Map<Enchantment, Identifier> ENCHANTMENTS = new LinkedHashMap();
     Enchantment BOOT_ENCHANT = createEnchantment("boot_enchant", new BootEnchantment());
-    //Enchantment EXCAVATE_ENCHANT = createEnchantment("excavate_enchant", new ExcavationEnchantment());
+    Enchantment EXCAVATE_ENCHANT = createEnchantment("excavate_enchant", new ExcavationEnchantment());
     Enchantment SLIVER = createEnchantment("sliver_enchant", new NeedleThrowEnchantment());
 
     static void init() {

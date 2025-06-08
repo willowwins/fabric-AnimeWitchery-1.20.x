@@ -1,0 +1,30 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "SSS",
+    " H ",
+    "CH "
+  ],
+  "key": {
+    "S": {
+      "item": "animewitchery:silveringot"
+    },
+    "C": {
+      "item": "animewitchery:alchemical_catalyst"
+    },
+    "H": {
+      "item": "minecraft:stick"
+    }
+  },
+  "result": {
+    "item": "animewitchery:silver_pickaxe",
+    "nbt": {
+      "Enchantments": [
+        {
+          "id": "animewitchery:excavate_enchant",
+          "lvl": 1
+        }
+      ]
+    }
+  }
+}

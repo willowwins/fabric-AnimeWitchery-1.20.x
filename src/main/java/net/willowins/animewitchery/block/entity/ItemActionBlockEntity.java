@@ -163,7 +163,7 @@ public class ItemActionBlockEntity extends BlockEntity implements Inventory, Nam
                         world.breakBlock(checkPos, false);
 
                         // Spawn the Alchemical Catalyst drop
-                        ItemStack dropStack = new ItemStack(ModItems.ALCHEMICAL_CATALYST);
+                        ItemStack dropStack = new ItemStack(ModItems.ALCHEMICAL_CATALYST,8);
                         ItemEntity entity = new ItemEntity(world, checkPos.getX() + 0.5, checkPos.getY() + 0.5, checkPos.getZ() + 0.5, dropStack);
                         world.spawnEntity(entity);
 

@@ -57,7 +57,7 @@ public class AnimeWitcheryClient implements ClientModInitializer {
         ScreenRegistry.register(ModScreenHandlers.ITEM_ACTION_SCREEN_HANDLER, ItemActionScreen::new);
         ScreenRegistry.register(ModScreenHandlers.BLOCK_MINER_SCREEN_HANDLER, BlockMinerScreen::new);
         ScreenRegistry.register(ModScreenHandlers.BLOCK_PLACER_SCREEN_HANDLER, BlockPlacerScreen::new);
-
+        ScreenRegistry.register(ModScreenHandlers.GROWTH_ACCELERATOR_SCREEN_HANDLER, GrowthAcceleratorScreen::new);
 
         ModPackets.registerS2CPackets();
 

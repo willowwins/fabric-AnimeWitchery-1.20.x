@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "SSS",
+    " C ",
+    " H "
+  ],
+  "key": {
+    "S": { "item": "minecraft:cobblestone" },
+    "C": { "item": "animewitchery:alchemical_catalyst" },
+    "H": { "item": "minecraft:stick" }
+  },
+  "result": {
+    "item": "minecraft:stone_pickaxe",
+    "nbt": {
+      "Enchantments": [
+        { "id": "animewitchery:excavate_enchant", "lvl": 1 }
+      ]
+    }
+  }
+}

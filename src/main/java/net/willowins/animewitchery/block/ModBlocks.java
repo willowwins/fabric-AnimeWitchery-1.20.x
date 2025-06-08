@@ -21,8 +21,9 @@ public class ModBlocks {
     public static final Block AUTO_CRAFTER_BLOCK = registerBlock("auto_crafter",
             new AutoCrafterBlock(FabricBlockSettings.copyOf(Blocks.IRON_BLOCK)));
     public static final Block BLOCK_MINER = registerBlock("block_miner",
-            new BlockMinerBlock(FabricBlockSettings.copyOf(Blocks.DISPENSER))
-    );
+            new BlockMinerBlock(FabricBlockSettings.copyOf(Blocks.DISPENSER)));
+    public static final Block GROWTH_ACCELERATOR = registerBlock("growth_accelerator",
+            new GrowthAcceleratorBlock(FabricBlockSettings.copyOf(Blocks.DISPENSER)));
  public static final Block BLOCK_PLACER = registerBlock("block_placer",
             new BlockPlacerBlock(FabricBlockSettings.copyOf(Blocks.IRON_BLOCK)));
 

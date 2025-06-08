@@ -5,9 +5,7 @@ import net.minecraft.enchantment.EnchantmentTarget;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.ToolItem;
-import net.minecraft.item.ToolMaterials;
-import net.willowins.animewitchery.item.ModToolMaterial;
+import net.minecraft.item.Items;
 
 public class ExcavationEnchantment extends Enchantment {
 
@@ -30,11 +28,19 @@ public class ExcavationEnchantment extends Enchantment {
         return true;
     }
 
+    // Only allow enchanted books, not tools
     @Override
     public boolean isAcceptableItem(ItemStack stack) {
-        if (!(stack.getItem() instanceof ToolItem toolItem)) return false;
+        return stack.isOf(Items.ENCHANTED_BOOK);
+    }
 
-        // Allow only ston >:(
-        return toolItem.getMaterial() == ToolMaterials.STONE||toolItem.getMaterial()== ModToolMaterial.SILVER;
+    @Override
+    public boolean isAvailableForRandomSelection() {
+        return false;
+    }
+
+    @Override
+    public boolean isAvailableForEnchantedBookOffer() {
+        return false;
     }
 }
