@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/cube_bottom_top",
+  "textures": {
+    "bottom": "animewitchery:block/growth_accelerator_bottom",
+    "side": "animewitchery:block/growth_accelerator_side",
+    "top": "animewitchery:block/growth_accelerator_top"
+  }
+}

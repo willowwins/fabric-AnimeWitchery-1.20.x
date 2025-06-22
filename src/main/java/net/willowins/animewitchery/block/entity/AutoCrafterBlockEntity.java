@@ -6,11 +6,8 @@ import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.CraftingInventory;
 import net.minecraft.inventory.Inventories;
-import net.minecraft.inventory.Inventory;
 import net.minecraft.inventory.SidedInventory;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.PacketByteBuf;
@@ -30,7 +27,6 @@ import net.willowins.animewitchery.ModScreenHandlers;
 import net.willowins.animewitchery.screen.AutoCrafterScreenHandler;
 
 import java.util.HashSet;
-import java.util.Optional;
 import java.util.Set;
 import java.util.stream.IntStream;
 
@@ -42,7 +38,6 @@ public class AutoCrafterBlockEntity extends BlockEntity implements ExtendedScree
     private static final int[] INPUT_SLOTS = IntStream.range(0, 9).toArray();
     private static final int[] OUTPUT_SLOT = new int[]{9};
 
-    private final CraftingInventory craftingInventory = new CraftingInventory(new DummyHandler(), 3, 3);
     private CraftingRecipe cachedRecipe = null;
     private boolean isRecipeGridDirty = true;
     private int craftCooldown = 0;
@@ -50,23 +45,6 @@ public class AutoCrafterBlockEntity extends BlockEntity implements ExtendedScree
     public AutoCrafterBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntities.AUTO_CRAFTER_BLOCK_ENTITY, pos, state);
     }
-
-    private static class DummyHandler extends ScreenHandler {
-        protected DummyHandler() {
-            super(null, 0);
-        }
-
-        @Override
-        public boolean canUse(PlayerEntity player) {
-            return true;
-        }
-
-        @Override
-        public ItemStack quickMove(PlayerEntity player, int index) {
-            return ItemStack.EMPTY;
-        }
-    }
-
 
     @Override
     public Text getDisplayName() {
@@ -132,7 +110,7 @@ public class AutoCrafterBlockEntity extends BlockEntity implements ExtendedScree
     }
 
     private void dropNonMatchingItems(World world, BlockPos pos, CraftingRecipe recipe) {
-        Set<Item> validItems = new HashSet<>();
+        Set<net.minecraft.item.Item> validItems = new HashSet<>();
         for (var ingredient : recipe.getIngredients()) {
             for (ItemStack stack : ingredient.getMatchingStacks()) {
                 validItems.add(stack.getItem());
@@ -202,9 +180,30 @@ public class AutoCrafterBlockEntity extends BlockEntity implements ExtendedScree
     @Override
     public boolean canInsert(int slot, ItemStack stack, Direction dir) {
         if (slot < 0 || slot >= 9) return false;
+
+        // Calculate total count of this item type in input slots (excluding slot being inserted to)
+        int totalCount = 0;
+        for (int i = 0; i < 9; i++) {
+            if (i == slot) continue;
+            ItemStack other = internalInventory.get(i);
+            if (!other.isEmpty() && ItemStack.canCombine(other, stack)) {
+                totalCount += other.getCount();
+            }
+        }
+
+        // Add count of inserting stack
+        totalCount += stack.getCount();
+
+        // Reject if total count > 64 (max stack size)
+        if (totalCount > 64) {
+            return false;
+        }
+
+        // Also check the current stack in the slot to not exceed max stack size
         ItemStack current = internalInventory.get(slot);
-        return current.isEmpty() || (ItemStack.canCombine(current, stack) && current.getCount() < current.getMaxCount());
+        return current.isEmpty() || (ItemStack.canCombine(current, stack) && current.getCount() + stack.getCount() <= current.getMaxCount());
     }
+
 
     @Override
     public boolean canExtract(int slot, ItemStack stack, Direction dir) {
@@ -239,9 +238,18 @@ public class AutoCrafterBlockEntity extends BlockEntity implements ExtendedScree
         if (!result.isEmpty()) markDirty();
         return result;
     }
+
     @Override
     public void setStack(int slot, ItemStack stack) {
         if (slot >= 0 && slot < internalInventory.size()) {
+            if (!stack.isEmpty() && slot < 9) { // only for input slots
+                for (int i = 0; i < 9; i++) {
+                    if (i != slot && ItemStack.canCombine(stack, internalInventory.get(i))) {
+                        // Duplicate item type - reject insertion
+                        return;
+                    }
+                }
+            }
             if (!stack.isEmpty()) {
                 ItemStack newStack = stack.copy();
                 newStack.setCount(Math.min(newStack.getCount(), 64));
@@ -264,7 +272,6 @@ public class AutoCrafterBlockEntity extends BlockEntity implements ExtendedScree
             markDirty();
         }
     }
-
 
     @Override
     public void clear() {
@@ -297,6 +304,7 @@ public class AutoCrafterBlockEntity extends BlockEntity implements ExtendedScree
         tag.put("InternalInventory", Inventories.writeNbt(new NbtCompound(), internalInventory, true));
         tag.put("RecipeInventory", Inventories.writeNbt(new NbtCompound(), recipeInventory, true));
     }
+
     public void dropInventory(World world, BlockPos pos) {
         if (world == null || world.isClient()) return;
         for (ItemStack stack : internalInventory) {
@@ -304,11 +312,31 @@ public class AutoCrafterBlockEntity extends BlockEntity implements ExtendedScree
                 ItemEntity itemEntity = new ItemEntity(world, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, stack);
                 world.spawnEntity(itemEntity);
             }
-        }for (ItemStack stack : recipeInventory) {
+        }
+        for (ItemStack stack : recipeInventory) {
             if (!stack.isEmpty()) {
                 ItemEntity itemEntity = new ItemEntity(world, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, stack);
                 world.spawnEntity(itemEntity);
             }
+        }
+    }
+
+    // CraftingInventory for recipe lookup
+    private final net.minecraft.inventory.CraftingInventory craftingInventory = new net.minecraft.inventory.CraftingInventory(new DummyHandler(), 3, 3);
+
+    private static class DummyHandler extends ScreenHandler {
+        protected DummyHandler() {
+            super(null, 0);
+        }
+
+        @Override
+        public boolean canUse(PlayerEntity player) {
+            return true;
+        }
+
+        @Override
+        public ItemStack quickMove(PlayerEntity player, int index) {
+            return ItemStack.EMPTY;
         }
     }
 }

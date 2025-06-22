@@ -20,8 +20,8 @@ public class GrowthAcceleratorScreen extends HandledScreen<GrowthAcceleratorScre
 
     @Override
     protected void drawForeground(DrawContext context, int mouseX, int mouseY) {
-        context.drawText(textRenderer, this.title, 8, 6, 0x404040, true);
-        context.drawText(textRenderer, this.playerInventoryTitle, 8, 128, 0x404040, true);
+        context.drawText(textRenderer, this.title, 8, 6, 0x404040, false);
+        context.drawText(textRenderer, this.playerInventoryTitle, 8, 128, 0x404040, false);
     }
 
 

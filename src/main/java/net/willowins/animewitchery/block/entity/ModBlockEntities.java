@@ -29,7 +29,9 @@ public class ModBlockEntities {
             Registry.register(Registries.BLOCK_ENTITY_TYPE, new Identifier(MOD_ID, "growth_accelerator_be"),
                     FabricBlockEntityTypeBuilder.create(GrowthAcceleratorBlockEntity::new, ModBlocks.GROWTH_ACCELERATOR)
                             .build());
-
+    public static final BlockEntityType<ItemPipeBlockEntity> ITEM_PIPE_BLOCK_ENTITY =
+            Registry.register(Registries.BLOCK_ENTITY_TYPE, new Identifier(MOD_ID, "item_pipe"),
+                    FabricBlockEntityTypeBuilder.create(ItemPipeBlockEntity::new, ModBlocks.ITEM_PIPE).build(null));
 
 
     public static final BlockEntityType<ActiveEffigyFountainBlockEntity> ACTIVE_EFFIGY_FOUNTAIN_BLOCK_ENTITY =

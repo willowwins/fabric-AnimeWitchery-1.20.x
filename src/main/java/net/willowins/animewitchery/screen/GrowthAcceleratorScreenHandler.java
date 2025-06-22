@@ -21,7 +21,8 @@ public class GrowthAcceleratorScreenHandler extends ScreenHandler {
     private static final int INVENTORY_SIZE = INVENTORY_ROWS * INVENTORY_COLUMNS; // 54 slots
 
     public GrowthAcceleratorScreenHandler(int syncId, PlayerInventory playerInventory, GrowthAcceleratorBlockEntity blockEntity) {
-        this(syncId, playerInventory, blockEntity.getInventory(), blockEntity.getPropertyDelegate());
+        this(syncId, playerInventory, blockEntity, blockEntity.getPropertyDelegate());
+
     }
 
     public GrowthAcceleratorScreenHandler(int syncId, PlayerInventory playerInventory, Inventory inventory, PropertyDelegate propertyDelegate) {
