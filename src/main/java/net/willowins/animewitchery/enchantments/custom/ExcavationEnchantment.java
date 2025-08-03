@@ -36,7 +36,7 @@ public class ExcavationEnchantment extends Enchantment {
 
     @Override
     public boolean isAvailableForRandomSelection() {
-        return false;
+        return true;
     }
 
     @Override

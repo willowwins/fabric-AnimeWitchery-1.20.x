@@ -56,8 +56,6 @@ public class ExcavationBreakHandler {
 
                     BlockState targetState = world.getBlockState(targetPos);
 
-                    // Skip specific blocks
-                    if (targetState.isOf(Blocks.NETHERRACK) || targetState.isOf(Blocks.ANCIENT_DEBRIS)) continue;
 
                     if (tool.isSuitableFor(targetState)) {
                         serverWorld.breakBlock(targetPos, true, player);

@@ -2,6 +2,8 @@ package net.willowins.animewitchery.block.custom;
 
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.block.entity.BlockEntityTicker;
+import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
@@ -21,6 +23,7 @@ import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldAccess;
 import net.willowins.animewitchery.block.ModBlocks;
+import net.willowins.animewitchery.block.entity.ActiveBindingSpellBlockEntity;
 import net.willowins.animewitchery.block.entity.ModBlockEntities;
 import net.willowins.animewitchery.effect.ModEffect;
 import net.willowins.animewitchery.item.ModItems;
@@ -38,6 +41,10 @@ public class ActiveBindingSpellBlock extends BlockWithEntity implements BlockEnt
     @Override
     public VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
         return SHAPE;
+    }
+    @Override
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type) {
+        return world.isClient ? null : checkType(type, ModBlockEntities.ACTIVE_BINDING_SPELL_BLOCK_ENTITY, ActiveBindingSpellBlockEntity::tick);
     }
 
     public BlockRenderType getRenderType(BlockState state) {
@@ -59,7 +66,6 @@ public class ActiveBindingSpellBlock extends BlockWithEntity implements BlockEnt
 
         return ActionResult.SUCCESS;
     }
-
 
     @Override
     public void scheduledTick(BlockState state, ServerWorld world, BlockPos pos, Random random) {
