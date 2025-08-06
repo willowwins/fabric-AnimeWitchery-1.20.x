@@ -104,6 +104,10 @@ public class ModItems {
     public static final Item MAGIC_CHALK = registerItem("magic_chalk", new Item(new FabricItemSettings().rarity(Rarity.UNCOMMON)));
     public static final Item ENCHANTED_CRYSTAL = registerItem("enchanted_crystal", new Item(new FabricItemSettings().rarity(Rarity.UNCOMMON)));
     
+    // Dust items
+    public static final Item BONE_DUST = registerItem("bone_dust", new Item(new FabricItemSettings()));
+    public static final Item AMETHYST_DUST = registerItem("amethyst_dust", new Item(new FabricItemSettings()));
+    
     // Rune Stones
     public static final Item FIRE_RUNE_STONE = registerItem("fire_rune_stone", new Item(new FabricItemSettings().rarity(Rarity.UNCOMMON)));
     public static final Item WATER_RUNE_STONE = registerItem("water_rune_stone", new Item(new FabricItemSettings().rarity(Rarity.UNCOMMON)));
@@ -131,6 +135,10 @@ public class ModItems {
         entries.add(CHALK);
         entries.add(MAGIC_CHALK);
         entries.add(ENCHANTED_CRYSTAL);
+        
+        // Add dust items
+        entries.add(BONE_DUST);
+        entries.add(AMETHYST_DUST);
         
         // Add rune stones
         entries.add(FIRE_RUNE_STONE);
