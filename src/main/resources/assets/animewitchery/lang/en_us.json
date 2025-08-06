@@ -98,6 +98,23 @@
 
 
   "tooltip.animewitchery.metal_detector.tooltip": "finds valuables with a vision beyond your own",
+  
+  "item.animewitchery.mortar_and_pestle": "§7Mortar and Pestle",
+  "item.animewitchery.chalk": "§fChalk",
+  "item.animewitchery.magic_chalk": "§5Magic Chalk",
+  "item.animewitchery.enchanted_crystal": "§bEnchanted Crystal",
+  
+  "item.animewitchery.fire_rune_stone": "§4Fire Rune Stone",
+  "item.animewitchery.water_rune_stone": "§3Water Rune Stone",
+  "item.animewitchery.earth_rune_stone": "§6Earth Rune Stone",
+  "item.animewitchery.air_rune_stone": "§fAir Rune Stone",
+  "item.animewitchery.life_rune_stone": "§aLife Rune Stone",
+  "item.animewitchery.death_rune_stone": "§8Death Rune Stone",
+  "item.animewitchery.light_rune_stone": "§eLight Rune Stone",
+  "item.animewitchery.darkness_rune_stone": "§5Darkness Rune Stone",
+  
+  "item.animewitchery.barrier_catalyst": "§5Barrier Catalyst",
+  "item.animewitchery.repair_essence": "§bRepair Essence",
 
   "itemgroup.silver": "§5Anime Witchery"
 }

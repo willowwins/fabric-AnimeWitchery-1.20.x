@@ -24,6 +24,7 @@ import net.willowins.animewitchery.sound.ModSounds;
 import net.willowins.animewitchery.util.ModCustomTrades;
 import net.willowins.animewitchery.util.ModLootTableModifiers;
 import net.willowins.animewitchery.villager.ModVillagers;
+import net.willowins.animewitchery.recipe.ModRecipes;
 import net.willowins.animewitchery.world.gen.ModWorldGeneration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -51,6 +52,8 @@ public class AnimeWitchery implements ModInitializer {
 		ModBlockEntities.registerBlockEntities();
 
 		ModEnchantments.init();
+
+		ModRecipes.registerRecipes();
 
 		ModParticles.registerParticles();
 

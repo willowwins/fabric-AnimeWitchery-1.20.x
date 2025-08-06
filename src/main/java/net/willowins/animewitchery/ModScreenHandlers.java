@@ -13,6 +13,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.willowins.animewitchery.block.entity.*;
 import net.willowins.animewitchery.screen.*;
+import net.willowins.animewitchery.screen.AlchemyTableScreenHandler;
 import net.minecraft.entity.player.PlayerInventory;
 
 import static net.willowins.animewitchery.AnimeWitchery.MOD_ID;
@@ -25,7 +26,8 @@ public class ModScreenHandlers {
     public static ScreenHandlerType<GenericContainerScreenHandler> DISPENSER_HANDLER;
     public static ScreenHandlerType<BlockMinerScreenHandler> BLOCK_MINER_SCREEN_HANDLER;
     public static ScreenHandlerType<BlockPlacerScreenHandler> BLOCK_PLACER_SCREEN_HANDLER;
-public static ScreenHandlerType<GrowthAcceleratorScreenHandler> GROWTH_ACCELERATOR_SCREEN_HANDLER;
+    public static ScreenHandlerType<GrowthAcceleratorScreenHandler> GROWTH_ACCELERATOR_SCREEN_HANDLER;
+    public static ScreenHandlerType<AlchemyTableScreenHandler> ALCHEMY_TABLE_SCREEN_HANDLER;
     public static void registerAll() {
 
 
@@ -80,9 +82,22 @@ public static ScreenHandlerType<GrowthAcceleratorScreenHandler> GROWTH_ACCELERAT
                     }
                     return null;
                 }
-        );   BLOCK_PLACER_SCREEN_HANDLER = ScreenHandlerRegistry.registerExtended(
+        );           BLOCK_PLACER_SCREEN_HANDLER = ScreenHandlerRegistry.registerExtended(
                 new Identifier("animewitchery", "block_placer"),
                 (syncId, inventory, buf) -> new BlockPlacerScreenHandler(syncId, inventory, buf)
+        );
+        
+        ALCHEMY_TABLE_SCREEN_HANDLER = ScreenHandlerRegistry.registerExtended(
+                new Identifier("animewitchery", "alchemy_table"),
+                (syncId, playerInventory, buf) -> {
+                    BlockPos pos = buf.readBlockPos();
+                    World world = playerInventory.player.getWorld();
+                    BlockEntity be = world.getBlockEntity(pos);
+                    if (be instanceof AlchemyTableBlockEntity alchemyTable) {
+                        return new AlchemyTableScreenHandler(syncId, playerInventory, alchemyTable);
+                    }
+                    return null;
+                }
         );
     }
 }

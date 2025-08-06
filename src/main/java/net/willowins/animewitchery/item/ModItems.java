@@ -98,6 +98,26 @@ public class ModItems {
     public static final Item HEALING_STAFF =registerItem("healing_staff", new HealingStaff(new FabricItemSettings().maxCount(1).rarity(Rarity.RARE)));
     public static final Item RAILGUN =registerItem("railgun", new RailgunItem(new FabricItemSettings().maxCount(1).rarity(Rarity.RARE)));
 
+    // New alchemy and magic items
+    public static final Item MORTAR_AND_PESTLE = registerItem("mortar_and_pestle", new Item(new FabricItemSettings()));
+    public static final Item CHALK = registerItem("chalk", new Item(new FabricItemSettings()));
+    public static final Item MAGIC_CHALK = registerItem("magic_chalk", new Item(new FabricItemSettings().rarity(Rarity.UNCOMMON)));
+    public static final Item ENCHANTED_CRYSTAL = registerItem("enchanted_crystal", new Item(new FabricItemSettings().rarity(Rarity.UNCOMMON)));
+    
+    // Rune Stones
+    public static final Item FIRE_RUNE_STONE = registerItem("fire_rune_stone", new Item(new FabricItemSettings().rarity(Rarity.UNCOMMON)));
+    public static final Item WATER_RUNE_STONE = registerItem("water_rune_stone", new Item(new FabricItemSettings().rarity(Rarity.UNCOMMON)));
+    public static final Item EARTH_RUNE_STONE = registerItem("earth_rune_stone", new Item(new FabricItemSettings().rarity(Rarity.UNCOMMON)));
+    public static final Item AIR_RUNE_STONE = registerItem("air_rune_stone", new Item(new FabricItemSettings().rarity(Rarity.UNCOMMON)));
+    public static final Item LIFE_RUNE_STONE = registerItem("life_rune_stone", new Item(new FabricItemSettings().rarity(Rarity.UNCOMMON)));
+    public static final Item DEATH_RUNE_STONE = registerItem("death_rune_stone", new Item(new FabricItemSettings().rarity(Rarity.UNCOMMON)));
+    public static final Item LIGHT_RUNE_STONE = registerItem("light_rune_stone", new Item(new FabricItemSettings().rarity(Rarity.UNCOMMON)));
+    public static final Item DARKNESS_RUNE_STONE = registerItem("darkness_rune_stone", new Item(new FabricItemSettings().rarity(Rarity.UNCOMMON)));
+    
+    // Barrier items
+    public static final Item BARRIER_CATALYST = registerItem("barrier_catalyst", new Item(new FabricItemSettings().rarity(Rarity.RARE)));
+    public static final Item REPAIR_ESSENCE = registerItem("repair_essence", new Item(new FabricItemSettings().rarity(Rarity.RARE)));
+
 
     private static void addItemsToIngredientItemGroup(FabricItemGroupEntries entries){
         entries.add(SILVER);
@@ -105,6 +125,26 @@ public class ModItems {
         entries.add(RAWSILVER);
         entries.add(SPOOL);
         entries.add(SILVERSPOOL);
+        
+        // Add new alchemy and magic items
+        entries.add(MORTAR_AND_PESTLE);
+        entries.add(CHALK);
+        entries.add(MAGIC_CHALK);
+        entries.add(ENCHANTED_CRYSTAL);
+        
+        // Add rune stones
+        entries.add(FIRE_RUNE_STONE);
+        entries.add(WATER_RUNE_STONE);
+        entries.add(EARTH_RUNE_STONE);
+        entries.add(AIR_RUNE_STONE);
+        entries.add(LIFE_RUNE_STONE);
+        entries.add(DEATH_RUNE_STONE);
+        entries.add(LIGHT_RUNE_STONE);
+        entries.add(DARKNESS_RUNE_STONE);
+        
+        // Add barrier items
+        entries.add(BARRIER_CATALYST);
+        entries.add(REPAIR_ESSENCE);
     }
 
 
