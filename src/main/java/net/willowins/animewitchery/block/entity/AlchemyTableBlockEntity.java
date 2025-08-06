@@ -1,5 +1,8 @@
 package net.willowins.animewitchery.block.entity;
 
+import org.jetbrains.annotations.Nullable;
+
+import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -7,16 +10,16 @@ import net.minecraft.inventory.Inventories;
 import net.minecraft.inventory.SidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.network.PacketByteBuf;
 import net.minecraft.network.listener.ClientPlayPacketListener;
 import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.s2c.play.BlockEntityUpdateS2CPacket;
-import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory;
-import net.minecraft.network.PacketByteBuf;
 import net.minecraft.particle.ParticleTypes;
+import net.minecraft.screen.PropertyDelegate;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
-import net.minecraft.screen.NamedScreenHandlerFactory;
-import net.minecraft.screen.PropertyDelegate;
+import net.minecraft.sound.SoundCategory;
+import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
 import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.math.BlockPos;
@@ -26,7 +29,6 @@ import net.minecraft.world.World;
 import net.willowins.animewitchery.recipe.AlchemyRecipe;
 import net.willowins.animewitchery.recipe.ModRecipes;
 import net.willowins.animewitchery.util.ImplementedInventory;
-import org.jetbrains.annotations.Nullable;
 import software.bernie.geckolib.animatable.GeoBlockEntity;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.core.animation.AnimatableManager;
@@ -44,7 +46,7 @@ public class AlchemyTableBlockEntity extends BlockEntity implements GeoBlockEnti
     private int progress = 0;
     private int maxProgress = 200; // Default 10 seconds
     private boolean isProcessing = false;
-    private boolean isActivated = false; // Whether the table has been activated with catalyst
+    public boolean isActivated = false; // Whether the table has been activated with catalyst
     private AlchemyRecipe currentRecipe = null;
     
     // Property delegate for syncing progress to client
@@ -182,6 +184,7 @@ public class AlchemyTableBlockEntity extends BlockEntity implements GeoBlockEnti
             if (entity.progress >= entity.maxProgress) {
                 entity.craftItem();
                 entity.isActivated = false; // Deactivate after crafting
+                world.playSound(null, pos, SoundEvents.BLOCK_END_PORTAL_FRAME_FILL, SoundCategory.BLOCKS, 1.0f, 1.5f);
             }
         } else {
             entity.isProcessing = false;

@@ -36,11 +36,11 @@ public class AlchemyTableBlock extends BlockWithEntity {
     @Override
     public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
         ItemStack heldItem = player.getStackInHand(hand);
-        
+        BlockEntity blockEntity = world.getBlockEntity(pos);
+
         // Check if player is holding alchemical catalyst
         if (heldItem.isOf(ModItems.ALCHEMICAL_CATALYST)) {
             if (!world.isClient) {
-                BlockEntity blockEntity = world.getBlockEntity(pos);
                 if (blockEntity instanceof AlchemyTableBlockEntity alchemyTable) {
                     if (alchemyTable.activateWithCatalyst(player)) {
                         // Consume the catalyst
@@ -69,7 +69,9 @@ public class AlchemyTableBlock extends BlockWithEntity {
         if (!world.isClient) {
             NamedScreenHandlerFactory screenHandlerFactory = state.createScreenHandlerFactory(world, pos);
             if (screenHandlerFactory != null) {
-                player.openHandledScreen(screenHandlerFactory);
+                if (blockEntity instanceof AlchemyTableBlockEntity alchemyTable && !alchemyTable.isActivated) {
+                    player.openHandledScreen(screenHandlerFactory);
+                }
             }
         }
         return ActionResult.SUCCESS;
