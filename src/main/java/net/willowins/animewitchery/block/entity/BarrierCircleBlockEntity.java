@@ -14,6 +14,8 @@ import net.minecraft.world.World;
 public class BarrierCircleBlockEntity extends BlockEntity {
     private CircleStage stage = CircleStage.BASIC; // BASIC -> DEFINED -> COMPLETE
     private CircleType circleType = CircleType.NONE;
+    private int ritualActivationStep = 0; // 0=none, 1=east, 2=south, 3=west
+    private long step3StartTime = 0; // Track when step 3 started for energy ball timing
     
     public enum CircleStage {
         BASIC,      // Just created - shows basic outline
@@ -35,6 +37,8 @@ public class BarrierCircleBlockEntity extends BlockEntity {
         super.writeNbt(nbt);
         nbt.putString("stage", stage.name());
         nbt.putString("circleType", circleType.name());
+        nbt.putInt("ritualActivationStep", ritualActivationStep);
+        nbt.putLong("step3StartTime", step3StartTime);
     }
 
     @Override
@@ -42,6 +46,8 @@ public class BarrierCircleBlockEntity extends BlockEntity {
         super.readNbt(nbt);
         this.stage = CircleStage.valueOf(nbt.getString("stage"));
         this.circleType = CircleType.valueOf(nbt.getString("circleType"));
+        this.ritualActivationStep = nbt.getInt("ritualActivationStep");
+        this.step3StartTime = nbt.getLong("step3StartTime");
     }
 
     public CircleStage getStage() {
@@ -80,6 +86,36 @@ public class BarrierCircleBlockEntity extends BlockEntity {
 
     public boolean isDefined() {
         return stage == CircleStage.DEFINED || stage == CircleStage.COMPLETE;
+    }
+    
+    public int getRitualActivationStep() {
+        return ritualActivationStep;
+    }
+    
+    public void setRitualActivationStep(int step) {
+        this.ritualActivationStep = step;
+        markDirty();
+        if (world != null && !world.isClient) {
+            world.updateListeners(pos, getCachedState(), getCachedState(), 3);
+        }
+    }
+    
+    public void advanceRitualStep() {
+        this.ritualActivationStep++;
+        
+        // Record when step 3 starts for energy ball timing
+        if (this.ritualActivationStep == 3 && world != null) {
+            this.step3StartTime = world.getTime();
+        }
+        
+        markDirty();
+        if (world != null && !world.isClient) {
+            world.updateListeners(pos, getCachedState(), getCachedState(), 3);
+        }
+    }
+    
+    public long getStep3StartTime() {
+        return step3StartTime;
     }
 
     @Override
