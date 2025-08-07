@@ -10,6 +10,8 @@ import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;
 import net.willowins.animewitchery.AnimeWitchery;
 import net.willowins.animewitchery.block.ModBlocks;
+import net.willowins.animewitchery.block.entity.ObeliskBlockEntity;
+import net.willowins.animewitchery.block.entity.ActiveObeliskBlockEntity;
 
 import static net.willowins.animewitchery.AnimeWitchery.MOD_ID;
 
@@ -53,6 +55,16 @@ public class ModBlockEntities {
             Registry.register(Registries.BLOCK_ENTITY_TYPE, new Identifier(MOD_ID, "alchemy_table_be"),
                     FabricBlockEntityTypeBuilder.create(AlchemyTableBlockEntity::new,
                             ModBlocks.ALCHEMY_TABLE).build((Type) null));
+
+    public static final BlockEntityType<ObeliskBlockEntity> OBELISK_BLOCK_ENTITY =
+            Registry.register(Registries.BLOCK_ENTITY_TYPE, new Identifier(MOD_ID, "obelisk_be"),
+                    FabricBlockEntityTypeBuilder.create(ObeliskBlockEntity::new,
+                            ModBlocks.OBELISK).build((Type) null));
+
+    public static final BlockEntityType<ActiveObeliskBlockEntity> ACTIVE_OBELISK_BLOCK_ENTITY =
+            Registry.register(Registries.BLOCK_ENTITY_TYPE, new Identifier(MOD_ID, "active_obelisk_be"),
+                    FabricBlockEntityTypeBuilder.create(ActiveObeliskBlockEntity::new,
+                            ModBlocks.ACTIVE_OBELISK).build((Type) null));
 
 
     public static final BlockEntityType<AutoCrafterBlockEntity> AUTO_CRAFTER_BLOCK_ENTITY =

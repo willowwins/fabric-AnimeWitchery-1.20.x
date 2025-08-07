@@ -16,5 +16,17 @@
     "sounds": [
       "animewitchery:laser_shoot"
     ]
+  },
+  "obelisk_activate": {
+    "subtitle": "sounds.animewitchery.obelisk_activate",
+    "sounds": [
+      "animewitchery:obelisk_activate"
+    ]
+  },
+  "obelisk_hum": {
+    "subtitle": "sounds.animewitchery.obelisk_hum",
+    "sounds": [
+      "animewitchery:obelisk_hum"
+    ]
   }
 }

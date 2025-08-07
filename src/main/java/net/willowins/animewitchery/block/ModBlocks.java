@@ -13,6 +13,8 @@ import net.minecraft.util.math.intprovider.UniformIntProvider;
 import net.willowins.animewitchery.AnimeWitchery;
 import net.willowins.animewitchery.block.custom.*;
 import net.willowins.animewitchery.block.custom.ItemActionBlock;
+import net.willowins.animewitchery.block.custom.ObeliskBlock;
+import net.willowins.animewitchery.block.custom.ActiveObeliskBlock;
 
 import java.util.Objects;
 
@@ -57,6 +59,12 @@ public static final Block ALCHEMY_TABLE =registerBlock("alchemy_table",
 
     public static final Block ACTIVE_BINDING_SPELL =registerBlock("active_binding_spell",
             new ActiveBindingSpellBlock(FabricBlockSettings.copyOf(Blocks.STONE).nonOpaque().hardness(-1f)));
+
+    public static final Block OBELISK =registerBlock("obelisk",
+            new ObeliskBlock(FabricBlockSettings.copyOf(Blocks.STONE).nonOpaque()));
+
+    public static final Block ACTIVE_OBELISK =registerBlock("active_obelisk",
+            new ActiveObeliskBlock(FabricBlockSettings.copyOf(Blocks.STONE).nonOpaque().hardness(-1f)));
 
     public static final Block SOUND_BLOCK =registerBlock("sound_block",
             new SoundBlock(FabricBlockSettings.copyOf(Blocks.JUKEBOX)));

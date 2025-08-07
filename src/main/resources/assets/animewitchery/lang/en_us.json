@@ -70,6 +70,8 @@
   "block.animewitchery.silver_ore": "Silver Ore",
   "block.animewitchery.deepslate_silver_ore": "Deepslate Silver Ore",
   "block.animewitchery.alchemy_table": "§5Alchemy Table",
+  "block.animewitchery.obelisk": "§5Obelisk",
+  "block.animewitchery.active_obelisk": "§5Active Obelisk",
 
   "enchantment.animewitchery.boot_enchant": "§5PlaneWalker",
   "enchantment.animewitchery.excavate_enchant": "§5Excavate",
@@ -92,6 +94,8 @@
   "sounds.animewitchery.hatsune_miku_lemon": "§bHatsune Miku Suffers",
   "sounds.animewitchery.laser_charge": "§5Railgun Charges",
   "sounds.animewitchery.laser_shoot": "§5Railgun Fires",
+  "sounds.animewitchery.obelisk_activate": "§5Obelisk Activates",
+  "sounds.animewitchery.obelisk_hum": "§5Obelisk Hums",
 
   "effect.animewitchery.bound": "§1Bound",
   "effect.animewitchery.marked": "§4Marked",

@@ -10,6 +10,8 @@ public class ModSounds {
 public static final SoundEvent LEMON_HATSUNE_MIKU = registerSoundEvent("hatsune_miku_lemon");
 public static final SoundEvent LASER_CHARGE = registerSoundEvent("laser_charge");
 public static final SoundEvent LASER_SHOOT = registerSoundEvent("laser_shoot");
+public static final SoundEvent OBELISK_ACTIVATE = registerSoundEvent("obelisk_activate");
+public static final SoundEvent OBELISK_HUM = registerSoundEvent("obelisk_hum");
 
 
 

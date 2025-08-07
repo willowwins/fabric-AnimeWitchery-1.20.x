@@ -96,6 +96,9 @@ public class ModItemGroups {
                         entries.add(ModBlocks.SILVER_SLAB);
                         entries.add(ModBlocks.SILVER_STAIRS);
 
+                        entries.add(ModBlocks.OBELISK);
+                        //entries.add(ModBlocks.ACTIVE_OBELISK);
+
                         entries.add(ModItems.SILVER_PENDANT);
                         entries.add(ModItems.HEALING_STAFF);
                         entries.add(ModItems.RAILGUN);

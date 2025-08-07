@@ -13,6 +13,8 @@ import net.willowins.animewitchery.block.entity.renderer.ActiveBindingSpellRende
 import net.willowins.animewitchery.block.entity.renderer.ActiveEffigyFountainRenderer;
 import net.willowins.animewitchery.block.entity.renderer.AlchemyTableRenderer;
 import net.willowins.animewitchery.block.entity.renderer.BindingSpellRenderer;
+import net.willowins.animewitchery.block.entity.renderer.ObeliskRenderer;
+import net.willowins.animewitchery.block.entity.renderer.ActiveObeliskRenderer;
 import net.willowins.animewitchery.entity.ModEntities;
 import net.willowins.animewitchery.entity.client.render.NeedleProjectileRenderer;
 import net.willowins.animewitchery.networking.ModPackets;
@@ -30,6 +32,8 @@ public class AnimeWitcheryClient implements ClientModInitializer {
         BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.ACTIVE_BINDING_SPELL, RenderLayer.getCutout());
         BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.BINDING_SPELL, RenderLayer.getCutout());
         BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.ALCHEMY_TABLE, RenderLayer.getCutout());
+        BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.OBELISK, RenderLayer.getCutout());
+        BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.ACTIVE_OBELISK, RenderLayer.getCutout());
         BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.SILVER_TRAPDOOR, RenderLayer.getCutout());
 
 
@@ -43,6 +47,8 @@ public class AnimeWitcheryClient implements ClientModInitializer {
         BlockEntityRendererRegistry.register(ModBlockEntities.ACTIVE_BINDING_SPELL_BLOCK_ENTITY, (context) -> new ActiveBindingSpellRenderer());
         BlockEntityRendererRegistry.register(ModBlockEntities.BINDING_SPELL_BLOCK_ENTITY, (context) -> new BindingSpellRenderer());
         BlockEntityRendererRegistry.register(ModBlockEntities.ALCHEMY_TABLE_BLOCK_ENTITY, (context) -> new AlchemyTableRenderer());
+        BlockEntityRendererRegistry.register(ModBlockEntities.OBELISK_BLOCK_ENTITY, (context) -> new ObeliskRenderer());
+        BlockEntityRendererRegistry.register(ModBlockEntities.ACTIVE_OBELISK_BLOCK_ENTITY, (context) -> new ActiveObeliskRenderer());
         BlockEntityRendererRegistry.register(ModBlockEntities.ITEM_PIPE_BLOCK_ENTITY, ItemPipeRenderer::new);
 
         EntityRendererRegistry.register(ModEntities.NEEDLE_PROJECTILE, NeedleProjectileRenderer::new);
