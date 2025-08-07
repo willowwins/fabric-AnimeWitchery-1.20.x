@@ -42,22 +42,6 @@ public class ActiveObeliskBlock extends BlockWithEntity implements BlockEntityPr
         return BlockRenderType.ENTITYBLOCK_ANIMATED;
     }
 
-    // @Override
-    // public ActionResult onUse(BlockState state, World world, BlockPos pos,
-    //                           PlayerEntity player, Hand hand, BlockHitResult hit) {
-    //     if (!world.isClient) {
-    //         if (player.isHolding(Items.DIAMOND)) {
-    //             world.setBlockState(pos, ModBlocks.OBELISK.getDefaultState());
-                
-    //             // Play deactivation sound
-    //             world.playSound(null, pos, SoundEvents.BLOCK_BEACON_DEACTIVATE, SoundCategory.BLOCKS, 1.0f, 1.0f);
-                
-    //             return ActionResult.SUCCESS;
-    //         }
-    //     }
-    //     return ActionResult.SUCCESS;
-    // }
-
     @Override
     public void scheduledTick(BlockState state, ServerWorld world, BlockPos pos, Random random) {
         super.scheduledTick(state, world, pos, random);

@@ -28,5 +28,23 @@
     "sounds": [
       "animewitchery:obelisk_hum"
     ]
+  },
+  "obelisk_message1": {
+    "subtitle": "sounds.animewitchery.obelisk_message1",
+    "sounds": [
+      "animewitchery:obelisk_message1"
+    ]
+  },
+  "obelisk_message2": {
+    "subtitle": "sounds.animewitchery.obelisk_message2",
+    "sounds": [
+      "animewitchery:obelisk_message2"
+    ]
+  },
+  "obelisk_break_once": {
+    "subtitle": "sounds.animewitchery.obelisk_break_once",
+    "sounds": [
+      "animewitchery:obelisk_break_once"
+    ]
   }
 }

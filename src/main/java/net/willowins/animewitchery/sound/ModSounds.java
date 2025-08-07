@@ -12,9 +12,9 @@ public static final SoundEvent LASER_CHARGE = registerSoundEvent("laser_charge")
 public static final SoundEvent LASER_SHOOT = registerSoundEvent("laser_shoot");
 public static final SoundEvent OBELISK_ACTIVATE = registerSoundEvent("obelisk_activate");
 public static final SoundEvent OBELISK_HUM = registerSoundEvent("obelisk_hum");
-
-
-
+public static final SoundEvent OBELISK_MESSAGE1 = registerSoundEvent("obelisk_message1");
+public static final SoundEvent OBELISK_MESSAGE2 = registerSoundEvent("obelisk_message2");
+public static final SoundEvent OBELISK_BREAK_ONCE = registerSoundEvent("obelisk_break_once");
 
 private static SoundEvent registerSoundEvent(String name){
     Identifier id = new Identifier(AnimeWitchery.MOD_ID, name);
