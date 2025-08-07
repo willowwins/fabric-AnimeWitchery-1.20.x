@@ -11,6 +11,7 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.willowins.animewitchery.sound.ModSounds;
 import net.minecraft.world.World;
+import net.willowins.animewitchery.block.ModBlocks;
 import software.bernie.geckolib.animatable.GeoBlockEntity;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.core.animation.AnimatableManager;
@@ -34,8 +35,7 @@ public class ActiveObeliskBlockEntity extends BlockEntity implements GeoBlockEnt
     public void startHumSound() {
         // This will be called from the renderer on client side
         if (world != null && world.isClient) {
-            world.playSound(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, 
-                ModSounds.OBELISK_HUM, SoundCategory.AMBIENT, 0.3f, 1.0f, false);
+            world.playSound(null, pos, ModSounds.OBELISK_HUM, SoundCategory.AMBIENT, 0.3f, 1.0f);
         }
     }
 
@@ -57,5 +57,78 @@ public class ActiveObeliskBlockEntity extends BlockEntity implements GeoBlockEnt
         if (world.getTime() % 40 == 0 && world.isClient) {
             entity.startHumSound();
         }
+        
+        // Check ritual integrity every 20 ticks (1 second) on server side
+        if (!world.isClient && world.getTime() % 20 == 0) {
+            entity.checkRitualIntegrity();
+        }
+    }
+    
+    /**
+     * Check if this obelisk is still part of an active ritual
+     * If not, deactivate itself
+     */
+    private void checkRitualIntegrity() {
+        if (world == null || world.isClient) return;
+        
+        // Check if there's a barrier circle within range that has an active ritual
+        boolean foundActiveRitual = false;
+        
+        // Check in a 10-block radius for barrier circles
+        for (int x = -10; x <= 10; x++) {
+            for (int z = -10; z <= 10; z++) {
+                BlockPos checkPos = pos.add(x, 0, z);
+                BlockState checkState = world.getBlockState(checkPos);
+                
+                if (checkState.isOf(ModBlocks.BARRIER_CIRCLE)) {
+                    BlockEntity blockEntity = world.getBlockEntity(checkPos);
+                    if (blockEntity instanceof BarrierCircleBlockEntity circleEntity) {
+                        if (circleEntity.isRitualActive()) {
+                            // Check if this obelisk is one of the ritual obelisks
+                            BlockPos circlePos = circleEntity.getPos();
+                            BlockPos northPos = circlePos.north(5);
+                            BlockPos southPos = circlePos.south(5);
+                            BlockPos eastPos = circlePos.east(5);
+                            BlockPos westPos = circlePos.west(5);
+                            
+                            if (pos.equals(northPos) || pos.equals(southPos) || 
+                                pos.equals(eastPos) || pos.equals(westPos)) {
+                                foundActiveRitual = true;
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+            if (foundActiveRitual) break;
+        }
+        
+        // If no active ritual found, deactivate this obelisk
+        if (!foundActiveRitual) {
+            System.out.println("ActiveObelisk: No active ritual found - deactivating obelisk at " + pos);
+            //deactivateObelisk();
+        }
+    }
+    
+    /**
+     * Deactivate this obelisk
+     */
+    private void deactivateObelisk() {
+        if (world == null || world.isClient) return;
+        
+        // Convert back to regular obelisk
+        world.setBlockState(pos, ModBlocks.OBELISK.getDefaultState());
+        
+        // Spawn deactivation particles
+        for (int i = 0; i < 15; i++) {
+            double x = pos.getX() + 0.5 + (world.random.nextDouble() - 0.5) * 2.0;
+            double y = pos.getY() + 1.0 + world.random.nextDouble() * 3.0;
+            double z = pos.getZ() + 0.5 + (world.random.nextDouble() - 0.5) * 2.0;
+            
+            world.addParticle(net.minecraft.particle.ParticleTypes.SMOKE, x, y, z, 0, 0.1, 0);
+        }
+        
+        // Play deactivation sound
+        world.playSound(null, pos, net.minecraft.sound.SoundEvents.BLOCK_BEACON_DEACTIVATE, SoundCategory.BLOCKS, 1.0f, 1.0f);
     }
 } 

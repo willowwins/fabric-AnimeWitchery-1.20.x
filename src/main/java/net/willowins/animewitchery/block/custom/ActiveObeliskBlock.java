@@ -22,6 +22,7 @@ import net.minecraft.world.WorldAccess;
 import net.willowins.animewitchery.block.ModBlocks;
 import net.willowins.animewitchery.block.entity.ModBlockEntities;
 import net.willowins.animewitchery.block.entity.ActiveObeliskBlockEntity;
+import net.willowins.animewitchery.block.entity.BarrierCircleBlockEntity;
 import org.jetbrains.annotations.Nullable;
 
 public class ActiveObeliskBlock extends BlockWithEntity implements BlockEntityProvider {
@@ -77,6 +78,38 @@ public class ActiveObeliskBlock extends BlockWithEntity implements BlockEntityPr
 
     @Override
     public void onBroken(WorldAccess world, BlockPos pos, BlockState state) {
+        // If this obelisk is part of an active ritual, notify the circle to deactivate
+        if (!world.isClient()) {
+            // Check for nearby barrier circles that might have active rituals
+            for (int x = -10; x <= 10; x++) {
+                for (int z = -10; z <= 10; z++) {
+                    BlockPos checkPos = pos.add(x, 0, z);
+                    BlockState checkState = world.getBlockState(checkPos);
+                    
+                    if (checkState.isOf(ModBlocks.BARRIER_CIRCLE)) {
+                        BlockEntity blockEntity = world.getBlockEntity(checkPos);
+                        if (blockEntity instanceof BarrierCircleBlockEntity circleEntity) {
+                            if (circleEntity.isRitualActive()) {
+                                // Check if this obelisk is one of the ritual obelisks
+                                BlockPos circlePos = circleEntity.getPos();
+                                BlockPos northPos = circlePos.north(5);
+                                BlockPos southPos = circlePos.south(5);
+                                BlockPos eastPos = circlePos.east(5);
+                                BlockPos westPos = circlePos.west(5);
+                                
+                                if (pos.equals(northPos) || pos.equals(southPos) || 
+                                    pos.equals(eastPos) || pos.equals(westPos)) {
+                                    System.out.println("ActiveObelisk: Obelisk broken during active ritual - deactivating ritual!");
+                                    circleEntity.deactivateRitual();
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        
         world.playSound(null, pos, SoundEvents.BLOCK_BEACON_DEACTIVATE, SoundCategory.BLOCKS);
         super.onBroken(world, pos, state);
     }

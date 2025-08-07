@@ -20,6 +20,7 @@ import team.lodestar.lodestone.systems.particle.data.spin.*;
 import java.awt.Color;
 import net.minecraft.world.World;
 import net.willowins.animewitchery.block.ModBlocks;
+import net.willowins.animewitchery.block.entity.BarrierCircleBlockEntity;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -76,16 +77,51 @@ public class ActiveObeliskRenderer extends GeoBlockRenderer<ActiveObeliskBlockEn
         //          .enableNoClip()
         //          .spawn(world, pos.getX() + 0.5, pos.getY() + 4, pos.getZ() + 0.5);
 
-        // Create connections to nearby active obelisks!
+        // Create connections to nearby active obelisks only if part of an active ritual!
         if (world.getTime() % 60 == 0) { // Check every 3 seconds
-            List<BlockPos> nearbyActiveObelisks = findNearbyActiveObelisks(world, pos, 48); // 48 block radius
+            // Check if this obelisk is part of an active ritual
+            boolean isPartOfActiveRitual = false;
             
-            // Check if we have 5 or more obelisks for a dynamic pentagram
-            if (nearbyActiveObelisks.size() >= 5) {
-                createDynamicPentagramConnections(world, nearbyActiveObelisks, time);
-            } else if (nearbyActiveObelisks.size() >= 2) {
-                // Neighbor connections for 2-4 obelisks
-                createNeighborConnections(world, nearbyActiveObelisks, time);
+            // Check for nearby barrier circles with active rituals
+            for (int x = -10; x <= 10; x++) {
+                for (int z = -10; z <= 10; z++) {
+                    BlockPos checkPos = pos.add(x, 0, z);
+                    BlockState checkState = world.getBlockState(checkPos);
+                    
+                    if (checkState.isOf(ModBlocks.BARRIER_CIRCLE)) {
+                        BlockEntity blockEntity = world.getBlockEntity(checkPos);
+                        if (blockEntity instanceof BarrierCircleBlockEntity circleEntity) {
+                            if (circleEntity.isRitualActive()) {
+                                // Check if this obelisk is one of the ritual obelisks
+                                BlockPos circlePos = circleEntity.getPos();
+                                BlockPos northPos = circlePos.north(5);
+                                BlockPos southPos = circlePos.south(5);
+                                BlockPos eastPos = circlePos.east(5);
+                                BlockPos westPos = circlePos.west(5);
+                                
+                                if (pos.equals(northPos) || pos.equals(southPos) || 
+                                    pos.equals(eastPos) || pos.equals(westPos)) {
+                                    isPartOfActiveRitual = true;
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                }
+                if (isPartOfActiveRitual) break;
+            }
+            
+            // Only create connections if part of an active ritual
+            if (isPartOfActiveRitual) {
+                List<BlockPos> nearbyActiveObelisks = findNearbyActiveObelisks(world, pos, 48); // 48 block radius
+                
+                // Check if we have 5 or more obelisks for a dynamic pentagram
+                if (nearbyActiveObelisks.size() >= 5) {
+                    createDynamicPentagramConnections(world, nearbyActiveObelisks, time);
+                } else if (nearbyActiveObelisks.size() >= 2) {
+                    // Neighbor connections for 2-4 obelisks
+                    createNeighborConnections(world, nearbyActiveObelisks, time);
+                }
             }
         }
     }

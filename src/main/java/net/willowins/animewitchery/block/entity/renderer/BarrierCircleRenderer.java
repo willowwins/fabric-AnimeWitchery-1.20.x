@@ -59,8 +59,8 @@ public class BarrierCircleRenderer implements BlockEntityRenderer<BarrierCircleB
         // Render the circle texture as a flat overlay on the ground
         renderCircleOverlay(matrices, vertexConsumers, textureToUse, light, overlay);
         
-        // Add ritual particle effects if in ritual phase
-        if (stage == BarrierCircleBlockEntity.CircleStage.COMPLETE) {
+        // Add ritual particle effects if in ritual phase and ritual is active
+        if (stage == BarrierCircleBlockEntity.CircleStage.COMPLETE && entity.isRitualActive()) {
             int ritualStep = entity.getRitualActivationStep();
             if (ritualStep >= 3) { // Gathering phase
                 renderGatheringParticles(entity);

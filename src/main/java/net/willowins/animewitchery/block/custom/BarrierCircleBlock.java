@@ -13,6 +13,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldAccess;
 import net.willowins.animewitchery.block.ModBlocks;
 import net.willowins.animewitchery.block.entity.BarrierCircleBlockEntity;
 import net.willowins.animewitchery.block.entity.ModBlockEntities;
@@ -240,7 +241,23 @@ public class BarrierCircleBlock extends BlockWithEntity {
     }
 
     @Override
+    public void onBroken(WorldAccess world, BlockPos pos, BlockState state) {
+        // If this circle is part of an active ritual, deactivate it immediately
+        if (!world.isClient()) {
+            BlockEntity blockEntity = world.getBlockEntity(pos);
+            if (blockEntity instanceof BarrierCircleBlockEntity circleEntity) {
+                if (circleEntity.isRitualActive()) {
+                    System.out.println("BarrierCircle: Circle broken during active ritual - deactivating!");
+                    circleEntity.deactivateRitual();
+                }
+            }
+        }
+        
+        super.onBroken(world, pos, state);
+    }
+
+    @Override
     public @Nullable <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type) {
-        return null; // No ticker needed for this block entity
+        return checkType(type, ModBlockEntities.BARRIER_CIRCLE_BLOCK_ENTITY, BarrierCircleBlockEntity::tick);
     }
 } 
