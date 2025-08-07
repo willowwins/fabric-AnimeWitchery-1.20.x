@@ -101,7 +101,7 @@ public class ModItems {
     // New alchemy and magic items
     public static final Item MORTAR_AND_PESTLE = registerItem("mortar_and_pestle", new Item(new FabricItemSettings()));
     public static final Item CHALK = registerItem("chalk", new Item(new FabricItemSettings()));
-    public static final Item MAGIC_CHALK = registerItem("magic_chalk", new Item(new FabricItemSettings().rarity(Rarity.UNCOMMON)));
+    public static final Item MAGIC_CHALK = registerItem("magic_chalk", new MagicChalkItem(new FabricItemSettings().rarity(Rarity.UNCOMMON)));
     public static final Item ENCHANTED_CRYSTAL = registerItem("enchanted_crystal", new Item(new FabricItemSettings().rarity(Rarity.UNCOMMON)));
     
     // Dust items

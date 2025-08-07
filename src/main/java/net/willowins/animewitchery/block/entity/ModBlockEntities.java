@@ -66,6 +66,10 @@ public class ModBlockEntities {
                     FabricBlockEntityTypeBuilder.create(ActiveObeliskBlockEntity::new,
                             ModBlocks.ACTIVE_OBELISK).build((Type) null));
 
+    public static final BlockEntityType<BarrierCircleBlockEntity> BARRIER_CIRCLE_BLOCK_ENTITY =
+            Registry.register(Registries.BLOCK_ENTITY_TYPE, new Identifier(MOD_ID, "barrier_circle_be"),
+                    FabricBlockEntityTypeBuilder.create(BarrierCircleBlockEntity::new,
+                            ModBlocks.BARRIER_CIRCLE).build((Type) null));
 
     public static final BlockEntityType<AutoCrafterBlockEntity> AUTO_CRAFTER_BLOCK_ENTITY =
             Registry.register(
