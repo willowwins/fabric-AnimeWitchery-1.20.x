@@ -15,7 +15,6 @@ import net.willowins.animewitchery.block.entity.ModBlockEntities;
 import net.willowins.animewitchery.effect.ModEffect;
 import net.willowins.animewitchery.enchantments.ModEnchantments;
 import net.willowins.animewitchery.entity.ModEntities;
-//import net.willowins.animewitchery.events.ExcavationBreakHandler;
 import net.willowins.animewitchery.events.ExcavationBreakHandler;
 import net.willowins.animewitchery.item.ModItemGroups;
 import net.willowins.animewitchery.item.ModItems;
