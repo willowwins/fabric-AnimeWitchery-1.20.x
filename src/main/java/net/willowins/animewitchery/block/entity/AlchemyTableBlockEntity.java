@@ -337,8 +337,8 @@ public class AlchemyTableBlockEntity extends BlockEntity implements GeoBlockEnti
 
     @Override
     public boolean canInsert(int slot, ItemStack stack, @Nullable Direction dir) {
-        // Only allow insertion into input slots (1-10)
-        return slot >= 1 && slot <= 10;
+        // Allow insertion into all slots (0-10)
+        return slot >= 0 && slot <= 10;
     }
 
     @Override

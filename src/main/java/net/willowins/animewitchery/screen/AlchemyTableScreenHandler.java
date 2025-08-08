@@ -26,12 +26,7 @@ public class AlchemyTableScreenHandler extends ScreenHandler {
 
         // Add alchemy table slots in circular layout
         // Center: Output slot (slot 0)
-        this.addSlot(new Slot(inventory, 0, 79, 71) {
-            @Override
-            public boolean canInsert(ItemStack stack) {
-                return false; // Output slot is read-only
-            }
-        });
+        this.addSlot(new Slot(inventory, 0, 79, 71));
         
         // 10 input slots arranged counter-clockwise around the center
         this.addSlot(new Slot(inventory, 1, 56, 10));
