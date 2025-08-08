@@ -131,7 +131,7 @@ public class BarrierCircleBlockEntity extends BlockEntity {
     }
     
     public boolean isRitualActive() {
-        return ritualActive && ritualActivationStep > 3;
+        return ritualActive && ritualActivationStep >= 3;
     }
     
     public void setRitualActive(boolean active) {

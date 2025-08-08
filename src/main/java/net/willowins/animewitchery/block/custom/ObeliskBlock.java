@@ -82,12 +82,12 @@ public class ObeliskBlock extends BlockWithEntity implements BlockEntityProvider
             };
             
             String selectedMessage = messages[world.random.nextInt(messages.length)];
-            //player.sendMessage(net.minecraft.text.Text.literal(selectedMessage), true);
+            player.sendMessage(net.minecraft.text.Text.literal(selectedMessage), true);
             
-                        // Send as title for center screen display
-            ((net.minecraft.server.network.ServerPlayerEntity) player).networkHandler.sendPacket(
-                new TitleS2CPacket(Text.literal(selectedMessage))
-            );
+            // Send as title for center screen display
+            //            ((net.minecraft.server.network.ServerPlayerEntity) player).networkHandler.sendPacket(
+            //                new TitleS2CPacket(Text.literal(selectedMessage))
+            //            );
 
             // depending on the message, play a different sound
             if (selectedMessage.equals("§c§lBreak the seal, and you break the world.")) {

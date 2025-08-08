@@ -23,6 +23,8 @@ public class ActiveObeliskBlockEntity extends BlockEntity implements GeoBlockEnt
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
     private SoundInstance humSound;
 
+    private BlockPos linkedRitualPos;
+
     public ActiveObeliskBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntities.ACTIVE_OBELISK_BLOCK_ENTITY, pos, state);
     }
@@ -51,6 +53,22 @@ public class ActiveObeliskBlockEntity extends BlockEntity implements GeoBlockEnt
     public AnimatableInstanceCache getAnimatableInstanceCache() {
         return cache;
     }
+    
+    @Override
+    public void writeNbt(net.minecraft.nbt.NbtCompound nbt) {
+        super.writeNbt(nbt);
+        if (linkedRitualPos != null) {
+            nbt.putLong("LinkedRitualPos", linkedRitualPos.asLong());
+        }
+    }
+    
+    @Override
+    public void readNbt(net.minecraft.nbt.NbtCompound nbt) {
+        super.readNbt(nbt);
+        if (nbt.contains("LinkedRitualPos")) {
+            linkedRitualPos = BlockPos.fromLong(nbt.getLong("LinkedRitualPos"));
+        }
+    }
 
     public static void tick(World world, BlockPos pos, BlockState state, ActiveObeliskBlockEntity entity) {
         // Play hum sound every 2 seconds (40 ticks)
@@ -65,49 +83,43 @@ public class ActiveObeliskBlockEntity extends BlockEntity implements GeoBlockEnt
     }
     
     /**
+     * Set the linked ritual position
+     */
+    public void setLinkedRitual(BlockPos ritualPos) {
+        this.linkedRitualPos = ritualPos;
+        markDirty();
+    }
+    
+    /**
+     * Get the linked ritual position
+     */
+    public BlockPos getLinkedRitualPos() {
+        return linkedRitualPos;
+    }
+    
+    /**
      * Check if this obelisk is still part of an active ritual
      * If not, deactivate itself
      */
     private void checkRitualIntegrity() {
         if (world == null || world.isClient) return;
         
-        // Check if there's a barrier circle within range that has an active ritual
-        boolean foundActiveRitual = false;
+        // Check if we have a linked ritual position
+        if (linkedRitualPos == null) {
+            deactivateObelisk();
+            return;
+        }
         
-        // Check in a 10-block radius for barrier circles
-        for (int x = -10; x <= 10; x++) {
-            for (int z = -10; z <= 10; z++) {
-                BlockPos checkPos = pos.add(x, 0, z);
-                BlockState checkState = world.getBlockState(checkPos);
-                
-                if (checkState.isOf(ModBlocks.BARRIER_CIRCLE)) {
-                    BlockEntity blockEntity = world.getBlockEntity(checkPos);
-                    if (blockEntity instanceof BarrierCircleBlockEntity circleEntity) {
-                        if (circleEntity.isRitualActive()) {
-                            // Check if this obelisk is one of the ritual obelisks
-                            BlockPos circlePos = circleEntity.getPos();
-                            BlockPos northPos = circlePos.north(5);
-                            BlockPos southPos = circlePos.south(5);
-                            BlockPos eastPos = circlePos.east(5);
-                            BlockPos westPos = circlePos.west(5);
-                            
-                            if (pos.equals(northPos) || pos.equals(southPos) || 
-                                pos.equals(eastPos) || pos.equals(westPos)) {
-                                foundActiveRitual = true;
-                                break;
-                            }
-                        }
-                    }
-                }
+        // Check if the barrier circle still exists and is active
+        BlockEntity blockEntity = world.getBlockEntity(linkedRitualPos);
+        if (blockEntity instanceof BarrierCircleBlockEntity barrierCircle) {
+            if (barrierCircle.checkRitualIntegrity()) {
+                return; // Ritual is still active
             }
-            if (foundActiveRitual) break;
         }
         
-        // If no active ritual found, deactivate this obelisk
-        if (!foundActiveRitual) {
-            System.out.println("ActiveObelisk: No active ritual found - deactivating obelisk at " + pos);
-            //deactivateObelisk();
-        }
+        // Ritual is no longer valid, deactivate
+        //deactivateObelisk();
     }
     
     /**

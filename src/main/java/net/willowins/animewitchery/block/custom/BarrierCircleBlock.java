@@ -15,6 +15,7 @@ import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldAccess;
 import net.willowins.animewitchery.block.ModBlocks;
+import net.willowins.animewitchery.block.entity.ActiveObeliskBlockEntity;
 import net.willowins.animewitchery.block.entity.BarrierCircleBlockEntity;
 import net.willowins.animewitchery.block.entity.ModBlockEntities;
 import net.willowins.animewitchery.item.ModItems;
@@ -96,7 +97,7 @@ public class BarrierCircleBlock extends BlockWithEntity {
         }
         return ActionResult.SUCCESS;
     }
-    
+
     private boolean checkRitualObelisks(World world, BlockPos circlePos) {
         // Check for 4 obelisks in cardinal directions around the circle
         // North, South, East, West at specific distances
@@ -135,7 +136,7 @@ public class BarrierCircleBlock extends BlockWithEntity {
     private void startSequentialRitual(World world, BlockPos circlePos) {
         // Start the sequential activation
         // Obelisk 1: North (immediate)
-        activateObeliskWithLightning(world, circlePos.north(5), "NORTH");
+        activateObeliskWithLightning(world, circlePos.north(5), "NORTH", circlePos);
         
         // Schedule the next obelisk activation
         world.scheduleBlockTick(circlePos, this, 20);
@@ -150,17 +151,17 @@ public class BarrierCircleBlock extends BlockWithEntity {
             
             switch (step) {
                 case 0: // First scheduled tick - activate East
-                    activateObeliskWithLightning(world, pos.east(5), "EAST");
+                    activateObeliskWithLightning(world, pos.east(5), "EAST", pos);
                     circleEntity.advanceRitualStep();
                     world.scheduleBlockTick(pos, this, 20);
                     break;
                 case 1: // Second scheduled tick - activate South
-                    activateObeliskWithLightning(world, pos.south(5), "SOUTH");
+                    activateObeliskWithLightning(world, pos.south(5), "SOUTH", pos);
                     circleEntity.advanceRitualStep();
                     world.scheduleBlockTick(pos, this, 20);
                     break;
                 case 2: // Third scheduled tick - activate West
-                    activateObeliskWithLightning(world, pos.west(5), "WEST");
+                    activateObeliskWithLightning(world, pos.west(5), "WEST", pos);
                     circleEntity.advanceRitualStep();
                     // Start the final ritual effect!
                     startFinalRitualEffect(world, pos);
@@ -174,7 +175,7 @@ public class BarrierCircleBlock extends BlockWithEntity {
         }
     }
     
-    private void activateObeliskWithLightning(World world, BlockPos obeliskPos, String direction) {
+    private void activateObeliskWithLightning(World world, BlockPos obeliskPos, String direction, BlockPos circlepos) {
         // Summon lightning at the obelisk
         LightningEntity lightning = EntityType.LIGHTNING_BOLT.create(world);
         if (lightning != null) {
@@ -187,7 +188,13 @@ public class BarrierCircleBlock extends BlockWithEntity {
         
         // Activate the obelisk
         world.setBlockState(obeliskPos, ModBlocks.ACTIVE_OBELISK.getDefaultState());
-        
+
+        // Set the linked ritual position for the obelisk
+        BlockEntity blockEntity = world.getBlockEntity(obeliskPos);
+        if (blockEntity instanceof ActiveObeliskBlockEntity activeObelisk) {
+            activeObelisk.setLinkedRitual(circlepos);
+        }
+
         // Spawn activation particles
         for (int i = 0; i < 20; i++) {
             double x = obeliskPos.getX() + 0.5 + (world.random.nextDouble() - 0.5) * 2.0;
@@ -242,18 +249,24 @@ public class BarrierCircleBlock extends BlockWithEntity {
 
     @Override
     public void onBroken(WorldAccess world, BlockPos pos, BlockState state) {
-        // If this circle is part of an active ritual, deactivate it immediately
-        if (!world.isClient()) {
-            BlockEntity blockEntity = world.getBlockEntity(pos);
-            if (blockEntity instanceof BarrierCircleBlockEntity circleEntity) {
-                if (circleEntity.isRitualActive()) {
-                    System.out.println("BarrierCircle: Circle broken during active ritual - deactivating!");
-                    circleEntity.deactivateRitual();
+        super.onBroken(world, pos, state);
+    }
+    
+    @Override
+    public void onStateReplaced(BlockState state, World world, BlockPos pos, BlockState newState, boolean moved) {
+        if (!state.isOf(newState.getBlock())) {
+            // Block is being replaced/destroyed
+            if (!world.isClient()) {
+                BlockEntity blockEntity = world.getBlockEntity(pos);
+                if (blockEntity instanceof BarrierCircleBlockEntity circleEntity) {
+                    if (circleEntity.isRitualActive()) {
+                        System.out.println("BarrierCircle: Circle broken during active ritual - deactivating!");
+                        circleEntity.deactivateRitual();
+                    }
                 }
             }
         }
-        
-        super.onBroken(world, pos, state);
+        super.onStateReplaced(state, world, pos, newState, moved);
     }
 
     @Override

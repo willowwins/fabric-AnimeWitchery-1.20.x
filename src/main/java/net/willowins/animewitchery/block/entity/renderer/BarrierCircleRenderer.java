@@ -52,21 +52,17 @@ public class BarrierCircleRenderer implements BlockEntityRenderer<BarrierCircleB
             default:
                 textureToUse = BASIC_CIRCLE_TEXTURE;
         }
-        
-        // Add debug output
-        System.out.println("BarrierCircleRenderer: Stage: " + stage + ", Texture: " + textureToUse);
-        
         // Render the circle texture as a flat overlay on the ground
         renderCircleOverlay(matrices, vertexConsumers, textureToUse, light, overlay);
         
         // Add ritual particle effects if in ritual phase and ritual is active
         if (stage == BarrierCircleBlockEntity.CircleStage.COMPLETE && entity.isRitualActive()) {
             int ritualStep = entity.getRitualActivationStep();
-            if (ritualStep >= 3) { // Gathering phase
+            if (ritualStep >= 3 && ritualStep < 4) { // Gathering phase (step 3 only)
                 renderGatheringParticles(entity);
                 renderEnergyBall(entity); // Add energy ball in center
             }
-            if (ritualStep >= 4) { // Beam phase
+            if (ritualStep >= 4) { // Beam phase (step 4+)
                 renderGiantBeam(entity);
             }
         }
