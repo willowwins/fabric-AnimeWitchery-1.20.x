@@ -24,6 +24,8 @@ import net.willowins.animewitchery.particle.ShockwaveParticle;
 import net.willowins.animewitchery.screen.*;
 import net.willowins.animewitchery.block.entity.renderer.ItemPipeRenderer;
 import net.willowins.animewitchery.client.sky.SkyRitualRenderer;
+import net.fabricmc.fabric.api.client.rendering.v1.BuiltinItemRendererRegistry;
+import net.willowins.animewitchery.item.renderer.ObeliskBuiltinItemRenderer;
 
 
 public class AnimeWitcheryClient implements ClientModInitializer {
@@ -71,6 +73,9 @@ public class AnimeWitcheryClient implements ClientModInitializer {
 
         // Register sky renderer
         registerSkyRenderer();
+
+        // Builtin item renderer for Obelisk block item
+        BuiltinItemRendererRegistry.INSTANCE.register(ModBlocks.OBELISK.asItem(), new ObeliskBuiltinItemRenderer());
     }
     
     private static void registerSkyRenderer() {
