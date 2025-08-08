@@ -11,6 +11,7 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.willowins.animewitchery.block.ModBlocks;
+import net.willowins.animewitchery.client.sky.SkyRitualRenderer;
 
 public class BarrierCircleBlockEntity extends BlockEntity {
     private CircleStage stage = CircleStage.BASIC; // BASIC -> DEFINED -> COMPLETE
@@ -34,6 +35,19 @@ public class BarrierCircleBlockEntity extends BlockEntity {
     public BarrierCircleBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntities.BARRIER_CIRCLE_BLOCK_ENTITY, pos, state);
     }
+    
+    @Override
+    public void setWorld(World world) {
+        super.setWorld(world);
+        
+        // Register with sky renderer on client side if ritual is active
+        if (world != null && world.isClient && isRitualActive()) {
+            System.out.println("BarrierCircleBlockEntity.setWorld: Registering with sky renderer at " + pos + " (ritualActive: " + ritualActive + ", step: " + ritualActivationStep + ")");
+            SkyRitualRenderer.addActiveRitual(pos);
+        } else {
+            System.out.println("BarrierCircleBlockEntity.setWorld: Not registering with sky renderer - world: " + (world != null) + ", isClient: " + (world != null && world.isClient) + ", isRitualActive: " + isRitualActive());
+        }
+    }
 
     @Override
     public void writeNbt(NbtCompound nbt) {
@@ -55,6 +69,14 @@ public class BarrierCircleBlockEntity extends BlockEntity {
         this.step3StartTime = nbt.getLong("step3StartTime");
         this.ritualActive = nbt.getBoolean("ritualActive");
         this.lastIntegrityCheck = nbt.getLong("lastIntegrityCheck");
+        
+        // Register with sky renderer on client side if ritual is active
+        if (world != null && world.isClient && isRitualActive()) {
+            System.out.println("BarrierCircleBlockEntity.readNbt: Registering with sky renderer at " + pos + " (ritualActive: " + ritualActive + ", step: " + ritualActivationStep + ")");
+            SkyRitualRenderer.addActiveRitual(pos);
+        } else {
+            System.out.println("BarrierCircleBlockEntity.readNbt: Not registering with sky renderer - world: " + (world != null) + ", isClient: " + (world != null && world.isClient) + ", isRitualActive: " + isRitualActive());
+        }
     }
 
     public CircleStage getStage() {
@@ -183,7 +205,8 @@ public class BarrierCircleBlockEntity extends BlockEntity {
         if (world == null || world.isClient) return;
         
         System.out.println("BarrierCircle: Deactivating ritual due to integrity failure!");
-        
+        SkyRitualRenderer.removeActiveRitual(pos);
+
         // Reset ritual state
         this.ritualActive = false;
         this.ritualActivationStep = 0;

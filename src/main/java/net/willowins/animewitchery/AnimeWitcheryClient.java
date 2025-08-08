@@ -23,6 +23,7 @@ import net.willowins.animewitchery.particle.ModParticles;
 import net.willowins.animewitchery.particle.ShockwaveParticle;
 import net.willowins.animewitchery.screen.*;
 import net.willowins.animewitchery.block.entity.renderer.ItemPipeRenderer;
+import net.willowins.animewitchery.client.sky.SkyRitualRenderer;
 
 
 public class AnimeWitcheryClient implements ClientModInitializer {
@@ -68,5 +69,12 @@ public class AnimeWitcheryClient implements ClientModInitializer {
 
         ModPackets.registerS2CPackets();
 
+        // Register sky renderer
+        registerSkyRenderer();
+    }
+    
+    private static void registerSkyRenderer() {
+        // This will be called from the barrier circle when rituals are active
+        // The sky renderer is static and will handle its own registration
     }
 }

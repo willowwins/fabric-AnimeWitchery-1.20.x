@@ -18,6 +18,7 @@ import net.willowins.animewitchery.block.ModBlocks;
 import net.willowins.animewitchery.block.entity.ActiveObeliskBlockEntity;
 import net.willowins.animewitchery.block.entity.BarrierCircleBlockEntity;
 import net.willowins.animewitchery.block.entity.ModBlockEntities;
+import net.willowins.animewitchery.client.sky.SkyRitualRenderer;
 import net.willowins.animewitchery.item.ModItems;
 import org.jetbrains.annotations.Nullable;
 import net.minecraft.sound.SoundCategory;
@@ -170,6 +171,8 @@ public class BarrierCircleBlock extends BlockWithEntity {
                     shootGiantBeam(world, pos);
                     circleEntity.advanceRitualStep();
                     // Ritual is now completely finished!
+                    SkyRitualRenderer.addActiveRitual(pos);
+
                     break;
             }
         }
