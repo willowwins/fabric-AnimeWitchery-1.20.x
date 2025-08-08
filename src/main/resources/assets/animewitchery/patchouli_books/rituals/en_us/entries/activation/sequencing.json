@@ -1,0 +1,19 @@
+{
+  "name": "The Quickening",
+  "icon": "minecraft:lightning_rod",
+  "category": "animewitchery:rituals",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "title": "Order of Waking",
+      "text": "Cast the $(item)Alchemical Spark$() into the Heart when the sky is bare.$(br)The Wardens stir by the old law: $(b)North$(), then $(b)East$(), afterward $(b)South$(), and lastly $(b)West$()."
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Measure of Power",
+      "text": "At the third stirring, the Breath coils inward like a serpent of light, swelling toward fullness.$(br)Then does the Pillar rise, and for a span the world remembers the dawn."
+    }
+  ]
+}
+
+

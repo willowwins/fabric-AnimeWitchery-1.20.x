@@ -1,0 +1,19 @@
+{
+  "name": "The Alchemy Table",
+  "icon": "animewitchery:alchemy_table",
+  "category": "animewitchery:alchemy",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "title": "Use and Order",
+      "text": "Arrange the eleven places thus: the $(item)Result$() at Heart (slot 0), and $(thing)Ingredients$() round about (slots 1–10).$(br)Cast the $(item)Alchemical Catalyst$() to quicken the rite, paying the cost in $(gold)experience$()."
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Measure of Time",
+      "text": "Each working declares its $(thing)processing time$() and $(thing)XP tithe$(). The Breath will circle and coil until the term is met, whereupon the work is revealed at the Heart."
+    }
+  ]
+}
+
+

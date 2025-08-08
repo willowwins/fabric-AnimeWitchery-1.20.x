@@ -1,0 +1,41 @@
+{
+  "name": "The Figure of the Rite",
+  "icon": "animewitchery:barrier_circle",
+  "category": "animewitchery:rituals",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "title": "Measure and Place",
+      "text": "Mark the $(gold)Heart$(), then set the Wardens upon the Cross of the World—$(gold)five paces$() each from the Heart.$(br)For visualization, the Heart is shown as $(item)white carpet$() in place of the inscribed Circle."
+    },
+    {
+      "type": "patchouli:multiblock",
+      "name": "Figure of the Four",
+      "enable_visualize": false,
+      "multiblock": {
+        "pattern": [
+          [
+            "_____B_____",
+            "___________",
+            "___________",
+            "___________",
+            "___________",
+            "B____0____B",
+            "___________",
+            "___________",
+            "___________",
+            "___________",
+            "_____B_____"
+          ]
+        ],
+        "mapping": {
+          "0": "animewitchery:barrier_circle",
+          "B": "animewitchery:obelisk"
+        },
+        "symmetrical": true
+      }
+    }
+  ]
+}
+
+

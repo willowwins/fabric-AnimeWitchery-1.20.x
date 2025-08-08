@@ -1,0 +1,24 @@
+{
+  "name": "The Grounding",
+  "icon": "animewitchery:chalk_magic",
+  "category": "animewitchery:rituals",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "title": "The Heart",
+      "text": "$(b)Take the place between breaths$() and trace the $(gold)Circle$().$(br)With the $(item)Barrier Seal$(), bind its Name; with $(item)sanctified chalk$(), seal its edge.$(br2)The Circle is a covenant—make no mark in haste."
+    },
+    {
+      "type": "patchouli:text",
+      "title": "The Wardens",
+      "text": "Plant the four $(thing)Wardens$() upon the Cross of the World, each $(gold)five strides$() from the Heart.$(br)Give heed to the compass, for a Warden misplaced shall answer no call."
+    },
+    {
+      "type": "patchouli:text",
+      "title": "The Sign Above",
+      "text": "Where the rite is true, the firmament mirrors the earth: a sigil vast turns above the Circle, discerned by those who draw near."
+    }
+  ]
+}
+
+

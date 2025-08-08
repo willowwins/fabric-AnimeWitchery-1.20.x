@@ -1,0 +1,26 @@
+{
+  "name": "Rune of Water",
+  "icon": "animewitchery:water_rune_stone",
+  "category": "animewitchery:alchemy",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "title": "Water Rune",
+      "text": "Crystal and tide: lay the six reagents and quicken with the $(item)Alchemical Catalyst$().$(br)$(gold)XP$(): 5  $(thing)Time$(): 200t"
+    },
+    {
+      "type": "animewitchery:alchemy_ui",
+      "ing1": "minecraft:stone",
+      "ing2": "animewitchery:amethyst_dust",
+      "ing3": "minecraft:prismarine_crystals",
+      "ing4": "minecraft:blue_dye",
+      "ing5": "minecraft:ice",
+      "ing6": "minecraft:kelp",
+      "result": "animewitchery:water_rune_stone",
+      "xp": "5",
+      "time": "200t"
+    }
+  ]
+}
+
+

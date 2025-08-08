@@ -1,0 +1,26 @@
+{
+  "name": "Rune of Light",
+  "icon": "animewitchery:light_rune_stone",
+  "category": "animewitchery:alchemy",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "title": "Light Rune",
+      "text": "Gleam and ink: lay the six reagents and quicken with the $(item)Alchemical Catalyst$().$(br)$(gold)XP$(): 3  $(thing)Time$(): 100t"
+    },
+    {
+      "type": "animewitchery:alchemy_ui",
+      "ing1": "animewitchery:amethyst_dust",
+      "ing2": "minecraft:stone",
+      "ing3": "minecraft:glow_ink_sac",
+      "ing4": "minecraft:glowstone_dust",
+      "ing5": "animewitchery:bone_dust",
+      "ing6": "minecraft:blaze_powder",
+      "result": "animewitchery:light_rune_stone",
+      "xp": "3",
+      "time": "100t"
+    }
+  ]
+}
+
+

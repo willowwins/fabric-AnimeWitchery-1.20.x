@@ -1,0 +1,18 @@
+{
+  "components": [
+    { "type": "patchouli:image", "x": 8, "y": 8, "u": 0, "v": 0, "image": "animewitchery:textures/gui/alchemy_book_ui.png", "width": 112, "height": 112, "texture_width": 112, "texture_height": 112 },
+
+    { "type": "patchouli:item", "x": 32, "y": 15,  "item": "#ing1" },
+    { "type": "patchouli:item", "x": 12, "y": 37, "item": "#ing2" },
+    { "type": "patchouli:item", "x": 6,  "y": 65, "item": "#ing3" },
+    { "type": "patchouli:item", "x": 12, "y": 93, "item": "#ing4" },
+    { "type": "patchouli:item", "x": 32, "y": 115, "item": "#ing5" },
+    { "type": "patchouli:item", "x": 67, "y": 115, "item": "#ing6" },
+
+    { "type": "patchouli:item", "x": 50, "y": 65, "item": "#result" },
+
+    { "type": "patchouli:text", "x": 0, "y": 112, "text": "$(gold)XP$(): #xp  $(thing)Time$(): #time" }
+  ]
+}
+
+

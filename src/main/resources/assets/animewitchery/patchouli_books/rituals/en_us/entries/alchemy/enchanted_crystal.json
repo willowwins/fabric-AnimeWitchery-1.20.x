@@ -1,0 +1,26 @@
+{
+  "name": "Enchanted Crystal",
+  "icon": "animewitchery:enchanted_crystal",
+  "category": "animewitchery:alchemy",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "title": "Enchanted Crystal",
+      "text": "Shard and star: lay the three reagents and quicken.$(br)$(gold)XP$(): 8  $(thing)Time$(): 300t"
+    },
+    {
+      "type": "animewitchery:alchemy_ui",
+      "ing1": "minecraft:amethyst_shard",
+      "ing2": "animewitchery:alchemical_catalyst",
+      "ing3": "minecraft:ender_pearl",
+      "ing4": "minecraft:air",
+      "ing5": "minecraft:air",
+      "ing6": "minecraft:air",
+      "result": "animewitchery:enchanted_crystal",
+      "xp": "8",
+      "time": "300t"
+    }
+  ]
+}
+
+

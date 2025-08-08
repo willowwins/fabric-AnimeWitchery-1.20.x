@@ -1,0 +1,26 @@
+{
+  "name": "Magic Chalk",
+  "icon": "animewitchery:magic_chalk",
+  "category": "animewitchery:alchemy",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "title": "Magic Chalk",
+      "text": "Seal of glimmer and catalyst: lay the three reagents and quicken.$(br)$(gold)XP$(): 3  $(thing)Time$(): 100t"
+    },
+    {
+      "type": "animewitchery:alchemy_ui",
+      "ing1": "animewitchery:chalk",
+      "ing2": "animewitchery:alchemical_catalyst",
+      "ing3": "minecraft:glow_ink_sac",
+      "ing4": "minecraft:air",
+      "ing5": "minecraft:air",
+      "ing6": "minecraft:air",
+      "result": "animewitchery:magic_chalk",
+      "xp": "3",
+      "time": "100t"
+    }
+  ]
+}
+
+
