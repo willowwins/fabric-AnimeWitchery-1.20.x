@@ -80,7 +80,7 @@ public class BarrierCircleBlock extends BlockWithEntity {
                 
                 // RITUAL ACTIVATION: Alchemy Catalyst activates the ritual
                 if (heldItem.isOf(ModItems.ALCHEMICAL_CATALYST)) {
-                    if (circleEntity.getStage() == BarrierCircleBlockEntity.CircleStage.COMPLETE) {
+                    if (circleEntity.getStage() == BarrierCircleBlockEntity.CircleStage.COMPLETE && world.isSkyVisible(pos)) {
                         System.out.println("BarrierCircle: Attempting ritual activation...");
                         if (checkRitualObelisks(world, pos)) {
                             System.out.println("BarrierCircle: RITUAL ACTIVATED! All obelisks found!");
