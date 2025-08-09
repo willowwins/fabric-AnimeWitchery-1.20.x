@@ -28,8 +28,6 @@ public class ModBlocks {
             new GrowthAcceleratorBlock(FabricBlockSettings.copyOf(Blocks.DISPENSER)));
  public static final Block BLOCK_PLACER = registerBlock("block_placer",
             new BlockPlacerBlock(FabricBlockSettings.copyOf(Blocks.IRON_BLOCK)));
- public static final Block ITEM_PIPE = registerBlock("item_pipe",
-            new ItemPipeBlock(FabricBlockSettings.copyOf(Blocks.HOPPER)));
 
     public static final Block INTERACTOR = registerBlock("interactor",
             new ItemActionBlock(FabricBlockSettings.copyOf(Blocks.IRON_BLOCK)));

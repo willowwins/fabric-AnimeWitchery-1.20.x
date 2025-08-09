@@ -22,7 +22,6 @@ import net.willowins.animewitchery.networking.ModPackets;
 import net.willowins.animewitchery.particle.ModParticles;
 import net.willowins.animewitchery.particle.ShockwaveParticle;
 import net.willowins.animewitchery.screen.*;
-import net.willowins.animewitchery.block.entity.renderer.ItemPipeRenderer;
 import net.willowins.animewitchery.client.sky.SkyRitualRenderer;
 import net.fabricmc.fabric.api.client.rendering.v1.BuiltinItemRendererRegistry;
 import net.willowins.animewitchery.item.renderer.ObeliskBuiltinItemRenderer;
@@ -55,7 +54,6 @@ public class AnimeWitcheryClient implements ClientModInitializer {
         BlockEntityRendererRegistry.register(ModBlockEntities.OBELISK_BLOCK_ENTITY, (context) -> new ObeliskRenderer());
         BlockEntityRendererRegistry.register(ModBlockEntities.ACTIVE_OBELISK_BLOCK_ENTITY, (context) -> new ActiveObeliskRenderer());
         BlockEntityRendererRegistry.register(ModBlockEntities.BARRIER_CIRCLE_BLOCK_ENTITY, (context) -> new BarrierCircleRenderer(context));
-        BlockEntityRendererRegistry.register(ModBlockEntities.ITEM_PIPE_BLOCK_ENTITY, ItemPipeRenderer::new);
 
         EntityRendererRegistry.register(ModEntities.NEEDLE_PROJECTILE, NeedleProjectileRenderer::new);
 
