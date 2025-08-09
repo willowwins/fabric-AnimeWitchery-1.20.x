@@ -188,7 +188,7 @@ public class RailgunItem extends Item implements GeoItem {
 
         for (LivingEntity target : player) {
             if (target != owner) {
-                target.damage(target.getDamageSources().magic(),15.0f);
+                target.damage(target.getDamageSources().magic(),50.0f);
                 target.addStatusEffect(new StatusEffectInstance(ModEffect.MARKED, 200, 0));
             }
         }
@@ -209,7 +209,7 @@ public class RailgunItem extends Item implements GeoItem {
 
         for (LivingEntity target : player) {
             if (target != owner) {
-                target.addStatusEffect(new StatusEffectInstance(StatusEffects.GLOWING, 20, 0,false,false));
+                target.addStatusEffect(new StatusEffectInstance(StatusEffects.GLOWING, 40, 0,false,false));
             }
         }
 
