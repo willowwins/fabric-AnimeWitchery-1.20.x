@@ -15,6 +15,7 @@ import java.util.List;
 
 public class SkyRitualRenderer {
     private static final Identifier SKY_RITUAL_TEXTURE = new Identifier(AnimeWitchery.MOD_ID, "textures/block/barrier_circle_sky.png");
+    private static final Identifier BARRIER_TEXTURE = new Identifier(AnimeWitchery.MOD_ID, "textures/block/barrier_texture.png");
     private static final List<BlockPos> activeRitualPositions = new ArrayList<>();
 
     public static void addActiveRitual(BlockPos pos) {
@@ -126,7 +127,7 @@ public class SkyRitualRenderer {
 
             // Y level to render the barrier at
             float baseY = ritualPos.getY() + 0.1f; // slightly above ground
-            float wallHeight = 20.0f; // Height of the barrier walls
+            float wallHeight = 100.0f; // Height of the barrier walls
 
             // Time-based animation
             float time = client.world.getTime() + tickDelta;
@@ -135,17 +136,15 @@ public class SkyRitualRenderer {
             // Render state for barrier
             RenderSystem.enableBlend();
             RenderSystem.defaultBlendFunc();
+            RenderSystem.setShaderTexture(0, BARRIER_TEXTURE);
 
             Tessellator tessellator = Tessellator.getInstance();
             BufferBuilder buffer = tessellator.getBuffer();
-            RenderSystem.setShader(GameRenderer::getPositionColorProgram);
-            buffer.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_COLOR);
+            RenderSystem.setShader(GameRenderer::getPositionTexColorProgram);
+            buffer.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_TEXTURE_COLOR);
 
-            // Purple barrier color with pulsing alpha
-            float r = 0.7f;
-            float g = 0.2f;
-            float b = 1.0f;
-            float a = 0.45f * pulse; // Pulsing alpha
+            // Alpha only (texture provides color)
+            float a = 0.7f * pulse;
 
             // Compute extents using per-direction radii
             float centerX = ritualPos.getX() + 0.5f;
@@ -161,10 +160,10 @@ public class SkyRitualRenderer {
             matrices.push();
             matrices.translate(-camX, -camY, -camZ);
 
-            renderBarrierWall(matrices, buffer, minX, minZ, maxX, minZ, baseY, wallHeight, thickness, r, g, b, a); // North
-            renderBarrierWall(matrices, buffer, minX, maxZ, maxX, maxZ, baseY, wallHeight, thickness, r, g, b, a); // South
-            renderBarrierWall(matrices, buffer, maxX, minZ, maxX, maxZ, baseY, wallHeight, thickness, r, g, b, a); // East
-            renderBarrierWall(matrices, buffer, minX, minZ, minX, maxZ, baseY, wallHeight, thickness, r, g, b, a); // West
+            renderTexturedBarrierWall(matrices, buffer, minX, minZ, maxX, minZ, baseY, wallHeight, thickness, a); // North
+            renderTexturedBarrierWall(matrices, buffer, minX, maxZ, maxX, maxZ, baseY, wallHeight, thickness, a); // South
+            renderTexturedBarrierWall(matrices, buffer, maxX, minZ, maxX, maxZ, baseY, wallHeight, thickness, a); // East
+            renderTexturedBarrierWall(matrices, buffer, minX, minZ, minX, maxZ, baseY, wallHeight, thickness, a); // West
 
             matrices.pop();
 
@@ -177,15 +176,12 @@ public class SkyRitualRenderer {
         }
     }
 
-    private static void renderBarrierWall(MatrixStack matrices, BufferBuilder buffer, float x1, float z1, float x2, float z2,
-                                          float baseY, float height, float thickness,
-                                          float r, float g, float b, float a) {
-
+    private static void renderTexturedBarrierWall(MatrixStack matrices, BufferBuilder buffer, float x1, float z1, float x2, float z2,
+                                                  float baseY, float height, float thickness, float a) {
         // Calculate wall direction
         float dx = x2 - x1;
         float dz = z2 - z1;
         float length = (float) Math.sqrt(dx * dx + dz * dz);
-
         if (length == 0) return;
 
         // Normalize direction
@@ -209,18 +205,24 @@ public class SkyRitualRenderer {
         float y0 = baseY;
         float y1 = baseY + height;
 
+        // Tile 1 repeat per block length/height
+        float u0 = 0.0f;
+        float u1 = length;     // repeats horizontally
+        float v0 = 0.0f;
+        float v1 = height;     // repeats vertically
+
         var mat = matrices.peek().getPositionMatrix();
 
         // Front face
-        buffer.vertex(mat, x1a, y0, z1a).color(r, g, b, a).next();
-        buffer.vertex(mat, x2a, y0, z2a).color(r, g, b, a).next();
-        buffer.vertex(mat, x2a, y1, z2a).color(r, g, b, a).next();
-        buffer.vertex(mat, x1a, y1, z1a).color(r, g, b, a).next();
+        buffer.vertex(mat, x1a, y0, z1a).texture(u0, v0).color(1.0f, 1.0f, 1.0f, a).next();
+        buffer.vertex(mat, x2a, y0, z2a).texture(u1, v0).color(1.0f, 1.0f, 1.0f, a).next();
+        buffer.vertex(mat, x2a, y1, z2a).texture(u1, v1).color(1.0f, 1.0f, 1.0f, a).next();
+        buffer.vertex(mat, x1a, y1, z1a).texture(u0, v1).color(1.0f, 1.0f, 1.0f, a).next();
 
         // Back face (reverse winding)
-        buffer.vertex(mat, x1b, y0, z1b).color(r, g, b, a).next();
-        buffer.vertex(mat, x1b, y1, z1b).color(r, g, b, a).next();
-        buffer.vertex(mat, x2b, y1, z2b).color(r, g, b, a).next();
-        buffer.vertex(mat, x2b, y0, z2b).color(r, g, b, a).next();
+        buffer.vertex(mat, x1b, y0, z1b).texture(u0, v0).color(1.0f, 1.0f, 1.0f, a).next();
+        buffer.vertex(mat, x1b, y1, z1b).texture(u0, v1).color(1.0f, 1.0f, 1.0f, a).next();
+        buffer.vertex(mat, x2b, y1, z2b).texture(u1, v1).color(1.0f, 1.0f, 1.0f, a).next();
+        buffer.vertex(mat, x2b, y0, z2b).texture(u1, v0).color(1.0f, 1.0f, 1.0f, a).next();
     }
 }
