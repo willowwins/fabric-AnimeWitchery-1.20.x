@@ -68,6 +68,11 @@ public class ModBlockEntities {
                     FabricBlockEntityTypeBuilder.create(BarrierCircleBlockEntity::new,
                             ModBlocks.BARRIER_CIRCLE).build((Type) null));
 
+    public static final BlockEntityType<BarrierDistanceGlyphBlockEntity> BARRIER_DISTANCE_GLYPH_BLOCK_ENTITY =
+            Registry.register(Registries.BLOCK_ENTITY_TYPE, new Identifier(MOD_ID, "barrier_distance_glyph_be"),
+                    FabricBlockEntityTypeBuilder.create(BarrierDistanceGlyphBlockEntity::new,
+                            ModBlocks.BARRIER_DISTANCE_GLYPH).build((Type) null));
+
     public static final BlockEntityType<AutoCrafterBlockEntity> AUTO_CRAFTER_BLOCK_ENTITY =
             Registry.register(
                     Registries.BLOCK_ENTITY_TYPE,

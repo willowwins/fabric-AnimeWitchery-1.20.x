@@ -67,6 +67,9 @@ public static final Block ALCHEMY_TABLE =registerBlock("alchemy_table",
     public static final Block BARRIER_CIRCLE =registerBlock("barrier_circle",
             new BarrierCircleBlock(FabricBlockSettings.copyOf(Blocks.STONE).nonOpaque()));
 
+    public static final Block BARRIER_DISTANCE_GLYPH = registerBlock("barrier_distance_glyph",
+            new BarrierDistanceGlyphBlock(FabricBlockSettings.copyOf(Blocks.STONE).nonOpaque()));
+
     public static final Block SOUND_BLOCK =registerBlock("sound_block",
             new SoundBlock(FabricBlockSettings.copyOf(Blocks.JUKEBOX)));
 

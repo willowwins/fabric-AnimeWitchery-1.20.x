@@ -31,6 +31,12 @@ public class ModArmorItem extends ArmorItem {
                     .put(ModArmorMaterials.RAILGUNNER, new StatusEffectInstance(StatusEffects.SPEED, 20, 2,
                             false, false, false))
                     .put(ModArmorMaterials.RAILGUNNER, new StatusEffectInstance(StatusEffects.WEAKNESS, 20, 255,
+                            false, false, false))
+                    .put(ModArmorMaterials.OBELISK, new StatusEffectInstance(StatusEffects.NIGHT_VISION, 400, 0,
+                            false, false, false))
+                    .put(ModArmorMaterials.OBELISK, new StatusEffectInstance(StatusEffects.STRENGTH, 400, 1,
+                            false, false, false))
+                    .put(ModArmorMaterials.OBELISK, new StatusEffectInstance(StatusEffects.RESISTANCE, 400, 1,
                             false, false, false)).build();
 
 

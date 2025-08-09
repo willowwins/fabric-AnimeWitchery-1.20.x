@@ -10,6 +10,7 @@ import net.minecraft.network.packet.s2c.play.BlockEntityUpdateS2CPacket;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraft.util.math.Direction;
 import net.willowins.animewitchery.block.ModBlocks;
 import net.willowins.animewitchery.client.sky.SkyRitualRenderer;
 
@@ -20,6 +21,18 @@ public class BarrierCircleBlockEntity extends BlockEntity {
     private long step3StartTime = 0; // Track when step 3 started for energy ball timing
     private boolean ritualActive = false; // Track if ritual is currently active
     private long lastIntegrityCheck = 0; // Track last integrity check time
+    
+    // Barrier distance storage (from distance glyphs)
+    private int northDistance = 5;
+    private int southDistance = 5;
+    private int eastDistance = 5;
+    private int westDistance = 5;
+    
+    // Cached glyph positions (stored when ritual is activated)
+    private BlockPos northGlyphPos = null;
+    private BlockPos southGlyphPos = null;
+    private BlockPos eastGlyphPos = null;
+    private BlockPos westGlyphPos = null;
     
     public enum CircleStage {
         BASIC,      // Just created - shows basic outline
@@ -58,6 +71,24 @@ public class BarrierCircleBlockEntity extends BlockEntity {
         nbt.putLong("step3StartTime", step3StartTime);
         nbt.putBoolean("ritualActive", ritualActive);
         nbt.putLong("lastIntegrityCheck", lastIntegrityCheck);
+        nbt.putInt("northDistance", northDistance);
+        nbt.putInt("southDistance", southDistance);
+        nbt.putInt("eastDistance", eastDistance);
+        nbt.putInt("westDistance", westDistance);
+        
+        // Save cached glyph positions
+        if (northGlyphPos != null) {
+            nbt.putLong("northGlyphPos", northGlyphPos.asLong());
+        }
+        if (southGlyphPos != null) {
+            nbt.putLong("southGlyphPos", southGlyphPos.asLong());
+        }
+        if (eastGlyphPos != null) {
+            nbt.putLong("eastGlyphPos", eastGlyphPos.asLong());
+        }
+        if (westGlyphPos != null) {
+            nbt.putLong("westGlyphPos", westGlyphPos.asLong());
+        }
     }
 
     @Override
@@ -69,6 +100,24 @@ public class BarrierCircleBlockEntity extends BlockEntity {
         this.step3StartTime = nbt.getLong("step3StartTime");
         this.ritualActive = nbt.getBoolean("ritualActive");
         this.lastIntegrityCheck = nbt.getLong("lastIntegrityCheck");
+        this.northDistance = nbt.getInt("northDistance");
+        this.southDistance = nbt.getInt("southDistance");
+        this.eastDistance = nbt.getInt("eastDistance");
+        this.westDistance = nbt.getInt("westDistance");
+        
+        // Load cached glyph positions
+        if (nbt.contains("northGlyphPos")) {
+            this.northGlyphPos = BlockPos.fromLong(nbt.getLong("northGlyphPos"));
+        }
+        if (nbt.contains("southGlyphPos")) {
+            this.southGlyphPos = BlockPos.fromLong(nbt.getLong("southGlyphPos"));
+        }
+        if (nbt.contains("eastGlyphPos")) {
+            this.eastGlyphPos = BlockPos.fromLong(nbt.getLong("eastGlyphPos"));
+        }
+        if (nbt.contains("westGlyphPos")) {
+            this.westGlyphPos = BlockPos.fromLong(nbt.getLong("westGlyphPos"));
+        }
         
         // Register with sky renderer on client side if ritual is active
         if (world != null && world.isClient && isRitualActive()) {
@@ -164,6 +213,44 @@ public class BarrierCircleBlockEntity extends BlockEntity {
         }
     }
     
+    public void setBarrierDistances(int north, int south, int east, int west) {
+        this.northDistance = north;
+        this.southDistance = south;
+        this.eastDistance = east;
+        this.westDistance = west;
+        markDirty();
+        if (world != null && !world.isClient) {
+            world.updateListeners(pos, getCachedState(), getCachedState(), 3);
+        }
+    }
+    
+    public void setCachedGlyphPositions(BlockPos north, BlockPos south, BlockPos east, BlockPos west) {
+        this.northGlyphPos = north;
+        this.southGlyphPos = south;
+        this.eastGlyphPos = east;
+        this.westGlyphPos = west;
+        markDirty();
+        if (world != null && !world.isClient) {
+            world.updateListeners(pos, getCachedState(), getCachedState(), 3);
+        }
+    }
+    
+    public int getNorthDistance() { return northDistance; }
+    public int getSouthDistance() { return southDistance; }
+    public int getEastDistance() { return eastDistance; }
+    public int getWestDistance() { return westDistance; }
+    
+    public BlockPos[] getDistanceGlyphs() {
+        // Use cached glyph positions if available
+        java.util.List<BlockPos> foundGlyphs = new java.util.ArrayList<>();
+        if (northGlyphPos != null) foundGlyphs.add(northGlyphPos);
+        if (southGlyphPos != null) foundGlyphs.add(southGlyphPos);
+        if (eastGlyphPos != null) foundGlyphs.add(eastGlyphPos);
+        if (westGlyphPos != null) foundGlyphs.add(westGlyphPos);
+        
+        return foundGlyphs.toArray(new BlockPos[0]);
+    }
+    
     /**
      * Check if the ritual integrity is maintained
      * Returns true if the ritual is intact, false if it should be deactivated
@@ -190,12 +277,34 @@ public class BarrierCircleBlockEntity extends BlockEntity {
         boolean hasEast = world.getBlockState(eastPos).isOf(ModBlocks.ACTIVE_OBELISK);
         boolean hasWest = world.getBlockState(westPos).isOf(ModBlocks.ACTIVE_OBELISK);
         
+        // Check if all required distance glyphs are still present (use cached positions)
+        boolean hasNorthGlyph = northGlyphPos != null && world.getBlockState(northGlyphPos).isOf(ModBlocks.BARRIER_DISTANCE_GLYPH);
+        boolean hasSouthGlyph = southGlyphPos != null && world.getBlockState(southGlyphPos).isOf(ModBlocks.BARRIER_DISTANCE_GLYPH);
+        boolean hasEastGlyph = eastGlyphPos != null && world.getBlockState(eastGlyphPos).isOf(ModBlocks.BARRIER_DISTANCE_GLYPH);
+        boolean hasWestGlyph = westGlyphPos != null && world.getBlockState(westGlyphPos).isOf(ModBlocks.BARRIER_DISTANCE_GLYPH);
+        
         if (!hasNorth || !hasSouth || !hasEast || !hasWest) {
             System.out.println("BarrierCircle: Obelisk missing - ritual integrity broken! N:" + hasNorth + " S:" + hasSouth + " E:" + hasEast + " W:" + hasWest);
             return false;
         }
         
+        if (!hasNorthGlyph || !hasSouthGlyph || !hasEastGlyph || !hasWestGlyph) {
+            System.out.println("BarrierCircle: Distance glyph missing - ritual integrity broken! N:" + hasNorthGlyph + " S:" + hasSouthGlyph + " E:" + hasEastGlyph + " W:" + hasWestGlyph);
+            return false;
+        }
+        
         return true;
+    }
+    
+    private BlockPos findDistanceGlyph(BlockPos circlePos, Direction direction) {
+        // Scan from 0 to 25 blocks in the specified direction
+        for (int distance = 0; distance <= 25; distance++) {
+            BlockPos checkPos = circlePos.offset(direction, distance);
+            if (world.getBlockState(checkPos).isOf(ModBlocks.BARRIER_DISTANCE_GLYPH)) {
+                return checkPos;
+            }
+        }
+        return null; // No glyph found in this direction
     }
     
     /**

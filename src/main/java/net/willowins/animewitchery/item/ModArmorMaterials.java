@@ -14,7 +14,9 @@ public enum ModArmorMaterials implements ArmorMaterial {
     SILVER("silver",25,new int[] { 3,8,6,3},10,
             SoundEvents.ITEM_ARMOR_EQUIP_GOLD, 0.5f, .5f, () -> Ingredient.ofItems(ModItems.SILVER)),
     RAILGUNNER("railgunner",250,new int[] { 3,8,6,3},8,
-    SoundEvents.ITEM_ARMOR_EQUIP_NETHERITE, 3f, .1f, () -> Ingredient.ofItems(Items.NETHERITE_INGOT));
+    SoundEvents.ITEM_ARMOR_EQUIP_NETHERITE, 3f, .1f, () -> Ingredient.ofItems(Items.NETHERITE_INGOT)),
+    OBELISK("obelisk",500,new int[] { 4,9,7,4},15,
+    SoundEvents.ITEM_ARMOR_EQUIP_NETHERITE, 4f, .2f, () -> Ingredient.ofItems(ModItems.SILVER));
 
 
 

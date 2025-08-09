@@ -65,6 +65,9 @@ public class BarrierCircleRenderer implements BlockEntityRenderer<BarrierCircleB
             if (ritualStep >= 4) { // Beam phase (step 4+)
                 renderGiantBeam(entity);
             }
+            
+            // Always render distance glyph particles when ritual is active
+            renderDistanceGlyphParticles(entity);
         }
     }
     
@@ -254,5 +257,38 @@ public class BarrierCircleRenderer implements BlockEntityRenderer<BarrierCircleB
             }
         }
         // If ritualStep > 3, the ball disappears (beam phase)
+    }
+
+    private void renderDistanceGlyphParticles(BarrierCircleBlockEntity entity) {
+        World world = entity.getWorld();
+        if (world == null || world.isClient == false) return;
+
+        BlockPos circlePos = entity.getPos();
+        Vec3d center = new Vec3d(circlePos.getX() + 0.5, circlePos.getY() + 0.5, circlePos.getZ() + 0.5);
+
+        // Get the distance glyphs from the entity
+        BlockPos[] distanceGlyphs = entity.getDistanceGlyphs();
+
+        if (distanceGlyphs == null || distanceGlyphs.length == 0) return;
+
+        for (BlockPos glyphPos : distanceGlyphs) {
+            Vec3d glyphCenter = new Vec3d(glyphPos.getX() + 0.5, glyphPos.getY() + 1.0, glyphPos.getZ() + 0.5);
+            Vec3d direction = center.subtract(glyphCenter).normalize();
+
+            // Spawn particles flowing from glyph to center
+            for (int i = 0; i < 10; i++) {
+                double progress = (world.getTime() % 20) / 20.0; // 1-second cycle
+                Vec3d particlePos = glyphCenter.lerp(center, progress);
+
+                WorldParticleBuilder.create(LodestoneParticleRegistry.WISP_PARTICLE)
+                    .setScaleData(GenericParticleData.create(0.1f, 0).build())
+                    .setTransparencyData(GenericParticleData.create(0.8f, 0.2f).build())
+                    .setColorData(ColorParticleData.create(new Color(255, 100, 100), new Color(255, 200, 200)).setCoefficient(1.2f).setEasing(Easing.BOUNCE_IN_OUT).build())
+                    .setLifetime(20)
+                    .addMotion(direction.x * 0.1, direction.y * 0.1, direction.z * 0.1)
+                    .enableNoClip()
+                    .spawn(world, particlePos.x, particlePos.y, particlePos.z);
+            }
+        }
     }
 } 

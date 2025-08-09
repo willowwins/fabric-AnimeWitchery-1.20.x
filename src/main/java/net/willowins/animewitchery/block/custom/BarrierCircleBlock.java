@@ -27,6 +27,8 @@ import net.minecraft.particle.ParticleTypes;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LightningEntity;
 import net.minecraft.server.world.ServerWorld;
+import net.willowins.animewitchery.block.entity.BarrierDistanceGlyphBlockEntity;
+import net.minecraft.util.math.Direction;
 
 public class BarrierCircleBlock extends BlockWithEntity {
     private static final VoxelShape SHAPE = Block.createCuboidShape(0, 0, 0, 16, 1, 16);
@@ -52,6 +54,14 @@ public class BarrierCircleBlock extends BlockWithEntity {
             BlockEntity blockEntity = world.getBlockEntity(pos);
             if (blockEntity instanceof BarrierCircleBlockEntity circleEntity) {
                 ItemStack heldItem = player.getStackInHand(hand);
+                
+                // Normal Chalk can convert this to a distance glyph
+                if (heldItem.isOf(ModItems.CHALK)) {
+                    System.out.println("BarrierCircle: Converting to BARRIER_DISTANCE_GLYPH");
+                    // Convert this block to a distance glyph
+                    world.setBlockState(pos, ModBlocks.BARRIER_DISTANCE_GLYPH.getDefaultState());
+                    return ActionResult.SUCCESS;
+                }
                 
                 // Stage 2: Barrier Catalyst defines circle type
                 if (heldItem.isOf(ModItems.BARRIER_CATALYST)) {
@@ -113,9 +123,60 @@ public class BarrierCircleBlock extends BlockWithEntity {
         boolean hasEast = world.getBlockState(eastPos).isOf(ModBlocks.OBELISK);
         boolean hasWest = world.getBlockState(westPos).isOf(ModBlocks.OBELISK);
         
-        System.out.println("BarrierCircle: Checking obelisks - N:" + hasNorth + " S:" + hasSouth + " E:" + hasEast + " W:" + hasWest);
+        // Check for distance glyphs in the same directions (scan 0-25 blocks)
+        BlockPos northGlyphPos = findDistanceGlyph(world, circlePos, Direction.NORTH);
+        BlockPos southGlyphPos = findDistanceGlyph(world, circlePos, Direction.SOUTH);
+        BlockPos eastGlyphPos = findDistanceGlyph(world, circlePos, Direction.EAST);
+        BlockPos westGlyphPos = findDistanceGlyph(world, circlePos, Direction.WEST);
         
-        return hasNorth && hasSouth && hasEast && hasWest;
+        boolean hasNorthGlyph = northGlyphPos != null;
+        boolean hasSouthGlyph = southGlyphPos != null;
+        boolean hasEastGlyph = eastGlyphPos != null;
+        boolean hasWestGlyph = westGlyphPos != null;
+        
+        System.out.println("BarrierCircle: Checking obelisks - N:" + hasNorth + " S:" + hasSouth + " E:" + hasEast + " W:" + hasWest);
+        System.out.println("BarrierCircle: Checking distance glyphs - N:" + hasNorthGlyph + " S:" + hasSouthGlyph + " E:" + hasEastGlyph + " W:" + hasWestGlyph);
+        
+        // Both obelisks and distance glyphs are required
+        boolean hasAllObelisks = hasNorth && hasSouth && hasEast && hasWest;
+        boolean hasAllGlyphs = hasNorthGlyph && hasSouthGlyph && hasEastGlyph && hasWestGlyph;
+        
+        if (hasAllObelisks && hasAllGlyphs) {
+            // Store the distance information in the block entity
+            BlockEntity blockEntity = world.getBlockEntity(circlePos);
+            if (blockEntity instanceof BarrierCircleBlockEntity circleEntity) {
+                // Calculate distances from the found glyph positions
+                int northDistance = northGlyphPos != null ? circlePos.getManhattanDistance(northGlyphPos) : 5;
+                int southDistance = southGlyphPos != null ? circlePos.getManhattanDistance(southGlyphPos) : 5;
+                int eastDistance = eastGlyphPos != null ? circlePos.getManhattanDistance(eastGlyphPos) : 5;
+                int westDistance = westGlyphPos != null ? circlePos.getManhattanDistance(westGlyphPos) : 5;
+                
+                circleEntity.setBarrierDistances(northDistance, southDistance, eastDistance, westDistance);
+                circleEntity.setCachedGlyphPositions(northGlyphPos, southGlyphPos, eastGlyphPos, westGlyphPos);
+                System.out.println("BarrierCircle: Barrier distances set - N:" + northDistance + " S:" + southDistance + " E:" + eastDistance + " W:" + westDistance);
+            }
+        }
+        
+        return hasAllObelisks && hasAllGlyphs;
+    }
+    
+    private BlockPos findDistanceGlyph(World world, BlockPos circlePos, Direction direction) {
+        // Scan from 0 to 25 blocks in the specified direction
+        for (int distance = 0; distance <= 25; distance++) {
+            BlockPos checkPos = circlePos.offset(direction, distance);
+            if (world.getBlockState(checkPos).isOf(ModBlocks.BARRIER_DISTANCE_GLYPH)) {
+                return checkPos;
+            }
+        }
+        return null; // No glyph found in this direction
+    }
+    
+    private int getDistanceFromGlyph(World world, BlockPos glyphPos) {
+        BlockEntity blockEntity = world.getBlockEntity(glyphPos);
+        if (blockEntity instanceof BarrierDistanceGlyphBlockEntity glyphEntity) {
+            return glyphEntity.getDistance();
+        }
+        return 5; // Default distance
     }
     
     private void activateRitual(World world, BlockPos circlePos, PlayerEntity player) {

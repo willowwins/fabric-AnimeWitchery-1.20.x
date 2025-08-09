@@ -11,6 +11,7 @@ import net.minecraft.util.Rarity;
 import net.willowins.animewitchery.AnimeWitchery;
 import net.willowins.animewitchery.block.ModBlocks;
 import net.willowins.animewitchery.item.armor.RailGunnerArmorItem;
+import net.willowins.animewitchery.item.armor.ObeliskArmorItem;
 import net.willowins.animewitchery.item.custom.*;
 
 public class ModItems {
@@ -59,6 +60,16 @@ public class ModItems {
     public static final Item RAILGUNNER_BOOTS =registerItem("railgunner_boots",
             new RailGunnerArmorItem(ModArmorMaterials.RAILGUNNER,ArmorItem.Type.BOOTS,new FabricItemSettings()));
 
+    // Obelisk Armor Set
+    public static final Item OBELISK_HELMET =registerItem("obelisk_helmet",
+            new ObeliskArmorItem(ModArmorMaterials.OBELISK,ArmorItem.Type.HELMET,new FabricItemSettings()));
+    public static final Item OBELISK_CHESTPLATE =registerItem("obelisk_chestplate",
+            new ObeliskArmorItem(ModArmorMaterials.OBELISK,ArmorItem.Type.CHESTPLATE,new FabricItemSettings()));
+    public static final Item OBELISK_LEGGINGS =registerItem("obelisk_leggings",
+            new ObeliskArmorItem(ModArmorMaterials.OBELISK,ArmorItem.Type.LEGGINGS,new FabricItemSettings()));
+    public static final Item OBELISK_BOOTS =registerItem("obelisk_boots",
+            new ObeliskArmorItem(ModArmorMaterials.OBELISK,ArmorItem.Type.BOOTS,new FabricItemSettings()));
+
 
     public static final Item LEMON =registerItem("lemon", new Item(new FabricItemSettings().food(ModFoodComponents.LEMON)));
 
@@ -100,7 +111,7 @@ public class ModItems {
 
     // New alchemy and magic items
     public static final Item MORTAR_AND_PESTLE = registerItem("mortar_and_pestle", new Item(new FabricItemSettings()));
-    public static final Item CHALK = registerItem("chalk", new Item(new FabricItemSettings()));
+    public static final Item CHALK = registerItem("chalk", new NormalChalkItem(new FabricItemSettings()));
     public static final Item MAGIC_CHALK = registerItem("magic_chalk", new MagicChalkItem(new FabricItemSettings().rarity(Rarity.UNCOMMON)));
     public static final Item ENCHANTED_CRYSTAL = registerItem("enchanted_crystal", new Item(new FabricItemSettings().rarity(Rarity.UNCOMMON)));
     
@@ -164,5 +175,13 @@ public class ModItems {
     public static void registerModItems( ){
         AnimeWitchery.LOGGER.info("registering Mod Items for"+AnimeWitchery.MOD_ID);
         ItemGroupEvents.modifyEntriesEvent(ItemGroups.INGREDIENTS).register(ModItems::addItemsToIngredientItemGroup);
+        ItemGroupEvents.modifyEntriesEvent(ItemGroups.COMBAT).register(ModItems::addItemsToCombatItemGroup);
+    }
+    
+    private static void addItemsToCombatItemGroup(FabricItemGroupEntries entries) {
+        entries.add(OBELISK_HELMET);
+        entries.add(OBELISK_CHESTPLATE);
+        entries.add(OBELISK_LEGGINGS);
+        entries.add(OBELISK_BOOTS);
     }
 }
