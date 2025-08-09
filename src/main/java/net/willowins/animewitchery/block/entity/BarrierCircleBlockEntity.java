@@ -331,27 +331,50 @@ public class BarrierCircleBlockEntity extends BlockEntity {
         if (world instanceof ServerWorld serverWorld) {
             for (ServerPlayerEntity player : serverWorld.getPlayers()) {
                 double x = player.getX();
+                double y = player.getY();
                 double z = player.getZ();
                 boolean inside = x >= minX && x <= maxX && z >= minZ && z <= maxZ;
                 if (inside && !isPlayerAllowed(player)) {
-                    // Push the player out to the nearest edge
+                    // Compute nearest boundary normal
                     double distToWest = x - minX;
                     double distToEast = maxX - x;
                     double distToNorth = z - minZ;
                     double distToSouth = maxZ - z;
                     double min = Math.min(Math.min(distToWest, distToEast), Math.min(distToNorth, distToSouth));
+                    double nx = 0.0;
+                    double nz = 0.0;
                     double targetX = x;
                     double targetZ = z;
-                    if (min == distToWest) {
-                        targetX = minX - 0.3;
-                    } else if (min == distToEast) {
-                        targetX = maxX + 0.3;
-                    } else if (min == distToNorth) {
-                        targetZ = minZ - 0.3;
-                    } else {
-                        targetZ = maxZ + 0.3;
+                    if (min == distToWest) { nx = -1.0; targetX = minX - 0.01; }
+                    else if (min == distToEast) { nx = 1.0; targetX = maxX + 0.01; }
+                    else if (min == distToNorth) { nz = -1.0; targetZ = minZ - 0.01; }
+                    else { nz = 1.0; targetZ = maxZ + 0.01; }
+
+                    // Damp inward velocity and apply outward impulse
+                    var v = player.getVelocity();
+                    double vn = v.x * nx + v.z * nz; // inward if vn > 0 along +n; but n is outward from inside
+                    // If moving further inside (opposite of n), vn will be negative; we want to remove inward component
+                    // Recompute: inward component relative to inward normal = -n
+                    double inward = v.x * (-nx) + v.z * (-nz);
+                    if (inward > 0) {
+                        // remove inward component
+                        double rx = inward * (-nx);
+                        double rz = inward * (-nz);
+                        v = v.add(-rx, 0, -rz);
                     }
-                    player.networkHandler.requestTeleport(targetX, player.getY(), targetZ, player.getYaw(), player.getPitch());
+                    // Apply outward push
+                    double push = 0.4;
+                    v = v.add(nx * push, 0, nz * push);
+                    player.setVelocity(v);
+                    player.velocityModified = true;
+
+                    // Clamp position to just outside boundary for smooth blocking
+                    player.refreshPositionAfterTeleport(targetX, y, targetZ);
+
+                    // Optional feedback
+                    if (serverWorld.getTime() % 10 == 0) {
+                        serverWorld.playSound(null, player.getBlockPos(), net.minecraft.sound.SoundEvents.BLOCK_AMETHYST_BLOCK_HIT, net.minecraft.sound.SoundCategory.PLAYERS, 0.2f, 1.5f);
+                    }
                 }
             }
         }
