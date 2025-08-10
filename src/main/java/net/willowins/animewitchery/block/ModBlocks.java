@@ -15,6 +15,7 @@ import net.willowins.animewitchery.block.custom.*;
 import net.willowins.animewitchery.block.custom.ItemActionBlock;
 import net.willowins.animewitchery.block.custom.ObeliskBlock;
 import net.willowins.animewitchery.block.custom.ActiveObeliskBlock;
+import net.willowins.animewitchery.block.custom.BossObeliskBlock;
 
 import java.util.Objects;
 
@@ -63,6 +64,9 @@ public static final Block ALCHEMY_TABLE =registerBlock("alchemy_table",
 
     public static final Block ACTIVE_OBELISK =registerBlock("active_obelisk",
             new ActiveObeliskBlock(FabricBlockSettings.copyOf(Blocks.STONE).nonOpaque().hardness(-1f)));
+
+    public static final Block BOSS_OBELISK = registerBlock("boss_obelisk",
+            new BossObeliskBlock(FabricBlockSettings.copyOf(Blocks.STONE).nonOpaque().hardness(-1f)));
 
     public static final Block BARRIER_CIRCLE =registerBlock("barrier_circle",
             new BarrierCircleBlock(FabricBlockSettings.copyOf(Blocks.STONE).nonOpaque()));

@@ -43,6 +43,10 @@ public class ModBlockEntities {
                     FabricBlockEntityTypeBuilder.create(ActiveBindingSpellBlockEntity::new,
                             ModBlocks.ACTIVE_BINDING_SPELL).build((Type) null));
 
+    public static final BlockEntityType<BossObeliskBlockEntity> BOSS_OBELISK_BLOCK_ENTITY =
+            Registry.register(Registries.BLOCK_ENTITY_TYPE, new Identifier(MOD_ID, "boss_obelisk_be"),
+                    FabricBlockEntityTypeBuilder.create(BossObeliskBlockEntity::new,
+                            ModBlocks.BOSS_OBELISK).build());
     public static final BlockEntityType<BindingSpellBlockEntity> BINDING_SPELL_BLOCK_ENTITY =
             Registry.register(Registries.BLOCK_ENTITY_TYPE, new Identifier(MOD_ID, "binding_spell_be"),
                     FabricBlockEntityTypeBuilder.create(BindingSpellBlockEntity::new,

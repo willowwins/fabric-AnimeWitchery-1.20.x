@@ -14,6 +14,7 @@ import net.willowins.animewitchery.block.entity.renderer.ActiveEffigyFountainRen
 import net.willowins.animewitchery.block.entity.renderer.AlchemyTableRenderer;
 import net.willowins.animewitchery.block.entity.renderer.BindingSpellRenderer;
 import net.willowins.animewitchery.block.entity.renderer.ObeliskRenderer;
+import net.willowins.animewitchery.block.entity.renderer.BossObeliskRenderer;
 import net.willowins.animewitchery.block.entity.renderer.ActiveObeliskRenderer;
 import net.willowins.animewitchery.block.entity.renderer.BarrierCircleRenderer;
 import net.willowins.animewitchery.block.entity.renderer.BarrierDistanceGlyphRenderer;
@@ -41,6 +42,7 @@ public class AnimeWitcheryClient implements ClientModInitializer {
         BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.BARRIER_CIRCLE, RenderLayer.getCutout());
         BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.BARRIER_DISTANCE_GLYPH, RenderLayer.getCutout());
         BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.SILVER_TRAPDOOR, RenderLayer.getCutout());
+        BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.BOSS_OBELISK, RenderLayer.getCutout());
 
 
 
@@ -57,6 +59,7 @@ public class AnimeWitcheryClient implements ClientModInitializer {
         BlockEntityRendererRegistry.register(ModBlockEntities.ACTIVE_OBELISK_BLOCK_ENTITY, (context) -> new ActiveObeliskRenderer());
         BlockEntityRendererRegistry.register(ModBlockEntities.BARRIER_CIRCLE_BLOCK_ENTITY, (context) -> new BarrierCircleRenderer(context));
         BlockEntityRendererRegistry.register(ModBlockEntities.BARRIER_DISTANCE_GLYPH_BLOCK_ENTITY, (context) -> new BarrierDistanceGlyphRenderer(context));
+        BlockEntityRendererRegistry.register(ModBlockEntities.BOSS_OBELISK_BLOCK_ENTITY, (context) -> new BossObeliskRenderer());
 
         EntityRendererRegistry.register(ModEntities.NEEDLE_PROJECTILE, NeedleProjectileRenderer::new);
 

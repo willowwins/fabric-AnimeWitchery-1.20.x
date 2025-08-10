@@ -128,5 +128,6 @@
   "item.animewitchery.barrier_catalyst": "§5Barrier Catalyst",
   "item.animewitchery.repair_essence": "§bRepair Essence",
 
-  "itemgroup.silver": "§5Anime Witchery"
+  "itemgroup.silver": "§5Anime Witchery",
+  "block.animewitchery.boss_obelisk": "Eidolon Obelisk"
 }
