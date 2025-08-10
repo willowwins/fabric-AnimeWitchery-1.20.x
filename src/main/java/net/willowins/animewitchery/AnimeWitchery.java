@@ -3,9 +3,15 @@ package net.willowins.animewitchery;
 import net.fabricmc.api.ModInitializer;
 
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
+import net.fabricmc.fabric.api.event.player.AttackBlockCallback;
+import net.fabricmc.fabric.api.event.player.AttackEntityCallback;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.fabricmc.fabric.api.registry.FuelRegistry;
 import net.kyrptonaught.customportalapi.api.CustomPortalBuilder;
 import net.minecraft.block.Blocks;
+import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -18,6 +24,7 @@ import net.willowins.animewitchery.entity.ModEntities;
 import net.willowins.animewitchery.events.ExcavationBreakHandler;
 import net.willowins.animewitchery.item.ModItemGroups;
 import net.willowins.animewitchery.item.ModItems;
+import net.willowins.animewitchery.item.custom.ObeliskSwordItem;
 import net.willowins.animewitchery.particle.ModParticles;
 import net.willowins.animewitchery.sound.ModSounds;
 import net.willowins.animewitchery.util.ModCustomTrades;
@@ -25,12 +32,14 @@ import net.willowins.animewitchery.util.ModLootTableModifiers;
 import net.willowins.animewitchery.villager.ModVillagers;
 import net.willowins.animewitchery.recipe.ModRecipes;
 import net.willowins.animewitchery.world.gen.ModWorldGeneration;
+import net.willowins.animewitchery.events.BarrierExplosionHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class AnimeWitchery implements ModInitializer {
 	public static final String MOD_ID = "animewitchery";
 	public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
+	public static final Identifier SWING_MISS_PACKET = new Identifier(MOD_ID, "swing_miss");
 
 
 	@Override
@@ -67,6 +76,8 @@ public class AnimeWitchery implements ModInitializer {
 		FuelRegistry.INSTANCE.add(ModBlocks.CHARCOAL_BLOCK, 16000);
 
 		ModWorldGeneration.generateModWorldGen();
+		// Register explosion absorber hook
+		BarrierExplosionHandler.register();
 
 
 
@@ -88,6 +99,31 @@ public class AnimeWitchery implements ModInitializer {
 					EffigyFountainBlock.active = false;
 				}
 			}
+		});
+
+		AttackEntityCallback.EVENT.register((player, world, hand, entity, hit) -> {
+			if (!world.isClient && player.getStackInHand(hand).getItem() instanceof ObeliskSwordItem item) {
+				item.playSwing((ServerPlayerEntity) player, player.getStackInHand(hand));
+			}
+			return ActionResult.PASS;
+		});
+
+		// Left-click BLOCK
+		AttackBlockCallback.EVENT.register((player, world, hand, pos, direction) -> {
+			if (!world.isClient && player.getStackInHand(hand).getItem() instanceof ObeliskSwordItem item) {
+				item.playSwing((ServerPlayerEntity) player, player.getStackInHand(hand));
+			}
+			return ActionResult.PASS;
+		});
+
+		// Left-click AIR (MISS) — packet from client
+		ServerPlayNetworking.registerGlobalReceiver(SWING_MISS_PACKET, (server, player, handler, buf, sender) -> {
+			Hand hand = buf.readEnumConstant(Hand.class);
+			server.execute(() -> {
+				if (player.getStackInHand(hand).getItem() instanceof ObeliskSwordItem item) {
+					item.playSwing((ServerPlayerEntity) player, player.getStackInHand(hand));
+				}
+			});
 		});
 	}
 

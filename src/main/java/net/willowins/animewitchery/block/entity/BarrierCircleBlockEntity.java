@@ -12,12 +12,15 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.util.math.Direction;
+import net.minecraft.util.math.Vec3d;
 import net.willowins.animewitchery.block.ModBlocks;
 import net.willowins.animewitchery.client.sky.SkyRitualRenderer;
 
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
+import java.util.Collections;
+import java.util.WeakHashMap;
 
 public class BarrierCircleBlockEntity extends BlockEntity {
     private CircleStage stage = CircleStage.BASIC; // BASIC -> DEFINED -> COMPLETE
@@ -26,6 +29,12 @@ public class BarrierCircleBlockEntity extends BlockEntity {
     private long step3StartTime = 0; // Track when step 3 started for energy ball timing
     private boolean ritualActive = false; // Track if ritual is currently active
     private long lastIntegrityCheck = 0; // Track last integrity check time
+    
+    // Barrier durability settings
+    private int barrierMaxDurability = 1000;
+    private int barrierDurability = 1000;
+    private int barrierRegenPerSecond = 5;
+    private long lastRegenTick = 0;
     
     // Barrier distance storage (from distance glyphs)
     private int northDistance = 5;
@@ -53,8 +62,13 @@ public class BarrierCircleBlockEntity extends BlockEntity {
         BARRIER     // For obelisk placement
     }
 
+    // Global registry of loaded barriers
+    private static final Set<BarrierCircleBlockEntity> LOADED_BARRIERS =
+            Collections.newSetFromMap(new WeakHashMap<>());
+
     public BarrierCircleBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntities.BARRIER_CIRCLE_BLOCK_ENTITY, pos, state);
+        LOADED_BARRIERS.add(this);
     }
     
     @Override
@@ -83,6 +97,10 @@ public class BarrierCircleBlockEntity extends BlockEntity {
         nbt.putInt("southDistance", southDistance);
         nbt.putInt("eastDistance", eastDistance);
         nbt.putInt("westDistance", westDistance);
+        nbt.putInt("barrierMaxDurability", barrierMaxDurability);
+        nbt.putInt("barrierDurability", barrierDurability);
+        nbt.putInt("barrierRegenPerSecond", barrierRegenPerSecond);
+        nbt.putLong("lastRegenTick", lastRegenTick);
         
         // Save cached glyph positions
         if (northGlyphPos != null) {
@@ -121,6 +139,10 @@ public class BarrierCircleBlockEntity extends BlockEntity {
         this.southDistance = nbt.getInt("southDistance");
         this.eastDistance = nbt.getInt("eastDistance");
         this.westDistance = nbt.getInt("westDistance");
+        if (nbt.contains("barrierMaxDurability")) this.barrierMaxDurability = nbt.getInt("barrierMaxDurability");
+        if (nbt.contains("barrierDurability")) this.barrierDurability = nbt.getInt("barrierDurability");
+        if (nbt.contains("barrierRegenPerSecond")) this.barrierRegenPerSecond = nbt.getInt("barrierRegenPerSecond");
+        if (nbt.contains("lastRegenTick")) this.lastRegenTick = nbt.getLong("lastRegenTick");
         
         // Load cached glyph positions
         if (nbt.contains("northGlyphPos")) {
@@ -239,12 +261,27 @@ public class BarrierCircleBlockEntity extends BlockEntity {
         return ritualActive && ritualActivationStep >= 3;
     }
     
+    public boolean isBarrierFunctional() {
+        return isRitualActive() && barrierDurability > 0;
+    }
+    
     public void setRitualActive(boolean active) {
         this.ritualActive = active;
         markDirty();
         if (world != null && !world.isClient) {
             world.updateListeners(pos, getCachedState(), getCachedState(), 3);
         }
+    }
+    
+    public int getBarrierDurability() { return barrierDurability; }
+    public int getBarrierMaxDurability() { return barrierMaxDurability; }
+    public void setBarrierMaxDurability(int max) { this.barrierMaxDurability = Math.max(1, max); markDirty(); }
+    public int getBarrierRegenPerSecond() { return barrierRegenPerSecond; }
+    public void setBarrierRegenPerSecond(int regen) { this.barrierRegenPerSecond = Math.max(0, regen); markDirty(); }
+    public void drainBarrierDurability(int amount) {
+        if (amount <= 0) return;
+        this.barrierDurability = Math.max(0, this.barrierDurability - amount);
+        markDirty();
     }
     
     public void setBarrierDistances(int north, int south, int east, int west) {
@@ -324,7 +361,7 @@ public class BarrierCircleBlockEntity extends BlockEntity {
 
     private void enforceBarrier() {
         if (world == null || world.isClient) return;
-        if (!isRitualActive()) return;
+        if (!isBarrierFunctional()) return;
         double[] extents = computeExtents();
         double minX = extents[0], maxX = extents[1], minZ = extents[2], maxZ = extents[3];
 
@@ -378,6 +415,27 @@ public class BarrierCircleBlockEntity extends BlockEntity {
                 }
             }
         }
+    }
+    
+    public boolean containsPosition(Vec3d position) {
+        double[] extents = computeExtents();
+        double minX = extents[0], maxX = extents[1], minZ = extents[2], maxZ = extents[3];
+        return position.x >= minX && position.x <= maxX && position.z >= minZ && position.z <= maxZ;
+    }
+
+    public void absorbExplosion(Vec3d explosionPos, float power) {
+        if (!isRitualActive()) return;
+        int damage = Math.max(1, Math.round(power * 50.0f));
+        drainBarrierDurability(damage);
+    }
+
+    public static BarrierCircleBlockEntity findBarrierAt(World world, Vec3d pos) {
+        for (BarrierCircleBlockEntity entity : LOADED_BARRIERS) {
+            if (entity.world == world && entity.isBarrierFunctional() && entity.containsPosition(pos)) {
+                return entity;
+            }
+        }
+        return null;
     }
     
     /**
@@ -501,9 +559,20 @@ public class BarrierCircleBlockEntity extends BlockEntity {
             }
         }
 
-        // Enforce barrier entry on every tick while active
-        if (entity.isRitualActive()) {
+        // Enforce barrier entry on every tick while active and functional
+        if (entity.isBarrierFunctional()) {
             entity.enforceBarrier();
+        }
+        
+        // Regenerate durability each second
+        if (entity.isRitualActive() && entity.barrierDurability < entity.barrierMaxDurability) {
+            long now = world.getTime();
+            if (now - entity.lastRegenTick >= 20) {
+                entity.lastRegenTick = now;
+                entity.barrierDurability = Math.min(entity.barrierMaxDurability,
+                        entity.barrierDurability + entity.barrierRegenPerSecond);
+                entity.markDirty();
+            }
         }
     }
 
@@ -517,6 +586,12 @@ public class BarrierCircleBlockEntity extends BlockEntity {
         NbtCompound nbt = new NbtCompound();
         writeNbt(nbt);
         return BlockEntityUpdateS2CPacket.create(this);
+    }
+
+    @Override
+    public void markRemoved() {
+        super.markRemoved();
+        LOADED_BARRIERS.remove(this);
     }
 
 } 

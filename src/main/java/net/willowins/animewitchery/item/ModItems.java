@@ -108,6 +108,7 @@ public class ModItems {
     public static final Item SILVER_PENDANT =registerItem("silver_pendant", new SilverPendant(new FabricItemSettings().maxCount(1).rarity(Rarity.RARE)));
     public static final Item HEALING_STAFF =registerItem("healing_staff", new HealingStaff(new FabricItemSettings().maxCount(1).rarity(Rarity.RARE)));
     public static final Item RAILGUN =registerItem("railgun", new RailgunItem(new FabricItemSettings().maxCount(1).rarity(Rarity.RARE)));
+    public static final Item OBELISK_SWORD = registerItem("obelisk_sword", new ObeliskSwordItem(ModToolMaterial.OBELISK, 7, -1.4f, new FabricItemSettings().maxCount(1).rarity(Rarity.RARE)));
 
     // New alchemy and magic items
     public static final Item MORTAR_AND_PESTLE = registerItem("mortar_and_pestle", new Item(new FabricItemSettings()));
@@ -183,5 +184,6 @@ public class ModItems {
         entries.add(OBELISK_CHESTPLATE);
         entries.add(OBELISK_LEGGINGS);
         entries.add(OBELISK_BOOTS);
+        entries.add(OBELISK_SWORD);
     }
 }

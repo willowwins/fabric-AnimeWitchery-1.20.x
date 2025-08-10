@@ -8,7 +8,9 @@ import java.util.function.Supplier;
 
 public enum ModToolMaterial implements ToolMaterial {
    SILVER(5,1561,13,3,22,
-           () ->Ingredient.ofItems(ModItems.SILVER));
+           () ->Ingredient.ofItems(ModItems.SILVER)),
+   OBELISK(5,2031,12,5,25,
+           () ->Ingredient.ofItems(ModItems.ENCHANTED_CRYSTAL));
 
 
     private final int miningLevel;

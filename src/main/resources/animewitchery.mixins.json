@@ -21,7 +21,8 @@
     "GoldOreMixin",
     "ReinforcedDeepslateMixin",
     "PlayerEntityMixin",
-    "LivingEntityMixin2"
+    "LivingEntityMixin2",
+    "ExplosionMixin"
   ],
   "client": [
     "ItemRendererAccessor",
