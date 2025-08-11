@@ -1,0 +1,38 @@
+{
+  "name": "Barrier Mode: Walls of Protection",
+  "category": "animewitchery:obelisk_variants",
+  "icon": "animewitchery:barrier_circle",
+  "sortnum": 2,
+  "pages": [
+    {
+      "type": "text",
+      "title": "The Shield Rune Awakens",
+      "text": "When the $(obelisk)North Obelisk$(reset) bears the $(barrier)Shield Rune (Variant 4)$(reset), your ritual manifests as a barrier of pure magical force. This is the most ancient form of ritual protection, dating back to the first wardens who sought to shield their sacred groves from harm.$(br2)$(barrier)Barrier Mode$(reset) creates physical barriers that block movement and absorb damage, protecting the area within from both intrusion and destruction. The barrier extends from bedrock to the heavens, creating an impenetrable wall that respects no height or depth."
+    },
+    {
+      "type": "text",
+      "title": "Barrier Shapes: Square vs Circular",
+      "text": "The $(obelisk)East Obelisk$(reset) determines the geometric form of your barrier:$(br2)$(barrier)$(b)Variant 1: Square Barrier$(reset)$(br)Creates a rectangular barrier with walls aligned to the cardinal directions. The barrier follows the exact distances set by your distance glyphs, creating a precise rectangular area.$(br2)$(barrier)$(b)Variant 2: Circular Barrier$(reset)$(br)Creates a cylindrical barrier that extends in all directions equally. The radius is determined by the maximum distance from any direction glyph, creating a perfect circle around your ritual center.$(br2)$(dim)Variant 0 creates an invalid barrier that cannot manifest."
+    },
+    {
+      "type": "text",
+      "title": "Barrier Strength & Durability",
+      "text": "The $(obelisk)South Obelisk$(reset) governs the barrier's resilience:$(br2)$(barrier)$(b)Variant 1: Weak Barrier$(reset) - 1000 durability points$(br)$(barrier)$(b)Variant 2: Moderate Barrier$(reset) - 2000 durability points$(br)$(barrier)$(b)Variant 3: Strong Barrier$(reset) - 3000 durability points$(br2)$(dim)Variant 0 creates a barrier with no durability that shatters immediately.$(br2)The barrier's durability determines how much damage it can absorb before failing. Explosions, attacks, and other destructive forces will drain the barrier's strength. When durability reaches zero, the ritual deactivates and all obelisks return to their dormant state."
+    },
+    {
+      "type": "text",
+      "title": "Barrier Regeneration",
+      "text": "The $(obelisk)West Obelisk$(reset) controls how quickly your barrier recovers:$(br2)$(barrier)$(b)Variant 1: Slow Regeneration$(reset) - 5 points per second$(br)$(barrier)$(b)Variant 2: Moderate Regeneration$(reset) - 10 points per second$(br)$(barrier)$(b)Variant 3: Fast Regeneration$(reset) - 15 points per second$(br2)$(dim)Variant 0 prevents any regeneration, making the barrier permanent once damaged.$(br2)Regeneration occurs automatically while the ritual is active, slowly restoring the barrier's durability. This allows your barrier to recover from minor damage without requiring ritual reactivation."
+    },
+    {
+      "type": "text",
+      "title": "Barrier Mechanics",
+      "text": "$(barrier)Barrier Mode$(reset) creates several distinct effects:$(br2)$(b)Physical Blocking:$(reset) Players cannot pass through the barrier walls. Attempting to do so results in being pushed back to the boundary.$(br2)$(b)Damage Absorption:$(reset) The barrier absorbs explosions and other destructive forces, converting them into durability loss.$(br2)$(b)Player Whitelisting:$(reset) Players present when the ritual activates are automatically allowed to cross the barrier. Others are blocked.$(br2)$(b)Full Height Coverage:$(reset) The barrier extends from Y=0 (bedrock) to Y=256 (build limit), creating complete vertical protection.$(br2)$(b)Visual Manifestation:$(reset) Active barriers create visible walls in the sky and ground, with the $(obelisk)BarrierCircleSky.png$(reset) texture manifesting high above the ritual."
+    },
+    {
+      "type": "text",
+      "title": "Barrier Ritual Examples",
+      "text": "$(b)Defensive Fortress:$(reset)$(br)$(barrier)North=4, East=1, South=3, West=2$(reset)$(br)Creates a $(barrier)strong square barrier$(reset) with $(barrier)moderate regeneration$(reset). Perfect for protecting rectangular bases with balanced recovery.$(br2)$(b)Circular Sanctuary:$(reset)$(br)$(barrier)North=4, East=2, South=2, West=3$(reset)$(br)Creates a $(barrier)moderate circular barrier$(reset) with $(barrier)fast regeneration$(reset). Ideal for protecting circular areas with rapid recovery.$(br2)$(b)Impenetrable Wall:$(reset)$(br)$(barrier)North=4, East=1, South=3, West=3$(reset)$(br)Creates a $(barrier)strong square barrier$(reset) with $(barrier)fast regeneration$(reset). Maximum protection with maximum recovery speed."
+    }
+  ]
+}

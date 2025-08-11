@@ -1,0 +1,42 @@
+{
+  "name": "The Chisel: Key of the Wardens",
+  "icon": "animewitchery:chisel",
+  "category": "animewitchery:rituals",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "title": "The Ancient Tool",
+      "text": "The $(obelisk)Chisel$(reset) is no ordinary tool - it is the sacred implement of the ancient wardens, the key that unlocks the language of the stones. Crafted from obsidian and imbued with magical properties, the chisel allows you to communicate with the obelisks and configure their ritual properties.$(br2)The ancient texts describe the chisel as 'The Voice of the Stones' - the tool that allows mortals to speak the ancient language of ritual configuration."
+    },
+    {
+      "type": "patchouli:item",
+      "item": "animewitchery:chisel",
+      "text": "$(obelisk)The Chisel$(reset) is crafted from obsidian, making it durable enough to work with the magical stone of the obelisks. Its obsidian composition also gives it a natural affinity for magical energy, allowing it to channel the power needed to cycle through obelisk variants."
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Cycling Obelisk Variants",
+      "text": "$(b)Right-click$(reset) an obelisk with the chisel to cycle through its seven variants:$(br2)$(obelisk)Variant 0:$(reset) Blank Rune - No ritual power$(br)$(obelisk)Variant 1:$(reset) Strength Rune - Earth power$(br)$(obelisk)Variant 2:$(reset) Balance Rune - Harmony power$(br)$(obelisk)Variant 3:$(reset) Power Rune - Maximum force$(br)$(obelisk)Variant 4:$(reset) Shield Rune - Protection$(br)$(obelisk)Variant 5:$(reset) Poison Rune - Corruption$(br)$(obelisk)Variant 6:$(reset) Regeneration Rune - Healing$(br)$(obelisk)Variant 7:$(reset) Blessing Rune - Divine favor$(br2)Each variant carries specific meaning and determines how the obelisk participates in ritual configuration."
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Destroying Obelisks",
+      "text": "$(b)Shift-right-click$(reset) an obelisk with the chisel to destroy it completely. This action will:$(br2)$(b)Destroy the obelisk:$(reset) The obelisk block is completely removed$(br)$(b)Drop a shard:$(reset) One $(obelisk)Obelisk Shard$(reset) is dropped$(br)$(b)Deactivate rituals:$(reset) If the obelisk was part of an active ritual, the ritual will deactivate$(br2)This is useful for:$(br)$(b)Harvesting materials:$(reset) Obelisk shards can be used in crafting$(br)$(b)Ritual reconfiguration:$(reset) Remove obelisks to change ritual layouts$(br)$(b)Emergency shutdown:$(reset) Quickly deactivate rituals if needed$(br2)$(dim)Warning: Destroying an obelisk will immediately deactivate any ritual it was part of!"
+    },
+    {
+      "type": "patchouli:item",
+      "item": "animewitchery:obelisk_shard",
+      "text": "$(obelisk)Obelisk Shards$(reset) are the crystalline remains of destroyed obelisks. These shards retain some of the magical energy of the original obelisk and can be used in various magical applications.$(br2)The ancient texts speak of shards as 'The Echo of Power' - fragments that carry the memory of the rituals they once participated in."
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Strategic Applications",
+      "text": "The chisel offers several strategic advantages:$(br2)$(b)Ritual Flexibility:$(reset) Quickly change ritual configurations without rebuilding entire setups$(br)$(b)Material Recovery:$(reset) Harvest obelisk shards for use in other magical projects$(br)$(b)Emergency Control:$(reset) Quickly deactivate rituals by destroying key obelisks$(br)$(b)Testing Configurations:$(reset) Experiment with different obelisk variants to find optimal ritual setups$(br2)$(b)Maintenance:$(reset) Remove damaged or incorrectly placed obelisks and replace them$(br2)The chisel transforms ritual configuration from a static setup into a dynamic, flexible system that can adapt to changing needs and strategies."
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Ancient Wisdom",
+      "text": "The ancient wardens left these words about the chisel:$(br2)'The chisel is not a weapon, though it can destroy. It is not a key, though it can unlock. It is the bridge between mortal will and ancient power, the tool that allows us to speak the language of the stones.$(br2)Use it wisely, for each variant you choose shapes not just your ritual, but the very nature of the magic that flows through your circle. The stones remember, and they will respond according to the patterns you create.'$(br2)Remember: the chisel is a tool of creation and destruction, of configuration and reconfiguration. Master its use, and you master the language of ritual magic itself."
+    }
+  ]
+}

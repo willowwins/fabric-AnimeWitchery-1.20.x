@@ -1,0 +1,69 @@
+{
+  "name": "Visual Reference: Obelisk Variants",
+  "category": "animewitchery:obelisk_variants",
+  "icon": "animewitchery:chisel",
+  "sortnum": 4,
+  "pages": [
+    {
+      "type": "text",
+      "title": "The Rune Gallery",
+      "text": "Below you will find visual representations of each obelisk variant, showing the sacred symbols that determine your ritual's nature. These runes are not mere decoration - they are the living language of power that channels the ancient magic into your circle.$(br2)Use your $(obelisk)Chisel$(reset) to cycle through these variants, and study the patterns carefully. Each symbol carries specific meaning and power that will manifest in your ritual."
+    },
+    {
+      "type": "image",
+      "images": [
+        "animewitchery:textures/block/obelisk.png"
+      ],
+      "text": "$(obelisk)Variant 0: Blank Rune$(reset)$(br)$(dim)This variant represents an uncharged obelisk with no ritual power. Blank obelisks cannot participate in ritual configuration and will cause the ritual to fail if placed in critical positions.$(br2)The ancient texts warn: 'Empty stones bring only silence. Power flows only through the marked.'"
+    },
+    {
+      "type": "image",
+      "images": [
+        "animewitchery:textures/block/obelisk2.png"
+      ],
+      "text": "$(obelisk)Variant 1: Strength Rune$(reset)$(br)This variant represents the power of the earth and is used in the $(obelisk)South$(reset) position to determine barrier durability and effect strength.$(br2)When placed in the $(obelisk)East$(reset) position, it creates square barriers in barrier mode.$(br2)When placed in the $(obelisk)West$(reset) position, it provides slow regeneration or short duration."
+    },
+    {
+      "type": "image",
+      "images": [
+        "animewitchery:textures/block/obelisk3.png"
+      ],
+      "text": "$(obelisk)Variant 2: Balance Rune$(reset)$(br)This variant represents the harmony between opposing forces and is used in the $(obelisk)South$(reset) position for moderate barrier durability and effect strength.$(br2)When placed in the $(obelisk)East$(reset) position, it creates circular barriers in barrier mode.$(br2)When placed in the $(obelisk)West$(reset) position, it provides moderate regeneration or duration."
+    },
+    {
+      "type": "image",
+      "images": [
+        "animewitchery:textures/block/obelisk4.png"
+      ],
+      "text": "$(obelisk)Variant 3: Power Rune$(reset)$(br)This variant represents the maximum expression of magical force and is used in the $(obelisk)South$(reset) position for maximum barrier durability and effect strength.$(br2)When placed in the $(obelisk)West$(reset) position, it provides fast regeneration or long duration.$(br2)The ancient texts speak of this rune: 'Where the third mark stands, power flows like a river.'"
+    },
+    {
+      "type": "image",
+      "images": [
+        "animewitchery:textures/block/obelisk5.png"
+      ],
+      "text": "$(obelisk)Variant 4: Shield Rune$(reset)$(br)This variant represents protection and defense, and is the keystone of barrier rituals. When placed in the $(obelisk)North$(reset) position, it activates $(barrier)Barrier Mode$(reset).$(br2)When placed in the $(obelisk)East$(reset) position in effect mode, it creates poison effects.$(br2)The ancient texts describe this rune: 'The fourth mark awakens walls of pure force, unyielding to all who would pass.'"
+    },
+    {
+      "type": "image",
+      "images": [
+        "animewitchery:textures/block/obelisk6.png"
+      ],
+      "text": "$(obelisk)Variant 5: Poison Rune$(reset)$(br)This variant represents corruption and decay, and is used to create harmful effects. When placed in the $(obelisk)North$(reset) position, it activates $(effect)Effect Mode$(reset).$(br2)When placed in the $(obelisk)East$(reset) position in effect mode, it creates poison effects that harm denied players.$(br2)The ancient texts warn: 'The fifth mark brings the touch of death, a curse upon those who trespass.'"
+    },
+    {
+      "type": "image",
+      "images": [
+        "animewitchery:textures/block/obelisk7.png"
+      ],
+      "text": "$(obelisk)Variant 6: Regeneration Rune$(reset)$(br)This variant represents healing and renewal, and is used to create beneficial effects. When placed in the $(obelisk)East$(reset) position in effect mode, it creates regeneration effects that heal allowed players.$(br2)The ancient texts speak of this rune: 'The sixth mark brings the gift of life, a blessing upon those who are welcome.'"
+    },
+    {
+      "type": "image",
+      "images": [
+        "animewitchery:textures/block/obelisk8.png"
+      ],
+      "text": "$(obelisk)Variant 7: Blessing Rune$(reset)$(br)This variant represents divine favor and protection, and is an alternative way to activate $(effect)Effect Mode$(reset). When placed in the $(obelisk)North$(reset) position, it creates effect rituals focused on healing and support.$(br2)The ancient texts describe this rune: 'The seventh mark brings the touch of the divine, a blessing upon all who seek sanctuary.'"
+    }
+  ]
+}

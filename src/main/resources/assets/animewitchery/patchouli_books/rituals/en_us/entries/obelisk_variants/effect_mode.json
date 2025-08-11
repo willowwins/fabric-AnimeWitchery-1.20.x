@@ -1,0 +1,43 @@
+{
+  "name": "Effect Mode: Blessings & Curses",
+  "category": "animewitchery:obelisk_variants",
+  "icon": "animewitchery:active_obelisk",
+  "sortnum": 3,
+  "pages": [
+    {
+      "type": "text",
+      "title": "The Effect Runes Awaken",
+      "text": "When the $(obelisk)North Obelisk$(reset) bears either the $(effect)Poison Rune (Variant 5)$(reset) or the $(effect)Blessing Rune (Variant 7)$(reset), your ritual manifests as an area effect that influences all within its bounds. This is the more subtle form of ritual magic, affecting the very essence of those who enter rather than creating physical barriers.$(br2)$(effect)Effect Mode$(reset) creates magical fields that apply status effects to entities within the ritual area. Unlike barriers, effects do not block movement but instead create zones of influence that can either harm or heal depending on the configuration."
+    },
+    {
+      "type": "text",
+      "title": "Effect Types: Poison vs Regeneration",
+      "text": "The $(obelisk)East Obelisk$(reset) determines the nature of the effect:$(br2)$(effect)$(b)Variant 5: Poison Effect$(reset)$(br)Creates a harmful area that applies poison to entities within. This effect is particularly dangerous to players who are not whitelisted for the barrier system.$(br2)$(effect)$(b)Variant 6: Regeneration Effect$(reset)$(br)Creates a beneficial area that applies regeneration to entities within. This effect is most useful for players who are whitelisted, creating safe zones of healing.$(br2)$(dim)Variant 0 creates an invalid effect that cannot manifest.$(br2)The East obelisk channels the specific magical energy that determines whether your ritual becomes a curse or a blessing."
+    },
+    {
+      "type": "text",
+      "title": "Effect Strength & Amplifier",
+      "text": "The $(obelisk)South Obelisk$(reset) governs the potency of the effect:$(br2)$(effect)$(b)Variant 1: Weak Effect$(reset) - Amplifier 0 (base effect)$(br)$(effect)$(b)Variant 2: Moderate Effect$(reset) - Amplifier 1 (enhanced effect)$(br)$(effect)$(b)Variant 3: Strong Effect$(reset) - Amplifier 2 (maximum effect)$(br2)$(dim)Variant 0 creates an effect with no strength that cannot manifest.$(br2)The effect strength determines how powerful the status effect becomes. Poison becomes more deadly, regeneration becomes more potent, and the overall impact on affected entities increases significantly."
+    },
+    {
+      "type": "text",
+      "title": "Effect Duration & Persistence",
+      "text": "The $(obelisk)West Obelisk$(reset) controls how long the effects persist:$(br2)$(effect)$(b)Variant 1: Short Duration$(reset) - 5 seconds per level$(br)$(effect)$(b)Variant 2: Moderate Duration$(reset) - 10 seconds per level$(br)$(effect)$(b)Variant 3: Long Duration$(reset) - 15 seconds per level$(br2)$(dim)Variant 0 creates an effect with no duration that cannot manifest.$(br2)Duration determines how long each application of the effect lasts. Effects are reapplied every second while entities remain within the ritual area, creating a continuous influence that can be either beneficial or harmful depending on the effect type."
+    },
+    {
+      "type": "text",
+      "title": "Effect Mechanics & Targeting",
+      "text": "$(effect)Effect Mode$(reset) operates on several key principles:$(br2)$(b)Circular Area:$(reset) All effect rituals create circular areas, regardless of the distance glyph configuration. The radius is determined by the maximum distance from any direction glyph.$(br2)$(b)Full Height Coverage:$(reset) Effects extend from Y=0 (bedrock) to Y=256 (build limit), affecting entities at any vertical position within the horizontal area.$(br2)$(b)Smart Targeting:$(reset) Poison effects only target denied players and non-player entities, while regeneration effects only target allowed players.$(br2)$(b)Continuous Application:$(reset) Effects are applied every 20 ticks (1 second) to all valid targets within the area, ensuring consistent coverage.$(br2)$(b)No Physical Blocking:$(reset) Unlike barriers, effects do not prevent movement or create walls - they only apply status effects."
+    },
+    {
+      "type": "text",
+      "title": "Effect Ritual Examples",
+      "text": "$(b)Poison Trap:$(reset)$(br)$(effect)North=5, East=5, South=3, West=2$(reset)$(br)Creates a $(effect)strong poison effect$(reset) with $(effect)moderate duration$(reset). Perfect for creating dangerous zones that harm intruders.$(br2)$(b)Healing Sanctuary:$(reset)$(br)$(effect)North=7, East=6, South=2, West=3$(reset)$(br)Creates a $(effect)moderate regeneration effect$(reset) with $(effect)fast duration$(reset). Ideal for creating safe zones where allies can recover quickly.$(br2)$(b)Maximum Curse:$(reset)$(br)$(effect)North=5, East=5, South=3, West=3$(reset)$(br)Creates a $(effect)strong poison effect$(reset) with $(effect)fast duration$(reset). The most deadly poison configuration for maximum harm to enemies."
+    },
+    {
+      "type": "text",
+      "title": "Strategic Considerations",
+      "text": "$(effect)Effect Mode$(reset) rituals offer unique strategic advantages:$(br2)$(b)Area Denial:$(reset) Poison effects can make areas inhospitable to enemies without blocking movement, allowing for tactical control of territory.$(br2)$(b)Support Zones:$(reset) Regeneration effects create safe havens where allies can recover and prepare for battle.$(br2)$(b)Resource Efficiency:$(reset) Effects require no durability management and cannot be destroyed by damage, making them more reliable than barriers.$(br2)$(b)Stealth Applications:$(reset) Effects can be used to create hidden zones of influence that enemies may not immediately recognize as dangerous.$(br2)$(b)Combination Potential:$(reset) Effect rituals can be combined with other defensive measures to create layered protection systems."
+    }
+  ]
+}
