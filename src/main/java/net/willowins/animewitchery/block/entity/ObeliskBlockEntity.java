@@ -20,7 +20,7 @@ public class ObeliskBlockEntity extends BlockEntity implements GeoBlockEntity {
     
     // Texture variant (0-6 for obelisk.png through obelisk7.png)
     private int textureVariant = 0;
-    private static final int MAX_VARIANTS = 7;
+    private static final int MAX_VARIANTS = 8;
 
     public ObeliskBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntities.OBELISK_BLOCK_ENTITY, pos, state);

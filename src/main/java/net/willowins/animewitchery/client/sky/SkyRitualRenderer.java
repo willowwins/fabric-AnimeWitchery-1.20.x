@@ -9,6 +9,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RotationAxis;
 import net.willowins.animewitchery.AnimeWitchery;
 import net.willowins.animewitchery.block.entity.BarrierCircleBlockEntity;
+import net.willowins.animewitchery.ritual.RitualConfiguration;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -146,26 +147,25 @@ public class SkyRitualRenderer {
             // Alpha only (texture provides color)
             float a = 0.7f * pulse;
 
-            // Compute extents using per-direction radii
-            float centerX = ritualPos.getX() + 0.5f;
-            float centerZ = ritualPos.getZ() + 0.5f;
-            float minX = centerX - westRadius;
-            float maxX = centerX + eastRadius;
-            float minZ = centerZ - northRadius;
-            float maxZ = centerZ + southRadius;
+            // Check ritual configuration to determine barrier shape
+            RitualConfiguration config = circleEntity.getRitualConfiguration();
+            boolean shouldRenderCircular = false;
+            if (config != null) {
+                if (config.getRitualType() == RitualConfiguration.RitualType.EFFECT) {
+                    // EFFECT rituals always render circular area
+                    shouldRenderCircular = true;
+                } else if (config.getRitualType() == RitualConfiguration.RitualType.BARRIER &&
+                           config.getBarrierShape() == RitualConfiguration.BarrierShape.CIRCULAR) {
+                    shouldRenderCircular = true;
+                }
+            }
 
-            // Render barrier walls as vertical quads (two-faced via thickness)
-            float thickness = 0.25f;
-
-            matrices.push();
-            matrices.translate(-camX, -camY, -camZ);
-
-            renderTexturedBarrierWall(matrices, buffer, minX, minZ, maxX, minZ, baseY, wallHeight, thickness, a); // North
-            renderTexturedBarrierWall(matrices, buffer, minX, maxZ, maxX, maxZ, baseY, wallHeight, thickness, a); // South
-            renderTexturedBarrierWall(matrices, buffer, maxX, minZ, maxX, maxZ, baseY, wallHeight, thickness, a); // East
-            renderTexturedBarrierWall(matrices, buffer, minX, minZ, minX, maxZ, baseY, wallHeight, thickness, a); // West
-
-            matrices.pop();
+            if (shouldRenderCircular) {
+                renderCircularBarrier(matrices, buffer, ritualPos, baseY, wallHeight, a, camX, camY, camZ);
+            } else {
+                renderRectangularBarrier(matrices, buffer, ritualPos, northRadius, southRadius, eastRadius, westRadius,
+                                         baseY, wallHeight, a, camX, camY, camZ);
+            }
 
             tessellator.draw();
 
@@ -224,5 +224,74 @@ public class SkyRitualRenderer {
         buffer.vertex(mat, x1b, y1, z1b).texture(u0, v1).color(1.0f, 1.0f, 1.0f, a).next();
         buffer.vertex(mat, x2b, y1, z2b).texture(u1, v1).color(1.0f, 1.0f, 1.0f, a).next();
         buffer.vertex(mat, x2b, y0, z2b).texture(u1, v0).color(1.0f, 1.0f, 1.0f, a).next();
+    }
+
+    /**
+     * Renders a rectangular barrier using the original wall-based approach
+     */
+    private static void renderRectangularBarrier(MatrixStack matrices, BufferBuilder buffer, BlockPos ritualPos,
+                                                int northRadius, int southRadius, int eastRadius, int westRadius,
+                                                float baseY, float wallHeight, float a, double camX, double camY, double camZ) {
+        // Compute extents using per-direction radii
+        float centerX = ritualPos.getX() + 0.5f;
+        float centerZ = ritualPos.getZ() + 0.5f;
+        float minX = centerX - westRadius;
+        float maxX = centerX + eastRadius;
+        float minZ = centerZ - northRadius;
+        float maxZ = centerZ + southRadius;
+
+        // Render barrier walls as vertical quads (two-faced via thickness)
+        float thickness = 0.25f;
+
+        matrices.push();
+        matrices.translate(-camX, -camY, -camZ);
+
+        renderTexturedBarrierWall(matrices, buffer, minX, minZ, maxX, minZ, baseY, wallHeight, thickness, a); // North
+        renderTexturedBarrierWall(matrices, buffer, minX, maxZ, maxX, maxZ, baseY, wallHeight, thickness, a); // South
+        renderTexturedBarrierWall(matrices, buffer, maxX, minZ, maxX, maxZ, baseY, wallHeight, thickness, a); // East
+        renderTexturedBarrierWall(matrices, buffer, minX, minZ, minX, maxZ, baseY, wallHeight, thickness, a); // West
+
+        matrices.pop();
+    }
+
+    /**
+     * Renders a circular barrier using multiple segments
+     */
+    private static void renderCircularBarrier(MatrixStack matrices, BufferBuilder buffer, BlockPos ritualPos,
+                                             float baseY, float wallHeight, float a, double camX, double camY, double camZ) {
+        // Get the barrier circle entity to access distance information
+        if (MinecraftClient.getInstance().world.getBlockEntity(ritualPos) instanceof BarrierCircleBlockEntity circleEntity) {
+            // Use the maximum distance from any direction as the radius
+            int maxRadius = Math.max(Math.max(circleEntity.getNorthDistance(), circleEntity.getSouthDistance()), 
+                                   Math.max(circleEntity.getEastDistance(), circleEntity.getWestDistance())) * 2;
+            float radius = maxRadius;
+            float centerX = ritualPos.getX() + 0.5f;
+            float centerZ = ritualPos.getZ() + 0.5f;
+            
+            // Number of segments for the circle (more segments = smoother circle)
+            int segments = 32;
+            float angleStep = (float) (2 * Math.PI / segments);
+            float thickness = 0.25f;
+
+            matrices.push();
+            matrices.translate(-camX, -camY, -camZ);
+
+            // Render circular barrier as multiple wall segments
+            for (int i = 0; i < segments; i++) {
+                float angle1 = i * angleStep;
+                float angle2 = (i + 1) * angleStep;
+                
+                // Calculate segment endpoints
+                float x1 = centerX + (float) Math.cos(angle1) * radius;
+                float z1 = centerZ + (float) Math.sin(angle1) * radius;
+                float x2 = centerX + (float) Math.cos(angle2) * radius;
+                float z2 = centerZ + (float) Math.sin(angle2) * radius;
+                
+                // Render this segment as a wall
+                renderTexturedBarrierWall(matrices, buffer, x1, z1, x2, z2, baseY, wallHeight, thickness, a);
+            }
+
+            matrices.pop();
+        }
     }
 }

@@ -9,20 +9,28 @@ import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.s2c.play.BlockEntityUpdateS2CPacket;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.effect.StatusEffect;
+import net.minecraft.entity.effect.StatusEffectInstance;
+import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.util.math.Direction;
+import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Vec3d;
 import net.willowins.animewitchery.block.ModBlocks;
 import net.willowins.animewitchery.block.entity.ActiveObeliskBlockEntity;
 import net.willowins.animewitchery.block.entity.ObeliskBlockEntity;
 import net.willowins.animewitchery.client.sky.SkyRitualRenderer;
+import net.willowins.animewitchery.ritual.RitualConfiguration;
+import net.willowins.animewitchery.ritual.RitualConfigurationBuilder;
 
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 import java.util.Collections;
 import java.util.WeakHashMap;
+import java.util.HashMap;
 
 public class BarrierCircleBlockEntity extends BlockEntity {
     private CircleStage stage = CircleStage.BASIC; // BASIC -> DEFINED -> COMPLETE
@@ -37,6 +45,7 @@ public class BarrierCircleBlockEntity extends BlockEntity {
     private int barrierDurability = 1000;
     private int barrierRegenPerSecond = 5;
     private long lastRegenTick = 0;
+    private long lastEffectTick = 0;
     
     // Barrier distance storage (from distance glyphs)
     private int northDistance = 5;
@@ -52,6 +61,9 @@ public class BarrierCircleBlockEntity extends BlockEntity {
 
     // Whitelist of players allowed to cross the barrier
     private final Set<UUID> allowedPlayerUuids = new HashSet<>();
+    
+    // Ritual configuration based on obelisk variants
+    private RitualConfiguration ritualConfiguration = null;
     
     public enum CircleStage {
         BASIC,      // Just created - shows basic outline
@@ -126,6 +138,20 @@ public class BarrierCircleBlockEntity extends BlockEntity {
         }
         allowed.putInt("count", index);
         nbt.put("allowedPlayers", allowed);
+        
+        // Save ritual configuration
+        if (ritualConfiguration != null) {
+            NbtCompound ritualNbt = new NbtCompound();
+            ritualNbt.putString("type", ritualConfiguration.getRitualType().name());
+            if (ritualConfiguration.getRitualType() == RitualConfiguration.RitualType.BARRIER) {
+                ritualNbt.putString("shape", ritualConfiguration.getBarrierShape().name());
+            } else if (ritualConfiguration.getRitualType() == RitualConfiguration.RitualType.EFFECT) {
+                ritualNbt.putString("effect", ritualConfiguration.getEffectType().name());
+            }
+            ritualNbt.putInt("strength", ritualConfiguration.getStrength());
+            ritualNbt.putInt("regenRate", ritualConfiguration.getRegenRate());
+            nbt.put("ritualConfiguration", ritualNbt);
+        }
     }
 
     @Override
@@ -170,6 +196,22 @@ public class BarrierCircleBlockEntity extends BlockEntity {
                 if (allowed.containsUuid(key)) {
                     this.allowedPlayerUuids.add(allowed.getUuid(key));
                 }
+            }
+        }
+        
+        // Load ritual configuration
+        if (nbt.contains("ritualConfiguration")) {
+            NbtCompound ritualNbt = nbt.getCompound("ritualConfiguration");
+            RitualConfiguration.RitualType type = RitualConfiguration.RitualType.valueOf(ritualNbt.getString("type"));
+            int strength = ritualNbt.getInt("strength");
+            int regenRate = ritualNbt.getInt("regenRate");
+            
+            if (type == RitualConfiguration.RitualType.BARRIER) {
+                RitualConfiguration.BarrierShape shape = RitualConfiguration.BarrierShape.valueOf(ritualNbt.getString("shape"));
+                this.ritualConfiguration = new RitualConfiguration(type, shape, null, strength, regenRate, new HashMap<>());
+            } else if (type == RitualConfiguration.RitualType.EFFECT) {
+                RitualConfiguration.EffectType effect = RitualConfiguration.EffectType.valueOf(ritualNbt.getString("effect"));
+                this.ritualConfiguration = new RitualConfiguration(type, null, effect, strength, regenRate, new HashMap<>());
             }
         }
         
@@ -241,6 +283,13 @@ public class BarrierCircleBlockEntity extends BlockEntity {
             // On the server, capture allowed players when barrier becomes active
             if (!world.isClient) {
                 captureAllowedPlayers();
+                // Build ritual configuration when ritual becomes fully active
+                if (!buildRitualConfiguration()) {
+                    // If ritual configuration is invalid, deactivate the ritual
+                    System.out.println("BarrierCircle: Invalid ritual configuration - deactivating ritual!");
+                    deactivateRitual();
+                    return;
+                }
             }
         }
         
@@ -252,6 +301,62 @@ public class BarrierCircleBlockEntity extends BlockEntity {
         markDirty();
         if (world != null && !world.isClient) {
             world.updateListeners(pos, getCachedState(), getCachedState(), 3);
+        }
+    }
+    
+    /**
+     * Builds the ritual configuration based on the obelisk variants around this barrier circle
+     * Returns true if configuration is valid, false if invalid
+     */
+    private boolean buildRitualConfiguration() {
+        if (world == null || world.isClient) return false;
+        
+        RitualConfiguration config = RitualConfigurationBuilder.buildConfiguration(world, pos);
+        if (RitualConfigurationBuilder.isValidConfiguration(config)) {
+            this.ritualConfiguration = config;
+            System.out.println("BarrierCircle: Built ritual configuration: " + config);
+            
+            // Apply configuration to barrier properties
+            applyRitualConfiguration(config);
+            return true;
+        } else {
+            System.out.println("BarrierCircle: Invalid ritual configuration - ritual cannot activate!");
+            return false;
+        }
+    }
+    
+    /**
+     * Applies the ritual configuration to modify barrier properties
+     */
+    private void applyRitualConfiguration(RitualConfiguration config) {
+        if (config == null) return;
+        
+        if (config.getRitualType() == RitualConfiguration.RitualType.BARRIER) {
+            // Barrier mode: Apply barrier properties
+            int strengthMultiplier = config.getStrength();
+            int newMaxDurability = 1000 * strengthMultiplier;
+            setBarrierMaxDurability(newMaxDurability);
+            this.barrierDurability = newMaxDurability; // Reset to full
+            
+            int regenMultiplier = config.getRegenRate();
+            int newRegenRate = 5 * regenMultiplier;
+            setBarrierRegenPerSecond(newRegenRate);
+            
+            System.out.println("BarrierCircle: Applied barrier configuration - Durability: " + newMaxDurability + ", Regen: " + newRegenRate + "/s");
+            System.out.println("BarrierCircle: Barrier shape: " + config.getBarrierShape());
+            
+        } else if (config.getRitualType() == RitualConfiguration.RitualType.EFFECT) {
+            // Effect mode: Apply effect properties
+            int strengthMultiplier = config.getStrength();
+            int durationMultiplier = config.getRegenRate(); // In effect mode, regenRate represents duration
+            
+            System.out.println("BarrierCircle: Applied effect configuration - Effect: " + config.getEffectType() + ", Strength: " + strengthMultiplier + ", Duration: " + durationMultiplier);
+            
+            // TODO: Implement effect application logic
+            // For now, just set barrier to minimal values since we're in effect mode
+            setBarrierMaxDurability(100);
+            this.barrierDurability = 100;
+            setBarrierRegenPerSecond(0);
         }
     }
     
@@ -313,6 +418,13 @@ public class BarrierCircleBlockEntity extends BlockEntity {
     public int getEastDistance() { return eastDistance; }
     public int getWestDistance() { return westDistance; }
     
+    // Ritual configuration methods
+    public RitualConfiguration getRitualConfiguration() { return ritualConfiguration; }
+    public void setRitualConfiguration(RitualConfiguration config) { 
+        this.ritualConfiguration = config; 
+        markDirty();
+    }
+    
     public BlockPos[] getDistanceGlyphs() {
         // Use cached glyph positions if available
         java.util.List<BlockPos> foundGlyphs = new java.util.ArrayList<>();
@@ -344,6 +456,20 @@ public class BarrierCircleBlockEntity extends BlockEntity {
     }
 
     private double[] computeExtents() {
+        // Check if we have a ritual configuration
+        if (ritualConfiguration != null) {
+            if (ritualConfiguration.getRitualType() == RitualConfiguration.RitualType.BARRIER) {
+                // Barrier mode: Check barrier shape
+                if (ritualConfiguration.getBarrierShape() == RitualConfiguration.BarrierShape.CIRCULAR) {
+                    return computeCircularExtents();
+                }
+            } else if (ritualConfiguration.getRitualType() == RitualConfiguration.RitualType.EFFECT) {
+                // Effect mode: Always use circular area for effects
+                return computeCircularExtents();
+            }
+        }
+        
+        // Default rectangular barrier
         int northRadius = Math.max(0, northDistance * 2);
         int southRadius = Math.max(0, southDistance * 2);
         int eastRadius = Math.max(0, eastDistance * 2);
@@ -356,6 +482,18 @@ public class BarrierCircleBlockEntity extends BlockEntity {
         double maxZ = centerZ + southRadius;
         return new double[]{minX, maxX, minZ, maxZ};
     }
+    
+    private double[] computeCircularExtents() {
+        // For circular barriers, we need to compute the radius and center
+        // Use the maximum distance from any direction as the radius
+        int maxRadius = Math.max(Math.max(northDistance, southDistance), Math.max(eastDistance, westDistance));
+        double radius = maxRadius * 2.0;
+        double centerX = pos.getX() + 0.5;
+        double centerZ = pos.getZ() + 0.5;
+        
+        // Return circular bounds (we'll use these for distance calculations)
+        return new double[]{centerX, centerZ, radius, 0}; // centerX, centerZ, radius, unused
+    }
 
     private boolean isPlayerAllowed(ServerPlayerEntity player) {
         return allowedPlayerUuids.contains(player.getUuid());
@@ -364,56 +502,103 @@ public class BarrierCircleBlockEntity extends BlockEntity {
     private void enforceBarrier() {
         if (world == null || world.isClient) return;
         if (!isBarrierFunctional()) return;
+        
+        // Check if we have a ritual configuration and use appropriate barrier logic
+        if (ritualConfiguration != null && ritualConfiguration.getRitualType() == RitualConfiguration.RitualType.EFFECT) {
+            // EFFECT mode doesn't push players out
+            return;
+        }
+        
         double[] extents = computeExtents();
-        double minX = extents[0], maxX = extents[1], minZ = extents[2], maxZ = extents[3];
-
+        
         if (world instanceof ServerWorld serverWorld) {
             for (ServerPlayerEntity player : serverWorld.getPlayers()) {
                 double x = player.getX();
                 double y = player.getY();
                 double z = player.getZ();
-                boolean inside = x >= minX && x <= maxX && z >= minZ && z <= maxZ;
-                if (inside && !isPlayerAllowed(player)) {
-                    // Compute nearest boundary normal
-                    double distToWest = x - minX;
-                    double distToEast = maxX - x;
-                    double distToNorth = z - minZ;
-                    double distToSouth = maxZ - z;
-                    double min = Math.min(Math.min(distToWest, distToEast), Math.min(distToNorth, distToSouth));
-                    double nx = 0.0;
-                    double nz = 0.0;
-                    double targetX = x;
-                    double targetZ = z;
-                    if (min == distToWest) { nx = -1.0; targetX = minX - 0.01; }
-                    else if (min == distToEast) { nx = 1.0; targetX = maxX + 0.01; }
-                    else if (min == distToNorth) { nz = -1.0; targetZ = minZ - 0.01; }
-                    else { nz = 1.0; targetZ = maxZ + 0.01; }
-
-                    // Damp inward velocity and apply outward impulse
-                    var v = player.getVelocity();
-                    double vn = v.x * nx + v.z * nz; // inward if vn > 0 along +n; but n is outward from inside
-                    // If moving further inside (opposite of n), vn will be negative; we want to remove inward component
-                    // Recompute: inward component relative to inward normal = -n
-                    double inward = v.x * (-nx) + v.z * (-nz);
-                    if (inward > 0) {
-                        // remove inward component
-                        double rx = inward * (-nx);
-                        double rz = inward * (-nz);
-                        v = v.add(-rx, 0, -rz);
+                
+                boolean inside;
+                double nx, nz, targetX, targetZ;
+                
+                if (ritualConfiguration != null && ritualConfiguration.getBarrierShape() == RitualConfiguration.BarrierShape.CIRCULAR) {
+                    // Circular barrier logic
+                    double centerX = extents[0];
+                    double centerZ = extents[1];
+                    double radius = extents[2];
+                    double dx = x - centerX;
+                    double dz = z - centerZ;
+                    double distanceSq = dx * dx + dz * dz;
+                    inside = distanceSq <= (radius * radius);
+                    
+                    if (inside && !isPlayerAllowed(player)) {
+                        // Calculate outward normal from center
+                        double distance = Math.sqrt(distanceSq);
+                        if (distance > 0) {
+                            nx = dx / distance;
+                            nz = dz / distance;
+                        } else {
+                            nx = 1.0;
+                            nz = 0.0;
+                        }
+                        
+                        // Push to just outside the circle
+                        targetX = centerX + nx * (radius + 0.01);
+                        targetZ = centerZ + nz * (radius + 0.01);
+                    } else {
+                        continue; // Player not inside or allowed
                     }
-                    // Apply outward push
-                    double push = 0.4;
-                    v = v.add(nx * push, 0, nz * push);
-                    player.setVelocity(v);
-                    player.velocityModified = true;
-
-                    // Clamp position to just outside boundary for smooth blocking
-                    player.refreshPositionAfterTeleport(targetX, y, targetZ);
-
-                    // Optional feedback
-                    if (serverWorld.getTime() % 10 == 0) {
-                        serverWorld.playSound(null, player.getBlockPos(), net.minecraft.sound.SoundEvents.BLOCK_AMETHYST_BLOCK_HIT, net.minecraft.sound.SoundCategory.PLAYERS, 0.2f, 1.5f);
+                } else {
+                    // Rectangular barrier logic
+                    double minX = extents[0], maxX = extents[1], minZ = extents[2], maxZ = extents[3];
+                    inside = x >= minX && x <= maxX && z >= minZ && z <= maxZ;
+                    
+                    if (inside && !isPlayerAllowed(player)) {
+                        // Compute nearest boundary normal
+                        double distToWest = x - minX;
+                        double distToEast = maxX - x;
+                        double distToNorth = z - minZ;
+                        double distToSouth = maxZ - z;
+                        double min = Math.min(Math.min(distToWest, distToEast), Math.min(distToNorth, distToSouth));
+                        
+                        if (min == distToWest) { nx = -1.0; targetX = minX - 0.01; }
+                        else if (min == distToEast) { nx = 1.0; targetX = maxX + 0.01; }
+                        else if (min == distToNorth) { nz = -1.0; targetZ = minZ - 0.01; }
+                        else { nz = 1.0; targetZ = maxZ + 0.01; }
+                        
+                        if (min == distToWest || min == distToEast) {
+                            nz = 0.0;
+                            targetZ = z;
+                        } else {
+                            nx = 0.0;
+                            targetX = x;
+                        }
+                    } else {
+                        continue; // Player not inside or allowed
                     }
+                }
+                
+                // Apply barrier physics (same for both shapes)
+                var v = player.getVelocity();
+                double inward = v.x * (-nx) + v.z * (-nz);
+                if (inward > 0) {
+                    // Remove inward component
+                    double rx = inward * (-nx);
+                    double rz = inward * (-nz);
+                    v = v.add(-rx, 0, -rz);
+                }
+                
+                // Apply outward push
+                double push = 0.4;
+                v = v.add(nx * push, 0, nz * push);
+                player.setVelocity(v);
+                player.velocityModified = true;
+
+                // Clamp position to just outside boundary
+                player.refreshPositionAfterTeleport(targetX, y, targetZ);
+
+                // Optional feedback
+                if (serverWorld.getTime() % 10 == 0) {
+                    serverWorld.playSound(null, player.getBlockPos(), net.minecraft.sound.SoundEvents.BLOCK_AMETHYST_BLOCK_HIT, net.minecraft.sound.SoundCategory.PLAYERS, 0.2f, 1.5f);
                 }
             }
         }
@@ -421,8 +606,23 @@ public class BarrierCircleBlockEntity extends BlockEntity {
     
     public boolean containsPosition(Vec3d position) {
         double[] extents = computeExtents();
-        double minX = extents[0], maxX = extents[1], minZ = extents[2], maxZ = extents[3];
-        return position.x >= minX && position.x <= maxX && position.z >= minZ && position.z <= maxZ;
+        
+        // EFFECT mode is always circular; BARRIER is circular only if configured
+        if (ritualConfiguration != null && (
+                ritualConfiguration.getRitualType() == RitualConfiguration.RitualType.EFFECT ||
+                ritualConfiguration.getBarrierShape() == RitualConfiguration.BarrierShape.CIRCULAR)) {
+            // Circular area check
+            double centerX = extents[0];
+            double centerZ = extents[1];
+            double radius = extents[2];
+            double dx = position.x - centerX;
+            double dz = position.z - centerZ;
+            return (dx * dx + dz * dz) <= (radius * radius);
+        } else {
+            // Rectangular bounds
+            double minX = extents[0], maxX = extents[1], minZ = extents[2], maxZ = extents[3];
+            return position.x >= minX && position.x <= maxX && position.z >= minZ && position.z <= maxZ;
+        }
     }
 
     public void absorbExplosion(Vec3d explosionPos, float power) {
@@ -579,6 +779,16 @@ public class BarrierCircleBlockEntity extends BlockEntity {
             entity.enforceBarrier();
         }
         
+        // Apply EFFECT mode pulses once per second
+        if (entity.isRitualActive() && entity.ritualConfiguration != null &&
+                entity.ritualConfiguration.getRitualType() == RitualConfiguration.RitualType.EFFECT) {
+            long now = world.getTime();
+            if (now - entity.lastEffectTick >= 20) {
+                entity.lastEffectTick = now;
+                entity.pulseEffectArea();
+            }
+        }
+        
         // Regenerate durability each second
         if (entity.isRitualActive() && entity.barrierDurability < entity.barrierMaxDurability) {
             long now = world.getTime();
@@ -587,6 +797,50 @@ public class BarrierCircleBlockEntity extends BlockEntity {
                 entity.barrierDurability = Math.min(entity.barrierMaxDurability,
                         entity.barrierDurability + entity.barrierRegenPerSecond);
                 entity.markDirty();
+            }
+        }
+    }
+
+    private void pulseEffectArea() {
+        if (!(world instanceof ServerWorld serverWorld)) return;
+        RitualConfiguration cfg = this.ritualConfiguration;
+        if (cfg == null || cfg.getRitualType() != RitualConfiguration.RitualType.EFFECT) return;
+
+        // Determine circular area
+        int maxRadius = Math.max(Math.max(northDistance, southDistance), Math.max(eastDistance, westDistance)) * 2;
+        double radius = Math.max(1, maxRadius);
+        double centerX = pos.getX() + 0.5;
+        double centerZ = pos.getZ() + 0.5;
+
+        // Search box around the circle area (much larger Y span to catch players above/below)
+        Box search = new Box(centerX - radius, pos.getY() - 10, centerZ - radius,
+                             centerX + radius, pos.getY() + 20, centerZ + radius);
+
+        // Map ritual effect type to status effect
+        StatusEffect effect = switch (cfg.getEffectType()) {
+            case POISON -> StatusEffects.POISON;
+            case REGENERATION -> StatusEffects.REGENERATION;
+            default -> null;
+        };
+        if (effect == null) return;
+
+        // Amplifier and duration mapping
+        int amplifier = Math.max(0, cfg.getStrength() - 1); // 1..3 -> 0..2
+        int durationTicks = 20 * 5 * Math.max(1, cfg.getRegenRate()); // 5s per duration level
+
+        // Gather targets within circle
+        java.util.List<LivingEntity> targets = serverWorld.getEntitiesByClass(
+                LivingEntity.class, search, e -> {
+                    double dx = e.getX() - centerX;
+                    double dz = e.getZ() - centerZ;
+                    return (dx * dx + dz * dz) <= (radius * radius);
+                }
+        );
+
+        if (!targets.isEmpty()) {
+            StatusEffectInstance instance = new StatusEffectInstance(effect, durationTicks, amplifier, true, true, true);
+            for (LivingEntity entity : targets) {
+                entity.addStatusEffect(new StatusEffectInstance(instance));
             }
         }
     }
