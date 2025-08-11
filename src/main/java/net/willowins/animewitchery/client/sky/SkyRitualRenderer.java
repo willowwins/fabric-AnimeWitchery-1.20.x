@@ -126,9 +126,9 @@ public class SkyRitualRenderer {
             double camY = camera.getPos().y;
             double camZ = camera.getPos().z;
 
-            // Y level to render the barrier at
-            float baseY = ritualPos.getY() + 0.1f; // slightly above ground
-            float wallHeight = 100.0f; // Height of the barrier walls
+            // Y level to render the barrier at - full chunk height for maximum coverage
+            float baseY = 0.0f; // Start from bedrock
+            float wallHeight = 256.0f; // Full world height
 
             // Time-based animation
             float time = client.world.getTime() + tickDelta;
