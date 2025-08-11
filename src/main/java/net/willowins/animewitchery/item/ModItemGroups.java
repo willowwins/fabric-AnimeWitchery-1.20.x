@@ -76,6 +76,7 @@ public class ModItemGroups {
                         entries.add(ModBlocks.SILVER_ORE);
                         entries.add(ModBlocks.EFFIGY_FOUNTAIN);
                         entries.add(ModBlocks.DECORATIVE_FOUNTAIN);
+                        entries.add(ModBlocks.GUARDIAN_STATUE);
                         entries.add(ModBlocks.DEEPSLATE_SILVER_ORE);
                         entries.add(ModBlocks.ALCHEMY_TABLE);
                         entries.add(ModBlocks.AUTO_CRAFTER_BLOCK);

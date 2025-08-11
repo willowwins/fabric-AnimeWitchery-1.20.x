@@ -12,6 +12,7 @@ import net.willowins.animewitchery.AnimeWitchery;
 import net.willowins.animewitchery.block.ModBlocks;
 import net.willowins.animewitchery.block.entity.ObeliskBlockEntity;
 import net.willowins.animewitchery.block.entity.ActiveObeliskBlockEntity;
+import net.willowins.animewitchery.block.entity.GuardianStatueBlockEntity;
 
 import static net.willowins.animewitchery.AnimeWitchery.MOD_ID;
 
@@ -102,6 +103,12 @@ public class ModBlockEntities {
             Registries.BLOCK_ENTITY_TYPE,
             new Identifier(MOD_ID, "block_miner"),
             FabricBlockEntityTypeBuilder.create(BlockMinerBlockEntity::new, ModBlocks.BLOCK_MINER).build(null)
+    );
+
+    public static final BlockEntityType<GuardianStatueBlockEntity> GUARDIAN_STATUE_BLOCK_ENTITY = Registry.register(
+            Registries.BLOCK_ENTITY_TYPE,
+            new Identifier(MOD_ID, "guardian_statue_be"),
+            FabricBlockEntityTypeBuilder.create(GuardianStatueBlockEntity::new, ModBlocks.GUARDIAN_STATUE).build(null)
     );
 
     public static void registerBlockEntities() {

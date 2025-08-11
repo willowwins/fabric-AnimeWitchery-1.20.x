@@ -18,6 +18,7 @@ import net.willowins.animewitchery.block.entity.renderer.BossObeliskRenderer;
 import net.willowins.animewitchery.block.entity.renderer.ActiveObeliskRenderer;
 import net.willowins.animewitchery.block.entity.renderer.BarrierCircleRenderer;
 import net.willowins.animewitchery.block.entity.renderer.BarrierDistanceGlyphRenderer;
+import net.willowins.animewitchery.block.entity.renderer.GuardianStatueRenderer;
 import net.willowins.animewitchery.entity.ModEntities;
 import net.willowins.animewitchery.entity.client.render.NeedleProjectileRenderer;
 import net.willowins.animewitchery.networking.ModPackets;
@@ -60,6 +61,7 @@ public class AnimeWitcheryClient implements ClientModInitializer {
         BlockEntityRendererRegistry.register(ModBlockEntities.BARRIER_CIRCLE_BLOCK_ENTITY, (context) -> new BarrierCircleRenderer(context));
         BlockEntityRendererRegistry.register(ModBlockEntities.BARRIER_DISTANCE_GLYPH_BLOCK_ENTITY, (context) -> new BarrierDistanceGlyphRenderer(context));
         BlockEntityRendererRegistry.register(ModBlockEntities.BOSS_OBELISK_BLOCK_ENTITY, (context) -> new BossObeliskRenderer());
+        BlockEntityRendererRegistry.register(ModBlockEntities.GUARDIAN_STATUE_BLOCK_ENTITY, (context) -> new GuardianStatueRenderer());
 
         EntityRendererRegistry.register(ModEntities.NEEDLE_PROJECTILE, NeedleProjectileRenderer::new);
 

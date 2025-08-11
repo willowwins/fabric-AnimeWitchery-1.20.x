@@ -16,6 +16,7 @@ import net.willowins.animewitchery.block.custom.ItemActionBlock;
 import net.willowins.animewitchery.block.custom.ObeliskBlock;
 import net.willowins.animewitchery.block.custom.ActiveObeliskBlock;
 import net.willowins.animewitchery.block.custom.BossObeliskBlock;
+import net.willowins.animewitchery.block.custom.GuardianStatueBlock;
 
 import java.util.Objects;
 
@@ -73,6 +74,9 @@ public static final Block ALCHEMY_TABLE =registerBlock("alchemy_table",
 
     public static final Block BARRIER_DISTANCE_GLYPH = registerBlock("barrier_distance_glyph",
             new BarrierDistanceGlyphBlock(FabricBlockSettings.copyOf(Blocks.STONE).nonOpaque()));
+
+    public static final Block GUARDIAN_STATUE = registerBlock("guardian_statue",
+            new GuardianStatueBlock(FabricBlockSettings.copyOf(Blocks.STONE).nonOpaque()));
 
     public static final Block SOUND_BLOCK =registerBlock("sound_block",
             new SoundBlock(FabricBlockSettings.copyOf(Blocks.JUKEBOX)));
