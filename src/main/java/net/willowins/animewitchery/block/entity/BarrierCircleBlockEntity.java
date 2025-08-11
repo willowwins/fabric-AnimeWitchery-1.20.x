@@ -7,12 +7,15 @@ import net.minecraft.network.PacketByteBuf;
 import net.minecraft.network.listener.ClientPlayPacketListener;
 import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.s2c.play.BlockEntityUpdateS2CPacket;
+import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
+import net.minecraft.sound.SoundCategory;
+import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.util.math.Direction;
@@ -25,12 +28,7 @@ import net.willowins.animewitchery.client.sky.SkyRitualRenderer;
 import net.willowins.animewitchery.ritual.RitualConfiguration;
 import net.willowins.animewitchery.ritual.RitualConfigurationBuilder;
 
-import java.util.HashSet;
-import java.util.Set;
-import java.util.UUID;
-import java.util.Collections;
-import java.util.WeakHashMap;
-import java.util.HashMap;
+import java.util.*;
 
 public class BarrierCircleBlockEntity extends BlockEntity {
     private CircleStage stage = CircleStage.BASIC; // BASIC -> DEFINED -> COMPLETE
@@ -427,7 +425,7 @@ public class BarrierCircleBlockEntity extends BlockEntity {
     
     public BlockPos[] getDistanceGlyphs() {
         // Use cached glyph positions if available
-        java.util.List<BlockPos> foundGlyphs = new java.util.ArrayList<>();
+        List<BlockPos> foundGlyphs = new ArrayList<>();
         if (northGlyphPos != null) foundGlyphs.add(northGlyphPos);
         if (southGlyphPos != null) foundGlyphs.add(southGlyphPos);
         if (eastGlyphPos != null) foundGlyphs.add(eastGlyphPos);
@@ -518,7 +516,7 @@ public class BarrierCircleBlockEntity extends BlockEntity {
                 double z = player.getZ();
                 
                 boolean inside;
-                double nx, nz, targetX, targetZ;
+                double nx = 0, nz = 0, targetX = 0, targetZ = 0;
                 
                 if (ritualConfiguration != null && ritualConfiguration.getBarrierShape() == RitualConfiguration.BarrierShape.CIRCULAR) {
                     // Circular barrier logic
@@ -598,7 +596,7 @@ public class BarrierCircleBlockEntity extends BlockEntity {
 
                 // Optional feedback
                 if (serverWorld.getTime() % 10 == 0) {
-                    serverWorld.playSound(null, player.getBlockPos(), net.minecraft.sound.SoundEvents.BLOCK_AMETHYST_BLOCK_HIT, net.minecraft.sound.SoundCategory.PLAYERS, 0.2f, 1.5f);
+                    serverWorld.playSound(null, player.getBlockPos(), SoundEvents.BLOCK_AMETHYST_BLOCK_HIT, SoundCategory.PLAYERS, 0.2f, 1.5f);
                 }
             }
         }
@@ -723,7 +721,7 @@ public class BarrierCircleBlockEntity extends BlockEntity {
         deactivateObelisk(world, westPos);
         
         // Play deactivation sound
-        world.playSound(null, pos, net.minecraft.sound.SoundEvents.BLOCK_BEACON_DEACTIVATE, net.minecraft.sound.SoundCategory.BLOCKS, 1.0f, 1.0f);
+        world.playSound(null, pos, SoundEvents.BLOCK_BEACON_DEACTIVATE, SoundCategory.BLOCKS, 1.0f, 1.0f);
         
         markDirty();
         if (world != null) {
@@ -754,7 +752,7 @@ public class BarrierCircleBlockEntity extends BlockEntity {
                 double y = obeliskPos.getY() + 1.0 + world.random.nextDouble() * 3.0;
                 double z = obeliskPos.getZ() + 0.5 + (world.random.nextDouble() - 0.5) * 2.0;
                 
-                world.addParticle(net.minecraft.particle.ParticleTypes.SMOKE, x, y, z, 0, 0.1, 0);
+                world.addParticle(ParticleTypes.SMOKE, x, y, z, 0, 0.1, 0);
             }
         }
     }
@@ -829,7 +827,7 @@ public class BarrierCircleBlockEntity extends BlockEntity {
         int durationTicks = 20 * 5 * Math.max(1, cfg.getRegenRate()); // 5s per duration level
 
         // Gather targets within circle
-        java.util.List<LivingEntity> targets = serverWorld.getEntitiesByClass(
+        List<LivingEntity> targets = serverWorld.getEntitiesByClass(
                 LivingEntity.class, search, e -> {
                     double dx = e.getX() - centerX;
                     double dz = e.getZ() - centerZ;
