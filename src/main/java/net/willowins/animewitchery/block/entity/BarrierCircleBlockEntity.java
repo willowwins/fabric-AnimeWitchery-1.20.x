@@ -810,9 +810,9 @@ public class BarrierCircleBlockEntity extends BlockEntity {
         double centerX = pos.getX() + 0.5;
         double centerZ = pos.getZ() + 0.5;
 
-        // Search box around the circle area (much larger Y span to catch players above/below)
-        Box search = new Box(centerX - radius, pos.getY() - 10, centerZ - radius,
-                             centerX + radius, pos.getY() + 20, centerZ + radius);
+        // Search box around the circle area (full chunk height for maximum coverage)
+        Box search = new Box(centerX - radius, 0, centerZ - radius,
+                             centerX + radius, 256, centerZ + radius);
 
         // Map ritual effect type to status effect
         StatusEffect effect = switch (cfg.getEffectType()) {
@@ -838,6 +838,20 @@ public class BarrierCircleBlockEntity extends BlockEntity {
         if (!targets.isEmpty()) {
             StatusEffectInstance instance = new StatusEffectInstance(effect, durationTicks, amplifier, true, true, true);
             for (LivingEntity entity : targets) {
+                // For negative effects (poison), only apply to denied players
+                // For positive effects (regeneration), apply to allowed players
+                if (cfg.getEffectType() == RitualConfiguration.EffectType.POISON) {
+                    // Poison only affects players who aren't allowed to cross the barrier
+                    if (entity instanceof ServerPlayerEntity player && isPlayerAllowed(player)) {
+                        continue; // Skip allowed players for poison
+                    }
+                }
+                else if (cfg.getEffectType() == RitualConfiguration.EffectType.REGENERATION) {
+                    // Regeneration affects everyone, poison only affects denied players
+                    if (entity instanceof ServerPlayerEntity player && !isPlayerAllowed(player)) {
+                        continue; // Skip denied players for regeneration
+                    }
+                }
                 entity.addStatusEffect(new StatusEffectInstance(instance));
             }
         }
