@@ -5,6 +5,10 @@ import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.sound.PositionedSoundInstance;
 import net.minecraft.client.sound.SoundInstance;
+import net.minecraft.nbt.NbtCompound;
+import net.minecraft.network.listener.ClientPlayPacketListener;
+import net.minecraft.network.packet.Packet;
+import net.minecraft.network.packet.s2c.play.BlockEntityUpdateS2CPacket;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
@@ -12,6 +16,7 @@ import net.minecraft.world.World;
 import net.willowins.animewitchery.sound.ModSounds;
 import net.minecraft.world.World;
 import net.willowins.animewitchery.block.ModBlocks;
+import net.willowins.animewitchery.block.entity.ObeliskBlockEntity;
 import software.bernie.geckolib.animatable.GeoBlockEntity;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.core.animation.AnimatableManager;
@@ -24,6 +29,7 @@ public class ActiveObeliskBlockEntity extends BlockEntity implements GeoBlockEnt
     private SoundInstance humSound;
 
     private BlockPos linkedRitualPos;
+    private int textureVariant = 0; // Store the texture variant from the original obelisk
 
     public ActiveObeliskBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntities.ACTIVE_OBELISK_BLOCK_ENTITY, pos, state);
@@ -60,6 +66,7 @@ public class ActiveObeliskBlockEntity extends BlockEntity implements GeoBlockEnt
         if (linkedRitualPos != null) {
             nbt.putLong("LinkedRitualPos", linkedRitualPos.asLong());
         }
+        nbt.putInt("textureVariant", textureVariant);
     }
     
     @Override
@@ -67,6 +74,9 @@ public class ActiveObeliskBlockEntity extends BlockEntity implements GeoBlockEnt
         super.readNbt(nbt);
         if (nbt.contains("LinkedRitualPos")) {
             linkedRitualPos = BlockPos.fromLong(nbt.getLong("LinkedRitualPos"));
+        }
+        if (nbt.contains("textureVariant")) {
+            textureVariant = nbt.getInt("textureVariant");
         }
     }
 
@@ -98,6 +108,21 @@ public class ActiveObeliskBlockEntity extends BlockEntity implements GeoBlockEnt
     }
     
     /**
+     * Get the texture variant
+     */
+    public int getTextureVariant() {
+        return textureVariant;
+    }
+    
+    /**
+     * Set the texture variant (called when converting from regular obelisk)
+     */
+    public void setTextureVariant(int variant) {
+        this.textureVariant = variant;
+        markDirty();
+    }
+    
+    /**
      * Check if this obelisk is still part of an active ritual
      * If not, deactivate itself
      */
@@ -121,6 +146,18 @@ public class ActiveObeliskBlockEntity extends BlockEntity implements GeoBlockEnt
         // Ritual is no longer valid, deactivate
         //deactivateObelisk();
     }
+
+    @Override
+    public NbtCompound toInitialChunkDataNbt() {
+        return createNbt(); // Send full NBT to client when chunk is loaded
+    }
+
+    @Override
+    public Packet<ClientPlayPacketListener> toUpdatePacket() {
+        NbtCompound nbt = new NbtCompound();
+        writeNbt(nbt);
+        return BlockEntityUpdateS2CPacket.create(this);
+    }
     
     /**
      * Deactivate this obelisk
@@ -130,6 +167,12 @@ public class ActiveObeliskBlockEntity extends BlockEntity implements GeoBlockEnt
         
         // Convert back to regular obelisk
         world.setBlockState(pos, ModBlocks.OBELISK.getDefaultState());
+        
+        // Set the texture variant on the new obelisk block entity
+        BlockEntity newObelisk = world.getBlockEntity(pos);
+        if (newObelisk instanceof ObeliskBlockEntity obeliskEntity) {
+            obeliskEntity.setTextureVariant(textureVariant);
+        }
         
         // Spawn deactivation particles
         for (int i = 0; i < 15; i++) {

@@ -97,12 +97,35 @@ public class ModItemGroups {
                         entries.add(ModBlocks.SILVER_STAIRS);
 
                         entries.add(ModBlocks.OBELISK);
-                        //entries.add(ModBlocks.ACTIVE_OBELISK);
 
                         entries.add(ModItems.SILVER_PENDANT);
                         entries.add(ModItems.HEALING_STAFF);
                         entries.add(ModItems.RAILGUN);
-                        } ).build());
+
+                        entries.add(ModItems.CHISEL);
+                        entries.add(ModItems.MORTAR_AND_PESTLE);
+                        entries.add(ModItems.CHALK);
+                        entries.add(ModItems.MAGIC_CHALK);
+                        entries.add(ModItems.ENCHANTED_CRYSTAL);
+                        entries.add(ModItems.BONE_DUST);
+                        entries.add(ModItems.AMETHYST_DUST);
+                        entries.add(ModItems.FIRE_RUNE_STONE);
+                        entries.add(ModItems.WATER_RUNE_STONE);
+                        entries.add(ModItems.EARTH_RUNE_STONE);
+                        entries.add(ModItems.AIR_RUNE_STONE);
+                        entries.add(ModItems.LIFE_RUNE_STONE);
+                        entries.add(ModItems.DEATH_RUNE_STONE);
+                        entries.add(ModItems.LIGHT_RUNE_STONE);
+                        entries.add(ModItems.DARKNESS_RUNE_STONE);
+                        entries.add(ModItems.BARRIER_CATALYST);
+                        entries.add(ModItems.REPAIR_ESSENCE);
+
+                        entries.add(ModItems.OBELISK_HELMET);
+                        entries.add(ModItems.OBELISK_CHESTPLATE);
+                        entries.add(ModItems.OBELISK_LEGGINGS);
+                        entries.add(ModItems.OBELISK_BOOTS);
+                        entries.add(ModItems.OBELISK_SWORD);
+                     } ).build());
 
     public static void registerItemGroups(){
         AnimeWitchery.LOGGER.info("registering Item Groups For " +AnimeWitchery.MOD_ID);

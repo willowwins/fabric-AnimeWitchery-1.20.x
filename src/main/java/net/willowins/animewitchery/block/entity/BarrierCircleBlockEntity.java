@@ -14,6 +14,8 @@ import net.minecraft.world.World;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3d;
 import net.willowins.animewitchery.block.ModBlocks;
+import net.willowins.animewitchery.block.entity.ActiveObeliskBlockEntity;
+import net.willowins.animewitchery.block.entity.ObeliskBlockEntity;
 import net.willowins.animewitchery.client.sky.SkyRitualRenderer;
 
 import java.util.HashSet;
@@ -531,7 +533,20 @@ public class BarrierCircleBlockEntity extends BlockEntity {
     
     private void deactivateObelisk(World world, BlockPos obeliskPos) {
         if (world.getBlockState(obeliskPos).isOf(ModBlocks.ACTIVE_OBELISK)) {
+            // Get the texture variant from the active obelisk before converting
+            int textureVariant = 0;
+            BlockEntity activeObelisk = world.getBlockEntity(obeliskPos);
+            if (activeObelisk instanceof ActiveObeliskBlockEntity activeObeliskEntity) {
+                textureVariant = activeObeliskEntity.getTextureVariant();
+            }
+            
             world.setBlockState(obeliskPos, ModBlocks.OBELISK.getDefaultState());
+            
+            // Set the texture variant on the new obelisk block entity
+            BlockEntity newObelisk = world.getBlockEntity(obeliskPos);
+            if (newObelisk instanceof ObeliskBlockEntity obeliskEntity) {
+                obeliskEntity.setTextureVariant(textureVariant);
+            }
             
             // Spawn deactivation particles
             for (int i = 0; i < 10; i++) {

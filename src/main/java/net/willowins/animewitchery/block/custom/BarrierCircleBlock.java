@@ -18,6 +18,7 @@ import net.willowins.animewitchery.block.ModBlocks;
 import net.willowins.animewitchery.block.entity.ActiveObeliskBlockEntity;
 import net.willowins.animewitchery.block.entity.BarrierCircleBlockEntity;
 import net.willowins.animewitchery.block.entity.ModBlockEntities;
+import net.willowins.animewitchery.block.entity.ObeliskBlockEntity;
 import net.willowins.animewitchery.client.sky.SkyRitualRenderer;
 import net.willowins.animewitchery.item.ModItems;
 import org.jetbrains.annotations.Nullable;
@@ -240,6 +241,13 @@ public class BarrierCircleBlock extends BlockWithEntity {
     }
     
     private void activateObeliskWithLightning(World world, BlockPos obeliskPos, String direction, BlockPos circlepos) {
+        // Get the texture variant from the original obelisk before converting
+        int textureVariant = 0;
+        BlockEntity originalObelisk = world.getBlockEntity(obeliskPos);
+        if (originalObelisk instanceof ObeliskBlockEntity obeliskEntity) {
+            textureVariant = obeliskEntity.getTextureVariant();
+        }
+        
         // Summon lightning at the obelisk
         LightningEntity lightning = EntityType.LIGHTNING_BOLT.create(world);
         if (lightning != null) {
@@ -253,10 +261,11 @@ public class BarrierCircleBlock extends BlockWithEntity {
         // Activate the obelisk
         world.setBlockState(obeliskPos, ModBlocks.ACTIVE_OBELISK.getDefaultState());
 
-        // Set the linked ritual position for the obelisk
+        // Set the linked ritual position and texture variant for the obelisk
         BlockEntity blockEntity = world.getBlockEntity(obeliskPos);
         if (blockEntity instanceof ActiveObeliskBlockEntity activeObelisk) {
             activeObelisk.setLinkedRitual(circlepos);
+            activeObelisk.setTextureVariant(textureVariant);
         }
 
         // Spawn activation particles

@@ -32,6 +32,7 @@ import net.willowins.animewitchery.block.ModBlocks;
 import net.willowins.animewitchery.block.entity.ModBlockEntities;
 import net.willowins.animewitchery.block.entity.ObeliskBlockEntity;
 import net.willowins.animewitchery.world.ObeliskBreakState;
+import net.willowins.animewitchery.item.ModItems;
 import org.jetbrains.annotations.Nullable;
 
 public class ObeliskBlock extends BlockWithEntity implements BlockEntityProvider {
@@ -61,6 +62,22 @@ public class ObeliskBlock extends BlockWithEntity implements BlockEntityProvider
     @Override
     public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
         if (!world.isClient) {
+            // Check if player is using chisel
+            if (player.getStackInHand(hand).isOf(ModItems.CHISEL)) {
+                BlockEntity blockEntity = world.getBlockEntity(pos);
+                if (blockEntity instanceof ObeliskBlockEntity obeliskEntity) {
+                    obeliskEntity.cycleTextureVariant();
+                    
+                    // Play chisel sound
+                    world.playSound(null, pos, SoundEvents.BLOCK_STONE_PLACE, SoundCategory.BLOCKS, 0.5f, 1.2f);
+                    
+                    // Send feedback message
+                    player.sendMessage(Text.literal("§7§oThe obelisk's surface shifts to reveal a new pattern..."), true);
+                    
+                    return ActionResult.SUCCESS;
+                }
+            }
+            
             // Give the player slowness and blindness effects
             player.addStatusEffect(new net.minecraft.entity.effect.StatusEffectInstance(
                 net.minecraft.entity.effect.StatusEffects.SLOWNESS, 

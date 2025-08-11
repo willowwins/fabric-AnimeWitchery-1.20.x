@@ -9,4 +9,4 @@ public class ObeliskModel extends DefaultedBlockGeoModel<ObeliskBlockEntity> {
     public ObeliskModel() {
         super(new Identifier(AnimeWitchery.MOD_ID, "obelisk"));
     }
-} 
+}

@@ -8,6 +8,7 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.block.BlockState;
 import net.minecraft.world.BlockView;
+import net.minecraft.util.Identifier;
 import software.bernie.geckolib.cache.object.BakedGeoModel;
 import software.bernie.geckolib.renderer.GeoBlockRenderer;
 import net.minecraft.block.entity.BlockEntity;
@@ -21,12 +22,23 @@ import java.awt.Color;
 import net.minecraft.world.World;
 import net.willowins.animewitchery.block.ModBlocks;
 import net.willowins.animewitchery.block.entity.BarrierCircleBlockEntity;
+import net.willowins.animewitchery.AnimeWitchery;
 import java.util.ArrayList;
 import java.util.List;
 
 public class ActiveObeliskRenderer extends GeoBlockRenderer<ActiveObeliskBlockEntity> {
     public ActiveObeliskRenderer() {
         super(new ActiveObeliskModel());
+    }
+    
+    @Override
+    public Identifier getTextureLocation(ActiveObeliskBlockEntity animatable) {
+        int variant = animatable.getTextureVariant();
+        if (variant == 0) {
+            return new Identifier(AnimeWitchery.MOD_ID, "textures/block/obelisk.png");
+        } else {
+            return new Identifier(AnimeWitchery.MOD_ID, "textures/block/obelisk" + (variant + 1) + ".png");
+        }
     }
 
     @Override

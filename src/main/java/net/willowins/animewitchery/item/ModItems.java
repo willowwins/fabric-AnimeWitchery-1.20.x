@@ -110,10 +110,14 @@ public class ModItems {
     public static final Item RAILGUN =registerItem("railgun", new RailgunItem(new FabricItemSettings().maxCount(1).rarity(Rarity.RARE)));
     public static final Item OBELISK_SWORD = registerItem("obelisk_sword", new ObeliskSwordItem(ModToolMaterial.OBELISK, 7, -1.4f, new FabricItemSettings().maxCount(1).rarity(Rarity.RARE)));
 
+    public static final Item CHISEL = registerItem("chisel", new ChiselItem(new FabricItemSettings().rarity(Rarity.UNCOMMON).maxCount(1)));
+
+    public static final Item OBELISK_SHARD = registerItem("obelisk_shard", new Item(new FabricItemSettings().rarity(Rarity.UNCOMMON)));
+
     // New alchemy and magic items
-    public static final Item MORTAR_AND_PESTLE = registerItem("mortar_and_pestle", new Item(new FabricItemSettings()));
-    public static final Item CHALK = registerItem("chalk", new NormalChalkItem(new FabricItemSettings()));
-    public static final Item MAGIC_CHALK = registerItem("magic_chalk", new MagicChalkItem(new FabricItemSettings().rarity(Rarity.UNCOMMON)));
+    public static final Item MORTAR_AND_PESTLE = registerItem("mortar_and_pestle", new Item(new FabricItemSettings().maxCount(1)));
+    public static final Item CHALK = registerItem("chalk", new NormalChalkItem(new FabricItemSettings().maxCount(1)));
+    public static final Item MAGIC_CHALK = registerItem("magic_chalk", new MagicChalkItem(new FabricItemSettings().rarity(Rarity.UNCOMMON).maxCount(1)));
     public static final Item ENCHANTED_CRYSTAL = registerItem("enchanted_crystal", new Item(new FabricItemSettings().rarity(Rarity.UNCOMMON)));
     
     // Dust items
@@ -165,6 +169,7 @@ public class ModItems {
         // Add barrier items
         entries.add(BARRIER_CATALYST);
         entries.add(REPAIR_ESSENCE);
+        entries.add(OBELISK_SHARD);
     }
 
 
@@ -185,5 +190,6 @@ public class ModItems {
         entries.add(OBELISK_LEGGINGS);
         entries.add(OBELISK_BOOTS);
         entries.add(OBELISK_SWORD);
+        entries.add(CHISEL);
     }
 }
