@@ -11,12 +11,22 @@
     {
       "type": "patchouli:text",
       "title": "The Wardens",
-      "text": "Plant the four $(thing)Wardens$() upon the Cross of the World, each $(gold)five strides$() from the Heart.$(br)Give heed to the compass, for a Warden misplaced shall answer no call."
+      "text": "Plant the four $(thing)Wardens$() upon the Cross of the World, each $(gold)five strides$() from the Heart.$(br)Give heed to the compass, for a Warden misplaced shall answer no call.$(br2)Each obelisk must be placed precisely at the cardinal directions: North, East, South, and West, exactly 5 blocks from the barrier circle center."
+    },
+    {
+      "type": "patchouli:text",
+      "title": "The Language of Stones",
+      "text": "Once your obelisks are placed, you must awaken their runes using the $(obelisk)Chisel$(reset).$(br2)$(b)Right-click$(reset) each obelisk to cycle through its seven variants, each carrying different ritual meaning:$(br)$(obelisk)Variant 0:$(reset) Blank (invalid)$(br)$(obelisk)Variant 1-3:$(reset) Strength and regeneration$(br)$(obelisk)Variant 4:$(reset) Shield rune (barrier mode)$(br)$(obelisk)Variant 5:$(reset) Poison rune (effect mode)$(br)$(obelisk)Variant 6:$(reset) Regeneration rune (effect mode)$(br)$(obelisk)Variant 7:$(reset) Blessing rune (effect mode)$(br2)Study the $(obelisk)Obelisk Variants$(reset) chapter to understand the complete ritual configuration system."
     },
     {
       "type": "patchouli:text",
       "title": "The Sign Above",
-      "text": "Where the rite is true, the firmament mirrors the earth: a sigil vast turns above the Circle, discerned by those who draw near."
+      "text": "Where the rite is true, the firmament mirrors the earth: a sigil vast turns above the Circle, discerned by those who draw near.$(br2)When your ritual activates successfully, the $(obelisk)BarrierCircleSky.png$(reset) texture will manifest high above your circle, creating a visible sign of the ancient magic at work.$(br2)This celestial manifestation serves as both a beacon of power and a visual anchor for your ritual's stability."
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Ritual Validation",
+      "text": "$(ritual)Important:$(reset) Not all obelisk configurations create valid rituals!$(br2)$(b)Critical Requirements:$(reset)$(br)$(obelisk)North Obelisk:$(reset) Must be variant 4, 5, or 7 to define ritual type$(br)$(obelisk)East Obelisk:$(reset) Must match the ritual type (1-2 for barriers, 5-6 for effects)$(br)$(obelisk)South & West:$(reset) Must be variants 1, 2, or 3 for strength and regeneration$(br2)$(dim)If any obelisk is variant 0 (blank), the ritual will fail to activate.$(br2)The ancient texts warn: 'Only the complete pattern awakens the sleeping power. Incomplete runes bring only silence.'"
     }
   ]
 }
