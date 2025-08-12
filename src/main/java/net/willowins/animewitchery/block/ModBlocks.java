@@ -4,6 +4,7 @@ import net.fabricmc.fabric.api.block.v1.FabricBlock;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.minecraft.block.*;
+import net.minecraft.block.AbstractBlock;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.registry.Registries;
@@ -12,11 +13,7 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.math.intprovider.UniformIntProvider;
 import net.willowins.animewitchery.AnimeWitchery;
 import net.willowins.animewitchery.block.custom.*;
-import net.willowins.animewitchery.block.custom.ItemActionBlock;
-import net.willowins.animewitchery.block.custom.ObeliskBlock;
-import net.willowins.animewitchery.block.custom.ActiveObeliskBlock;
-import net.willowins.animewitchery.block.custom.BossObeliskBlock;
-import net.willowins.animewitchery.block.custom.GuardianStatueBlock;
+import net.willowins.animewitchery.block.custom.PillarBlock;
 
 import java.util.Objects;
 
@@ -77,6 +74,9 @@ public static final Block ALCHEMY_TABLE =registerBlock("alchemy_table",
 
     public static final Block GUARDIAN_STATUE = registerBlock("guardian_statue",
             new GuardianStatueBlock(FabricBlockSettings.copyOf(Blocks.STONE).nonOpaque()));
+
+    public static final Block PILLAR = registerBlock("pillar",
+            new PillarBlock(FabricBlockSettings.copyOf(Blocks.STONE)));
 
     public static final Block SOUND_BLOCK =registerBlock("sound_block",
             new SoundBlock(FabricBlockSettings.copyOf(Blocks.JUKEBOX)));
