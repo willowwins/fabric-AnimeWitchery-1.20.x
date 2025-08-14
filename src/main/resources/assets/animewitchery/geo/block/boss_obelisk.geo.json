@@ -3,20 +3,20 @@
 	"minecraft:geometry": [
 		{
 			"description": {
-                "identifier": "geometry.boss_obelisk",
+				"identifier": "geometry.unknown",
 				"texture_width": 256,
 				"texture_height": 256,
-				"visible_bounds_width": 4,
+				"visible_bounds_width": 5,
 				"visible_bounds_height": 9.5,
 				"visible_bounds_offset": [0, 4.25, 0]
 			},
 			"bones": [
 				{
 					"name": "Q4",
-					"pivot": [1, 0, 1],
+					"pivot": [0.5, 43, 15.5],
 					"cubes": [
 						{
-							"origin": [0, 0, 0],
+							"origin": [-8, -1, 7],
 							"size": [18, 48, 18],
 							"inflate": 0.01,
 							"uv": {
@@ -29,7 +29,7 @@
 							}
 						},
 						{
-							"origin": [0, 0, 0],
+							"origin": [-8, -1, 7],
 							"size": [16, 128, 16],
 							"uv": {
 								"north": {"uv": [0, 0], "uv_size": [16, 128]},
@@ -44,10 +44,10 @@
 				},
 				{
 					"name": "Q3",
-					"pivot": [1, 0, -15],
+					"pivot": [0.5, 43, -1.5],
 					"cubes": [
 						{
-							"origin": [0, 0, -18],
+							"origin": [-8, -1, -11],
 							"size": [18, 48, 18],
 							"inflate": 0.01,
 							"uv": {
@@ -60,7 +60,7 @@
 							}
 						},
 						{
-							"origin": [0, 0, -16],
+							"origin": [-8, -1, -9],
 							"size": [16, 128, 16],
 							"uv": {
 								"north": {"uv": [16, 0], "uv_size": [-16, 128]},
@@ -75,10 +75,10 @@
 				},
 				{
 					"name": "Q2",
-					"pivot": [-15, 0, -15],
+					"pivot": [-16.5, 43, -1.5],
 					"cubes": [
 						{
-							"origin": [-18, 0, -18],
+							"origin": [-26, -1, -11],
 							"size": [18, 48, 18],
 							"inflate": 0.01,
 							"uv": {
@@ -91,7 +91,7 @@
 							}
 						},
 						{
-							"origin": [-16, 0, -16],
+							"origin": [-24, -1, -9],
 							"size": [16, 128, 16],
 							"uv": {
 								"north": {"uv": [0, 0], "uv_size": [16, 128]},
@@ -106,10 +106,10 @@
 				},
 				{
 					"name": "Q1",
-					"pivot": [-18, 0, 1],
+					"pivot": [-16.5, 43, 15.5],
 					"cubes": [
 						{
-							"origin": [-18, 0, 0],
+							"origin": [-26, -1, 7],
 							"size": [18, 48, 18],
 							"inflate": 0.01,
 							"uv": {
@@ -122,7 +122,7 @@
 							}
 						},
 						{
-							"origin": [-16, 0, 0],
+							"origin": [-24, -1, 7],
 							"size": [16, 128, 16],
 							"uv": {
 								"north": {"uv": [48, 128], "uv_size": [16, 128]},
@@ -137,10 +137,10 @@
 				},
 				{
 					"name": "Tool1",
-					"pivot": [0, 0, 0],
+					"pivot": [-8, -1.5, 7],
 					"cubes": [
 						{
-							"origin": [0, 0, -8],
+							"origin": [-8, -1, -1],
 							"size": [0, 127, 16],
 							"uv": {
 								"north": {"uv": [0, 0], "uv_size": [0, 127]},
