@@ -41,7 +41,7 @@ public class VoidBoundEffect extends StatusEffect {
                 if (player.getWorld() != null && player.getWorld().isClient) {
                     spawnVoidParticles(player);
                     // Turn ON the void shader
-                    net.willowins.animewitchery.client.shader.VoidBoundPostProcessor.INSTANCE.setActive(true);
+                    //net.willowins.animewitchery.client.shader.VoidBoundPostProcessor.INSTANCE.setActive(true);
                 }
             } else {
                 // Normal phase - visible and vulnerable
@@ -50,7 +50,7 @@ public class VoidBoundEffect extends StatusEffect {
                 
                 // Turn OFF the void shader
                 if (player.getWorld() != null && player.getWorld().isClient) {
-                    net.willowins.animewitchery.client.shader.VoidBoundPostProcessor.INSTANCE.setActive(false);
+                    //net.willowins.animewitchery.client.shader.VoidBoundPostProcessor.INSTANCE.setActive(false);
                 }
             }
         }
@@ -62,7 +62,7 @@ public class VoidBoundEffect extends StatusEffect {
         
         // Ensure PostProcessor is turned off when effect completely ends
         if (entity instanceof PlayerEntity player && player.getWorld() != null && player.getWorld().isClient) {
-            net.willowins.animewitchery.client.shader.VoidBoundPostProcessor.INSTANCE.setActive(false);
+            //net.willowins.animewitchery.client.shader.VoidBoundPostProcessor.INSTANCE.setActive(false);
         }
     }
     

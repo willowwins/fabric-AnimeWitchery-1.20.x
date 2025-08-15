@@ -29,8 +29,7 @@ import net.willowins.animewitchery.screen.*;
 import net.willowins.animewitchery.client.sky.SkyRitualRenderer;
 import net.fabricmc.fabric.api.client.rendering.v1.BuiltinItemRendererRegistry;
 import net.willowins.animewitchery.item.renderer.ObeliskBuiltinItemRenderer;
-import net.willowins.animewitchery.client.shader.VoidBoundPostProcessor;
-import team.lodestar.lodestone.systems.postprocess.PostProcessHandler;
+import net.willowins.animewitchery.client.shader.VoidBoundShaderRenderer;
 
 
 public class AnimeWitcheryClient implements ClientModInitializer {
@@ -86,7 +85,10 @@ public class AnimeWitcheryClient implements ClientModInitializer {
         // Builtin item renderer for Obelisk block item
         BuiltinItemRendererRegistry.INSTANCE.register(ModBlocks.OBELISK.asItem(), new ObeliskBuiltinItemRenderer());
 
-        // Register void bound post processor
-        PostProcessHandler.addInstance(VoidBoundPostProcessor.INSTANCE);
+        // Veil post-processing will be configured via data files; no explicit registration needed here for basics.
+
+        // Register void bound shader renderer
+        VoidBoundShaderRenderer.cleanup(); // Clean up any existing instances
+        VoidBoundShaderRenderer.init(); // Initialize the renderer
     }
 }

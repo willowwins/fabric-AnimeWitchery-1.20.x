@@ -1,0 +1,11 @@
+{
+  "stages": [
+    {
+      "type": "veil:blit",
+      "shader": "animewitchery:void_bound",
+      "in": "minecraft:main",
+      "out": "minecraft:main",
+      "clear": false
+    }
+  ]
+}
