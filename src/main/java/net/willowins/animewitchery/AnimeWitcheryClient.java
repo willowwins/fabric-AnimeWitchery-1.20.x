@@ -21,6 +21,7 @@ import net.willowins.animewitchery.block.entity.renderer.BarrierDistanceGlyphRen
 import net.willowins.animewitchery.block.entity.renderer.GuardianStatueRenderer;
 import net.willowins.animewitchery.entity.ModEntities;
 import net.willowins.animewitchery.entity.client.render.NeedleProjectileRenderer;
+import net.willowins.animewitchery.entity.client.render.VoidWispRenderer;
 import net.willowins.animewitchery.networking.ModPackets;
 import net.willowins.animewitchery.particle.ModParticles;
 import net.willowins.animewitchery.particle.ShockwaveParticle;
@@ -66,6 +67,7 @@ public class AnimeWitcheryClient implements ClientModInitializer {
         BlockEntityRendererRegistry.register(ModBlockEntities.GUARDIAN_STATUE_BLOCK_ENTITY, GuardianStatueRenderer::new);
 
         EntityRendererRegistry.register(ModEntities.NEEDLE_PROJECTILE, NeedleProjectileRenderer::new);
+        EntityRendererRegistry.register(ModEntities.VOID_WISP, VoidWispRenderer::new);
 
 
         ParticleFactoryRegistry.getInstance().register(ModParticles.LASER_PARTICLE, ShockwaveParticle.Factory::new);

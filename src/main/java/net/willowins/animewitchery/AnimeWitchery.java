@@ -7,6 +7,7 @@ import net.fabricmc.fabric.api.event.player.AttackBlockCallback;
 import net.fabricmc.fabric.api.event.player.AttackEntityCallback;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.fabricmc.fabric.api.registry.FuelRegistry;
+import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRegistry;
 import net.kyrptonaught.customportalapi.api.CustomPortalBuilder;
 import net.minecraft.block.Blocks;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -21,6 +22,7 @@ import net.willowins.animewitchery.block.entity.ModBlockEntities;
 import net.willowins.animewitchery.effect.ModEffect;
 import net.willowins.animewitchery.enchantments.ModEnchantments;
 import net.willowins.animewitchery.entity.ModEntities;
+import net.willowins.animewitchery.entity.VoidWispEntity;
 import net.willowins.animewitchery.events.ExcavationBreakHandler;
 import net.willowins.animewitchery.item.ModItemGroups;
 import net.willowins.animewitchery.item.ModItems;
@@ -67,9 +69,12 @@ public class AnimeWitchery implements ModInitializer {
 
 		ModEffect.registerEffects();
 
-		ModEntities.registerModEntities();
+		        ModEntities.registerModEntities();
 
-		ExcavationBreakHandler.register();
+        // Register entity attributes
+        FabricDefaultAttributeRegistry.register(ModEntities.VOID_WISP, VoidWispEntity.createVoidWispAttributes());
+
+        ExcavationBreakHandler.register();
 
 		LOGGER.info("Hello Fabric world!");
 

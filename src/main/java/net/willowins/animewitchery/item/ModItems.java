@@ -138,6 +138,10 @@ public class ModItems {
     public static final Item BARRIER_CATALYST = registerItem("barrier_catalyst", new Item(new FabricItemSettings().rarity(Rarity.RARE)));
     public static final Item REPAIR_ESSENCE = registerItem("repair_essence", new Item(new FabricItemSettings().rarity(Rarity.RARE)));
 
+    // Entity spawn eggs
+    public static final Item VOID_WISP_SPAWN_EGG = registerItem("void_wisp_spawn_egg", 
+            new VoidWispSpawnEggItem(new FabricItemSettings().maxCount(64)));
+
 
     private static void addItemsToIngredientItemGroup(FabricItemGroupEntries entries){
         entries.add(SILVER);
@@ -170,6 +174,9 @@ public class ModItems {
         entries.add(BARRIER_CATALYST);
         entries.add(REPAIR_ESSENCE);
         entries.add(OBELISK_SHARD);
+        
+        // Add spawn eggs
+        entries.add(VOID_WISP_SPAWN_EGG);
     }
 
 

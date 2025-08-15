@@ -24,6 +24,19 @@ public class ModEntities {
                     .build()
     );
 
+    public static final EntityType<VoidWispEntity> VOID_WISP = Registry.register(
+            Registries.ENTITY_TYPE,
+            new Identifier(AnimeWitchery.MOD_ID, "void_wisp"),
+            FabricEntityTypeBuilder.<VoidWispEntity>create(
+                            SpawnGroup.MONSTER,
+                            VoidWispEntity::new
+                    )
+                    .dimensions(EntityDimensions.fixed(0.6f, 1.8f))
+                    .trackRangeBlocks(8)
+                    .trackedUpdateRate(3)
+                    .build()
+    );
+
     public static void registerModEntities() {
         System.out.println("Registering Mod Entities for " + AnimeWitchery.MOD_ID);
     }
