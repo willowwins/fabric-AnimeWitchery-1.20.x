@@ -5,10 +5,16 @@ import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectCategory;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.MathHelper;
+import net.willowins.animewitchery.util.VoidPhaseUtil;
 // Removed unused shader-related imports; Lodestone PostProcessor handles rendering
 
 public class VoidBoundEffect extends StatusEffect {
-    
+
+    private static final float RISE_TIME_T   = 40f;   // 0 → 1   (~2.0s)
+    private static final float HOLD_MAX_T    = 200f;  // hold 1  (~10s)
+    private static final float FALL_TIME_T   = 40f;   // 1 → 0   (~2.0s)
+    private static final float HOLD_MIN_T    = 40f;   // hold 0  (~2.0s)
+
     public VoidBoundEffect() {
         super(StatusEffectCategory.BENEFICIAL, 0x000000); // Pure black color for void theme
     }
@@ -25,14 +31,11 @@ public class VoidBoundEffect extends StatusEffect {
     public void applyUpdateEffect(LivingEntity entity, int amplifier) {
         if (entity instanceof PlayerEntity player) {
             // Calculate phasing cycle (faster with higher amplifier)
-            float phaseSpeed = 0.05f + (amplifier * 0.02f); // Base speed + amplifier bonus
-            float phase = (entity.age * phaseSpeed) % (MathHelper.PI * 2);
-            
-            // Create smooth sine wave for phasing (0 = visible, 1 = void phase)
-            float voidPhase = (MathHelper.sin(phase) + 1.0f) * 0.5f;
-            
+            float voidPhase = VoidPhaseUtil.computePhase(player.age, amplifier); // 0..1
+
+
             // Apply invisibility during void phase
-            if (voidPhase > 0.7f) {
+            if (voidPhase > 0.99f) {
                 // Void phase - invisible and invulnerable
                 player.setInvisible(true);
                 player.setInvulnerable(true);
