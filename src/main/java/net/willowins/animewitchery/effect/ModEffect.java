@@ -17,6 +17,9 @@ public class ModEffect {
     public static final StatusEffect MARKED = registerStatusEffect("marked",
             new MarkedEffect(StatusEffectCategory.NEUTRAL,0x672c12));
 
+    public static final StatusEffect VOID_BOUND = registerStatusEffect("void_bound",
+            new VoidBoundEffect());
+
     public static StatusEffect registerStatusEffect(String name, StatusEffect statusEffect){
         return Registry.register(Registries.STATUS_EFFECT,new Identifier(AnimeWitchery.MOD_ID, name), statusEffect);
     }

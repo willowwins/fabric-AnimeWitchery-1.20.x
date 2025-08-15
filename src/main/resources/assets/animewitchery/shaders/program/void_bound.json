@@ -1,0 +1,15 @@
+{
+    "blend": {
+        "func": "add",
+        "srcrgb": "srcalpha",
+        "dstrgb": "1-srcalpha"
+    },
+    "vertex": "blit",
+    "fragment": "animewitchery:void_bound",
+    "attributes": [ "Position" ],
+    "samplers": [
+        { "name": "DiffuseSampler" },
+        { "name": "MainDepthSampler" }
+    ],
+    "uniforms": []
+}
