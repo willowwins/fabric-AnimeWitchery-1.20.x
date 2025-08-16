@@ -26,7 +26,8 @@ public class VoidBoundShaderRenderer {
 
     private static Framebuffer effectFramebuffer;
     private static boolean initialized = false;
-    
+    private static boolean addedToPostProcessingPipeline = false;
+
     public static void init() {
         if (initialized) return;
         
@@ -42,15 +43,22 @@ public class VoidBoundShaderRenderer {
         PlayerEntity player = client.player;
         if (!player.hasStatusEffect(ModEffect.VOID_BOUND)) {
 
-            VeilRenderSystem.renderer()
-                    .getPostProcessingManager()
-                    .remove(VOID_BOUND_PIPELINE);
+            if (addedToPostProcessingPipeline) {
+                VeilRenderSystem.renderer()
+                        .getPostProcessingManager()
+                        .remove(VOID_BOUND_PIPELINE);
+                addedToPostProcessingPipeline = false;
+            }
+
             return;
         }else {
 
-            VeilRenderSystem.renderer()
-                    .getPostProcessingManager()
-                    .add(VOID_BOUND_PIPELINE);
+            if (!addedToPostProcessingPipeline) {
+                VeilRenderSystem.renderer()
+                        .getPostProcessingManager()
+                        .add(VOID_BOUND_PIPELINE);
+                addedToPostProcessingPipeline = true;
+            }
         }
 
         var effect = player.getStatusEffect(ModEffect.VOID_BOUND);
