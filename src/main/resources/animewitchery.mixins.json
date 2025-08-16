@@ -22,7 +22,8 @@
     "ReinforcedDeepslateMixin",
     "PlayerEntityMixin",
     "LivingEntityMixin2",
-    "ExplosionMixin"
+    "ExplosionMixin",
+    "PlayerRendererMixin"
   ],
   "client": [
     "ItemRendererAccessor",
