@@ -4,7 +4,6 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectCategory;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.math.MathHelper;
 import net.willowins.animewitchery.util.VoidPhaseUtil;
 // Removed unused shader-related imports; Lodestone PostProcessor handles rendering
 
@@ -36,7 +35,7 @@ public class VoidBoundEffect extends StatusEffect {
 
             // Apply invisibility during void phase
             if (voidPhase > 0.99f) {
-                // Void phase - invisible and invulnerable
+                // Void phase - invisible and invulnerable, but fully mobile
                 player.setInvisible(true);
                 player.setInvulnerable(true);
                 
@@ -94,6 +93,18 @@ public class VoidBoundEffect extends StatusEffect {
     public String getTranslationKey() {
         return "effect.animewitchery.void_bound";
     }
+    
+    // Prevent interaction with blocks during void phase
+    public static boolean canInteractWithWorld(PlayerEntity player) {
+        if (player.hasStatusEffect(ModEffect.VOID_BOUND)) {
+            var effect = player.getStatusEffect(ModEffect.VOID_BOUND);
+            float voidPhase = VoidPhaseUtil.computePhase(player.age, effect.getAmplifier());
+            return voidPhase <= 0.99f; // Can only interact when NOT in void phase
+        }
+        return true; // Can always interact if no void bound effect
+    }
+    
+
     
     private void applyVoidShader(boolean active, float voidPhase) {
         // The PostProcessor is now automatically handled by Lodestone
