@@ -4,6 +4,13 @@
       "type": "veil:blit",
       "shader": "animewitchery:void_bound",
       "in": "minecraft:main",
+      "out": "animewitchery:void_temp",
+      "clear": false
+    },
+    {
+      "type": "veil:blit",
+      "shader": "veil:blit_screen",
+      "in": "animewitchery:void_temp",
       "out": "minecraft:main",
       "clear": false
     }

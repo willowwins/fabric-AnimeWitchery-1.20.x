@@ -20,6 +20,9 @@ public class ModItems {
     public static final Item STAFF_HEAD =registerItem("staff_head", new Item(new FabricItemSettings()));
     public static final Item BLAZE_SACK =registerItem("blaze_powder_bag", new Item(new FabricItemSettings()));
     public static final Item ALCHEMICAL_CATALYST =registerItem("alchemical_catalyst", new Item(new FabricItemSettings()));
+    public static final Item VOID_ESSENCE =registerItem("void_essence", new Item(new FabricItemSettings().rarity(Rarity.RARE)));
+    public static final Item RUNE_STONE =registerItem("rune_stone", new Item(new FabricItemSettings().rarity(Rarity.UNCOMMON)));
+    public static final Item BLOOD_RUNE_STONE =registerItem("blood_rune_stone", new Item(new FabricItemSettings().rarity(Rarity.RARE)));
     public static final Item SILVERNUGGET =registerItem("silvernugget", new Item(new FabricItemSettings()));
         public static final Item RAWSILVER =registerItem("rawsilver", new Item(new FabricItemSettings()));
     public static final Item SPOOL =registerItem("spool", new Item(new FabricItemSettings()));
