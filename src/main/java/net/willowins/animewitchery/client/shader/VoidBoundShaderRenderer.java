@@ -31,8 +31,8 @@ public class VoidBoundShaderRenderer {
         MinecraftClient client = MinecraftClient.getInstance();
         if (client == null || client.player == null) return;
         
-        // Update total time for animations
-        totalTime += client.getTickDelta();
+        // Update total time for animations - keep it bounded to prevent overflow
+        totalTime = (totalTime + client.getTickDelta());
         
         PlayerEntity player = client.player;
         if (!player.hasStatusEffect(ModEffect.VOID_BOUND)) {
@@ -81,8 +81,24 @@ public class VoidBoundShaderRenderer {
                 var effect = client.player.getStatusEffect(ModEffect.VOID_BOUND);
                 float voidPhase = VoidPhaseUtil.computePhase(client.player.age, effect.getAmplifier());
                 shader.setFloat("uVoidPhase", voidPhase);
+                
+                // Pass player position for world-space tendrils
+                shader.setVector("uPlayerPos", 
+                    (float) client.player.getX(),
+                    (float) client.player.getY(),
+                    (float) client.player.getZ()
+                );
+                
+                // Pass camera position for depth calculations
+                shader.setVector("uCameraPos",
+                    (float) client.gameRenderer.getCamera().getPos().x,
+                    (float) client.gameRenderer.getCamera().getPos().y,
+                    (float) client.gameRenderer.getCamera().getPos().z
+                );
             } else {
                 shader.setFloat("uVoidPhase", 0.0f);
+                shader.setVector("uPlayerPos", 0.0f, 0.0f, 0.0f);
+                shader.setVector("uCameraPos", 0.0f, 0.0f, 0.0f);
             }
             
             // Unbind shader after setting uniforms
