@@ -85,7 +85,6 @@ public class AnimeWitchery implements ModInitializer {
 		BarrierExplosionHandler.register();
 
 
-
 		CustomPortalBuilder.beginPortal()
 				.frameBlock(Blocks.REINFORCED_DEEPSLATE)
 				.lightWithItem(ModItems.NEEDLE)

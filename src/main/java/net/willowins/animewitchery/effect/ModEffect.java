@@ -20,6 +20,9 @@ public class ModEffect {
     public static final StatusEffect VOID_BOUND = registerStatusEffect("void_bound",
             new VoidBoundEffect());
 
+    public static final StatusEffect KAMIKAZE_RITUAL = registerStatusEffect("kamikaze_ritual",
+            new KamikazeRitualEffect(StatusEffectCategory.HARMFUL, 0x8B0000));
+
     public static StatusEffect registerStatusEffect(String name, StatusEffect statusEffect){
         return Registry.register(Registries.STATUS_EFFECT,new Identifier(AnimeWitchery.MOD_ID, name), statusEffect);
     }

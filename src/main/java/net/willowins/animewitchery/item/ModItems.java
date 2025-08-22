@@ -23,6 +23,7 @@ public class ModItems {
     public static final Item VOID_ESSENCE =registerItem("void_essence", new Item(new FabricItemSettings().rarity(Rarity.RARE)));
     public static final Item RUNE_STONE =registerItem("rune_stone", new Item(new FabricItemSettings().rarity(Rarity.UNCOMMON)));
     public static final Item BLOOD_RUNE_STONE =registerItem("blood_rune_stone", new Item(new FabricItemSettings().rarity(Rarity.RARE)));
+    public static final Item KAMIKAZE_RITUAL_SCROLL =registerItem("kamikaze_ritual_scroll", new KamikazeRitualScroll(new FabricItemSettings().maxCount(1).rarity(Rarity.EPIC)));
     public static final Item SILVERNUGGET =registerItem("silvernugget", new Item(new FabricItemSettings()));
         public static final Item RAWSILVER =registerItem("rawsilver", new Item(new FabricItemSettings()));
     public static final Item SPOOL =registerItem("spool", new Item(new FabricItemSettings()));

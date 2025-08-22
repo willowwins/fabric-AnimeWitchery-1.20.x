@@ -48,6 +48,7 @@ public class ModItemGroups {
                         entries.add(ModItems.VOID_ESSENCE);
                         entries.add(ModItems.RUNE_STONE);
                         entries.add(ModItems.BLOOD_RUNE_STONE);
+                        entries.add(ModItems.KAMIKAZE_RITUAL_SCROLL);
                         entries.add(ModItems.DEEP_DARK_DEEP_DISH);
                         entries.add(ModItems.FIRE_RES_CRYSTAL);
                         entries.add(ModItems.SPEED_CRYSTAL);

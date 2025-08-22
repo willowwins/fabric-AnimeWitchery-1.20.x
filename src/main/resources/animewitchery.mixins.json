@@ -23,7 +23,8 @@
     "PlayerEntityMixin",
     "LivingEntityMixin2",
     "ExplosionMixin",
-    "PlayerRendererMixin"
+    "PlayerRendererMixin",
+    "PlayerDeathMixin"
   ],
   "client": [
     "ItemRendererAccessor",
