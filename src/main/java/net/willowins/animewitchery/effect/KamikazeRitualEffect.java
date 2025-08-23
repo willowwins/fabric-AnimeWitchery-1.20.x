@@ -7,6 +7,7 @@ import java.util.UUID;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
+import net.minecraft.entity.FallingBlockEntity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.effect.StatusEffect;
@@ -19,6 +20,7 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.Heightmap;
 import net.minecraft.world.World;
 import net.willowins.animewitchery.AnimeWitchery;
 import net.willowins.animewitchery.networking.ModPackets;
@@ -208,6 +210,9 @@ public class KamikazeRitualEffect extends StatusEffect {
         private final BlockPos deathPos;
         private int ticks = 0;
         private final int TOTAL_TICKS = 200; // 10 seconds at 20 ticks/second
+        private float lockedYaw;
+        private boolean yawPitchCaptured;
+        private float lockedPitch;
 
         public DeathSequence(PlayerEntity player) {
             this.player = player;
@@ -218,10 +223,30 @@ public class KamikazeRitualEffect extends StatusEffect {
             ticks++;
 
             // Keep player completely frozen in place
+
+
+            if (!yawPitchCaptured) {
+                lockedYaw = player.getYaw();
+                lockedPitch = player.getPitch();
+                yawPitchCaptured = true;
+                // just in case they were mounted
+                player.stopRiding();
+
             player.setPosition(deathPos.getX() + 0.5, deathPos.getY() + 0.5, deathPos.getZ() + 0.5);
             player.setVelocity(0, 0, 0);
             player.setMovementSpeed(0.0f);
             player.fallDistance = 0;
+            }
+
+            if (player instanceof ServerPlayerEntity sp) {
+                sp.networkHandler.requestTeleport(
+                        deathPos.getX() + 0.5,
+                        deathPos.getY() + 0.5,
+                        deathPos.getZ() + 0.5,
+                        lockedYaw, lockedPitch
+                );
+            }
+
 
             // Keep health at max and maintain invulnerability
             player.setHealth(player.getMaxHealth());
@@ -278,6 +303,7 @@ public class KamikazeRitualEffect extends StatusEffect {
             // Execute the ritual
             if (ticks >= TOTAL_TICKS) {
                 executeRitual(world, player);
+                flingDebris((ServerWorld) world, deathPos, 80, 90);
                 activeDeathSequences.remove(player.getUuid());
                 isRitualActive = false; // Reset flag after ritual completes
             }
@@ -308,7 +334,31 @@ public class KamikazeRitualEffect extends StatusEffect {
                 AnimeWitchery.LOGGER.error("Failed to ban player after Kamikaze Ritual: " + e.getMessage());
             }
         }
-        
+
+        private void flingDebris(ServerWorld sw, BlockPos c, int samples, double r) {
+            var rnd = sw.getRandom();
+            for (int i=0;i<samples;i++) {
+                double a = rnd.nextDouble() * Math.PI * 2;
+                int x = c.getX() + (int)Math.round(Math.cos(a) * r);
+                int z = c.getZ() + (int)Math.round(Math.sin(a) * r);
+                int y = sw.getTopY(Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, x, z) - 1;
+                BlockPos pos = new BlockPos(x,y,z);
+                var st = sw.getBlockState(pos);
+                if (st.isAir() || st.getHardness(sw,pos) < 0) continue;
+
+                sw.setBlockState(pos, net.minecraft.block.Blocks.AIR.getDefaultState(), 3);
+                var fbe = FallingBlockEntity.spawnFromBlock(sw, pos, st);
+                if (fbe != null) {
+                    double spd = 0.6 + rnd.nextDouble() * 0.6;
+                    fbe.setVelocity(
+                            Math.cos(a) * spd,
+                            0.55 + rnd.nextDouble() * 0.55,
+                            Math.sin(a) * spd
+                    );
+                }
+            }
+        }
+
         // Custom explosion class for maximum destruction control!
         private static class HomemadeExplosion implements ModExplosionManager.TickableExplosion {
             private final World world;
@@ -332,6 +382,7 @@ public class KamikazeRitualEffect extends StatusEffect {
             private int dilationBudget = DILATION_BUDGET_PER_TICK;
             private int dynamicStride = 1;          // adaptive scan stride per tick
             private double shellMargin = 2.0;       // margin added to inner/outer radii each tick
+            private static final int ENTITY_BUDGET_PER_TICK = 512;
 
 
             // Resumable scan state
@@ -477,61 +528,94 @@ public class KamikazeRitualEffect extends StatusEffect {
                 boolean finishedScan = (sx == Integer.MIN_VALUE);
                 return finishedRadius && finishedScan;
             }
-            
+
+
             private void killEntitiesInShell() {
                 if (world.isClient()) return;
-            
-                // Thin shell thickness — keeps the work focused near the expansion front
-                final double shellThickness = Math.max(1.5, currentRadius - lastRadius + 1.0);
-            
-                // Bounding box just big enough for the current radius
-                int r = (int) Math.ceil(currentRadius + shellThickness + 1);
-                var aabb = new net.minecraft.util.math.Box(
-                    center.getX() - r, center.getY() - r, center.getZ() - r,
-                    center.getX() + r + 1, center.getY() + r + 1, center.getZ() + r + 1
+
+                // thin band around the advancing front
+                final double shellInnerR = Math.max(0.0, lastRadius - 0.75);
+                final double shellOuterR = currentRadius + 1.25;
+                final double innerSq     = shellInnerR * shellInnerR;
+                final double outerSq     = shellOuterR * shellOuterR;
+
+                // AABB for current shell
+                final int r = (int) Math.ceil(shellOuterR + 1.0);
+                final var aabb = new net.minecraft.util.math.Box(
+                        center.getX() - r, center.getY() - r, center.getZ() - r,
+                        center.getX() + r + 1, center.getY() + r + 1, center.getZ() + r + 1
                 );
-            
+
                 final var centerVec = new net.minecraft.util.math.Vec3d(
-                    center.getX() + 0.5, center.getY() + 0.5, center.getZ() + 0.5
+                        center.getX() + 0.5, center.getY() + 0.5, center.getZ() + 0.5
                 );
-            
-                // Fetch candidates once; filter by distance to keep only the shell
-                var entities = world.getOtherEntities(
-                    null,
-                    aabb,
-                    e -> {
-                        // Skip removed/immune players (spectator/creative), and the ritual source if you wish
-                        if (!e.isAlive()) return false;
-                        if (e instanceof net.minecraft.server.network.ServerPlayerEntity sp) {
-                            if (sp.isSpectator() || sp.isCreative()) return false;
-                            // Optionally: don't kill the caster while the ritual animation runs
-                            if (sp.getUuid().equals(player.getUuid())) return false;
+
+                // pull once, filter to shell + immunity
+                var hits = world.getOtherEntities(
+                        null,
+                        aabb,
+                        e -> {
+                            if (!e.isAlive()) return false;
+                            // skip the caster
+                            if (e.getUuid().equals(player.getUuid())) return false;
+                            // skip spect/creative
+                            if (e instanceof net.minecraft.server.network.ServerPlayerEntity sp &&
+                                    (sp.isSpectator() || sp.isCreative())) return false;
+
+                            double d2 = e.getPos().squaredDistanceTo(centerVec);
+                            return d2 > innerSq && d2 <= outerSq;
                         }
-                        // Distance check (squared)
-                        double d2 = e.getPos().squaredDistanceTo(centerVec);
-                        return d2 > lastRadiusSq && d2 <= currentRadiusSq;
-                    }
                 );
-            
-                for (var e : entities) {
-                    // Non-living: just remove (FallingBlockEntity, ItemEntity, projectiles, vehicles, TNT, etc.)
+
+                int budget = ENTITY_BUDGET_PER_TICK;
+
+                for (var e : hits) {
+                    if (budget-- <= 0) break;
+
+                    double d2 = e.getPos().squaredDistanceTo(centerVec);
+                    double d  = Math.sqrt(d2);
+
+                    // progress across this tick's shell (0 inner → 1 outer)
+                    double rim = (d - shellInnerR) / Math.max(1e-6, (shellOuterR - shellInnerR));
+                    rim = Math.max(0.0, Math.min(1.0, rim));
+
+                    // closeness to center (1 center → 0 edge of full blast)
+                    double centerFrac = 1.0 - Math.min(1.0, d / (maxRadius + 1e-6));
+
+                    var dir = e.getPos().subtract(centerVec).normalize();
+                    double kb = 0.7 + 1.0 * rim;   // stronger shove on the front
+                    double up = 0.12 + 0.28 * rim;
+
+                    // non-living → just remove (item/projectile/falling block/etc.)
                     if (!(e instanceof net.minecraft.entity.LivingEntity le)) {
+                        if (e.hasPassengers()) e.removeAllPassengers();
                         e.discard();
                         continue;
                     }
-            
-                    // Living: deal overwhelming explosion damage and small knockback if desired
+
+                    // damage peaks near center, eases toward edge
+                    final float MIN_DMG = 40f;
+                    final float MAX_DMG = 500f;
+                    final double GAMMA  = 1.7; // steeper center bias
+                    float dmg = (float)(MIN_DMG + (MAX_DMG - MIN_DMG) * Math.pow(centerFrac, GAMMA));
+
                     var src = world.getDamageSources().explosion(player, player);
-                    le.damage(src, Float.MAX_VALUE);
-                    // Optional flair:
-                    le.setFireTicks(60);
-                    // tiny outward push to sell the effect (won’t matter if it dies instantly)
-                    var dir = e.getPos().subtract(centerVec).normalize();
-                    e.addVelocity(dir.x * 0.6, 0.3, dir.z * 0.6);
+                    le.damage(src, dmg);
+
+                    // hard fallback for chunky/immune mobs
+                    if (le.isAlive()) {
+                        le.damage(world.getDamageSources().outOfWorld(), Float.MAX_VALUE);
+                    }
+
+                    if (le.isAlive()) le.setFireTicks(80);
+
+                    e.addVelocity(dir.x * kb, up, dir.z * kb);
                     e.velocityDirty = true;
+
+                    if (e.hasPassengers()) e.removeAllPassengers();
                 }
             }
-            
+
 
             /**
              * Destroys only blocks with (lastRadius .. currentRadius], shaped by:

@@ -7,6 +7,7 @@ import net.minecraft.client.render.entity.model.PlayerEntityModel;
 import net.minecraft.client.render.entity.PlayerEntityRenderer;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.player.PlayerEntity;
+import net.willowins.animewitchery.effect.ModEffect;
 import net.willowins.animewitchery.util.VoidPhaseUtil;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -26,7 +27,7 @@ public class PlayerRendererMixin {
                           int light, CallbackInfo ci) {
         // AbstractClientPlayerEntity extends Entity -> has public int age
         float voidPhase = VoidPhaseUtil.computePhase(entity.age, 0);
-        if (voidPhase > 0.99f) {
+        if (voidPhase > 0.99f && entity.hasStatusEffect(ModEffect.VOID_BOUND)) {
             ci.cancel(); // cancel all rendering for this player
         }
     }
