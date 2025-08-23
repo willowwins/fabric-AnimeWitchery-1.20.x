@@ -41,15 +41,4 @@ public class PlayerDeathMixin {
             ci.cancel();
         }
     }
-    
-    // Override the isDead check to keep player "alive" during ritual
-    @Inject(method = "isDead", at = @At("HEAD"), cancellable = true)
-    private void onIsDead(CallbackInfoReturnable<Boolean> cir) {
-        PlayerEntity player = (PlayerEntity) (Object) this;
-        
-        // If a ritual is active, player is not considered dead
-        if (net.willowins.animewitchery.effect.KamikazeRitualEffect.isRitualActive) {
-            cir.setReturnValue(false);
-        }
-    }
 }

@@ -113,10 +113,11 @@
   "sounds.animewitchery.laser_shoot": "§5Railgun Fires",
   "sounds.animewitchery.obelisk_activate": "§5Obelisk Activates",
   "sounds.animewitchery.obelisk_hum": "§5Obelisk Hums",
+  "sounds.animewitchery.kamikaze_explosion": "§4Kamikaze Explosion",
 
   "effect.animewitchery.bound": "§1Bound",
   "effect.animewitchery.marked": "§4Marked",
-
+  "effect.animewitchery.kamikaze_ritual": "§4Kamikaze Ritual",
 
   "tooltip.animewitchery.metal_detector.tooltip": "finds valuables with a vision beyond your own",
   

@@ -30,6 +30,7 @@ import net.willowins.animewitchery.item.custom.ObeliskSwordItem;
 import net.willowins.animewitchery.particle.ModParticles;
 import net.willowins.animewitchery.sound.ModSounds;
 import net.willowins.animewitchery.util.ModCustomTrades;
+import net.willowins.animewitchery.util.ModExplosionManager;
 import net.willowins.animewitchery.util.ModLootTableModifiers;
 import net.willowins.animewitchery.villager.ModVillagers;
 import net.willowins.animewitchery.recipe.ModRecipes;
@@ -84,6 +85,7 @@ public class AnimeWitchery implements ModInitializer {
 		// Register explosion absorber hook
 		BarrierExplosionHandler.register();
 
+		ModExplosionManager.init();
 
 		CustomPortalBuilder.beginPortal()
 				.frameBlock(Blocks.REINFORCED_DEEPSLATE)
