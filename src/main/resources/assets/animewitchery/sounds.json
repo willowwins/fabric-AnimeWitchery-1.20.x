@@ -52,5 +52,11 @@
     "sounds": [
       "animewitchery:kamikaze_explosion"
     ]
+  },
+  "kamikaze_explosion_wind_up": {
+    "subtitle": "sounds.animewitchery.kamikaze_explosion_wind_up",
+    "sounds": [
+      "animewitchery:kamikaze_explosion_wind_up"
+    ]
   }
 }

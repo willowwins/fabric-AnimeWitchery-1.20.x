@@ -134,8 +134,8 @@ public class KamikazeRitualEffect extends StatusEffect {
                 
                 // Play dramatic kamikaze explosion sound at the start of the countdown
                 player.getWorld().playSound(null, player.getBlockPos(), net.minecraft.sound.SoundEvent.of(
-                    new net.minecraft.util.Identifier("animewitchery", "kamikaze_explosion")), 
-                    player.getSoundCategory(), 4.0f, 0.8f);
+                    new net.minecraft.util.Identifier(AnimeWitchery.MOD_ID, "kamikaze_explosion_wind_up")),
+                    player.getSoundCategory(), 4.0f, 1f);
                 
                 return true; // Death was cancelled
             }
@@ -267,10 +267,11 @@ public class KamikazeRitualEffect extends StatusEffect {
             // if (ticks == 190) player.sendMessage(Text.literal("§4§l[FORBIDDEN MAGIC] §c1 second remaining..."));
             
             // Final countdown
-            if (ticks == 220) {
+            if (ticks == 200) {
                 player.sendMessage(Text.literal("§4§l[FORBIDDEN MAGIC] §cRITUAL COMPLETE!"));
-                world.playSound(null, deathPos, SoundEvents.ENTITY_GENERIC_EXPLODE, 
-                    player.getSoundCategory(), 2.0f, 0.5f);
+                player.getWorld().playSound(null, player.getBlockPos(), net.minecraft.sound.SoundEvent.of(
+                                new net.minecraft.util.Identifier(AnimeWitchery.MOD_ID, "kamikaze_explosion")),
+                        player.getSoundCategory(), 4.0f, 1f);
             }
             
             // Execute the ritual

@@ -16,6 +16,7 @@ import team.lodestar.lodestone.systems.screenshake.ScreenshakeInstance;
 import java.awt.*;
 
 public class KamikazeFxPacket {
+    private static float S(float v, float mul) { return v * mul; }
 
     public static void receive(MinecraftClient client, ClientPlayNetworkHandler handler, PacketByteBuf buf, PacketSender sender) {
         final double cx = buf.readDouble();
@@ -29,29 +30,33 @@ public class KamikazeFxPacket {
 
         client.execute(() -> {
             // ---- TIMELINE CHOREOGRAPHY ----
+            // Size multiplier tuned by blast size and growth over time.
+            // Clamp keeps things sane.
+            final float sizeMul = Math.max(10f, Math.min(3.0f, 1.6f + radius * 0.006f + progress * 0.6f));
+
             if (progress < 0.05f) {
-                spawnFlashBloom(client.world, cx, cy, cz, radius, maxRadius, seed);
-                spawnImplosionSwirl(client.world, cx, cy, cz, radius, seed);
-            } else if (progress < 0.25f) {
-                spawnDustWall(client.world, cx, cy, cz, radius, seed);
-                if (bigPulse) spawnLightningRimArcs(client.world, cx, cy, cz, radius, seed, 6);
-            } else if (progress < 0.60f) {
-                spawnMushroomColumn(client.world, cx, cy, cz, radius, seed);
-                if (bigPulse) spawnPressureBursts(client.world, cx, cy, cz, radius, seed);
+                spawnFlashBloom(client.world, cx, cy, cz, radius, maxRadius, seed, sizeMul);
+                spawnImplosionSwirl(client.world, cx, cy, cz, radius, seed, sizeMul);
+            }
+            if (progress < 0.25f) {
+                spawnDustWall(client.world, cx, cy, cz, radius, seed, sizeMul);
+                if (bigPulse) spawnLightningRimArcs(client.world, cx, cy, cz, radius, seed, 6, sizeMul);
+            }
+            if (progress < 0.60f) {
+                spawnMushroomColumn(client.world, cx, cy, cz, radius, seed, sizeMul);
+                if (bigPulse) spawnPressureBursts(client.world, cx, cy, cz, radius, seed, sizeMul);
             } else {
-                spawnAshFallout(client.world, cx, cy, cz, radius, seed);
-                if (bigPulse) spawnRuneRing(client.world, cx, cy, cz, radius * 0.92, seed);
+                spawnAshFallout(client.world, cx, cy, cz, radius, seed, sizeMul);
+                if (bigPulse) spawnRuneRing(client.world, cx, cy, cz, radius * 0.92, seed, sizeMul);
             }
         });
     }
 
     private static void spawnFlashBloom(net.minecraft.client.world.ClientWorld world,
                                         double cx, double cy, double cz,
-                                        float radius, float maxRadius, int seed) {
-        // Brief camera kick (a touch more than your base shake)
+                                        float radius, float maxRadius, int seed, float sizeMul) {
         ScreenshakeHandler.addScreenshake(new ScreenshakeInstance(6).setIntensity(0.5f));
 
-        // Central overbright wisps and stars
         int count = 120;
         Color hotA = new Color(255, 240, 255);
         Color hotB = new Color(255, 120, 240);
@@ -63,7 +68,7 @@ public class KamikazeFxPacket {
             double y  = cy + 0.1 + (hash(seed ^ 0x333, i) - 0.5) * 0.6;
 
             WorldParticleBuilder.create(LodestoneParticleRegistry.WISP_PARTICLE)
-                    .setScaleData(GenericParticleData.create(1.2f, 0.0f).build())
+                    .setScaleData(GenericParticleData.create(S(1.2f, sizeMul), 0.0f).build())
                     .setTransparencyData(GenericParticleData.create(1.2f, 0.0f).build())
                     .setColorData(ColorParticleData.create(hotA, hotB).setCoefficient(1.6f).setEasing(Easing.EXPO_OUT).build())
                     .setSpinData(SpinParticleData.create(0.8f, 0.0f).setEasing(Easing.QUARTIC_OUT).build())
@@ -76,7 +81,7 @@ public class KamikazeFxPacket {
 
     private static void spawnImplosionSwirl(net.minecraft.client.world.ClientWorld world,
                                             double cx, double cy, double cz,
-                                            float radius, int seed) {
+                                            float radius, int seed, float sizeMul) {
         // Small inward spirals to hint at vacuum before main shock
         int arms = 5;
         int steps = 28;
@@ -92,7 +97,7 @@ public class KamikazeFxPacket {
                 double y = cy + 0.05;
 
                 WorldParticleBuilder.create(LodestoneParticleRegistry.WISP_PARTICLE)
-                        .setScaleData(GenericParticleData.create(0.2f, 0.0f).build())
+                        .setScaleData(GenericParticleData.create(S(0.2f, sizeMul), 0.0f).build())
                         .setTransparencyData(GenericParticleData.create(0.6f, 0.0f).build())
                         .setColorData(ColorParticleData.create(c1, c2).setEasing(Easing.SINE_IN_OUT).build())
                         .setSpinData(SpinParticleData.create(0.3f, 0.0f).build())
@@ -106,7 +111,7 @@ public class KamikazeFxPacket {
 
     private static void spawnDustWall(net.minecraft.client.world.ClientWorld world,
                                       double cx, double cy, double cz,
-                                      float radius, int seed) {
+                                      float radius, int seed, float sizeMul) {
         int segments = Math.max(64, Math.min(220, (int)(radius * 3.2f)));
         Color dA = new Color(65, 36, 68), dB = new Color(28, 18, 36);
         for (int i = 0; i < segments; i++) {
@@ -118,7 +123,7 @@ public class KamikazeFxPacket {
             double y = cy + 0.05 + (hash(seed ^ 0xD55D, i) * 0.15);
 
             WorldParticleBuilder.create(LodestoneParticleRegistry.WISP_PARTICLE)
-                    .setScaleData(GenericParticleData.create(0.35f, 0.0f).build())
+                    .setScaleData(GenericParticleData.create(S(0.35f, sizeMul), 0.0f).build())
                     .setTransparencyData(GenericParticleData.create(0.5f, 0.0f).build())
                     .setColorData(ColorParticleData.create(dA, dB).setEasing(Easing.QUAD_OUT).build())
                     .setLifetime(24 + (int)(hash(seed ^ 0xD77D, i) * 16))
@@ -130,9 +135,9 @@ public class KamikazeFxPacket {
 
     private static void spawnMushroomColumn(net.minecraft.client.world.ClientWorld world,
                                             double cx, double cy, double cz,
-                                            float radius, int seed) {
+                                            float radius, int seed, float sizeMul) {
         // Column: rising wisps with slight roll
-        int col = 80;
+        int col = 100;
         Color cLow = new Color(120, 20, 150), cHigh = new Color(60, 10, 90);
         double rise = Math.min(18.0, 6.0 + radius * 0.18);
         for (int i = 0; i < col; i++) {
@@ -145,7 +150,7 @@ public class KamikazeFxPacket {
             double y = cy + 0.4 + h;
 
             WorldParticleBuilder.create(LodestoneParticleRegistry.WISP_PARTICLE)
-                    .setScaleData(GenericParticleData.create(0.28f, 0.0f).build())
+                    .setScaleData(GenericParticleData.create(S(0.28f, sizeMul), 0.0f).build())
                     .setTransparencyData(GenericParticleData.create(0.55f, 0.0f).build())
                     .setColorData(ColorParticleData.create(cLow, cHigh).setEasing(Easing.SINE_IN_OUT).build())
                     .setSpinData(SpinParticleData.create(0.2f, 0.5f).setEasing(Easing.QUAD_OUT).build())
@@ -156,16 +161,16 @@ public class KamikazeFxPacket {
         }
 
         // Cap: wide ring at top
-        int cap = 60;
+        int cap = 80;
         double topY = cy + rise + 0.8;
-        double capR = 2.0 + Math.min(6.0, radius * 0.18);
+        double capR = 2.0 + Math.min(6.0, radius * 0.2);
         for (int i = 0; i < cap; i++) {
             double a = (i / (double)cap) * Math.PI * 2.0 + hash(seed ^ 0xCAFE5, i) * 0.1;
             double x = cx + Math.cos(a) * capR;
             double z = cz + Math.sin(a) * capR;
 
             WorldParticleBuilder.create(LodestoneParticleRegistry.WISP_PARTICLE)
-                    .setScaleData(GenericParticleData.create(0.35f, 0.0f).build())
+                    .setScaleData(GenericParticleData.create(S(0.35f, sizeMul), 0.0f).build())
                     .setTransparencyData(GenericParticleData.create(0.6f, 0.0f).build())
                     .setColorData(ColorParticleData.create(cHigh, cLow).setEasing(Easing.SINE_IN_OUT).build())
                     .setLifetime(26 + (int)(hash(seed ^ 0xC4D2, i) * 18))
@@ -177,7 +182,7 @@ public class KamikazeFxPacket {
 
     private static void spawnPressureBursts(net.minecraft.client.world.ClientWorld world,
                                             double cx, double cy, double cz,
-                                            float radius, int seed) {
+                                            float radius, int seed, float sizeMul) {
         int bursts = 8;
         Color hot = new Color(255, 80, 120), cool = new Color(255, 60, 245);
         for (int i = 0; i < bursts; i++) {
@@ -188,7 +193,7 @@ public class KamikazeFxPacket {
             double y = cy + 0.3 + hash(seed ^ 0xFADE, i) * 0.6;
 
             WorldParticleBuilder.create(LodestoneParticleRegistry.WISP_PARTICLE)
-                    .setScaleData(GenericParticleData.create(0.9f, 0.0f).build())
+                    .setScaleData(GenericParticleData.create(S(0.9f, sizeMul), 0.0f).build())
                     .setTransparencyData(GenericParticleData.create(1.2f, 0.0f).build())
                     .setColorData(ColorParticleData.create(hot, cool).setCoefficient(1.3f).setEasing(Easing.CIRC_OUT).build())
                     .setSpinData(SpinParticleData.create(0.2f, 1.0f).setEasing(Easing.QUAD_OUT).build())
@@ -201,7 +206,7 @@ public class KamikazeFxPacket {
 
     private static void spawnLightningRimArcs(net.minecraft.client.world.ClientWorld world,
                                               double cx, double cy, double cz,
-                                              float radius, int seed, int arcCount) {
+                                              float radius, int seed, int arcCount, float sizeMul) {
         Color cA = new Color(240, 120, 255), cB = new Color(180, 40, 255);
         for (int k = 0; k < arcCount; k++) {
             double a = hash(seed ^ (0xAC00 + k), k) * Math.PI * 2.0;
@@ -221,7 +226,7 @@ public class KamikazeFxPacket {
 
                 // Particle at segment point
                 WorldParticleBuilder.create(LodestoneParticleRegistry.STAR_PARTICLE)
-                        .setScaleData(GenericParticleData.create(0.16f, 0.05f).build())
+                        .setScaleData(GenericParticleData.create(S(0.16f, sizeMul), S(0.05f, sizeMul)).build())
                         .setTransparencyData(GenericParticleData.create(1.0f, 0.0f).build())
                         .setColorData(ColorParticleData.create(cA, cB).setCoefficient(1.4f).setEasing(Easing.QUAD_OUT).build())
                         .setSpinData(SpinParticleData.create(0.9f, 1.2f).build())
@@ -237,7 +242,7 @@ public class KamikazeFxPacket {
 
     private static void spawnAshFallout(net.minecraft.client.world.ClientWorld world,
                                         double cx, double cy, double cz,
-                                        float radius, int seed) {
+                                        float radius, int seed, float sizeMul) {
         int count = 140;
         Color ashA = new Color(60, 30, 70), ashB = new Color(30, 18, 40);
         for (int i = 0; i < count; i++) {
@@ -248,7 +253,7 @@ public class KamikazeFxPacket {
             double y = cy + 1.2 + hash(seed ^ 0xA5E2, i) * 3.5;
 
             WorldParticleBuilder.create(LodestoneParticleRegistry.WISP_PARTICLE)
-                    .setScaleData(GenericParticleData.create(0.25f, 0.0f).build())
+                    .setScaleData(GenericParticleData.create(S(0.25f, sizeMul), 0.0f).build())
                     .setTransparencyData(GenericParticleData.create(0.45f, 0.0f).build())
                     .setColorData(ColorParticleData.create(ashA, ashB).setEasing(Easing.SINE_IN_OUT).build())
                     .setLifetime(34 + (int)(hash(seed ^ 0xA5E3, i) * 28))
@@ -258,7 +263,7 @@ public class KamikazeFxPacket {
 
             if (hash(seed ^ 0xA5E7, i) < 0.14) {
                 WorldParticleBuilder.create(LodestoneParticleRegistry.STAR_PARTICLE)
-                        .setScaleData(GenericParticleData.create(0.08f, 0.24f, 0.0f).build())
+                        .setScaleData(GenericParticleData.create(S(0.25f, sizeMul), 0.0f).build())
                         .setTransparencyData(GenericParticleData.create(1.0f, 0.0f).build())
                         .setColorData(ColorParticleData.create(new Color(255, 160, 120), new Color(255, 80, 80)).setEasing(Easing.QUAD_OUT).build())
                         .setLifetime(18)
@@ -271,7 +276,7 @@ public class KamikazeFxPacket {
 
     private static void spawnRuneRing(net.minecraft.client.world.ClientWorld world,
                                       double cx, double cy, double cz,
-                                      double r, int seed) {
+                                      double r, int seed, float sizeMul) {
         int glyphs = 16;
         Color ca = new Color(220, 60, 255), cb = new Color(120, 30, 160);
         for (int i = 0; i < glyphs; i++) {
@@ -281,7 +286,7 @@ public class KamikazeFxPacket {
             double y = cy + 0.02;
 
             WorldParticleBuilder.create(LodestoneParticleRegistry.WISP_PARTICLE)
-                    .setScaleData(GenericParticleData.create(0.7f, 0.0f).build())
+                    .setScaleData(GenericParticleData.create(S(0.7f, sizeMul), 0.0f).build())
                     .setTransparencyData(GenericParticleData.create(1.1f, 0.0f).build())
                     .setColorData(ColorParticleData.create(ca, cb).setCoefficient(1.3f).setEasing(Easing.QUAD_OUT).build())
                     .setSpinData(SpinParticleData.create(0.0f, 1.2f).setEasing(Easing.CUBIC_OUT).build())
