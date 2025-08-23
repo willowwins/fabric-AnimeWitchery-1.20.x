@@ -220,6 +220,7 @@ public class KamikazeRitualEffect extends StatusEffect {
             // Keep player completely frozen in place
             player.setPosition(deathPos.getX() + 0.5, deathPos.getY() + 0.5, deathPos.getZ() + 0.5);
             player.setVelocity(0, 0, 0);
+            player.setMovementSpeed(0.0f);
             player.fallDistance = 0;
 
             // Keep health at max and maintain invulnerability
