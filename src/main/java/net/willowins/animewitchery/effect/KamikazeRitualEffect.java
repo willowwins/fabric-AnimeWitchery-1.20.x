@@ -4,18 +4,24 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
+import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectCategory;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.network.PacketByteBuf;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.willowins.animewitchery.AnimeWitchery;
+import net.willowins.animewitchery.networking.ModPackets;
 import net.willowins.animewitchery.util.ModExplosionManager;
 import team.lodestar.lodestone.systems.particle.builder.WorldParticleBuilder;
 import team.lodestar.lodestone.systems.particle.data.GenericParticleData;
@@ -397,6 +403,29 @@ public class KamikazeRitualEffect extends StatusEffect {
 
             public void start() { ModExplosionManager.add(this); }
 
+            public static void sendKamikazeFx(ServerWorld world,
+                                              BlockPos center,
+                                              double currentRadius,
+                                              double maxRadius,
+                                              double progress,           // 0..1
+                                              int seed,
+                                              boolean bigPulse) {
+                Vec3d c = Vec3d.ofCenter(center);
+                double reach = Math.max(96.0, currentRadius + 64.0); // who should see the FX
+
+                for (ServerPlayerEntity p : PlayerLookup.around(world, c, reach)) {
+                    PacketByteBuf buf = PacketByteBufs.create();
+                    buf.writeDouble(c.x); buf.writeDouble(c.y); buf.writeDouble(c.z);
+                    buf.writeFloat((float) currentRadius);
+                    buf.writeFloat((float) maxRadius);
+                    buf.writeFloat((float) progress);
+                    buf.writeInt(seed);
+                    buf.writeBoolean(bigPulse);
+                    ServerPlayNetworking.send(p, ModPackets.KAMIKAZE_FX, buf);
+                }
+            }
+
+
             @Override
             public boolean tickOnce(net.minecraft.server.MinecraftServer server) {
                 if (world.isClient()) return true;
@@ -410,7 +439,15 @@ public class KamikazeRitualEffect extends StatusEffect {
             
                 currentRadius = progress * maxRadius;
                 currentRadiusSq = currentRadius * currentRadius;
-            
+
+                boolean bigPulse = (tick % 12) == 0; // a nice “beat”
+                int seed = (int)(world.getTime() ^ tick ^ center.asLong());
+
+                if (world instanceof net.minecraft.server.world.ServerWorld sw) {
+                    sendKamikazeFx(sw, center, currentRadius, maxRadius, progress, seed, bigPulse);
+                }
+
+
                 // --- NEW: adaptive stride & shell margins per tick ---
                 this.dynamicStride = strideFor(currentRadius);
                 this.shellMargin = marginFor(this.dynamicStride);
