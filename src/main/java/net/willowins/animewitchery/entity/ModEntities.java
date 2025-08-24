@@ -9,6 +9,7 @@ import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;
 import net.willowins.animewitchery.AnimeWitchery;
 import net.willowins.animewitchery.entity.projectile.NeedleProjectileEntity;
+import net.willowins.animewitchery.entity.KamikazeRitualEntity;
 
 public class ModEntities {
     public static final EntityType<NeedleProjectileEntity> NEEDLE_PROJECTILE = Registry.register(
@@ -34,6 +35,19 @@ public class ModEntities {
                     .dimensions(EntityDimensions.fixed(0.6f, 1.8f))
                     .trackRangeBlocks(8)
                     .trackedUpdateRate(3)
+                    .build()
+    );
+
+    public static final EntityType<KamikazeRitualEntity> KAMIKAZE_RITUAL = Registry.register(
+            Registries.ENTITY_TYPE,
+            new Identifier(AnimeWitchery.MOD_ID, "kamikaze_ritual"),
+            FabricEntityTypeBuilder.<KamikazeRitualEntity>create(
+                            SpawnGroup.MISC,
+                            KamikazeRitualEntity::new
+                    )
+                    .dimensions(EntityDimensions.fixed(16.0f, 16.0f)) // Large ritual circle
+                    .trackRangeBlocks(32)
+                    .trackedUpdateRate(2)
                     .build()
     );
 

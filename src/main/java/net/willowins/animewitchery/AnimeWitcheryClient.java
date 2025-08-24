@@ -22,6 +22,7 @@ import net.willowins.animewitchery.block.entity.renderer.GuardianStatueRenderer;
 import net.willowins.animewitchery.entity.ModEntities;
 import net.willowins.animewitchery.entity.client.render.NeedleProjectileRenderer;
 import net.willowins.animewitchery.entity.client.render.VoidWispRenderer;
+import net.willowins.animewitchery.entity.client.KamikazeRitualRenderer;
 import net.willowins.animewitchery.networking.ModPackets;
 import net.willowins.animewitchery.particle.ModParticles;
 import net.willowins.animewitchery.particle.ShockwaveParticle;
@@ -69,6 +70,7 @@ public class AnimeWitcheryClient implements ClientModInitializer {
 
         EntityRendererRegistry.register(ModEntities.NEEDLE_PROJECTILE, NeedleProjectileRenderer::new);
         EntityRendererRegistry.register(ModEntities.VOID_WISP, VoidWispRenderer::new);
+        EntityRendererRegistry.register(ModEntities.KAMIKAZE_RITUAL, KamikazeRitualRenderer::new);
 
 
         ParticleFactoryRegistry.getInstance().register(ModParticles.LASER_PARTICLE, ShockwaveParticle.Factory::new);

@@ -23,6 +23,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.Heightmap;
 import net.minecraft.world.World;
 import net.willowins.animewitchery.AnimeWitchery;
+import net.willowins.animewitchery.entity.KamikazeRitualEntity;
 import net.willowins.animewitchery.networking.ModPackets;
 import net.willowins.animewitchery.util.ModExplosionManager;
 import team.lodestar.lodestone.systems.particle.builder.WorldParticleBuilder;
@@ -139,10 +140,21 @@ public class KamikazeRitualEffect extends StatusEffect {
                     new net.minecraft.util.Identifier(AnimeWitchery.MOD_ID, "kamikaze_explosion_wind_up")),
                     player.getSoundCategory(), 4.0f, 1f);
                 
+                // Spawn the Kamikaze ritual entity
+                if (player.getWorld() instanceof ServerWorld serverWorld) {
+                    KamikazeRitualEffect.spawnKamikazeEntity(serverWorld, player.getBlockPos());
+                }
+                
                 return true; // Death was cancelled
             }
         }
         return false; // Death was not cancelled
+    }
+    
+    // Spawn the Kamikaze ritual entity
+    private static void spawnKamikazeEntity(ServerWorld world, BlockPos pos) {
+        KamikazeRitualEntity ritualEntity = new KamikazeRitualEntity(world, pos);
+        world.spawnEntity(ritualEntity);
     }
     
     // Client-side Lodestone particle methods
@@ -311,7 +323,7 @@ public class KamikazeRitualEffect extends StatusEffect {
         
         private void executeRitual(World world, PlayerEntity player) {
             // Start our HOMEMADE SPHERICAL EXPLOSION sequence! 🔥💥
-            HomemadeExplosion explosion = new HomemadeExplosion(world, deathPos, 100.0, player);
+            HomemadeExplosion explosion = new HomemadeExplosion(world, deathPos, 200, player);
             explosion.start(); // no recursive scheduling anymore
 
             // Play explosion sound
@@ -374,14 +386,14 @@ public class KamikazeRitualEffect extends StatusEffect {
             private double currentRadiusSq = 0.0;
             private double lastRadiusSq = 0.0;
 
-            // Performance knobs
-            private static final int MAX_BLOCKS_PER_TICK = 5000; // tune for your server
+            // Performance knobs - scale with explosion size
+            private static final int BASE_BLOCKS_PER_TICK = 10000; // base budget for radius 100
+            private static final int MAX_BLOCKS_PER_TICK = 40000; // maximum budget for very large explosions
             private static final int MAX_PARTICLES_PER_TICK = 400; // throttle visuals
-            private static final int SCAN_STRIDE = 1; // step size in blocks
-            private static final int DILATION_BUDGET_PER_TICK = 5000;   // seals micro gaps around destroyed blocks
+            private static final int DILATION_BUDGET_PER_TICK = 10000;   // seals micro gaps around destroyed blocks
             private int dilationBudget = DILATION_BUDGET_PER_TICK;
             private int dynamicStride = 1;          // adaptive scan stride per tick
-            private double shellMargin = 2.0;       // margin added to inner/outer radii each tick
+            private double shellMargin = 1.0;       // margin added to inner/outer radii each tick
             private static final int ENTITY_BUDGET_PER_TICK = 512;
 
 
@@ -403,9 +415,12 @@ public class KamikazeRitualEffect extends StatusEffect {
                 return 1; // Always stride=1 for clarity
             }
 
-            // Shell margin ≳ √3 * stride to avoid voxel holes; a bit more is fine
+            // Shell margin scales with explosion radius to avoid rings
             private double marginFor(int stride) {
-                return Math.max(2.0, 1.9 * stride);
+                // Scale shell thickness with explosion radius to avoid ring formation
+                double baseMargin = Math.max(2.0, 1.9 * stride);
+                double radiusScale = Math.max(1.0, maxRadius / 100.0); // Scale factor for radius > 100
+                return baseMargin * radiusScale;
             }
 
             // Stable per-block hash → [0,1)
@@ -625,7 +640,9 @@ public class KamikazeRitualEffect extends StatusEffect {
              * Uses resumable nested loops and a per-tick budget.
              */
             private int destroyIncrementalShell() {
-                int budget = MAX_BLOCKS_PER_TICK;
+                // Scale budget with explosion size to avoid rings
+                int budget = (int) Math.min(MAX_BLOCKS_PER_TICK, 
+                    BASE_BLOCKS_PER_TICK * Math.max(1.0, maxRadius / 100.0));
                 int destroyed = 0;
 
                 // Prepare squared bounds once (with margins) for quick outer reject
@@ -663,9 +680,16 @@ public class KamikazeRitualEffect extends StatusEffect {
                             double jitter = (hash01(center.getX()+dx, y, center.getZ()+dz, 1337) * 2.0 - 1.0) * jitterAmp;
                             double rEdge = currentRadius + jitter;
 
-                            // Two bands: strong (thin) and taper (thicker)
-                            double strongBand = Math.max(1.0, shellMargin * 0.60);
-                            double taperBand  = Math.max(2.0, shellMargin * 1.75);
+                                        // Two bands: strong (thin) and taper (thicker) - scale with radius
+            double strongBand = Math.max(1.0, shellMargin * 0.60);
+            double taperBand  = Math.max(2.0, shellMargin * 1.75);
+            
+            // For very large explosions, ensure we destroy blocks more evenly
+            if (maxRadius > 100.0) {
+                // Increase band thickness for larger explosions to avoid rings
+                strongBand *= Math.max(1.0, maxRadius / 100.0);
+                taperBand *= Math.max(1.0, maxRadius / 100.0);
+            }
 
                             double rStrongInner = Math.max(0.0, rEdge - strongBand);
                             double rTaperInner  = Math.max(0.0, rEdge - strongBand - taperBand);
