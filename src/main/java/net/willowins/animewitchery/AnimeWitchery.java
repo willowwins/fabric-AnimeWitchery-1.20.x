@@ -24,6 +24,7 @@ import net.willowins.animewitchery.enchantments.ModEnchantments;
 import net.willowins.animewitchery.entity.ModEntities;
 import net.willowins.animewitchery.entity.VoidWispEntity;
 import net.willowins.animewitchery.events.BlastingBreakHandler;
+import net.willowins.animewitchery.events.ChestplateElytraFlight;
 import net.willowins.animewitchery.events.ExcavationBreakHandler;
 import net.willowins.animewitchery.item.ModItemGroups;
 import net.willowins.animewitchery.item.ModItems;
@@ -79,6 +80,8 @@ public class AnimeWitchery implements ModInitializer {
         ExcavationBreakHandler.register();
 
 		BlastingBreakHandler.register();
+
+		ChestplateElytraFlight.register();
 
 		LOGGER.info("Hello Fabric world!");
 

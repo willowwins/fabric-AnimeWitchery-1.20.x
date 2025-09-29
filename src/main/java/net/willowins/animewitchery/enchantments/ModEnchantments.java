@@ -5,10 +5,7 @@ import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;
 import net.willowins.animewitchery.AnimeWitchery;
-import net.willowins.animewitchery.enchantments.custom.BlastEnchantment;
-import net.willowins.animewitchery.enchantments.custom.BootEnchantment;
-import net.willowins.animewitchery.enchantments.custom.ExcavationEnchantment;
-import net.willowins.animewitchery.enchantments.custom.NeedleThrowEnchantment;
+import net.willowins.animewitchery.enchantments.custom.*;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -18,6 +15,7 @@ public interface ModEnchantments {
     Enchantment BOOT_ENCHANT = createEnchantment("boot_enchant", new BootEnchantment());
     Enchantment EXCAVATE_ENCHANT = createEnchantment("excavate_enchant", new ExcavationEnchantment());
     Enchantment BLAST_ENCHANT = createEnchantment("blast_enchant", new BlastEnchantment());
+    Enchantment FLIGHT_ENCHANT = createEnchantment("flight_enchant", new FlightEnchantment());
     Enchantment SLIVER = createEnchantment("sliver_enchant", new NeedleThrowEnchantment());
 
     static void init() {

@@ -2,15 +2,14 @@ package net.willowins.animewitchery.enchantments.custom;
 
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentTarget;
-import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 
-public class ExcavationEnchantment extends Enchantment {
+public class FlightEnchantment extends Enchantment {
 
-    public ExcavationEnchantment() {
-        super(Rarity.RARE, EnchantmentTarget.DIGGER, new EquipmentSlot[]{EquipmentSlot.MAINHAND});
+    public FlightEnchantment() {
+        super(Rarity.RARE, EnchantmentTarget.ARMOR_CHEST, new EquipmentSlot[]{EquipmentSlot.CHEST});
     }
 
     @Override
@@ -21,22 +20,16 @@ public class ExcavationEnchantment extends Enchantment {
 
     @Override
     public boolean isCursed() {
-        return false;
-    }
-
-    // Only allow enchanted books, not tools
-    @Override
-    public boolean isAcceptableItem(ItemStack stack) {
-        return stack.isOf(Items.ENCHANTED_BOOK);
-    }
-
-    @Override
-    public boolean isAvailableForRandomSelection() {
         return true;
     }
 
     @Override
-    public boolean isAvailableForEnchantedBookOffer() {
+    public boolean isAvailableForRandomSelection() {
         return false;
+    }
+
+    @Override
+    public boolean isAvailableForEnchantedBookOffer() {
+        return true;
     }
 }

@@ -6,12 +6,15 @@ import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.inventory.CraftingInventory;
 import net.minecraft.inventory.Inventories;
 import net.minecraft.inventory.SidedInventory;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.recipe.CraftingRecipe;
+import net.minecraft.recipe.Ingredient;
 import net.minecraft.recipe.RecipeManager;
 import net.minecraft.recipe.RecipeType;
 import net.minecraft.screen.ScreenHandler;
@@ -33,7 +36,7 @@ import java.util.stream.IntStream;
 public class AutoCrafterBlockEntity extends BlockEntity implements ExtendedScreenHandlerFactory, SidedInventory {
 
     private final DefaultedList<ItemStack> recipeInventory = DefaultedList.ofSize(9, ItemStack.EMPTY);
-    private final DefaultedList<ItemStack> internalInventory = DefaultedList.ofSize(10, ItemStack.EMPTY);
+    private final DefaultedList<ItemStack> internalInventory = DefaultedList.ofSize(10, ItemStack.EMPTY); // 0..8 in, 9 out
 
     private static final int[] INPUT_SLOTS = IntStream.range(0, 9).toArray();
     private static final int[] OUTPUT_SLOT = new int[]{9};
@@ -41,6 +44,9 @@ public class AutoCrafterBlockEntity extends BlockEntity implements ExtendedScree
     private CraftingRecipe cachedRecipe = null;
     private boolean isRecipeGridDirty = true;
     private int craftCooldown = 0;
+
+    // Transient crafting grid for matching/lookup
+    private final CraftingInventory craftingInventory = new CraftingInventory(new DummyHandler(), 3, 3);
 
     public AutoCrafterBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntities.AUTO_CRAFTER_BLOCK_ENTITY, pos, state);
@@ -67,6 +73,7 @@ public class AutoCrafterBlockEntity extends BlockEntity implements ExtendedScree
                 world != null && world.getBlockEntity(pos) == this;
     }
 
+    /** Ticking **/
     public static void tick(World world, BlockPos pos, BlockState state, AutoCrafterBlockEntity be) {
         if (world.isClient || be.isRecipeEmpty()) return;
 
@@ -76,102 +83,179 @@ public class AutoCrafterBlockEntity extends BlockEntity implements ExtendedScree
         }
         be.craftCooldown = 20;
 
+        // Refresh recipe if the visible 3x3 changed
         if (be.isRecipeGridDirty) {
-            for (int i = 0; i < 9; i++) {
-                be.craftingInventory.setStack(i, be.recipeInventory.get(i));
-            }
+            be.syncCraftingInventoryFromRecipeGrid();
             RecipeManager recipeManager = ((ServerWorld) world).getServer().getRecipeManager();
             be.cachedRecipe = recipeManager.getFirstMatch(RecipeType.CRAFTING, be.craftingInventory, world).orElse(null);
             be.isRecipeGridDirty = false;
         }
-
         if (be.cachedRecipe == null) return;
 
+        // Eject trash (anything not matching any ingredient of the cached recipe)
         be.dropNonMatchingItems(world, pos, be.cachedRecipe);
 
-        ItemStack result = be.cachedRecipe.craft(be.craftingInventory, world.getRegistryManager());
-        if (result.isEmpty()) return;
+        // If output cannot accept, stop early
+        ItemStack preview = be.cachedRecipe.craft(be.craftingInventory, world.getRegistryManager());
+        if (preview.isEmpty()) return;
 
         ItemStack outputStack = be.internalInventory.get(9);
-        boolean canInsertOutput = outputStack.isEmpty() ||
-                (ItemStack.canCombine(outputStack, result) && outputStack.getCount() + result.getCount() <= outputStack.getMaxCount());
+        boolean canInsertOutput = outputStack.isEmpty()
+                || (ItemStack.canCombine(outputStack, preview)
+                && outputStack.getCount() + preview.getCount() <= Math.min(preview.getMaxCount(), be.getMaxCountPerStack()));
+        if (!canInsertOutput) return;
 
-        if (!canInsertOutput || !be.hasIngredients(be.cachedRecipe)) return;
+        // Build a consumption plan (shaped to the recipe’s 3x3), ensuring we truly have the ingredients.
+        int[] plan = be.buildConsumptionPlan(be.cachedRecipe);
+        if (plan == null) return; // missing ingredients
 
-        be.consumeIngredients(be.cachedRecipe);
+        // Consume according to plan while building a transient grid for remainder calculation
+        CraftingInventory consumedGrid = new CraftingInventory(new DummyHandler(), 3, 3);
+        be.consumeAccordingToPlanAndFillGrid(plan, consumedGrid);
 
+        // Handle output
         if (outputStack.isEmpty()) {
-            be.internalInventory.set(9, result.copy());
+            be.internalInventory.set(9, preview.copy());
         } else {
-            outputStack.increment(result.getCount());
+            outputStack.increment(preview.getCount());
+        }
+
+        // Handle container items / remainders faithfully
+        DefaultedList<ItemStack> remainders = be.cachedRecipe.getRemainder(consumedGrid);
+        for (int i = 0; i < remainders.size(); i++) {
+            ItemStack rem = remainders.get(i);
+            if (rem.isEmpty()) continue;
+            if (!be.tryInsertIntoInputs(rem)) {
+                ItemScatterer.spawn(world, pos.getX(), pos.getY() + 1, pos.getZ(), rem);
+            }
         }
 
         be.markDirty();
     }
 
-    private void dropNonMatchingItems(World world, BlockPos pos, CraftingRecipe recipe) {
-        Set<net.minecraft.item.Item> validItems = new HashSet<>();
-        for (var ingredient : recipe.getIngredients()) {
-            for (ItemStack stack : ingredient.getMatchingStacks()) {
-                validItems.add(stack.getItem());
-            }
-        }
+    /** Build a shaped consumption plan mapping each recipe 3x3 index -> internal input slot index, or -1 if empty ingredient. */
+    private int[] buildConsumptionPlan(CraftingRecipe recipe) {
+        int[] plan = new int[9];
+        for (int i = 0; i < 9; i++) plan[i] = -1;
+
+        DefaultedList<Ingredient> ings = recipe.getIngredients();
+        // Work on a mutable copy of input counts so we don’t mutate real inventory unless we succeed
+        int[] counts = new int[9];
+        for (int s = 0; s < 9; s++) counts[s] = internalInventory.get(s).getCount();
 
         for (int i = 0; i < 9; i++) {
+            Ingredient ing = i < ings.size() ? ings.get(i) : Ingredient.EMPTY;
+            if (ing.isEmpty()) continue;
+
+            // Find any internal slot that matches this ingredient and still has count > 0
+            boolean matched = false;
+            for (int s = 0; s < 9; s++) {
+                ItemStack stack = internalInventory.get(s);
+                if (counts[s] > 0 && ing.test(stack)) {
+                    plan[i] = s;
+                    counts[s]--; // Reserve one
+                    matched = true;
+                    break;
+                }
+            }
+            if (!matched) return null; // missing something; abort
+        }
+        return plan;
+    }
+
+    /** Apply the plan: decrement inputs and populate a transient 3×3 grid with single-count copies for remainder logic. */
+    private void consumeAccordingToPlanAndFillGrid(int[] plan, CraftingInventory gridOut) {
+        for (int i = 0; i < 9; i++) {
+            int src = plan[i];
+            if (src < 0) {
+                gridOut.setStack(i, ItemStack.EMPTY);
+                continue;
+            }
+            ItemStack srcStack = internalInventory.get(src);
+            // Place a single-copy into the transient grid
+            ItemStack one = srcStack.copy();
+            one.setCount(1);
+            gridOut.setStack(i, one);
+
+            // Decrement the actual input by one
+            srcStack.decrement(1);
+            if (srcStack.isEmpty()) {
+                internalInventory.set(src, ItemStack.EMPTY);
+            }
+        }
+    }
+
+    /** Attempt to insert a remainder back into the 0..8 inputs, preferring merges before empty slots. */
+    private boolean tryInsertIntoInputs(ItemStack stack) {
+        if (stack.isEmpty()) return true;
+
+        // Try merges first
+        for (int i = 0; i < 9; i++) {
+            ItemStack cur = internalInventory.get(i);
+            if (cur.isEmpty()) continue;
+            if (ItemStack.canCombine(cur, stack)) {
+                int max = Math.min(cur.getMaxCount(), getMaxCountPerStack());
+                int space = max - cur.getCount();
+                if (space <= 0) continue;
+                int toMove = Math.min(space, stack.getCount());
+                if (toMove > 0) {
+                    cur.increment(toMove);
+                    stack.decrement(toMove);
+                    if (stack.isEmpty()) return true;
+                }
+            }
+        }
+        // Then empty slots
+        for (int i = 0; i < 9; i++) {
+            ItemStack cur = internalInventory.get(i);
+            if (cur.isEmpty()) {
+                int max = Math.min(stack.getMaxCount(), getMaxCountPerStack());
+                ItemStack placed = stack.copy();
+                placed.setCount(Math.min(stack.getCount(), max));
+                internalInventory.set(i, placed);
+                stack.decrement(placed.getCount());
+                if (stack.isEmpty()) return true;
+            }
+        }
+        return stack.isEmpty();
+    }
+
+    /** Eject anything in inputs that cannot serve the current recipe. */
+    private void dropNonMatchingItems(World world, BlockPos pos, CraftingRecipe recipe) {
+        Set<Item> validItems = computeValidItemsForRecipe(recipe);
+        for (int i = 0; i < 9; i++) {
             ItemStack stack = internalInventory.get(i);
-            if (!stack.isEmpty() && !validItems.contains(stack.getItem())) {
+            if (stack.isEmpty()) continue;
+            if (!validItems.isEmpty() && !validItems.contains(stack.getItem())) {
                 ItemScatterer.spawn(world, pos.getX(), pos.getY() + 1, pos.getZ(), stack);
                 internalInventory.set(i, ItemStack.EMPTY);
             }
         }
     }
 
-    private boolean isRecipeEmpty() {
-        for (ItemStack stack : recipeInventory) {
-            if (!stack.isEmpty()) return false;
+    private Set<Item> computeValidItemsForRecipe(CraftingRecipe recipe) {
+        Set<Item> valid = new HashSet<>();
+        if (recipe == null) return valid;
+        for (Ingredient ing : recipe.getIngredients()) {
+            if (ing.isEmpty()) continue;
+            for (ItemStack s : ing.getMatchingStacks()) valid.add(s.getItem());
         }
-        return true;
+        return valid;
     }
 
-    private boolean hasIngredients(CraftingRecipe recipe) {
-        DefaultedList<ItemStack> tempInventory = DefaultedList.ofSize(9, ItemStack.EMPTY);
+    private void syncCraftingInventoryFromRecipeGrid() {
         for (int i = 0; i < 9; i++) {
-            tempInventory.set(i, internalInventory.get(i).copy());
+            ItemStack s = recipeInventory.get(i);
+            craftingInventory.setStack(i, s.isEmpty() ? ItemStack.EMPTY : s.copy());
         }
+    }
 
-        for (var ingredient : recipe.getIngredients()) {
-            if (ingredient.isEmpty()) continue;
-
-            boolean matched = false;
-            for (int j = 0; j < tempInventory.size(); j++) {
-                ItemStack stack = tempInventory.get(j);
-                if (ingredient.test(stack) && stack.getCount() > 0) {
-                    stack.decrement(1);
-                    matched = true;
-                    break;
-                }
-            }
-
-            if (!matched) return false;
-        }
-
+    private boolean isRecipeEmpty() {
+        for (ItemStack stack : recipeInventory) if (!stack.isEmpty()) return false;
         return true;
     }
 
-    private void consumeIngredients(CraftingRecipe recipe) {
-        for (var ingredient : recipe.getIngredients()) {
-            if (ingredient.isEmpty()) continue;
-            for (int i = 0; i < 9; i++) {
-                ItemStack stack = internalInventory.get(i);
-                if (ingredient.test(stack) && stack.getCount() > 0) {
-                    stack.decrement(1);
-                    break;
-                }
-            }
-        }
-    }
-
-    // Hopper interaction
+    /** Sided inventory: hoppers */
     @Override
     public int[] getAvailableSlots(Direction side) {
         return side == Direction.DOWN ? OUTPUT_SLOT : INPUT_SLOTS;
@@ -179,51 +263,36 @@ public class AutoCrafterBlockEntity extends BlockEntity implements ExtendedScree
 
     @Override
     public boolean canInsert(int slot, ItemStack stack, Direction dir) {
-        if (slot < 0 || slot >= 9) return false;
+        if (slot < 0 || slot > 8) return false; // inputs only
 
-        // Calculate total count of this item type in input slots (excluding slot being inserted to)
-        int totalCount = 0;
-        for (int i = 0; i < 9; i++) {
-            if (i == slot) continue;
-            ItemStack other = internalInventory.get(i);
-            if (!other.isEmpty() && ItemStack.canCombine(other, stack)) {
-                totalCount += other.getCount();
-            }
-        }
+        // If we know the recipe, only accept items that are valid for any ingredient
+        Set<Item> valid = computeValidItemsForRecipe(cachedRecipe);
+        if (!valid.isEmpty() && !valid.contains(stack.getItem())) return false;
 
-        // Add count of inserting stack
-        totalCount += stack.getCount();
-
-        // Reject if total count > 64 (max stack size)
-        if (totalCount > 64) {
-            return false;
-        }
-
-        // Also check the current stack in the slot to not exceed max stack size
+        // Per-slot stacking only
         ItemStack current = internalInventory.get(slot);
-        return current.isEmpty() || (ItemStack.canCombine(current, stack) && current.getCount() + stack.getCount() <= current.getMaxCount());
-    }
+        if (current.isEmpty()) return true;
+        if (!ItemStack.canCombine(current, stack)) return false;
 
+        int max = Math.min(current.getMaxCount(), getMaxCountPerStack());
+        return current.getCount() + stack.getCount() <= max;
+    }
 
     @Override
     public boolean canExtract(int slot, ItemStack stack, Direction dir) {
         return dir == Direction.DOWN && slot == 9;
     }
 
-    // Inventory interface (internalInventory only)
-    @Override
-    public int size() { return internalInventory.size(); }
+    /** Inventory interface (internalInventory only) */
+    @Override public int size() { return internalInventory.size(); }
 
     @Override
     public boolean isEmpty() {
-        for (ItemStack stack : internalInventory) {
-            if (!stack.isEmpty()) return false;
-        }
+        for (ItemStack stack : internalInventory) if (!stack.isEmpty()) return false;
         return true;
     }
 
-    @Override
-    public ItemStack getStack(int slot) { return internalInventory.get(slot); }
+    @Override public ItemStack getStack(int slot) { return internalInventory.get(slot); }
 
     @Override
     public ItemStack removeStack(int slot, int amount) {
@@ -241,31 +310,27 @@ public class AutoCrafterBlockEntity extends BlockEntity implements ExtendedScree
 
     @Override
     public void setStack(int slot, ItemStack stack) {
-        if (slot >= 0 && slot < internalInventory.size()) {
-            if (!stack.isEmpty() && slot < 9) { // only for input slots
-                for (int i = 0; i < 9; i++) {
-                    if (i != slot && ItemStack.canCombine(stack, internalInventory.get(i))) {
-                        // Duplicate item type - reject insertion
-                        return;
-                    }
-                }
-            }
-            if (!stack.isEmpty()) {
-                ItemStack newStack = stack.copy();
-                newStack.setCount(Math.min(newStack.getCount(), 64));
-                internalInventory.set(slot, newStack);
-            } else {
-                internalInventory.set(slot, ItemStack.EMPTY);
-            }
-            markDirty();
+        if (slot < 0 || slot >= internalInventory.size()) return;
+
+        // Enforce ingredient-only for inputs when a recipe is known
+        if (slot <= 8 && !stack.isEmpty()) {
+            Set<Item> valid = computeValidItemsForRecipe(cachedRecipe);
+            if (!valid.isEmpty() && !valid.contains(stack.getItem())) return;
         }
+
+        if (stack.isEmpty()) {
+            internalInventory.set(slot, ItemStack.EMPTY);
+        } else {
+            ItemStack copy = stack.copy();
+            copy.setCount(Math.min(copy.getCount(), Math.min(copy.getMaxCount(), getMaxCountPerStack())));
+            internalInventory.set(slot, copy);
+        }
+        markDirty();
     }
 
     public void recheckRecipe() {
         if (world instanceof ServerWorld serverWorld) {
-            for (int i = 0; i < 9; i++) {
-                craftingInventory.setStack(i, recipeInventory.get(i));
-            }
+            syncCraftingInventoryFromRecipeGrid();
             RecipeManager recipeManager = serverWorld.getServer().getRecipeManager();
             cachedRecipe = recipeManager.getFirstMatch(RecipeType.CRAFTING, craftingInventory, serverWorld).orElse(null);
             isRecipeGridDirty = false;
@@ -279,18 +344,13 @@ public class AutoCrafterBlockEntity extends BlockEntity implements ExtendedScree
         markDirty();
     }
 
-    @Override
-    public int getMaxCountPerStack() { return 64; }
+    @Override public int getMaxCountPerStack() { return 64; }
 
-    public DefaultedList<ItemStack> getRecipeInventory() {
-        return recipeInventory;
-    }
+    public DefaultedList<ItemStack> getRecipeInventory() { return recipeInventory; }
 
-    public void markRecipeDirty() {
-        this.isRecipeGridDirty = true;
-    }
+    public void markRecipeDirty() { this.isRecipeGridDirty = true; }
 
-    // NBT Save/Load
+    /** NBT Save/Load */
     @Override
     public void readNbt(NbtCompound tag) {
         super.readNbt(tag);
@@ -305,38 +365,31 @@ public class AutoCrafterBlockEntity extends BlockEntity implements ExtendedScree
         tag.put("RecipeInventory", Inventories.writeNbt(new NbtCompound(), recipeInventory, true));
     }
 
+    /** Drop and clear inventories (no duplication if called repeatedly). */
     public void dropInventory(World world, BlockPos pos) {
         if (world == null || world.isClient()) return;
-        for (ItemStack stack : internalInventory) {
+
+        for (int i = 0; i < internalInventory.size(); i++) {
+            ItemStack stack = internalInventory.get(i);
             if (!stack.isEmpty()) {
-                ItemEntity itemEntity = new ItemEntity(world, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, stack);
-                world.spawnEntity(itemEntity);
+                world.spawnEntity(new ItemEntity(world, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, stack));
+                internalInventory.set(i, ItemStack.EMPTY);
             }
         }
-        for (ItemStack stack : recipeInventory) {
+        for (int i = 0; i < recipeInventory.size(); i++) {
+            ItemStack stack = recipeInventory.get(i);
             if (!stack.isEmpty()) {
-                ItemEntity itemEntity = new ItemEntity(world, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, stack);
-                world.spawnEntity(itemEntity);
+                world.spawnEntity(new ItemEntity(world, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, stack));
+                recipeInventory.set(i, ItemStack.EMPTY);
             }
         }
+        markDirty();
     }
 
-    // CraftingInventory for recipe lookup
-    private final net.minecraft.inventory.CraftingInventory craftingInventory = new net.minecraft.inventory.CraftingInventory(new DummyHandler(), 3, 3);
-
+    /** Dummy handler for CraftingInventory */
     private static class DummyHandler extends ScreenHandler {
-        protected DummyHandler() {
-            super(null, 0);
-        }
-
-        @Override
-        public boolean canUse(PlayerEntity player) {
-            return true;
-        }
-
-        @Override
-        public ItemStack quickMove(PlayerEntity player, int index) {
-            return ItemStack.EMPTY;
-        }
+        protected DummyHandler() { super(null, 0); }
+        @Override public boolean canUse(PlayerEntity player) { return true; }
+        @Override public ItemStack quickMove(PlayerEntity player, int index) { return ItemStack.EMPTY; }
     }
 }
