@@ -9,16 +9,7 @@ import net.fabricmc.fabric.api.client.screenhandler.v1.ScreenRegistry;
 import net.minecraft.client.render.RenderLayer;
 import net.willowins.animewitchery.block.ModBlocks;
 import net.willowins.animewitchery.block.entity.ModBlockEntities;
-import net.willowins.animewitchery.block.entity.renderer.ActiveBindingSpellRenderer;
-import net.willowins.animewitchery.block.entity.renderer.ActiveEffigyFountainRenderer;
-import net.willowins.animewitchery.block.entity.renderer.AlchemyTableRenderer;
-import net.willowins.animewitchery.block.entity.renderer.BindingSpellRenderer;
-import net.willowins.animewitchery.block.entity.renderer.ObeliskRenderer;
-import net.willowins.animewitchery.block.entity.renderer.BossObeliskRenderer;
-import net.willowins.animewitchery.block.entity.renderer.ActiveObeliskRenderer;
-import net.willowins.animewitchery.block.entity.renderer.BarrierCircleRenderer;
-import net.willowins.animewitchery.block.entity.renderer.BarrierDistanceGlyphRenderer;
-import net.willowins.animewitchery.block.entity.renderer.GuardianStatueRenderer;
+import net.willowins.animewitchery.block.entity.renderer.*;
 import net.willowins.animewitchery.entity.ModEntities;
 import net.willowins.animewitchery.entity.client.render.NeedleProjectileRenderer;
 import net.willowins.animewitchery.entity.client.render.VoidWispRenderer;
@@ -41,6 +32,7 @@ public class AnimeWitcheryClient implements ClientModInitializer {
         BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.ACTIVE_BINDING_SPELL, RenderLayer.getCutout());
         BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.BINDING_SPELL, RenderLayer.getCutout());
         BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.ALCHEMY_TABLE, RenderLayer.getCutout());
+        BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.PLATE_BLOCK, RenderLayer.getCutout());
         BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.OBELISK, RenderLayer.getCutout());
         BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.ACTIVE_OBELISK, RenderLayer.getCutout());
         BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.BARRIER_CIRCLE, RenderLayer.getCutout());
@@ -67,6 +59,7 @@ public class AnimeWitcheryClient implements ClientModInitializer {
         BlockEntityRendererRegistry.register(ModBlockEntities.BARRIER_DISTANCE_GLYPH_BLOCK_ENTITY, (context) -> new BarrierDistanceGlyphRenderer(context));
         BlockEntityRendererRegistry.register(ModBlockEntities.BOSS_OBELISK_BLOCK_ENTITY, (context) -> new BossObeliskRenderer());
         BlockEntityRendererRegistry.register(ModBlockEntities.GUARDIAN_STATUE_BLOCK_ENTITY, GuardianStatueRenderer::new);
+        BlockEntityRendererRegistry.register(ModBlockEntities.PLATE_BLOCK_ENTITY, PlateRenderer::new);
 
         EntityRendererRegistry.register(ModEntities.NEEDLE_PROJECTILE, NeedleProjectileRenderer::new);
         EntityRendererRegistry.register(ModEntities.VOID_WISP, VoidWispRenderer::new);

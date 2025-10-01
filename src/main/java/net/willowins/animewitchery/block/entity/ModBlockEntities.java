@@ -58,6 +58,11 @@ public class ModBlockEntities {
                     FabricBlockEntityTypeBuilder.create(AlchemyTableBlockEntity::new,
                             ModBlocks.ALCHEMY_TABLE).build((Type) null));
 
+    public static final BlockEntityType<PlateBlockEntity> PLATE_BLOCK_ENTITY =
+            Registry.register(Registries.BLOCK_ENTITY_TYPE, new Identifier(MOD_ID, "plate_be"),
+                    FabricBlockEntityTypeBuilder.create(PlateBlockEntity::new,
+                            ModBlocks.PLATE_BLOCK).build((Type) null));
+
     public static final BlockEntityType<ObeliskBlockEntity> OBELISK_BLOCK_ENTITY =
             Registry.register(Registries.BLOCK_ENTITY_TYPE, new Identifier(MOD_ID, "obelisk_be"),
                     FabricBlockEntityTypeBuilder.create(ObeliskBlockEntity::new,

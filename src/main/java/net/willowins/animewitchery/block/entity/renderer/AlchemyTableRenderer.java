@@ -56,7 +56,7 @@ public class AlchemyTableRenderer extends GeoBlockRenderer<AlchemyTableBlockEnti
         poseStack.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(time * 20));
         
         // Scale the item
-        poseStack.scale(0.6f, 0.6f, 0.6f);
+        poseStack.scale(1.5f, 1.5f, 1.5f);
         
         // Render the item
         itemRenderer.renderItem(itemStack, ModelTransformationMode.GROUND, packedLight, packedOverlay, poseStack, bufferSource, blockEntity.getWorld(), 0);

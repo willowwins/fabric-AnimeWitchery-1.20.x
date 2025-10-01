@@ -50,6 +50,8 @@ public static final Block BINDING_SPELL =registerBlock("binding_spell",
 
 public static final Block ALCHEMY_TABLE =registerBlock("alchemy_table",
             new AlchemyTableBlock(FabricBlockSettings.copyOf(Blocks.STONE).nonOpaque()));
+public static final Block PLATE_BLOCK =registerBlock("plate",
+            new PlateBlock(FabricBlockSettings.copyOf(ModBlocks.SILVER_BLOCK).nonOpaque()));
 
     public static final Block ACTIVE_EFFIGY_FOUNTAIN =registerBlock("active_effigy_fountain",
             new ActiveEffigyFountainBlock(FabricBlockSettings.copyOf(Blocks.STONE).nonOpaque().hardness(-1f)));
