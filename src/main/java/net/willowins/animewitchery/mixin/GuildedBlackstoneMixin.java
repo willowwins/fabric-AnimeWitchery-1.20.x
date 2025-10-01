@@ -27,7 +27,6 @@ public class GuildedBlackstoneMixin {
         if (world.getBlockState(pos).isOf(Blocks.GILDED_BLACKSTONE) && !world.isClient) {
             if (player.getOffHandStack().isOf(Items.IRON_NUGGET.asItem())){
                 Block.dropStack(world,pos,new ItemStack(Items.GOLD_NUGGET.asItem(),1));
-                player.getMainHandStack().decrement(1);
                 world.playSound(null, pos, SoundEvents.BLOCK_GRINDSTONE_USE, SoundCategory.BLOCKS, 1f,1f);
                 player.getOffHandStack().decrement(1);
             }
