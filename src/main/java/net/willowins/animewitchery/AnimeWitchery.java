@@ -1,5 +1,9 @@
 package net.willowins.animewitchery;
 
+import dev.onyxstudios.cca.api.v3.component.ComponentKey;
+import dev.onyxstudios.cca.api.v3.component.ComponentRegistryV3;
+import dev.onyxstudios.cca.api.v3.entity.EntityComponentFactoryRegistry;
+import dev.onyxstudios.cca.api.v3.entity.EntityComponentInitializer;
 import net.fabricmc.api.ModInitializer;
 
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
@@ -10,6 +14,7 @@ import net.fabricmc.fabric.api.registry.FuelRegistry;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRegistry;
 import net.kyrptonaught.customportalapi.api.CustomPortalBuilder;
 import net.minecraft.block.Blocks;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
@@ -29,6 +34,8 @@ import net.willowins.animewitchery.events.ExcavationBreakHandler;
 import net.willowins.animewitchery.item.ModItemGroups;
 import net.willowins.animewitchery.item.ModItems;
 import net.willowins.animewitchery.item.custom.ObeliskSwordItem;
+import net.willowins.animewitchery.mana.ManaComponent;
+import net.willowins.animewitchery.mana.ManaTicker;
 import net.willowins.animewitchery.particle.ModParticles;
 import net.willowins.animewitchery.sound.ModSounds;
 import net.willowins.animewitchery.util.ModCustomTrades;
@@ -45,7 +52,17 @@ public class AnimeWitchery implements ModInitializer {
 	public static final String MOD_ID = "animewitchery";
 	public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 	public static final Identifier SWING_MISS_PACKET = new Identifier(MOD_ID, "swing_miss");
+	public class AnimeWitcheryComponents implements EntityComponentInitializer {
+		public static final ComponentKey<ManaComponent> MANA =
+				ComponentRegistryV3.INSTANCE.getOrCreate(
+						new Identifier("animewitchery", "mana"),
+						ManaComponent.class
+				);
 
+		@Override
+		public void registerEntityComponentFactories(EntityComponentFactoryRegistry registry) {
+			registry.registerFor(PlayerEntity.class, MANA, player -> new ManaComponent());
+		}}
 
 	@Override
 	public void onInitialize() {
@@ -55,6 +72,8 @@ public class AnimeWitchery implements ModInitializer {
 
 		ModItems.registerModItems();
 		ModBlocks.registerModBlocks();
+
+		ManaTicker.register();
 
 		ModLootTableModifiers.modifyLootTables();
 		ModCustomTrades.registerCustomTrades();

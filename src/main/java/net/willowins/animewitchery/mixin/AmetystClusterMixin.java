@@ -26,7 +26,7 @@ public class AmetystClusterMixin {
         if (world.getBlockState(pos).isOf(Blocks.AMETHYST_CLUSTER) && !world.isClient) {
             if (player.getMainHandStack().isOf(ModItems.BLAZE_SACK)){
                 world.setBlockState(pos, Blocks.AIR.getDefaultState());
-                Block.dropStack(world,pos,new ItemStack(ModItems.ALCHEMICAL_CATALYST,8));
+                Block.dropStack(world,pos,new ItemStack(ModItems.ALCHEMICAL_CATALYST,1));
                 player.getMainHandStack().decrement(1);
 
 

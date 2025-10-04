@@ -18,6 +18,9 @@
 		"main": [
 			"net.willowins.animewitchery.AnimeWitchery"
 		],
+		"cardinal-components-entity": [
+			"net.willowins.animewitchery.mana.ModComponents"
+		],
 		"client": [
 			"net.willowins.animewitchery.AnimeWitcheryClient"
 		],
