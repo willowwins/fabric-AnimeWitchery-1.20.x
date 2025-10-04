@@ -4,8 +4,8 @@
 	"parent": "plate",
 	"texture_size": [32, 32],
 	"textures": {
-		"0": "plate",
-		"particle": "plate"
+		"0": "animewitchery:block/plate",
+		"particle": "animewitchery:block/plate"
 	},
 	"elements": [
 		{

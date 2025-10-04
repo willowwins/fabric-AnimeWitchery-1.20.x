@@ -56,7 +56,7 @@ public class PlateRenderer implements BlockEntityRenderer<PlateBlockEntity> {
         // Grab baked model
         BakedModel model = itemRenderer.getModel(stack, world, null, 0);
         boolean is3d = model != null && model.hasDepth();
-        float scale = is3d ? 0.8f : 1.0f;
+        float scale = is3d ? 1.0f : 1.2f;
 
         matrices.push();
 
