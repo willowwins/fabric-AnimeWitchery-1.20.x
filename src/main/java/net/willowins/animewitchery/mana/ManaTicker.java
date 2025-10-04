@@ -8,10 +8,8 @@ public class ManaTicker {
     public static void register() {
         ServerTickEvents.END_SERVER_TICK.register(server -> {
             for (ServerPlayerEntity player : server.getPlayerManager().getPlayerList()) {
-                ManaComponent mana = AnimeWitchery.AnimeWitcheryComponents.MANA.get(player);
-
-                // Regenerate 1 mana per tick (20/sec).
-                mana.regen(1);
+                IManaComponent mana = ModComponents.PLAYER_MANA.get(player);
+                mana.regen(5);
             }
         });
     }

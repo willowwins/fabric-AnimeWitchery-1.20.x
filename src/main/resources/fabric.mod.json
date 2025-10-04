@@ -3,7 +3,7 @@
 	"id": "animewitchery",
 	"version": "${version}",
 	"name": "Anime Witchery",
-	"description": "a silly mod about magic based off of the makers prefrence",
+	"description": "a silly mod about magic based off of the makers preference",
 	"authors": [
 		"willow,Dino,Error303,MelodyVox"
 	],
@@ -22,7 +22,8 @@
 			"net.willowins.animewitchery.mana.ModComponents"
 		],
 		"client": [
-			"net.willowins.animewitchery.AnimeWitcheryClient"
+			"net.willowins.animewitchery.AnimeWitcheryClient",
+			"net.willowins.animewitchery.client.ManaHudOverlay"
 		],
 		"fabric-datagen": [
 			"net.willowins.animewitchery.AnimeWitcheryDataGenerator"
@@ -43,5 +44,10 @@
 	},
 	"suggests": {
 		"another-mod": "*"
+	},
+	"custom": {
+		"cardinal-components": [
+			"animewitchery:player_mana"
+		]
 	}
 }

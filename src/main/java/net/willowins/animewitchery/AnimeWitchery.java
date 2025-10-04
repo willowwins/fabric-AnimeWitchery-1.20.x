@@ -61,7 +61,12 @@ public class AnimeWitchery implements ModInitializer {
 
 		@Override
 		public void registerEntityComponentFactories(EntityComponentFactoryRegistry registry) {
-			registry.registerFor(PlayerEntity.class, MANA, player -> new ManaComponent());
+			registry.registerFor(
+					PlayerEntity.class,
+					MANA,
+					player -> new ManaComponent(player)
+			);
+
 		}}
 
 	@Override

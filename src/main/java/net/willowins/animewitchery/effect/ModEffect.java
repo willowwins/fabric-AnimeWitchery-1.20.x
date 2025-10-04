@@ -23,6 +23,9 @@ public class ModEffect {
     public static final StatusEffect KAMIKAZE_RITUAL = registerStatusEffect("kamikaze_ritual",
             new KamikazeRitualEffect(StatusEffectCategory.HARMFUL, 0x8B0000));
 
+    public static final StatusEffect MANA_REGEN = registerStatusEffect("mana_regen",
+            new ManaRegenEffect(StatusEffectCategory.BENEFICIAL, 0x3B9EFF));
+
     public static StatusEffect registerStatusEffect(String name, StatusEffect statusEffect){
         return Registry.register(Registries.STATUS_EFFECT,new Identifier(AnimeWitchery.MOD_ID, name), statusEffect);
     }
