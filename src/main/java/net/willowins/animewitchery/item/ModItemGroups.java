@@ -29,6 +29,8 @@ public class ModItemGroups {
                         entries.add(ModItems.UNBAKED_STRAWBERRY_TART);
                         entries.add(ModItems.STRAWBERRY_TART);
                         entries.add(ModItems.LEMON_TART);
+                        entries.add(ModItems.REPAIR_CHARM);
+                        entries.add(ModItems.KINETIC_BLADE);
                         
 
                         entries.add(ModItems.STRAWBERRY_SEEDS);
@@ -52,6 +54,7 @@ public class ModItemGroups {
                         entries.add(ModItems.DEEP_DARK_DEEP_DISH);
                         entries.add(ModItems.FIRE_RES_CRYSTAL);
                         entries.add(ModItems.SPEED_CRYSTAL);
+                        entries.add(ModItems.MANA_ROCKET);
                         entries.add(ModItems.OVERHEATED_FUEL_ROD);
                         entries.add(ModItems.FUEL_ROD);
 

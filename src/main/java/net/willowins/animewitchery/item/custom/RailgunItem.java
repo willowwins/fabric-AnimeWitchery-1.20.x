@@ -5,9 +5,7 @@ import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.block.Blocks;
 import net.minecraft.client.render.item.BuiltinModelItemRenderer;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
@@ -15,11 +13,13 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.network.packet.s2c.play.StopSoundS2CPacket;
+import net.minecraft.particle.DustParticleEffect;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.text.Text;
+import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
 import net.minecraft.util.UseAction;
@@ -33,6 +33,7 @@ import net.willowins.animewitchery.item.renderer.RailgunRenderer;
 import net.willowins.animewitchery.networking.ModPackets;
 import net.willowins.animewitchery.particle.ModParticles;
 import net.willowins.animewitchery.sound.ModSounds;
+import org.joml.Vector3f;
 import software.bernie.geckolib.animatable.GeoItem;
 import software.bernie.geckolib.animatable.client.RenderProvider;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
@@ -45,188 +46,160 @@ import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
-
 public class RailgunItem extends Item implements GeoItem {
-    AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
+    private static final int CHARGE_TIME = 60; // 3 seconds
+    private static final int REQUIRED_MANA = 50000;
+    private static final DustParticleEffect PURPLE_BEAM = new DustParticleEffect(new Vector3f(0.6f, 0.0f, 0.8f), 1.0f);
+
+    private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
     private final Supplier<Object> renderProvider = GeoItem.makeRenderer(this);
+
     public RailgunItem(Settings settings) {
         super(settings);
     }
 
+    // === Start charging ===
     @Override
     public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
         ItemStack itemStack = user.getStackInHand(hand);
+
+        // Already charged → fire
+        if (isCharged(itemStack)) {
+            if (!world.isClient) {
+                fireLaser(world, user);
+                return TypedActionResult.success(itemStack);
+            }
+            return TypedActionResult.consume(itemStack);
+        }
+
         user.setCurrentHand(hand);
         if (world instanceof ServerWorld serverWorld) {
-            serverWorld.playSound(null, user.getX(), user.getY(), user.getZ(), ModSounds.LASER_CHARGE, SoundCategory.PLAYERS, 1, 1);
+            serverWorld.playSound(null, user.getX(), user.getY(), user.getZ(),
+                    ModSounds.LASER_CHARGE, SoundCategory.PLAYERS, 1, 1);
         }
         return TypedActionResult.consume(itemStack);
     }
 
+    // === Stop charging ===
     @Override
     public void onStoppedUsing(ItemStack stack, World world, LivingEntity user, int remainingUseTicks) {
-        stack.getOrCreateNbt().putFloat("charge", 0.0f);
-        for (PlayerEntity player : world.getPlayers()) {
-            if (player instanceof ServerPlayerEntity serverPlayer) {
-                StopSoundS2CPacket stopSoundS2CPacket = new StopSoundS2CPacket(ModSounds.LASER_CHARGE.getId(), SoundCategory.PLAYERS);
-                serverPlayer.networkHandler.sendPacket(stopSoundS2CPacket);
+        if (!(user instanceof PlayerEntity player)) return;
+
+        // Stop charge sound
+        for (PlayerEntity p : world.getPlayers()) {
+            if (p instanceof ServerPlayerEntity sp)
+                sp.networkHandler.sendPacket(new StopSoundS2CPacket(ModSounds.LASER_CHARGE.getId(), SoundCategory.PLAYERS));
+        }
+
+        int used = getMaxUseTime(stack) - remainingUseTicks;
+        if (getPullProgress(used) >= 1.0f) {
+            ItemStack offhand = player.getOffHandStack();
+            if (offhand.isOf(ModItems.FUEL_ROD) &&
+                    net.willowins.animewitchery.item.custom.FuelRodItem.getStoredMana(offhand) >= REQUIRED_MANA) {
+
+                // Consume rod immediately after charging
+                net.willowins.animewitchery.item.custom.FuelRodItem.setStoredMana(offhand, 0);
+                offhand.decrement(1);
+
+                // Mark charged
+                stack.getOrCreateNbt().putBoolean("charged", true);
+                if (!world.isClient)
+                    player.sendMessage(Text.literal("🔋 Railgun charged — ready to fire."), true);
+
+                player.getItemCooldownManager().set(this, 20);
+            } else {
+                if (!world.isClient)
+                    player.sendMessage(Text.literal("❌ Fuel Rod requires 50,000 mana."), true);
             }
         }
         super.onStoppedUsing(stack, world, user, remainingUseTicks);
     }
 
-    @Override
-    public void inventoryTick(ItemStack stack, World world, Entity entity, int slot, boolean selected) {
+    // === Fire Laser ===
+    private void fireLaser(World world, PlayerEntity player) {
+        if (!isCharged(player.getMainHandStack())) return;
 
-        if (entity instanceof PlayerEntity player) {
-            if (!world.isClient) {
-                if(player.getOffHandStack().isOf(ModItems.FUEL_ROD)){
-                if (player.getMainHandStack().isOf(this) && player.isUsingItem()) {
-                    int i = this.getMaxUseTime(stack) - player.getItemUseTimeLeft();
-                    player.sendMessage(Text.of(String.valueOf(getPullProgress(i))), true);
-                    stack.getOrCreateNbt().putFloat("charge", getPullProgress(i));
+        ItemStack stack = player.getMainHandStack();
+        stack.getOrCreateNbt().putBoolean("charged", false); // Reset
 
-                    if (stack.getOrCreateNbt().getFloat("charge") == 1.0f) {
-                        player.getItemCooldownManager().set(this, 30);
-                        shootLaser(player.getRotationVector(), world, player.getPos().add(0,1,0), player);
-                        player.stopUsingItem();
-                    }
-                    if (stack.getOrCreateNbt().getFloat("charge") > 0.0f) {
-                         for (PlayerEntity playerEntity : world.getPlayers()) {
-                             if (playerEntity instanceof ServerPlayerEntity serverPlayer) {
-                                 ServerPlayNetworking.send(serverPlayer, ModPackets.LASER_CHARGE, new PacketByteBuf(PacketByteBufs
-                                         .create()
-                                         .writeDouble((player.getX() + (1.25) * player.getRotationVector().x))
-                                         .writeDouble((player.getY() + 1.5 + (1.25) * player.getRotationVector().y))
-                                         .writeDouble((player.getZ() + (1.25) * player.getRotationVector().z))
-                                         .writeFloat(stack.getOrCreateNbt().getFloat("charge"))
-                                 ));
+        Vec3d pos = player.getPos().add(0, 1, 0);
+        Vec3d look = player.getRotationVector();
 
-                             }
-                         }}
-                        for (int z = 0; z < 100; z++) {
-                            Vec3d pos = player.getPos();
-                            Vec3d look = player.getRotationVector();
-                            glowEntities(world, 1.5, new BlockPos((int) (pos.getX() + (z*look.x)), (int) (pos.getY() + (z*look.y)), (int) (pos.getZ() + (z*look.z))), player);
-                            if (!world.getBlockState(new BlockPos((int) (pos.getX() + (z*look.x)), (int) (pos.getY() + (z*look.y)), (int) (pos.getZ() + (z*look.z)))).isOf(Blocks.AIR)) {
-                                break;
-                            }
-                        }
-                    }
-                } else {
-                    stack.getOrCreateNbt().putFloat("charge", 0.0f);
-                }
-            }
-        }
-        super.inventoryTick(stack, world, entity, slot, selected);
-    }
+        // Recoil
+        player.setVelocity(player.getRotationVector().multiply(-3, -3, -3));
+        player.velocityModified = true;
 
-    private void shootLaser(Vec3d look, World world, Vec3d pos, PlayerEntity owner) {
-        owner.setVelocity(owner.getRotationVector().multiply(-3,-3,-3));
-        owner.velocityModified = true;
-        owner.getOffHandStack().decrement(1);
-        owner.giveItemStack(ModItems.OVERHEATED_FUEL_ROD.getDefaultStack());
+        // Fire sound
         if (world instanceof ServerWorld serverWorld) {
-            serverWorld.playSound(null, owner.getX(), owner.getY(), owner.getZ(), ModSounds.LASER_SHOOT, SoundCategory.PLAYERS, 1, 1);
-        }
-        if (world instanceof  ServerWorld serverWorld) {
+            serverWorld.playSound(null, player.getX(), player.getY(), player.getZ(),
+                    ModSounds.LASER_SHOOT, SoundCategory.PLAYERS, 1.5f, 1.0f);
+
+            // Beam core flash
             for (int i = 1; i <= 3; i++) {
                 serverWorld.spawnParticles(ModParticles.LASER_PARTICLE,
-                        (pos.getX() + (4 * i * look.x)),
-                        (pos.getY() + (4 * i * look.y)),
-                        (pos.getZ() + (4 * i * look.z)),
-                        1,
-                        0, 0, 0, 0
-                );
+                        pos.x + (4 * i * look.x),
+                        pos.y + (4 * i * look.y),
+                        pos.z + (4 * i * look.z),
+                        5, 0, 0, 0, 0.02);
             }
-        }
-        for (int i = 0; i < 100; i++) {
-            findEntities(world, 1.5, new BlockPos((int) (pos.getX() + (i*look.x)), (int) (pos.getY() + (i*look.y)), (int) (pos.getZ() + (i*look.z))), owner);
-            if (!world.getBlockState(new BlockPos((int) (pos.getX() + (i*look.x)), (int) (pos.getY() + (i*look.y)), (int) (pos.getZ() + (i*look.z)))).isOf(Blocks.AIR)) {
-                for (PlayerEntity playerEntity : world.getPlayers()) {
-                    if (playerEntity instanceof ServerPlayerEntity serverPlayerEntity) {
-                        ServerPlayNetworking.send(serverPlayerEntity, ModPackets.LASER_HIT, new PacketByteBuf(PacketByteBufs
-                                .create()
-                                .writeDouble((pos.getX() + (i*look.x - 2*look.x)))
-                                .writeDouble((pos.getY() + (i*look.y - 2*look.y)))
-                                .writeDouble((pos.getZ() + (i*look.z - 2*look.z)))
-                        ));
-                    }
-                }
-                break;
-            }
-        }
-        for (PlayerEntity player : world.getPlayers()) {
-            if (player instanceof ServerPlayerEntity serverPlayer) {
-                for (int i = 10; i < 1000; i++) {
-                    ServerPlayNetworking.send(serverPlayer, ModPackets.LASER_BEAM, new PacketByteBuf(PacketByteBufs
-                            .create()
-                            .writeDouble((pos.getX() + (((double) i / 10) * look.x)))
-                            .writeDouble((pos.getY() + (((double) i / 10) * look.y)))
-                            .writeDouble((pos.getZ() + (((double) i / 10) * look.z)))
-                    ));
-                    world.addParticle(ParticleTypes.CLOUD, (pos.getX() + (((double) i / 10) * look.x)), (pos.getY() + (((double) i / 10) * look.y)), (pos.getZ() + (((double) i / 10) * look.z)), 0, 0, 0);
-                    if (!world.getBlockState(new BlockPos((int) (pos.getX() + (((double) i /10)*look.x)), (int) (pos.getY() + (((double) i /10)*look.y)), (int) (pos.getZ() + (((double) i /10)*look.z)))).isOf(Blocks.AIR)) {
 
-                        break;
-                    }
-                }
+            // Lodestone-style purple + reverse portal beam
+            for (int i = 10; i < 1000; i++) {
+                double bx = pos.x + (((double) i / 10) * look.x);
+                double by = pos.y + (((double) i / 10) * look.y);
+                double bz = pos.z + (((double) i / 10) * look.z);
+
+                serverWorld.spawnParticles(PURPLE_BEAM, bx, by, bz, 1, 0, 0, 0, 0);
+                serverWorld.spawnParticles(ParticleTypes.REVERSE_PORTAL, bx, by, bz, 2, 0, 0, 0, 0);
+
+                if (!world.getBlockState(BlockPos.ofFloored(bx, by, bz)).isOf(Blocks.AIR)) break;
             }
+
+            // Damage entities
+            for (int i = 0; i < 100; i++) {
+                Vec3d checkVec = pos.add(look.multiply(i));
+                BlockPos checkPos = BlockPos.ofFloored(checkVec);
+                if (!world.getBlockState(checkPos).isOf(Blocks.AIR)) break;
+                findEntities(world, 1.5, checkPos, player);
+                glowEntities(world, 1.5, checkPos, player);
+            }
+
+            // Overheated fuel rod
+            player.giveItemStack(ModItems.OVERHEATED_FUEL_ROD.getDefaultStack());
+            player.getItemCooldownManager().set(this, 40);
         }
     }
 
+    // === Entity interaction ===
     private void findEntities(World world, double radius, BlockPos pos, PlayerEntity owner) {
-        if (!(world instanceof ServerWorld serverWorld)) return;
-
-        Box box = new Box(
-                pos.getX() - radius, pos.getY() - radius, pos.getZ() - radius,
-                pos.getX() + radius, pos.getY() + radius, pos.getZ() + radius
-        );
-
-        List<LivingEntity> player = serverWorld.getEntitiesByClass(LivingEntity.class, box, entity -> true);
-
-
-        for (LivingEntity target : player) {
-            if (target != owner) {
-                target.damage(target.getDamageSources().magic(),50.0f);
-                target.addStatusEffect(new StatusEffectInstance(ModEffect.MARKED, 200, 0));
-            }
+        if (!(world instanceof ServerWorld sw)) return;
+        Box box = new Box(pos).expand(radius);
+        List<LivingEntity> targets = sw.getEntitiesByClass(LivingEntity.class, box, e -> e != owner);
+        for (LivingEntity t : targets) {
+            t.damage(t.getDamageSources().magic(), 50.0f);
+            t.addStatusEffect(new StatusEffectInstance(ModEffect.MARKED, 200, 0));
         }
-
-
     }
 
     private void glowEntities(World world, double radius, BlockPos pos, PlayerEntity owner) {
-        if (!(world instanceof ServerWorld serverWorld)) return;
-
-        Box box = new Box(
-                pos.getX() - radius, pos.getY() - radius, pos.getZ() - radius,
-                pos.getX() + radius, pos.getY() + radius, pos.getZ() + radius
-        );
-
-        List<LivingEntity> player = serverWorld.getEntitiesByClass(LivingEntity.class, box, entity -> true);
-
-
-        for (LivingEntity target : player) {
-            if (target != owner) {
-                target.addStatusEffect(new StatusEffectInstance(StatusEffects.GLOWING, 40, 0,false,false));
-            }
+        if (!(world instanceof ServerWorld sw)) return;
+        Box box = new Box(pos).expand(radius);
+        List<LivingEntity> targets = sw.getEntitiesByClass(LivingEntity.class, box, e -> e != owner);
+        for (LivingEntity t : targets) {
+            t.addStatusEffect(new StatusEffectInstance(StatusEffects.GLOWING, 40, 0, false, false));
         }
-
-
     }
 
+    // === Utility ===
     private static float getPullProgress(int useTicks) {
-        float f = (float)useTicks / 100;
-        if (f > 1.0F) {
-            f = 1.0F;
-        }
-
-
-        return f;
+        return Math.min((float) useTicks / CHARGE_TIME, 1.0F);
     }
 
+    private static boolean isCharged(ItemStack stack) {
+        return stack.getOrCreateNbt().getBoolean("charged");
+    }
 
+    // === Vanilla ===
     @Override
     public int getMaxUseTime(ItemStack stack) {
         return 72000;
@@ -237,33 +210,27 @@ public class RailgunItem extends Item implements GeoItem {
         return UseAction.NONE;
     }
 
+    // === Renderer ===
     @Override
     public void createRenderer(Consumer<Object> consumer) {
         consumer.accept(new RenderProvider() {
             private RailgunRenderer renderer;
-
             public BuiltinModelItemRenderer getCustomRenderer() {
-                if (this.renderer == null) {
-                    this.renderer = new RailgunRenderer();
-                }
-
-                return this.renderer;
+                if (renderer == null) renderer = new RailgunRenderer();
+                return renderer;
             }
         });
     }
 
     @Override
-    public Supplier<Object> getRenderProvider() {
-        return this.renderProvider;
-    }
+    public Supplier<Object> getRenderProvider() { return renderProvider; }
 
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllerRegistrar) {
-        controllerRegistrar.add(new AnimationController<>(this, "Idle", 0, state -> state.setAndContinue(RawAnimation.begin().thenLoop("idle"))));
+        controllerRegistrar.add(new AnimationController<>(this, "Idle", 0,
+                state -> state.setAndContinue(RawAnimation.begin().thenLoop("idle"))));
     }
 
     @Override
-    public AnimatableInstanceCache getAnimatableInstanceCache() {
-        return cache;
-    }
+    public AnimatableInstanceCache getAnimatableInstanceCache() { return cache; }
 }

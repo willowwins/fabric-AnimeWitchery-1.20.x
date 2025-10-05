@@ -22,6 +22,7 @@
 			"net.willowins.animewitchery.mana.ModComponents"
 		],
 		"client": [
+			"net.willowins.animewitchery.client.input.PlatformKeybindHandler",
 			"net.willowins.animewitchery.AnimeWitcheryClient",
 			"net.willowins.animewitchery.client.ManaHudOverlay"
 		],

@@ -17,6 +17,7 @@ public interface ModEnchantments {
     Enchantment BLAST_ENCHANT = createEnchantment("blast_enchant", new BlastEnchantment());
     Enchantment FLIGHT_ENCHANT = createEnchantment("flight_enchant", new FlightEnchantment());
     Enchantment SLIVER = createEnchantment("sliver_enchant", new NeedleThrowEnchantment());
+    Enchantment LEAD_COATED_PAINT = createEnchantment("lead_coated_paint", new LeadCoatedEnchantment());
 
     static void init() {
         ENCHANTMENTS.keySet().forEach((enchantment) -> Registry.register(Registries.ENCHANTMENT, (Identifier)ENCHANTMENTS.get(enchantment), enchantment));

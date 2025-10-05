@@ -64,6 +64,9 @@
   "item.animewitchery.deep_dark_deep_dish": "§1Deep Dark Deep Dish",
   "item.animewitchery.weatheritem": "§1Thunderous Wand",
   "item.animewitchery.dimension": "§5Dual Faze Shifter",
+  "item.animewitchery.kinetic_breaker": "Kinetic Breaker",
+  "item.animewitchery.mana_rocket": "§bMana Rocket",
+  "item.animewitchery.creeping_prevailance": "§5Creeping Prevalence",
 
   "block.animewitchery.sound_block": "Block of Music",
   "block.animewitchery.sound_block2": "Block of Hilarity",
@@ -72,6 +75,7 @@
   "block.animewitchery.player_use_dispenser": "Placer",
   "block.animewitchery.auto_crafter": "Auto Crafter",
   "block.animewitchery.growth_accelerator": "Growth Accelerator",
+  "block.animewitchery.plate": "Silver Plate",
 
   "block.animewitchery.binding_spell": "§5Binding Spell",
   "block.animewitchery.active_effigy_fountain": "§bActive Effigy Fountain",

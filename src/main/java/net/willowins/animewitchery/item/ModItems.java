@@ -81,8 +81,18 @@ public class ModItems {
 
     public static final Item FIRE_RES_CRYSTAL =registerItem("fire_res_crystal",
             new FireResCrystalItem(new FabricItemSettings()));
+
  public static final Item SPEED_CRYSTAL =registerItem("speed_crystal",
             new SpeedCrystalItem(new FabricItemSettings()));
+
+ public static final Item REPAIR_CHARM =registerItem("creeping_prevailance",
+            new RepairCharmItem(new FabricItemSettings().maxCount(1)));
+
+public static final Item MANA_ROCKET =registerItem("mana_rocket",
+            new ManaRocketItem(new FabricItemSettings().maxCount(1)));
+
+public static final Item KINETIC_BLADE =registerItem("kinetic_breaker",
+            new KineticBladeItem(new FabricItemSettings().maxCount(1)));
 
     public static final Item OVERHEATED_FUEL_ROD =registerItem("overheated_fuel_rod",
             new OverheatedFuelRodItem(new FabricItemSettings().maxCount(1)));
