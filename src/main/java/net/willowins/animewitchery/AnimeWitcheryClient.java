@@ -6,14 +6,30 @@ import net.fabricmc.fabric.api.client.particle.v1.ParticleFactoryRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.BlockEntityRendererRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
 import net.fabricmc.fabric.api.client.screenhandler.v1.ScreenRegistry;
+import net.minecraft.client.item.ModelPredicateProviderRegistry;
 import net.minecraft.client.render.RenderLayer;
+import net.minecraft.client.render.entity.EmptyEntityRenderer;
+import net.minecraft.client.render.entity.PlayerEntityRenderer;
+import net.minecraft.item.CrossbowItem;
+import net.minecraft.item.Item;
+import net.fabricmc.fabric.api.client.rendering.v1.LivingEntityFeatureRendererRegistrationCallback;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
+import net.minecraft.nbt.NbtCompound;
+import net.minecraft.nbt.NbtList;
+import net.minecraft.util.Identifier;
 import net.willowins.animewitchery.block.ModBlocks;
 import net.willowins.animewitchery.block.entity.ModBlockEntities;
 import net.willowins.animewitchery.block.entity.renderer.*;
+import net.willowins.animewitchery.client.render.FlightElytraRenderLayer;
 import net.willowins.animewitchery.entity.ModEntities;
 import net.willowins.animewitchery.entity.client.render.NeedleProjectileRenderer;
 import net.willowins.animewitchery.entity.client.render.VoidWispRenderer;
 import net.willowins.animewitchery.entity.client.KamikazeRitualRenderer;
+import net.willowins.animewitchery.item.ModItems;
+import net.willowins.animewitchery.item.custom.ManaRocketItem;
+import net.willowins.animewitchery.item.custom.ObeliskCompassAnglePredicateProvider;
+import net.willowins.animewitchery.item.custom.ObeliskCompassItem;
 import net.willowins.animewitchery.networking.ModPackets;
 import net.willowins.animewitchery.particle.ModParticles;
 import net.willowins.animewitchery.particle.ShockwaveParticle;
@@ -22,6 +38,7 @@ import net.willowins.animewitchery.client.sky.SkyRitualRenderer;
 import net.fabricmc.fabric.api.client.rendering.v1.BuiltinItemRendererRegistry;
 import net.willowins.animewitchery.item.renderer.ObeliskBuiltinItemRenderer;
 import net.willowins.animewitchery.client.shader.VoidBoundShaderRenderer;
+
 
 
 public class AnimeWitcheryClient implements ClientModInitializer {
@@ -41,8 +58,6 @@ public class AnimeWitcheryClient implements ClientModInitializer {
         BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.BOSS_OBELISK, RenderLayer.getCutout());
         BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.GUARDIAN_STATUE, RenderLayer.getCutout());
         BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.PILLAR, RenderLayer.getCutout());
-
-
 
         BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.STRAWBERRY_CROP, RenderLayer.getCutout());
         BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.LEMON_CROP, RenderLayer.getCutout());
@@ -65,6 +80,8 @@ public class AnimeWitcheryClient implements ClientModInitializer {
         EntityRendererRegistry.register(ModEntities.VOID_WISP, VoidWispRenderer::new);
         EntityRendererRegistry.register(ModEntities.KAMIKAZE_RITUAL, KamikazeRitualRenderer::new);
 
+        ObeliskCompassAnglePredicateProvider.registerModelPredicate(ModItems.OBELISK_COMPASS);
+        System.out.println("[AnimeWitchery] Registered ObeliskCompass angle predicate.");
 
         ParticleFactoryRegistry.getInstance().register(ModParticles.LASER_PARTICLE, ShockwaveParticle.Factory::new);
         ScreenRegistry.register(ModScreenHandlers.PLAYER_USE_DISPENSER_SCREEN_HANDLER, PlayerUseDispenserScreen::new);
@@ -77,13 +94,51 @@ public class AnimeWitcheryClient implements ClientModInitializer {
 
         ModPackets.registerS2CPackets();
 
-        // Builtin item renderer for Obelisk block item
         BuiltinItemRendererRegistry.INSTANCE.register(ModBlocks.OBELISK.asItem(), new ObeliskBuiltinItemRenderer());
 
-        // Veil post-processing will be configured via data files; no explicit registration needed here for basics.
+        VoidBoundShaderRenderer.cleanup();
+        VoidBoundShaderRenderer.init();
+        ModelPredicateProviderRegistry.register(
+                Items.CROSSBOW,
+                new Identifier("animewitchery", "mana_charged"),
+                (stack, world, entity, seed) -> {
+                    if (!CrossbowItem.isCharged(stack)) return 0f;
+                    NbtCompound nbt = stack.getNbt();
+                    if (nbt == null || !nbt.contains("ChargedProjectiles", 9)) return 0f;
+                    NbtList list = nbt.getList("ChargedProjectiles", 10);
+                    for (int i = 0; i < list.size(); i++) {
+                        ItemStack proj = ItemStack.fromNbt(list.getCompound(i));
+                        if (proj.getItem() instanceof ManaRocketItem) return 1f;
+                    }
+                    return 0f;
+                }
+        );
+        ModelPredicateProviderRegistry.register(ModItems.OBELISK_COMPASS,
+                new Identifier("angle"),
+                (stack, world, entity, seed) -> {
+                    if (stack.hasNbt()) {
+                        float angle = stack.getNbt().getFloat("ObeliskCompassAngle");
+                        return angle / 360f;
+                    }
+                    return 0f;
+                });
 
-        // Register void bound shader renderer
-        VoidBoundShaderRenderer.cleanup(); // Clean up any existing instances
-        VoidBoundShaderRenderer.init(); // Initialize the renderer
+
+        LivingEntityFeatureRendererRegistrationCallback.EVENT.register(
+                (entityType, entityRenderer, registrationHelper, context) -> {
+                    if (entityRenderer instanceof PlayerEntityRenderer playerRenderer) {
+                        registrationHelper.register(new FlightElytraRenderLayer(playerRenderer));
+                    }
+                }
+        );
+
+        EntityRendererRegistry.register(
+                ModEntities.KINETIC_BLADE_HITBOX,
+                (context) -> new EmptyEntityRenderer<>(context)
+        );
+
     }
-}
+
+    }
+
+

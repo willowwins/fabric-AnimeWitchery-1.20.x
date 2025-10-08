@@ -50,7 +50,16 @@ public class ModEntities {
                     .trackedUpdateRate(2)
                     .build()
     );
-
+    public static final EntityType<KineticBladeHitboxEntity> KINETIC_BLADE_HITBOX =
+            Registry.register(
+                    Registries.ENTITY_TYPE,
+                    new Identifier(AnimeWitchery.MOD_ID, "kinetic_blade_hitbox"),
+                    FabricEntityTypeBuilder.<KineticBladeHitboxEntity>create(SpawnGroup.MISC, KineticBladeHitboxEntity::new)
+                            .dimensions(EntityDimensions.fixed(1.5f, 1.5f)) // size for hitbox
+                            .trackRangeBlocks(64)
+                            .trackedUpdateRate(1)
+                            .build()
+            );
     public static void registerModEntities() {
         System.out.println("Registering Mod Entities for " + AnimeWitchery.MOD_ID);
     }

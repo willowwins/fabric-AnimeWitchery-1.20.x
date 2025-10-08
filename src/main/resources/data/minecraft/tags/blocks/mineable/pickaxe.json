@@ -21,6 +21,7 @@
     "animewitchery:block_placer",
     "animewitchery:block_miner",
     "animewitchery:interactor",
-    "animewitchery:silver_slab"
+    "animewitchery:silver_slab",
+    "animewitchery:obelisk"
   ]
 }

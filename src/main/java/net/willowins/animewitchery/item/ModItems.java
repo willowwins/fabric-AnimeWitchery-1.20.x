@@ -42,6 +42,12 @@ public class ModItems {
     public static final Item ALCHEMICAL_CATALYST =registerItem("alchemical_catalyst",
             new AlchemicalCatalystItem(new FabricItemSettings().maxCount(1)));
 
+  public static final Item RESONANT_CATALYST =registerItem("resonant_catalyst",
+            new ResonantlCatalystItem(new FabricItemSettings().maxCount(1)));
+
+public static final Item OBELISK_COMPASS =registerItem("obelisk_compass",
+            new ObeliskCompassItem(new FabricItemSettings().maxCount(1)));
+
     public static final Item NEEDLE =registerItem("needle",
             new NeedleItem(ModToolMaterial.SILVER,4,-2.2f,new FabricItemSettings().maxCount(1)));
 

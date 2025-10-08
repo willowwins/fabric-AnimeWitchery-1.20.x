@@ -24,14 +24,18 @@
     "LivingEntityMixin2",
     "ExplosionMixin",
     "PlayerRendererMixin",
-    "PlayerDeathMixin"
+    "PlayerDeathMixin",
+    "CrossbowItemMixin"
   ],
   "client": [
     "ItemRendererAccessor",
     "ItemRendererMixin",
     "ModelLoaderMixin",
     "PlayerEntityRendererMixin",
-    "WorldRendererMixin"
+    "WorldRendererMixin",
+    "client.ForceRiptideAnimationMixin",
+    "client.LivingEntityRiptideAccessor"
+
   ],
   "injectors": {
     "defaultRequire": 1

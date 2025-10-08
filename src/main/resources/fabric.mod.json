@@ -22,9 +22,10 @@
 			"net.willowins.animewitchery.mana.ModComponents"
 		],
 		"client": [
-			"net.willowins.animewitchery.client.input.PlatformKeybindHandler",
 			"net.willowins.animewitchery.AnimeWitcheryClient",
-			"net.willowins.animewitchery.client.ManaHudOverlay"
+			"net.willowins.animewitchery.client.input.PlatformKeybindHandler",
+			"net.willowins.animewitchery.client.ManaHudOverlay",
+			"net.willowins.animewitchery.client.render.ObeliskCompassHud"
 		],
 		"fabric-datagen": [
 			"net.willowins.animewitchery.AnimeWitcheryDataGenerator"

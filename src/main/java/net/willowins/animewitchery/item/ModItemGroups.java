@@ -47,6 +47,7 @@ public class ModItemGroups {
 
                         entries.add(ModItems.BLAZE_SACK);
                         entries.add(ModItems.ALCHEMICAL_CATALYST);
+                        entries.add(ModItems.RESONANT_CATALYST);
                         entries.add(ModItems.VOID_ESSENCE);
                         entries.add(ModItems.RUNE_STONE);
                         entries.add(ModItems.BLOOD_RUNE_STONE);
