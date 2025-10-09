@@ -4,6 +4,8 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.inventory.Inventories;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.listener.ClientPlayPacketListener;
 import net.minecraft.network.packet.Packet;
@@ -13,6 +15,7 @@ import net.minecraft.network.PacketByteBuf;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
+import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.math.BlockPos;
 import org.jetbrains.annotations.Nullable;
 import software.bernie.geckolib.animatable.GeoBlockEntity;
@@ -29,6 +32,9 @@ public class GrandShulkerBoxBlockEntity extends net.minecraft.block.entity.Shulk
     // We'll override the inventory size to 54 slots instead of 27
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
     private boolean isOpen = false;
+    
+    // Override the inventory to have 54 slots
+    private final DefaultedList<ItemStack> inventory = DefaultedList.ofSize(54, ItemStack.EMPTY);
 
     public GrandShulkerBoxBlockEntity(BlockPos pos, BlockState state) {
         super(getColorFromState(state), pos, state);
@@ -48,9 +54,9 @@ public class GrandShulkerBoxBlockEntity extends net.minecraft.block.entity.Shulk
 
     @Override
     public ScreenHandler createMenu(int syncId, PlayerInventory playerInventory, PlayerEntity player) {
-        // Trigger open animation
-        triggerAnim("controller", "open");
+        // Set open state and mark dirty to sync to client
         isOpen = true;
+        this.markDirty();
         
         return new net.willowins.animewitchery.screen.GrandShulkerBoxScreenHandler(
                 net.willowins.animewitchery.ModScreenHandlers.GRAND_SHULKER_BOX_SCREEN_HANDLER, 
@@ -68,14 +74,16 @@ public class GrandShulkerBoxBlockEntity extends net.minecraft.block.entity.Shulk
     @Override
     public void writeNbt(NbtCompound nbt) {
         super.writeNbt(nbt);
-        // The parent ShulkerBoxBlockEntity handles inventory serialization
+        // Serialize our custom 54-slot inventory
+        Inventories.writeNbt(nbt, this.inventory);
         nbt.putBoolean("isOpen", this.isOpen);
     }
 
     @Override
     public void readNbt(NbtCompound nbt) {
         super.readNbt(nbt);
-        // The parent ShulkerBoxBlockEntity handles inventory deserialization
+        // Deserialize our custom 54-slot inventory
+        Inventories.readNbt(nbt, this.inventory);
         this.isOpen = nbt.getBoolean("isOpen");
     }
 
@@ -83,8 +91,43 @@ public class GrandShulkerBoxBlockEntity extends net.minecraft.block.entity.Shulk
     public int size() {
         return 54; // Grand Shulker Box has 54 slots (6 rows of 9)
     }
-
-    // All inventory methods are inherited from ShulkerBoxBlockEntity
+    
+    @Override
+    public ItemStack getStack(int slot) {
+        return this.inventory.get(slot);
+    }
+    
+    @Override
+    public ItemStack removeStack(int slot, int amount) {
+        return Inventories.splitStack(this.inventory, slot, amount);
+    }
+    
+    @Override
+    public ItemStack removeStack(int slot) {
+        return Inventories.removeStack(this.inventory, slot);
+    }
+    
+    @Override
+    public void setStack(int slot, ItemStack stack) {
+        this.inventory.set(slot, stack);
+        if (stack.getCount() > this.getMaxCountPerStack()) {
+            stack.setCount(this.getMaxCountPerStack());
+        }
+    }
+    
+    @Override
+    public boolean canPlayerUse(PlayerEntity player) {
+        if (this.world.getBlockEntity(this.pos) != this) {
+            return false;
+        } else {
+            return player.squaredDistanceTo((double)this.pos.getX() + 0.5D, (double)this.pos.getY() + 0.5D, (double)this.pos.getZ() + 0.5D) <= 64.0D;
+        }
+    }
+    
+    @Override
+    public void clear() {
+        this.inventory.clear();
+    }
 
     public int getMaxCountPerStack() {
         return 256;
@@ -125,6 +168,7 @@ public class GrandShulkerBoxBlockEntity extends net.minecraft.block.entity.Shulk
             if (isOpen) {
                 return state.setAndContinue(RawAnimation.begin().thenPlay("open"));
             } else {
+                // Play close animation when closing
                 return state.setAndContinue(RawAnimation.begin().thenPlay("close"));
             }
         }));

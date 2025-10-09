@@ -8,9 +8,6 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.screen.ScreenHandler;
-import net.minecraft.state.StateManager;
-import net.minecraft.state.property.DirectionProperty;
-import net.minecraft.state.property.Properties;
 import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.DyeColor;
@@ -18,7 +15,6 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.ItemScatterer;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 import net.minecraft.item.ItemPlacementContext;
 import net.willowins.animewitchery.block.ModBlocks;
@@ -26,13 +22,11 @@ import net.willowins.animewitchery.block.entity.GrandShulkerBoxBlockEntity;
 import org.jetbrains.annotations.Nullable;
 
 public class GrandShulkerBoxBlock extends ShulkerBoxBlock {
-    public static final DirectionProperty FACING = Properties.FACING;
     private final DyeColor color;
 
     public GrandShulkerBoxBlock(DyeColor color, Settings settings) {
         super(color, settings);
         this.color = color;
-        this.setDefaultState(this.stateManager.getDefaultState().with(FACING, Direction.UP));
     }
 
     public DyeColor getColor() {
@@ -49,14 +43,11 @@ public class GrandShulkerBoxBlock extends ShulkerBoxBlock {
         return net.willowins.animewitchery.block.ModBlocks.GRAND_SHULKER_BOX_ENTITY;
     }
 
-    @Override
-    protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
-        builder.add(FACING);
-    }
 
     @Override
     public BlockState getPlacementState(ItemPlacementContext ctx) {
-        return this.getDefaultState().with(FACING, ctx.getSide());
+        // Always place the block in the same orientation regardless of placement surface
+        return this.getDefaultState();
     }
 
     @Override

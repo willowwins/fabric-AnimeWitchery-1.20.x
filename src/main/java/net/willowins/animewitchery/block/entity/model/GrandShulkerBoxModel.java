@@ -24,6 +24,6 @@ public class GrandShulkerBoxModel extends DefaultedBlockGeoModel<GrandShulkerBox
     
     @Override
     public Identifier getAnimationResource(GrandShulkerBoxBlockEntity animatable) {
-        return new Identifier(AnimeWitchery.MOD_ID, "animations/grand_shulker_box.animation.json");
+        return new Identifier(AnimeWitchery.MOD_ID, "animations/block/grand_shulker.animation.json");
     }
 }

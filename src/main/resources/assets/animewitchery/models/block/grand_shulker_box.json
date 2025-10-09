@@ -1,3 +1,6 @@
 {
-  "parent": "minecraft:block/shulker_box"
+  "parent": "minecraft:block/cube_all",
+  "textures": {
+    "all": "animewitchery:block/grand_shulker_box"
+  }
 }
