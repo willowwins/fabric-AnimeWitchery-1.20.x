@@ -57,6 +57,13 @@ public class GrandShulkerBoxBlockEntity extends net.minecraft.block.entity.Shulk
         // Set open state and mark dirty to sync to client
         isOpen = true;
         this.markDirty();
+        updateAnimationState();
+        
+        // Play shulker box open sound
+        if (!world.isClient) {
+            world.playSound(null, pos, net.minecraft.sound.SoundEvents.BLOCK_SHULKER_BOX_OPEN, 
+                    net.minecraft.sound.SoundCategory.BLOCKS, 0.5F, world.random.nextFloat() * 0.1F + 0.9F);
+        }
         
         return new net.willowins.animewitchery.screen.GrandShulkerBoxScreenHandler(
                 net.willowins.animewitchery.ModScreenHandlers.GRAND_SHULKER_BOX_SCREEN_HANDLER, 
@@ -172,6 +179,14 @@ public class GrandShulkerBoxBlockEntity extends net.minecraft.block.entity.Shulk
                 return state.setAndContinue(RawAnimation.begin().thenPlay("close"));
             }
         }));
+    }
+    
+    // Force animation update when state changes
+    public void updateAnimationState() {
+        if (world != null && !world.isClient) {
+            // Send update packet to client
+            world.updateListeners(pos, getCachedState(), getCachedState(), 3);
+        }
     }
 
     @Override

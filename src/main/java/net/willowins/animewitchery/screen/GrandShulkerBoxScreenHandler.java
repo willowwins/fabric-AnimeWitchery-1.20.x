@@ -77,6 +77,15 @@ public class GrandShulkerBoxScreenHandler extends ScreenHandler {
         if (blockEntity != null) {
             blockEntity.setOpen(false);
             blockEntity.markDirty();
+            blockEntity.updateAnimationState();
+            
+            // Play shulker box close sound
+            if (!player.getWorld().isClient) {
+                player.getWorld().playSound(null, blockEntity.getPos(), 
+                        net.minecraft.sound.SoundEvents.BLOCK_SHULKER_BOX_CLOSE, 
+                        net.minecraft.sound.SoundCategory.BLOCKS, 0.5F, 
+                        player.getWorld().random.nextFloat() * 0.1F + 0.9F);
+            }
         }
     }
 }
