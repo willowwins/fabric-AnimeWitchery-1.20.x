@@ -5,7 +5,7 @@
       "x": 90
     },
     "facing=up": {
-      "model": "minecraft:block/shulker_box"
+      "model": "animewitchery:block/grand_shulker_box"
     },
     "facing=north": {
       "model": "minecraft:block/shulker_box",

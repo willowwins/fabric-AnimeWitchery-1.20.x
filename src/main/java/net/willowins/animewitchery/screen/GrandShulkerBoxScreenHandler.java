@@ -76,6 +76,9 @@ public class GrandShulkerBoxScreenHandler extends ScreenHandler {
         // Mark the block entity as dirty to ensure changes are saved
         if (blockEntity != null) {
             blockEntity.markDirty();
+            // Trigger close animation
+            blockEntity.setOpen(false);
+            blockEntity.triggerAnim("controller", "close");
         }
     }
 }

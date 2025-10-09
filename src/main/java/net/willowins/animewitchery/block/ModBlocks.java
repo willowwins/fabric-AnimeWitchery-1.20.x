@@ -24,22 +24,6 @@ public class ModBlocks {
        🟪 GRAND SHULKER BOX (DEFERRED REGISTRATION)
        ---------------------------------------------------------- */
     public static Block GRAND_SHULKER_BOX;
-    public static Block GRAND_SHULKER_BOX_WHITE;
-    public static Block GRAND_SHULKER_BOX_ORANGE;
-    public static Block GRAND_SHULKER_BOX_MAGENTA;
-    public static Block GRAND_SHULKER_BOX_LIGHT_BLUE;
-    public static Block GRAND_SHULKER_BOX_YELLOW;
-    public static Block GRAND_SHULKER_BOX_LIME;
-    public static Block GRAND_SHULKER_BOX_PINK;
-    public static Block GRAND_SHULKER_BOX_GRAY;
-    public static Block GRAND_SHULKER_BOX_LIGHT_GRAY;
-    public static Block GRAND_SHULKER_BOX_CYAN;
-    public static Block GRAND_SHULKER_BOX_PURPLE;
-    public static Block GRAND_SHULKER_BOX_BLUE;
-    public static Block GRAND_SHULKER_BOX_BROWN;
-    public static Block GRAND_SHULKER_BOX_GREEN;
-    public static Block GRAND_SHULKER_BOX_RED;
-    public static Block GRAND_SHULKER_BOX_BLACK;
     public static BlockEntityType<GrandShulkerBoxBlockEntity> GRAND_SHULKER_BOX_ENTITY;
 
     /* ----------------------------------------------------------
@@ -171,145 +155,30 @@ public class ModBlocks {
        🧩 REGISTRATION LOGIC
        ---------------------------------------------------------- */
     public static void registerBlocks() {
-        // 🟣 Create & register all Grand Shulker Box variants
+        // 🟣 Create & register Grand Shulker Box
         GRAND_SHULKER_BOX = new GrandShulkerBoxBlock(
                 net.minecraft.util.DyeColor.PURPLE,
                 FabricBlockSettings.copyOf(Blocks.SHULKER_BOX).nonOpaque()
         );
-        GRAND_SHULKER_BOX_WHITE = new GrandShulkerBoxBlock(
-                net.minecraft.util.DyeColor.WHITE,
-                FabricBlockSettings.copyOf(Blocks.SHULKER_BOX).nonOpaque()
-        );
-        GRAND_SHULKER_BOX_ORANGE = new GrandShulkerBoxBlock(
-                net.minecraft.util.DyeColor.ORANGE,
-                FabricBlockSettings.copyOf(Blocks.SHULKER_BOX).nonOpaque()
-        );
-        GRAND_SHULKER_BOX_MAGENTA = new GrandShulkerBoxBlock(
-                net.minecraft.util.DyeColor.MAGENTA,
-                FabricBlockSettings.copyOf(Blocks.SHULKER_BOX).nonOpaque()
-        );
-        GRAND_SHULKER_BOX_LIGHT_BLUE = new GrandShulkerBoxBlock(
-                net.minecraft.util.DyeColor.LIGHT_BLUE,
-                FabricBlockSettings.copyOf(Blocks.SHULKER_BOX).nonOpaque()
-        );
-        GRAND_SHULKER_BOX_YELLOW = new GrandShulkerBoxBlock(
-                net.minecraft.util.DyeColor.YELLOW,
-                FabricBlockSettings.copyOf(Blocks.SHULKER_BOX).nonOpaque()
-        );
-        GRAND_SHULKER_BOX_LIME = new GrandShulkerBoxBlock(
-                net.minecraft.util.DyeColor.LIME,
-                FabricBlockSettings.copyOf(Blocks.SHULKER_BOX).nonOpaque()
-        );
-        GRAND_SHULKER_BOX_PINK = new GrandShulkerBoxBlock(
-                net.minecraft.util.DyeColor.PINK,
-                FabricBlockSettings.copyOf(Blocks.SHULKER_BOX).nonOpaque()
-        );
-        GRAND_SHULKER_BOX_GRAY = new GrandShulkerBoxBlock(
-                net.minecraft.util.DyeColor.GRAY,
-                FabricBlockSettings.copyOf(Blocks.SHULKER_BOX).nonOpaque()
-        );
-        GRAND_SHULKER_BOX_LIGHT_GRAY = new GrandShulkerBoxBlock(
-                net.minecraft.util.DyeColor.LIGHT_GRAY,
-                FabricBlockSettings.copyOf(Blocks.SHULKER_BOX).nonOpaque()
-        );
-        GRAND_SHULKER_BOX_CYAN = new GrandShulkerBoxBlock(
-                net.minecraft.util.DyeColor.CYAN,
-                FabricBlockSettings.copyOf(Blocks.SHULKER_BOX).nonOpaque()
-        );
-        GRAND_SHULKER_BOX_PURPLE = new GrandShulkerBoxBlock(
-                net.minecraft.util.DyeColor.PURPLE,
-                FabricBlockSettings.copyOf(Blocks.SHULKER_BOX).nonOpaque()
-        );
-        GRAND_SHULKER_BOX_BLUE = new GrandShulkerBoxBlock(
-                net.minecraft.util.DyeColor.BLUE,
-                FabricBlockSettings.copyOf(Blocks.SHULKER_BOX).nonOpaque()
-        );
-        GRAND_SHULKER_BOX_BROWN = new GrandShulkerBoxBlock(
-                net.minecraft.util.DyeColor.BROWN,
-                FabricBlockSettings.copyOf(Blocks.SHULKER_BOX).nonOpaque()
-        );
-        GRAND_SHULKER_BOX_GREEN = new GrandShulkerBoxBlock(
-                net.minecraft.util.DyeColor.GREEN,
-                FabricBlockSettings.copyOf(Blocks.SHULKER_BOX).nonOpaque()
-        );
-        GRAND_SHULKER_BOX_RED = new GrandShulkerBoxBlock(
-                net.minecraft.util.DyeColor.RED,
-                FabricBlockSettings.copyOf(Blocks.SHULKER_BOX).nonOpaque()
-        );
-        GRAND_SHULKER_BOX_BLACK = new GrandShulkerBoxBlock(
-                net.minecraft.util.DyeColor.BLACK,
-                FabricBlockSettings.copyOf(Blocks.SHULKER_BOX).nonOpaque()
-        );
 
-        // Register all blocks
+        // Register Grand Shulker Box
         Registry.register(Registries.BLOCK, new Identifier(AnimeWitchery.MOD_ID, "grand_shulker_box"), GRAND_SHULKER_BOX);
-        Registry.register(Registries.BLOCK, new Identifier(AnimeWitchery.MOD_ID, "grand_shulker_box_white"), GRAND_SHULKER_BOX_WHITE);
-        Registry.register(Registries.BLOCK, new Identifier(AnimeWitchery.MOD_ID, "grand_shulker_box_orange"), GRAND_SHULKER_BOX_ORANGE);
-        Registry.register(Registries.BLOCK, new Identifier(AnimeWitchery.MOD_ID, "grand_shulker_box_magenta"), GRAND_SHULKER_BOX_MAGENTA);
-        Registry.register(Registries.BLOCK, new Identifier(AnimeWitchery.MOD_ID, "grand_shulker_box_light_blue"), GRAND_SHULKER_BOX_LIGHT_BLUE);
-        Registry.register(Registries.BLOCK, new Identifier(AnimeWitchery.MOD_ID, "grand_shulker_box_yellow"), GRAND_SHULKER_BOX_YELLOW);
-        Registry.register(Registries.BLOCK, new Identifier(AnimeWitchery.MOD_ID, "grand_shulker_box_lime"), GRAND_SHULKER_BOX_LIME);
-        Registry.register(Registries.BLOCK, new Identifier(AnimeWitchery.MOD_ID, "grand_shulker_box_pink"), GRAND_SHULKER_BOX_PINK);
-        Registry.register(Registries.BLOCK, new Identifier(AnimeWitchery.MOD_ID, "grand_shulker_box_gray"), GRAND_SHULKER_BOX_GRAY);
-        Registry.register(Registries.BLOCK, new Identifier(AnimeWitchery.MOD_ID, "grand_shulker_box_light_gray"), GRAND_SHULKER_BOX_LIGHT_GRAY);
-        Registry.register(Registries.BLOCK, new Identifier(AnimeWitchery.MOD_ID, "grand_shulker_box_cyan"), GRAND_SHULKER_BOX_CYAN);
-        Registry.register(Registries.BLOCK, new Identifier(AnimeWitchery.MOD_ID, "grand_shulker_box_purple"), GRAND_SHULKER_BOX_PURPLE);
-        Registry.register(Registries.BLOCK, new Identifier(AnimeWitchery.MOD_ID, "grand_shulker_box_blue"), GRAND_SHULKER_BOX_BLUE);
-        Registry.register(Registries.BLOCK, new Identifier(AnimeWitchery.MOD_ID, "grand_shulker_box_brown"), GRAND_SHULKER_BOX_BROWN);
-        Registry.register(Registries.BLOCK, new Identifier(AnimeWitchery.MOD_ID, "grand_shulker_box_green"), GRAND_SHULKER_BOX_GREEN);
-        Registry.register(Registries.BLOCK, new Identifier(AnimeWitchery.MOD_ID, "grand_shulker_box_red"), GRAND_SHULKER_BOX_RED);
-        Registry.register(Registries.BLOCK, new Identifier(AnimeWitchery.MOD_ID, "grand_shulker_box_black"), GRAND_SHULKER_BOX_BLACK);
 
-        // Register items for all Grand Shulker Box variants
+        // Register Grand Shulker Box item
         Registry.register(Registries.ITEM, new Identifier(AnimeWitchery.MOD_ID, "grand_shulker_box"),
                 new net.willowins.animewitchery.item.custom.GrandShulkerBoxItem(GRAND_SHULKER_BOX, new FabricItemSettings()));
-        Registry.register(Registries.ITEM, new Identifier(AnimeWitchery.MOD_ID, "grand_shulker_box_white"),
-                new net.willowins.animewitchery.item.custom.GrandShulkerBoxItem(GRAND_SHULKER_BOX_WHITE, new FabricItemSettings()));
-        Registry.register(Registries.ITEM, new Identifier(AnimeWitchery.MOD_ID, "grand_shulker_box_orange"),
-                new net.willowins.animewitchery.item.custom.GrandShulkerBoxItem(GRAND_SHULKER_BOX_ORANGE, new FabricItemSettings()));
-        Registry.register(Registries.ITEM, new Identifier(AnimeWitchery.MOD_ID, "grand_shulker_box_magenta"),
-                new net.willowins.animewitchery.item.custom.GrandShulkerBoxItem(GRAND_SHULKER_BOX_MAGENTA, new FabricItemSettings()));
-        Registry.register(Registries.ITEM, new Identifier(AnimeWitchery.MOD_ID, "grand_shulker_box_light_blue"),
-                new net.willowins.animewitchery.item.custom.GrandShulkerBoxItem(GRAND_SHULKER_BOX_LIGHT_BLUE, new FabricItemSettings()));
-        Registry.register(Registries.ITEM, new Identifier(AnimeWitchery.MOD_ID, "grand_shulker_box_yellow"),
-                new net.willowins.animewitchery.item.custom.GrandShulkerBoxItem(GRAND_SHULKER_BOX_YELLOW, new FabricItemSettings()));
-        Registry.register(Registries.ITEM, new Identifier(AnimeWitchery.MOD_ID, "grand_shulker_box_lime"),
-                new net.willowins.animewitchery.item.custom.GrandShulkerBoxItem(GRAND_SHULKER_BOX_LIME, new FabricItemSettings()));
-        Registry.register(Registries.ITEM, new Identifier(AnimeWitchery.MOD_ID, "grand_shulker_box_pink"),
-                new net.willowins.animewitchery.item.custom.GrandShulkerBoxItem(GRAND_SHULKER_BOX_PINK, new FabricItemSettings()));
-        Registry.register(Registries.ITEM, new Identifier(AnimeWitchery.MOD_ID, "grand_shulker_box_gray"),
-                new net.willowins.animewitchery.item.custom.GrandShulkerBoxItem(GRAND_SHULKER_BOX_GRAY, new FabricItemSettings()));
-        Registry.register(Registries.ITEM, new Identifier(AnimeWitchery.MOD_ID, "grand_shulker_box_light_gray"),
-                new net.willowins.animewitchery.item.custom.GrandShulkerBoxItem(GRAND_SHULKER_BOX_LIGHT_GRAY, new FabricItemSettings()));
-        Registry.register(Registries.ITEM, new Identifier(AnimeWitchery.MOD_ID, "grand_shulker_box_cyan"),
-                new net.willowins.animewitchery.item.custom.GrandShulkerBoxItem(GRAND_SHULKER_BOX_CYAN, new FabricItemSettings()));
-        Registry.register(Registries.ITEM, new Identifier(AnimeWitchery.MOD_ID, "grand_shulker_box_purple"),
-                new net.willowins.animewitchery.item.custom.GrandShulkerBoxItem(GRAND_SHULKER_BOX_PURPLE, new FabricItemSettings()));
-        Registry.register(Registries.ITEM, new Identifier(AnimeWitchery.MOD_ID, "grand_shulker_box_blue"),
-                new net.willowins.animewitchery.item.custom.GrandShulkerBoxItem(GRAND_SHULKER_BOX_BLUE, new FabricItemSettings()));
-        Registry.register(Registries.ITEM, new Identifier(AnimeWitchery.MOD_ID, "grand_shulker_box_brown"),
-                new net.willowins.animewitchery.item.custom.GrandShulkerBoxItem(GRAND_SHULKER_BOX_BROWN, new FabricItemSettings()));
-        Registry.register(Registries.ITEM, new Identifier(AnimeWitchery.MOD_ID, "grand_shulker_box_green"),
-                new net.willowins.animewitchery.item.custom.GrandShulkerBoxItem(GRAND_SHULKER_BOX_GREEN, new FabricItemSettings()));
-        Registry.register(Registries.ITEM, new Identifier(AnimeWitchery.MOD_ID, "grand_shulker_box_red"),
-                new net.willowins.animewitchery.item.custom.GrandShulkerBoxItem(GRAND_SHULKER_BOX_RED, new FabricItemSettings()));
-        Registry.register(Registries.ITEM, new Identifier(AnimeWitchery.MOD_ID, "grand_shulker_box_black"),
-                new net.willowins.animewitchery.item.custom.GrandShulkerBoxItem(GRAND_SHULKER_BOX_BLACK, new FabricItemSettings()));
 
-        // Register block entity type with all variants
+        // Register block entity type
         GRAND_SHULKER_BOX_ENTITY = Registry.register(
                 Registries.BLOCK_ENTITY_TYPE,
                 new Identifier(AnimeWitchery.MOD_ID, "grand_shulker_box_entity"),
                 FabricBlockEntityTypeBuilder.create(
                         GrandShulkerBoxBlockEntity::new,
-                        GRAND_SHULKER_BOX, GRAND_SHULKER_BOX_WHITE, GRAND_SHULKER_BOX_ORANGE, GRAND_SHULKER_BOX_MAGENTA,
-                        GRAND_SHULKER_BOX_LIGHT_BLUE, GRAND_SHULKER_BOX_YELLOW, GRAND_SHULKER_BOX_LIME, GRAND_SHULKER_BOX_PINK,
-                        GRAND_SHULKER_BOX_GRAY, GRAND_SHULKER_BOX_LIGHT_GRAY, GRAND_SHULKER_BOX_CYAN, GRAND_SHULKER_BOX_PURPLE,
-                        GRAND_SHULKER_BOX_BLUE, GRAND_SHULKER_BOX_BROWN, GRAND_SHULKER_BOX_GREEN, GRAND_SHULKER_BOX_RED, GRAND_SHULKER_BOX_BLACK
+                        GRAND_SHULKER_BOX
                 ).build()
         );
 
-        AnimeWitchery.LOGGER.info("✅ Registered all Grand Shulker Box variants successfully.");
+        AnimeWitchery.LOGGER.info("✅ Registered Grand Shulker Box successfully.");
     }
 
     /* ----------------------------------------------------------

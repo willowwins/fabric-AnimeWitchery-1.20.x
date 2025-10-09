@@ -77,7 +77,8 @@ public class AnimeWitcheryClient implements ClientModInitializer {
         BlockEntityRendererRegistry.register(ModBlockEntities.BOSS_OBELISK_BLOCK_ENTITY, (context) -> new BossObeliskRenderer());
         BlockEntityRendererRegistry.register(ModBlockEntities.GUARDIAN_STATUE_BLOCK_ENTITY, GuardianStatueRenderer::new);
                 BlockEntityRendererRegistry.register(ModBlockEntities.PLATE_BLOCK_ENTITY, PlateRenderer::new);
-                BlockEntityRendererRegistry.register(ModBlocks.GRAND_SHULKER_BOX_ENTITY, GrandShulkerBoxRenderer::new);
+        // Register Grand Shulker Box GeckoLib renderer
+        BlockEntityRendererRegistry.register(ModBlocks.GRAND_SHULKER_BOX_ENTITY, GrandShulkerBoxRenderer::new);
 
         EntityRendererRegistry.register(ModEntities.NEEDLE_PROJECTILE, NeedleProjectileRenderer::new);
         EntityRendererRegistry.register(ModEntities.VOID_WISP, VoidWispRenderer::new);
