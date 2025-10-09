@@ -260,9 +260,41 @@ public class ModBlocks {
         Registry.register(Registries.BLOCK, new Identifier(AnimeWitchery.MOD_ID, "grand_shulker_box_red"), GRAND_SHULKER_BOX_RED);
         Registry.register(Registries.BLOCK, new Identifier(AnimeWitchery.MOD_ID, "grand_shulker_box_black"), GRAND_SHULKER_BOX_BLACK);
 
-        // Register items (only for the main purple one)
+        // Register items for all Grand Shulker Box variants
         Registry.register(Registries.ITEM, new Identifier(AnimeWitchery.MOD_ID, "grand_shulker_box"),
                 new net.willowins.animewitchery.item.custom.GrandShulkerBoxItem(GRAND_SHULKER_BOX, new FabricItemSettings()));
+        Registry.register(Registries.ITEM, new Identifier(AnimeWitchery.MOD_ID, "grand_shulker_box_white"),
+                new net.willowins.animewitchery.item.custom.GrandShulkerBoxItem(GRAND_SHULKER_BOX_WHITE, new FabricItemSettings()));
+        Registry.register(Registries.ITEM, new Identifier(AnimeWitchery.MOD_ID, "grand_shulker_box_orange"),
+                new net.willowins.animewitchery.item.custom.GrandShulkerBoxItem(GRAND_SHULKER_BOX_ORANGE, new FabricItemSettings()));
+        Registry.register(Registries.ITEM, new Identifier(AnimeWitchery.MOD_ID, "grand_shulker_box_magenta"),
+                new net.willowins.animewitchery.item.custom.GrandShulkerBoxItem(GRAND_SHULKER_BOX_MAGENTA, new FabricItemSettings()));
+        Registry.register(Registries.ITEM, new Identifier(AnimeWitchery.MOD_ID, "grand_shulker_box_light_blue"),
+                new net.willowins.animewitchery.item.custom.GrandShulkerBoxItem(GRAND_SHULKER_BOX_LIGHT_BLUE, new FabricItemSettings()));
+        Registry.register(Registries.ITEM, new Identifier(AnimeWitchery.MOD_ID, "grand_shulker_box_yellow"),
+                new net.willowins.animewitchery.item.custom.GrandShulkerBoxItem(GRAND_SHULKER_BOX_YELLOW, new FabricItemSettings()));
+        Registry.register(Registries.ITEM, new Identifier(AnimeWitchery.MOD_ID, "grand_shulker_box_lime"),
+                new net.willowins.animewitchery.item.custom.GrandShulkerBoxItem(GRAND_SHULKER_BOX_LIME, new FabricItemSettings()));
+        Registry.register(Registries.ITEM, new Identifier(AnimeWitchery.MOD_ID, "grand_shulker_box_pink"),
+                new net.willowins.animewitchery.item.custom.GrandShulkerBoxItem(GRAND_SHULKER_BOX_PINK, new FabricItemSettings()));
+        Registry.register(Registries.ITEM, new Identifier(AnimeWitchery.MOD_ID, "grand_shulker_box_gray"),
+                new net.willowins.animewitchery.item.custom.GrandShulkerBoxItem(GRAND_SHULKER_BOX_GRAY, new FabricItemSettings()));
+        Registry.register(Registries.ITEM, new Identifier(AnimeWitchery.MOD_ID, "grand_shulker_box_light_gray"),
+                new net.willowins.animewitchery.item.custom.GrandShulkerBoxItem(GRAND_SHULKER_BOX_LIGHT_GRAY, new FabricItemSettings()));
+        Registry.register(Registries.ITEM, new Identifier(AnimeWitchery.MOD_ID, "grand_shulker_box_cyan"),
+                new net.willowins.animewitchery.item.custom.GrandShulkerBoxItem(GRAND_SHULKER_BOX_CYAN, new FabricItemSettings()));
+        Registry.register(Registries.ITEM, new Identifier(AnimeWitchery.MOD_ID, "grand_shulker_box_purple"),
+                new net.willowins.animewitchery.item.custom.GrandShulkerBoxItem(GRAND_SHULKER_BOX_PURPLE, new FabricItemSettings()));
+        Registry.register(Registries.ITEM, new Identifier(AnimeWitchery.MOD_ID, "grand_shulker_box_blue"),
+                new net.willowins.animewitchery.item.custom.GrandShulkerBoxItem(GRAND_SHULKER_BOX_BLUE, new FabricItemSettings()));
+        Registry.register(Registries.ITEM, new Identifier(AnimeWitchery.MOD_ID, "grand_shulker_box_brown"),
+                new net.willowins.animewitchery.item.custom.GrandShulkerBoxItem(GRAND_SHULKER_BOX_BROWN, new FabricItemSettings()));
+        Registry.register(Registries.ITEM, new Identifier(AnimeWitchery.MOD_ID, "grand_shulker_box_green"),
+                new net.willowins.animewitchery.item.custom.GrandShulkerBoxItem(GRAND_SHULKER_BOX_GREEN, new FabricItemSettings()));
+        Registry.register(Registries.ITEM, new Identifier(AnimeWitchery.MOD_ID, "grand_shulker_box_red"),
+                new net.willowins.animewitchery.item.custom.GrandShulkerBoxItem(GRAND_SHULKER_BOX_RED, new FabricItemSettings()));
+        Registry.register(Registries.ITEM, new Identifier(AnimeWitchery.MOD_ID, "grand_shulker_box_black"),
+                new net.willowins.animewitchery.item.custom.GrandShulkerBoxItem(GRAND_SHULKER_BOX_BLACK, new FabricItemSettings()));
 
         // Register block entity type with all variants
         GRAND_SHULKER_BOX_ENTITY = Registry.register(

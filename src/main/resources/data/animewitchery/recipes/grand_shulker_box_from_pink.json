@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "animewitchery:grand_shulker_box_pink"
+    }
+  ],
+  "result": {
+    "item": "animewitchery:grand_shulker_box"
+  }
+}

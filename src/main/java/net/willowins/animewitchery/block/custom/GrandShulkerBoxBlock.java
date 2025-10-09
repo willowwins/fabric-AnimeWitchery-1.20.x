@@ -21,6 +21,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 import net.minecraft.item.ItemPlacementContext;
+import net.willowins.animewitchery.block.ModBlocks;
 import net.willowins.animewitchery.block.entity.GrandShulkerBoxBlockEntity;
 import org.jetbrains.annotations.Nullable;
 
@@ -59,33 +60,31 @@ public class GrandShulkerBoxBlock extends ShulkerBoxBlock {
         if (!world.isClient) {
             ItemStack itemStack = player.getStackInHand(hand);
             
-            // Check if player is holding a dye - handle this FIRST to prevent vanilla behavior
+            // Check if player is holding a dye
             if (itemStack.getItem() instanceof DyeItem dyeItem) {
                 DyeColor dyeColor = dyeItem.getColor();
                 if (dyeColor != this.color) {
-                    // Change the color of the Grand Shulker Box by replacing the block
-                    BlockState newState = getColoredBlock(dyeColor).getDefaultState().with(FACING, state.get(FACING));
+                    // Get the new colored block
+                    Block newBlock = getColoredBlock(dyeColor);
+                    BlockState newState = newBlock.getDefaultState().with(FACING, state.get(FACING));
+                    
+                    // Store the old block entity data
+                    BlockEntity oldEntity = world.getBlockEntity(pos);
+                    NbtCompound oldNbt = null;
+                    if (oldEntity instanceof GrandShulkerBoxBlockEntity oldGrandBox) {
+                        oldNbt = oldGrandBox.createNbt();
+                    }
+                    
+                    // Replace the block
                     world.setBlockState(pos, newState);
                     
-                    // Transfer block entity data
-                    BlockEntity oldEntity = world.getBlockEntity(pos);
-                    if (oldEntity instanceof GrandShulkerBoxBlockEntity oldGrandBox) {
-                        // Store the old data
-                        NbtCompound oldNbt = oldGrandBox.createNbt();
-                        
-                        // Remove the old block entity
-                        world.removeBlockEntity(pos);
-                        
-                        // The new block will create its own block entity automatically
-                        // We'll transfer the data after the block is placed
+                    // Transfer the data to the new block entity
+                    if (oldNbt != null) {
                         BlockEntity newEntity = world.getBlockEntity(pos);
                         if (newEntity instanceof GrandShulkerBoxBlockEntity newGrandBox) {
                             newGrandBox.readNbt(oldNbt);
                         }
                     }
-                    
-                    // Force block update to ensure client synchronization
-                    world.updateListeners(pos, state, newState, 3);
                     
                     // Consume the dye if not in creative mode
                     if (!player.getAbilities().creativeMode) {
@@ -94,7 +93,6 @@ public class GrandShulkerBoxBlock extends ShulkerBoxBlock {
                     
                     return ActionResult.SUCCESS;
                 }
-                // If it's the same color, don't do anything
                 return ActionResult.SUCCESS;
             }
             
@@ -106,7 +104,6 @@ public class GrandShulkerBoxBlock extends ShulkerBoxBlock {
             }
         }
         
-        // Don't call super.onUse() to prevent vanilla shulker box behavior
         return ActionResult.SUCCESS;
     }
 
@@ -116,8 +113,8 @@ public class GrandShulkerBoxBlock extends ShulkerBoxBlock {
             BlockEntity blockEntity = world.getBlockEntity(pos);
             if (blockEntity instanceof GrandShulkerBoxBlockEntity entity) {
                 if (!world.isClient && !world.getBlockState(pos).isOf(this)) {
-                    // Create an item stack
-                    ItemStack itemStack = new ItemStack(this);
+                    // Always drop the main purple Grand Shulker Box item, regardless of color
+                    ItemStack itemStack = new ItemStack(ModBlocks.GRAND_SHULKER_BOX);
 
                     // Only add NBT data if the inventory is not empty
                     if (!entity.isEmpty()) {

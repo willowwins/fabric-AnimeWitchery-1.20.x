@@ -285,24 +285,8 @@ public static final Item KINETIC_BLADE =registerItem("kinetic_breaker",
     }
     
     private static void addItemsToFunctionalItemGroup(FabricItemGroupEntries entries) {
-        // Grand Shulker Boxes (all colors)
+        // Grand Shulker Box (only the main one has an item - colored variants are obtained through dyeing)
         entries.add(ModBlocks.GRAND_SHULKER_BOX);
-        entries.add(ModBlocks.GRAND_SHULKER_BOX_WHITE);
-        entries.add(ModBlocks.GRAND_SHULKER_BOX_ORANGE);
-        entries.add(ModBlocks.GRAND_SHULKER_BOX_MAGENTA);
-        entries.add(ModBlocks.GRAND_SHULKER_BOX_LIGHT_BLUE);
-        entries.add(ModBlocks.GRAND_SHULKER_BOX_YELLOW);
-        entries.add(ModBlocks.GRAND_SHULKER_BOX_LIME);
-        entries.add(ModBlocks.GRAND_SHULKER_BOX_PINK);
-        entries.add(ModBlocks.GRAND_SHULKER_BOX_GRAY);
-        entries.add(ModBlocks.GRAND_SHULKER_BOX_LIGHT_GRAY);
-        entries.add(ModBlocks.GRAND_SHULKER_BOX_CYAN);
-        entries.add(ModBlocks.GRAND_SHULKER_BOX_PURPLE);
-        entries.add(ModBlocks.GRAND_SHULKER_BOX_BLUE);
-        entries.add(ModBlocks.GRAND_SHULKER_BOX_BROWN);
-        entries.add(ModBlocks.GRAND_SHULKER_BOX_GREEN);
-        entries.add(ModBlocks.GRAND_SHULKER_BOX_RED);
-        entries.add(ModBlocks.GRAND_SHULKER_BOX_BLACK);
         
         // Functional Blocks
         entries.add(ModBlocks.AUTO_CRAFTER_BLOCK);
@@ -328,7 +312,7 @@ public static final Item KINETIC_BLADE =registerItem("kinetic_breaker",
         entries.add(ModBlocks.DECORATIVE_FOUNTAIN);
         entries.add(ModBlocks.SOUND_BLOCK);
         entries.add(ModBlocks.SOUND_BLOCK2);
-        entries.add(ModBlocks.FLOAT_BLOCK);
+        // Note: FLOAT_BLOCK doesn't have an item - it's excluded from item creation
         
         // Silver Building Blocks
         entries.add(ModBlocks.SILVER_BLOCK);
@@ -346,6 +330,8 @@ public static final Item KINETIC_BLADE =registerItem("kinetic_breaker",
         entries.add(ModBlocks.SILVER_ORE);
         entries.add(ModBlocks.DEEPSLATE_SILVER_ORE);
         entries.add(ModBlocks.CHARCOAL_BLOCK);
+        
+        // Note: STRAWBERRY_CROP and LEMON_CROP don't have items - they're accessed through seeds
         
         // Special Items
         entries.add(METAL_DETECTOR);

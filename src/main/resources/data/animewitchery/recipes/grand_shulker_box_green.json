@@ -9,9 +9,6 @@
     }
   ],
   "result": {
-    "item": "animewitchery:grand_shulker_box",
-    "nbt": {
-      "color": "green"
-    }
+    "item": "animewitchery:grand_shulker_box_green"
   }
 }

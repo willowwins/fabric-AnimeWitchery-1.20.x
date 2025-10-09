@@ -1,28 +1,28 @@
 {
   "variants": {
     "facing=down": {
-      "model": "animewitchery:block/grand_shulker_box_purple",
+      "model": "minecraft:block/shulker_box",
       "x": 90
     },
     "facing=up": {
-      "model": "animewitchery:block/grand_shulker_box_purple"
+      "model": "minecraft:block/shulker_box"
     },
     "facing=north": {
-      "model": "animewitchery:block/grand_shulker_box_purple",
+      "model": "minecraft:block/shulker_box",
       "x": 90,
       "y": 180
     },
     "facing=south": {
-      "model": "animewitchery:block/grand_shulker_box_purple",
+      "model": "minecraft:block/shulker_box",
       "x": 90
     },
     "facing=west": {
-      "model": "animewitchery:block/grand_shulker_box_purple",
+      "model": "minecraft:block/shulker_box",
       "x": 90,
       "y": 90
     },
     "facing=east": {
-      "model": "animewitchery:block/grand_shulker_box_purple",
+      "model": "minecraft:block/shulker_box",
       "x": 90,
       "y": 270
     }
