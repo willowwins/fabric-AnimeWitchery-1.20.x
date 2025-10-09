@@ -12,6 +12,7 @@ import net.willowins.animewitchery.AnimeWitchery;
 import net.willowins.animewitchery.block.ModBlocks;
 import net.willowins.animewitchery.item.armor.RailGunnerArmorItem;
 import net.willowins.animewitchery.item.armor.ObeliskArmorItem;
+import net.willowins.animewitchery.item.armor.ResonantArmorItem;
 import net.willowins.animewitchery.item.custom.*;
 
 public class ModItems {
@@ -81,6 +82,16 @@ public static final Item OBELISK_COMPASS =registerItem("obelisk_compass",
             new ObeliskArmorItem(ModArmorMaterials.OBELISK,ArmorItem.Type.LEGGINGS,new FabricItemSettings()));
     public static final Item OBELISK_BOOTS =registerItem("obelisk_boots",
             new ObeliskArmorItem(ModArmorMaterials.OBELISK,ArmorItem.Type.BOOTS,new FabricItemSettings()));
+
+    //Resonant Armor Set
+ public static final Item RESONANT_HELMET =registerItem("resonant_helmet",
+            new ResonantArmorItem(ModArmorMaterials.RESONANT,ArmorItem.Type.HELMET,new FabricItemSettings()));
+    public static final Item RESONANT_CHESTPLATE =registerItem("resonant_chestplate",
+            new ResonantArmorItem(ModArmorMaterials.RESONANT,ArmorItem.Type.CHESTPLATE,new FabricItemSettings()));
+    public static final Item RESONANT_LEGGINGS =registerItem("resonant_leggings",
+            new ResonantArmorItem(ModArmorMaterials.RESONANT,ArmorItem.Type.LEGGINGS,new FabricItemSettings()));
+    public static final Item RESONANT_BOOTS =registerItem("resonant_boots",
+            new ResonantArmorItem(ModArmorMaterials.RESONANT,ArmorItem.Type.BOOTS,new FabricItemSettings()));
 
 
     public static final Item LEMON =registerItem("lemon", new Item(new FabricItemSettings().food(ModFoodComponents.LEMON)));
@@ -211,6 +222,7 @@ public static final Item KINETIC_BLADE =registerItem("kinetic_breaker",
         AnimeWitchery.LOGGER.info("registering Mod Items for"+AnimeWitchery.MOD_ID);
         ItemGroupEvents.modifyEntriesEvent(ItemGroups.INGREDIENTS).register(ModItems::addItemsToIngredientItemGroup);
         ItemGroupEvents.modifyEntriesEvent(ItemGroups.COMBAT).register(ModItems::addItemsToCombatItemGroup);
+        ItemGroupEvents.modifyEntriesEvent(ItemGroups.FUNCTIONAL).register(ModItems::addItemsToFunctionalItemGroup);
     }
     
     private static void addItemsToCombatItemGroup(FabricItemGroupEntries entries) {
@@ -220,5 +232,9 @@ public static final Item KINETIC_BLADE =registerItem("kinetic_breaker",
         entries.add(OBELISK_BOOTS);
         entries.add(OBELISK_SWORD);
         entries.add(CHISEL);
+    }
+    
+    private static void addItemsToFunctionalItemGroup(FabricItemGroupEntries entries) {
+        entries.add(ModBlocks.GRAND_SHULKER_BOX);
     }
 }

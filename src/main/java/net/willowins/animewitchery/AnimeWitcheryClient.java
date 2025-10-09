@@ -21,6 +21,7 @@ import net.minecraft.util.Identifier;
 import net.willowins.animewitchery.block.ModBlocks;
 import net.willowins.animewitchery.block.entity.ModBlockEntities;
 import net.willowins.animewitchery.block.entity.renderer.*;
+import net.willowins.animewitchery.client.DebugScreenInterceptor;
 import net.willowins.animewitchery.client.render.FlightElytraRenderLayer;
 import net.willowins.animewitchery.entity.ModEntities;
 import net.willowins.animewitchery.entity.client.render.NeedleProjectileRenderer;
@@ -91,6 +92,9 @@ public class AnimeWitcheryClient implements ClientModInitializer {
         ScreenRegistry.register(ModScreenHandlers.BLOCK_PLACER_SCREEN_HANDLER, BlockPlacerScreen::new);
         ScreenRegistry.register(ModScreenHandlers.GROWTH_ACCELERATOR_SCREEN_HANDLER, GrowthAcceleratorScreen::new);
         ScreenRegistry.register(ModScreenHandlers.ALCHEMY_TABLE_SCREEN_HANDLER, AlchemyTableScreen::new);
+        ScreenRegistry.register(ModScreenHandlers.GRAND_SHULKER_BOX_SCREEN_HANDLER, net.willowins.animewitchery.screen.GrandShulkerBoxScreen::new);
+
+        new DebugScreenInterceptor().onInitializeClient();
 
         ModPackets.registerS2CPackets();
 

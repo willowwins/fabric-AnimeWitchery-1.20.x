@@ -1,0 +1,14 @@
+{
+  "type": "animewitchery:alchemy",
+  "ingredients": [
+    { "item": "minecraft:compass" },
+    { "item": "minecraft:echo_shard" },
+    { "item": "animewitchery:resonant_catalyst" }
+  ],
+  "result": {
+    "item": "animewitchery:obelisk_compass",
+    "count": 1
+  },
+  "xp_cost": 15,
+  "processing_time": 400
+}

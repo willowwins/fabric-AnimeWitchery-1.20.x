@@ -1,5 +1,6 @@
 package net.willowins.animewitchery.block.entity;
 
+import net.minecraft.util.Formatting;
 import org.jetbrains.annotations.Nullable;
 
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory;
@@ -36,20 +37,18 @@ import software.bernie.geckolib.core.animation.AnimationController;
 import software.bernie.geckolib.core.animation.RawAnimation;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
-public class AlchemyTableBlockEntity extends BlockEntity implements GeoBlockEntity, ImplementedInventory, SidedInventory, ExtendedScreenHandlerFactory {
+public class AlchemyTableBlockEntity extends BlockEntity
+        implements GeoBlockEntity, ImplementedInventory, SidedInventory, ExtendedScreenHandlerFactory {
+
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
-    
-    // Inventory slots: 0=Output (center), 1-10=Input slots (counter-clockwise from top)
     private final DefaultedList<ItemStack> inventory = DefaultedList.ofSize(11, ItemStack.EMPTY);
-    
-    // Progress tracking
+
     private int progress = 0;
-    private int maxProgress = 200; // Default 10 seconds
+    private int maxProgress = 200;
     private boolean isProcessing = false;
-    public boolean isActivated = false; // Whether the table has been activated with catalyst
+    public boolean isActivated = false;
     private AlchemyRecipe currentRecipe = null;
-    
-    // Property delegate for syncing progress to client
+
     private final PropertyDelegate propertyDelegate = new PropertyDelegate() {
         @Override
         public int get(int index) {
@@ -83,16 +82,9 @@ public class AlchemyTableBlockEntity extends BlockEntity implements GeoBlockEnti
     }
 
     @Override
-    public void registerControllers(AnimatableManager.ControllerRegistrar controllerRegistrar) {
-        controllerRegistrar.add(new AnimationController<>(this, "Idle", 0, state -> {
-            // TODO: Add processing animation when available
-            // if (isProcessing) {
-            //     return state.setAndContinue(RawAnimation.begin().thenLoop("processing"));
-            // } else {
-            //     return state.setAndContinue(RawAnimation.begin().thenLoop("idle"));
-            // }
-            return state.setAndContinue(RawAnimation.begin().thenLoop("idle"));
-        }));
+    public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
+        controllers.add(new AnimationController<>(this, "Idle", 0,
+                state -> state.setAndContinue(RawAnimation.begin().thenLoop("idle"))));
     }
 
     @Override
@@ -116,7 +108,8 @@ public class AlchemyTableBlockEntity extends BlockEntity implements GeoBlockEnti
     }
 
     @Override
-    public @Nullable net.minecraft.screen.ScreenHandler createMenu(int syncId, net.minecraft.entity.player.PlayerInventory playerInventory, PlayerEntity player) {
+    public @Nullable net.minecraft.screen.ScreenHandler createMenu(
+            int syncId, net.minecraft.entity.player.PlayerInventory playerInventory, PlayerEntity player) {
         return new net.willowins.animewitchery.screen.AlchemyTableScreenHandler(syncId, playerInventory, this);
     }
 
@@ -161,137 +154,100 @@ public class AlchemyTableBlockEntity extends BlockEntity implements GeoBlockEnti
         return nbt;
     }
 
+    // === MAIN SERVER TICK LOGIC ===
     public static void tick(World world, BlockPos pos, BlockState state, AlchemyTableBlockEntity entity) {
         if (world.isClient) return;
 
-        // Only process if activated and we have a valid recipe
         if (entity.isActivated && entity.hasRecipe()) {
-            // Get the current recipe and update max progress
             AlchemyRecipe recipe = entity.findRecipe();
             if (recipe != null && entity.currentRecipe != recipe) {
                 entity.currentRecipe = recipe;
                 entity.maxProgress = recipe.getProcessingTime();
             }
-            
+
             entity.isProcessing = true;
             entity.progress++;
-            
-            // Spawn portal particles when processing
+
             if (world instanceof ServerWorld serverWorld) {
                 spawnPortalParticles(serverWorld, pos, entity.progress, entity.maxProgress);
             }
-            
+
             if (entity.progress >= entity.maxProgress) {
                 entity.craftItem();
-                entity.isActivated = false; // Deactivate after crafting
-                world.playSound(null, pos, SoundEvents.BLOCK_END_PORTAL_FRAME_FILL, SoundCategory.BLOCKS, 1.0f, 1.5f);
+                entity.isActivated = false;
+                world.playSound(null, pos, SoundEvents.BLOCK_END_PORTAL_FRAME_FILL,
+                        SoundCategory.BLOCKS, 1.0f, 1.5f);
+                entity.sync();
             }
         } else {
             entity.isProcessing = false;
             entity.progress = 0;
             entity.currentRecipe = null;
         }
-        
+
         entity.markDirty();
     }
 
+    // === PARTICLE EFFECTS ===
     private static void spawnPortalParticles(ServerWorld world, BlockPos pos, int progress, int maxProgress) {
-        // Calculate center position of the block (slightly above)
-        Vec3d center = Vec3d.ofCenter(pos).add(0, 0.8, 0);
-        
-        // Calculate intensity based on progress (more particles as it gets closer to completion)
+        Vec3d center = Vec3d.ofCenter(pos);
         float intensity = (float) progress / maxProgress;
-        
-        // Check if we're in the final 50% for the inward spiral effect
+
         if (intensity >= 0.5f) {
-            // Final 50% - inward spiral with trailing particles
             spawnInwardSpiralParticles(world, center, intensity);
         } else {
-            // Normal swirling pattern for first 50% - MUCH BIGGER!
-            int particleCount = (int) (8 + (intensity * 12)); // 8-20 particles based on progress
-            
-            // Spawn portal particles in a swirling pattern around the center
+            int particleCount = (int) (8 + (intensity * 12));
             for (int i = 0; i < particleCount; i++) {
-                double angle = (world.getTime() * 0.03) + (i * Math.PI * 2 / particleCount); // Slower rotation
-                double radius = 1.5 + (intensity * 2.0); // Much bigger radius: 1.5 to 3.5
-                
+                double angle = (world.getTime() * 0.03) + (i * Math.PI * 2 / particleCount);
+                double radius = 1.5 + (intensity * 2.0);
+
+                double y = center.y + 0.7 + Math.sin(world.getTime() * 0.01) * 0.2;
                 double x = center.x + Math.cos(angle) * radius;
-                double y = center.y + Math.sin(world.getTime() * 0.01) * 0.5; // Slower vertical movement
                 double z = center.z + Math.sin(angle) * radius;
-                
-                // Spawn multiple portal particles for more visibility and persistence
-                world.spawnParticles(ParticleTypes.PORTAL, x, y, z, 5, 0.1, 0.1, 0.1, 0.02);
+
+                world.spawnParticles(ParticleTypes.ENCHANT, x, y, z, 5, 0.1, 0.05, 0.1, 0.02);
             }
         }
     }
-    
+
     private static void spawnInwardSpiralParticles(ServerWorld world, Vec3d center, float intensity) {
-        // Two portal particles spiraling inward with trails - MUCH BIGGER!
-        double time = world.getTime() * 0.08; // Slower rotation for dramatic effect
-        
-        // Calculate inward spiral radius (starts at 3.0, goes to 0.5) - adjusted for 50% threshold
-        double radius = 3.0 - (intensity - 0.5f) * 5.0; // Inward spiral effect over 50% of progress
-        
-        // First particle (clockwise spiral)
+        Vec3d floorCenter = new Vec3d(center.x, center.y - 0.3, center.z);
+        double time = world.getTime() * 0.08;
+        double radius = 3.0 - (intensity - 0.5f) * 5.0;
+
+        // Both rotate clockwise, offset by π
         double angle1 = time;
-        double x1 = center.x + Math.cos(angle1) * radius;
-        double y1 = center.y + Math.sin(time * 0.2) * 0.3;
-        double z1 = center.z + Math.sin(angle1) * radius;
-        
-        // Second particle (counter-clockwise spiral)
-        double angle2 = -time + Math.PI; // Offset by PI for opposite direction
-        double x2 = center.x + Math.cos(angle2) * radius;
-        double y2 = center.y + Math.sin(-time * 0.2) * 0.3;
-        double z2 = center.z + Math.sin(angle2) * radius;
-        
-        // Spawn main particles with multiple portal particles for visibility and persistence
-        world.spawnParticles(ParticleTypes.PORTAL, x1, y1, z1, 8, 0.2, 0.2, 0.2, 0.05);
-        world.spawnParticles(ParticleTypes.PORTAL, x2, y2, z2, 8, 0.2, 0.2, 0.2, 0.05);
-        
-        // Spawn trail particles (smaller, more transparent effect)
-        for (int i = 1; i <= 5; i++) {
-            double trailRadius1 = radius + (i * 0.2);
-            double trailRadius2 = radius + (i * 0.2);
-            
-            double trailX1 = center.x + Math.cos(angle1 - (i * 0.3)) * trailRadius1;
-            double trailY1 = center.y + Math.sin((time - (i * 0.3)) * 0.2) * 0.3;
-            double trailZ1 = center.z + Math.sin(angle1 - (i * 0.3)) * trailRadius1;
-            
-            double trailX2 = center.x + Math.cos(angle2 + (i * 0.3)) * trailRadius2;
-            double trailY2 = center.y + Math.sin((-time + (i * 0.3)) * 0.2) * 0.3;
-            double trailZ2 = center.z + Math.sin(angle2 + (i * 0.3)) * trailRadius2;
-            
-            // Spawn trail particles with more persistence
-            world.spawnParticles(ParticleTypes.PORTAL, trailX1, trailY1, trailZ1, 3, 0.1, 0.1, 0.1, 0.02);
-            world.spawnParticles(ParticleTypes.PORTAL, trailX2, trailY2, trailZ2, 3, 0.1, 0.1, 0.1, 0.02);
-        }
+        double angle2 = time + Math.PI;
+
+        double x1 = floorCenter.x + Math.cos(angle1) * radius;
+        double z1 = floorCenter.z + Math.sin(angle1) * radius;
+        double y1 = floorCenter.y + Math.sin(time * 0.2) * 0.15;
+
+        double x2 = floorCenter.x + Math.cos(angle2) * radius;
+        double z2 = floorCenter.z + Math.sin(angle2) * radius;
+        double y2 = floorCenter.y + Math.sin(time * 0.2) * 0.15;
+
+        // Both follow the same rotational direction
+        world.spawnParticles(ParticleTypes.END_ROD, x1, y1, z1, 8, 0.2, 0.1, 0.2, 0.05);
+        world.spawnParticles(ParticleTypes.DRAGON_BREATH, x2, y2, z2, 8, 0.2, 0.1, 0.2, 0.05);
     }
 
+
+    // === RECIPE LOGIC ===
     private boolean hasRecipe() {
-        // Find a matching recipe
         AlchemyRecipe recipe = findRecipe();
-        if (recipe == null) {
-            return false;
-        }
-        
-        // Check if output slot can accept the result
+        if (recipe == null) return false;
+
         ItemStack output = inventory.get(0);
         ItemStack result = recipe.getOutput(null);
-        
-        if (output.isEmpty()) {
-            return true;
-        }
-        
-        if (!ItemStack.areItemsEqual(output, result)) {
-            return false;
-        }
-        
+
+        if (output.isEmpty()) return true;
+        if (!ItemStack.areItemsEqual(output, result)) return false;
         return output.getCount() + result.getCount() <= output.getMaxCount();
     }
-    
+
     private AlchemyRecipe findRecipe() {
         if (world == null) return null;
-        
         return world.getRecipeManager()
                 .getFirstMatch(ModRecipes.ALCHEMY_RECIPE_TYPE, this, world)
                 .orElse(null);
@@ -300,25 +256,49 @@ public class AlchemyTableBlockEntity extends BlockEntity implements GeoBlockEnti
     private void craftItem() {
         AlchemyRecipe recipe = findRecipe();
         if (recipe == null) return;
-        
+
         // Consume ingredients
         recipe.consumeIngredients(this);
-        
-        // Create result
+
+        // Produce output
         ItemStack result = recipe.getOutput(null);
         ItemStack output = inventory.get(0);
-        
+
         if (output.isEmpty()) {
             inventory.set(0, result.copy());
-        } else {
+        } else if (ItemStack.areItemsEqual(output, result)) {
             output.increment(result.getCount());
         }
-        
+
         progress = 0;
         isProcessing = false;
         currentRecipe = null;
+
+        // Ensure inventory and visuals sync immediately
+        markDirty();
+        sync();
+
+        if (world != null && !world.isClient) {
+            // Force client re-render and BlockEntity update packet
+            world.updateListeners(pos, getCachedState(), getCachedState(), 3);
+
+            // Send a manual update packet for this block entity’s NBT
+            world.getServer().execute(() -> {
+                if (world instanceof ServerWorld serverWorld) {
+                    serverWorld.getChunkManager().markForUpdate(pos);
+                }
+            });
+        }
     }
 
+
+    private void sync() {
+        if (world instanceof ServerWorld serverWorld) {
+            serverWorld.getChunkManager().markForUpdate(pos);
+        }
+    }
+
+    // === INVENTORY INTERACTION ===
     @Override
     public boolean canPlayerUse(PlayerEntity player) {
         return pos.isWithinDistance(player.getBlockPos(), 4.5);
@@ -326,55 +306,86 @@ public class AlchemyTableBlockEntity extends BlockEntity implements GeoBlockEnti
 
     @Override
     public int[] getAvailableSlots(Direction side) {
-        // Input slots (1-10) can be accessed from any side
-        // Output slot (0) can only be accessed from the top
-        if (side == Direction.UP) {
+        if (side == Direction.UP)
             return new int[]{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
-        } else {
+        else
             return new int[]{1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
-        }
     }
 
     @Override
     public boolean canInsert(int slot, ItemStack stack, @Nullable Direction dir) {
-        // Allow insertion into all slots (0-10)
         return slot >= 0 && slot <= 10;
     }
 
     @Override
     public boolean canExtract(int slot, ItemStack stack, Direction dir) {
-        // Allow extraction from output slot (0)
         return slot == 0;
     }
 
+    // === ACTIVATION ===
     public boolean activateWithCatalyst(PlayerEntity player) {
         if (!isActivated && hasRecipe()) {
             AlchemyRecipe recipe = findRecipe();
             if (recipe != null) {
                 int xpCost = recipe.getXpCost();
-                
-                // Check if player has enough XP
+
+                // --- NEW: Check if player holds a *full* catalyst ---
+                ItemStack held = player.getMainHandStack();
+                if (!(held.getItem() instanceof net.willowins.animewitchery.item.custom.AlchemicalCatalystItem catalyst)) {
+                    // Try offhand instead if main hand isn’t a catalyst
+                    held = player.getOffHandStack();
+                    if (!(held.getItem() instanceof net.willowins.animewitchery.item.custom.AlchemicalCatalystItem))
+                        return false;
+                }
+
+                int storedMana = net.willowins.animewitchery.item.custom.AlchemicalCatalystItem.getStoredMana(held);
+                int maxMana = net.willowins.animewitchery.item.custom.AlchemicalCatalystItem.MAX_MANA;
+
+                if (storedMana < maxMana) {
+                    player.sendMessage(
+                            Text.literal("⚠️ The catalyst must brim with power before alchemy may begin.")
+                                    .formatted(Formatting.GRAY),
+                            true
+                    );
+                    return false;
+                }
+
+                // --- If catalyst full and player has XP, proceed ---
                 if (player.experienceLevel >= xpCost) {
-                    // Consume XP
                     player.addExperienceLevels(-xpCost);
-                    
                     isActivated = true;
                     progress = 0;
+
+                    player.sendMessage(
+                            Text.literal("✨ The table hums to life as the catalyst discharges its energy.")
+                                    .formatted(Formatting.DARK_AQUA),
+                            true
+                    );
+
                     markDirty();
+                    sync();
                     return true;
+                } else {
+                    player.sendMessage(
+                            Text.literal("You lack the experience to command the subvoid's flow.")
+                                    .formatted(Formatting.RED),
+                            true
+                    );
                 }
             }
         }
         return false;
     }
-    
+
     public int getCurrentRecipeXpCost() {
         if (hasRecipe()) {
             AlchemyRecipe recipe = findRecipe();
-            if (recipe != null) {
-                return recipe.getXpCost();
-            }
+            if (recipe != null) return recipe.getXpCost();
         }
         return 0;
     }
+    public boolean isProcessing() {
+        return isProcessing;
+    }
+
 }

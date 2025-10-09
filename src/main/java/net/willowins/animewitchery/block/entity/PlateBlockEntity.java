@@ -96,7 +96,7 @@ public class PlateBlockEntity extends BlockEntity implements ImplementedInventor
             this.world.updateListeners(this.pos, state, state, Block.NOTIFY_LISTENERS);
         }
 
-        // fuck you RELOAD
+        // Force update listeners
         this.world.updateListeners(this.pos, state, state, Block.NOTIFY_ALL);
 
 

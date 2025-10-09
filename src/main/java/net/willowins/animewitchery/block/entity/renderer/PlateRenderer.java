@@ -37,8 +37,6 @@ public class PlateRenderer implements BlockEntityRenderer<PlateBlockEntity> {
         ItemStack stack = entity.getStack(0);
         if (stack.isEmpty()) {
             return;
-        }else {
-            System.out.println("[PlateRenderer] HOW DO YOU HAVE A FUCKIGN ITEM YOU PIECE OF ABSOLUTE GRNEGHUERHJGUIOREWJHGUIR...");
         }
 
         int packedLight = WorldRenderer.getLightmapCoordinates(entity.getWorld(), entity.getPos());

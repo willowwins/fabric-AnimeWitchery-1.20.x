@@ -28,6 +28,7 @@ public class ModScreenHandlers {
     public static ScreenHandlerType<BlockPlacerScreenHandler> BLOCK_PLACER_SCREEN_HANDLER;
     public static ScreenHandlerType<GrowthAcceleratorScreenHandler> GROWTH_ACCELERATOR_SCREEN_HANDLER;
     public static ScreenHandlerType<AlchemyTableScreenHandler> ALCHEMY_TABLE_SCREEN_HANDLER;
+    public static ScreenHandlerType<GrandShulkerBoxScreenHandler> GRAND_SHULKER_BOX_SCREEN_HANDLER;
     public static void registerAll() {
 
 
@@ -95,6 +96,19 @@ public class ModScreenHandlers {
                     BlockEntity be = world.getBlockEntity(pos);
                     if (be instanceof AlchemyTableBlockEntity alchemyTable) {
                         return new AlchemyTableScreenHandler(syncId, playerInventory, alchemyTable);
+                    }
+                    return null;
+                }
+        );
+        
+        GRAND_SHULKER_BOX_SCREEN_HANDLER = ScreenHandlerRegistry.registerExtended(
+                new Identifier("animewitchery", "grand_shulker_box"),
+                (syncId, playerInventory, buf) -> {
+                    BlockPos pos = buf.readBlockPos();
+                    World world = playerInventory.player.getWorld();
+                    BlockEntity be = world.getBlockEntity(pos);
+                    if (be instanceof GrandShulkerBoxBlockEntity grandBox) {
+                        return new GrandShulkerBoxScreenHandler(GRAND_SHULKER_BOX_SCREEN_HANDLER, syncId, playerInventory, grandBox);
                     }
                     return null;
                 }

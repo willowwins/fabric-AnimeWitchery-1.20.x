@@ -67,6 +67,11 @@ public class ModItemGroups {
                         entries.add(ModItems.SILVER_BOOTS);
                         entries.add(ModItems.SILVER_TEMPLATE);
 
+                        entries.add(ModItems.RESONANT_HELMET);
+                        entries.add(ModItems.RESONANT_CHESTPLATE);
+                        entries.add(ModItems.RESONANT_LEGGINGS);
+                        entries.add(ModItems.RESONANT_BOOTS);
+
                         entries.add(ModItems.METAL_DETECTOR);
                         entries.add(ModItems.RESPAWN_BEACON);
                         entries.add(ModItems.DIMENSION_HOPPER);
@@ -107,6 +112,7 @@ public class ModItemGroups {
                         entries.add(ModBlocks.SILVER_STAIRS);
 
                         entries.add(ModBlocks.OBELISK);
+                        entries.add(ModBlocks.GRAND_SHULKER_BOX);
 
                         entries.add(ModItems.SILVER_PENDANT);
                         entries.add(ModItems.HEALING_STAFF);

@@ -1,0 +1,134 @@
+package net.willowins.animewitchery.block.custom;
+
+import net.minecraft.block.*;
+import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.DyeItem;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NbtCompound;
+import net.minecraft.screen.ScreenHandler;
+import net.minecraft.state.StateManager;
+import net.minecraft.state.property.DirectionProperty;
+import net.minecraft.state.property.EnumProperty;
+import net.minecraft.state.property.Properties;
+import net.minecraft.text.Text;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.DyeColor;
+import net.minecraft.util.Hand;
+import net.minecraft.util.ItemScatterer;
+import net.minecraft.util.hit.BlockHitResult;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Direction;
+import net.minecraft.world.World;
+import net.minecraft.item.ItemPlacementContext;
+import net.willowins.animewitchery.block.entity.GrandShulkerBoxBlockEntity;
+import org.jetbrains.annotations.Nullable;
+
+public class GrandShulkerBoxBlock extends BlockWithEntity implements BlockEntityProvider {
+    public static final DirectionProperty FACING = Properties.FACING;
+    public static final EnumProperty<DyeColor> COLOR = EnumProperty.of("color", DyeColor.class);
+
+    public GrandShulkerBoxBlock(Settings settings) {
+        super(settings);
+        this.setDefaultState(this.stateManager.getDefaultState()
+                .with(FACING, Direction.UP)
+                .with(COLOR, DyeColor.PURPLE)); // Default to purple like vanilla shulker boxes
+    }
+
+    @Override
+    public BlockEntity createBlockEntity(BlockPos pos, BlockState state) {
+        return new GrandShulkerBoxBlockEntity(pos, state);
+    }
+
+    @Override
+    public void onPlaced(World world, BlockPos pos, BlockState state, LivingEntity placer, ItemStack itemStack) {
+        if (!world.isClient && itemStack.hasNbt()) {
+            NbtCompound tag = itemStack.getNbt();
+            if (tag != null && tag.contains("BlockEntityTag")) {
+                BlockEntity be = world.getBlockEntity(pos);
+                if (be instanceof GrandShulkerBoxBlockEntity grandBox) {
+                    grandBox.readNbt(tag.getCompound("BlockEntityTag"));
+                }
+            }
+        }
+    }
+
+    @Override
+    protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
+        builder.add(FACING, COLOR);
+    }
+
+    @Override
+    public BlockState getPlacementState(ItemPlacementContext ctx) {
+        return this.getDefaultState().with(FACING, ctx.getSide());
+    }
+
+    @Override
+    public ActionResult onUse(BlockState state, World world, BlockPos pos,
+                              PlayerEntity player, Hand hand, BlockHitResult hit) {
+        if (!world.isClient) {
+            ItemStack itemStack = player.getStackInHand(hand);
+            
+            // Check if player is holding a dye
+            if (itemStack.getItem() instanceof DyeItem dyeItem) {
+                DyeColor dyeColor = dyeItem.getColor();
+                if (dyeColor != state.get(COLOR)) {
+                    // Change the color of the shulker box
+                    world.setBlockState(pos, state.with(COLOR, dyeColor));
+                    
+                    // Consume the dye if not in creative mode
+                    if (!player.getAbilities().creativeMode) {
+                        itemStack.decrement(1);
+                    }
+                    
+                    return ActionResult.SUCCESS;
+                }
+            }
+            
+            // Open the inventory if not dyeing
+            BlockEntity blockEntity = world.getBlockEntity(pos);
+            if (blockEntity instanceof GrandShulkerBoxBlockEntity entity) {
+                player.openHandledScreen(entity);
+                return ActionResult.SUCCESS;
+            }
+        }
+        return ActionResult.SUCCESS;
+    }
+
+    @Override
+    public void onStateReplaced(BlockState state, World world, BlockPos pos, BlockState newState, boolean moved) {
+        if (state.getBlock() != newState.getBlock()) {
+            BlockEntity blockEntity = world.getBlockEntity(pos);
+            if (blockEntity instanceof GrandShulkerBoxBlockEntity entity) {
+                if (!world.isClient && !world.getBlockState(pos).isOf(this)) {
+                    // Create an item stack
+                    ItemStack itemStack = new ItemStack(this);
+                    
+                    // Only add NBT data if the inventory is not empty
+                    if (!entity.isEmpty()) {
+                        NbtCompound blockEntityTag = entity.createNbtWithIdentifyingData();
+                        NbtCompound itemNbt = new NbtCompound();
+                        itemNbt.put("BlockEntityTag", blockEntityTag);
+                        itemStack.setNbt(itemNbt);
+                    }
+                    
+                    // Drop the item with preserved NBT (if any)
+                    ItemScatterer.spawn(world, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, itemStack);
+                    world.updateComparators(pos, this);
+                }
+            }
+            super.onStateReplaced(state, world, pos, newState, moved);
+        }
+    }
+
+    @Override
+    public boolean hasComparatorOutput(BlockState state) {
+        return true;
+    }
+
+    @Override
+    public int getComparatorOutput(BlockState state, World world, BlockPos pos) {
+        return ScreenHandler.calculateComparatorOutput(world.getBlockEntity(pos));
+    }
+}

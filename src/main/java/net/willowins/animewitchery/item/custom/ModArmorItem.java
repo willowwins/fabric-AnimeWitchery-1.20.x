@@ -2,102 +2,111 @@ package net.willowins.animewitchery.item.custom;
 
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
-import net.willowins.animewitchery.item.ModArmorMaterials;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.effect.StatusEffectInstance;
+import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ArmorItem;
 import net.minecraft.item.ArmorMaterial;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
+import net.willowins.animewitchery.effect.ModEffect;
+import net.willowins.animewitchery.item.ModArmorMaterials;
 
 import java.util.Map;
 
-
+/**
+ * Grants full-set bonuses and effects depending on the armor material.
+ * Automatically re-applies effects while worn, without stacking or duplication.
+ */
 public class ModArmorItem extends ArmorItem {
     private static final Multimap<ArmorMaterial, StatusEffectInstance> MATERIAL_TO_EFFECT_MAP =
-            (new ImmutableMultimap.Builder<ArmorMaterial, StatusEffectInstance>())
-                    .put(ModArmorMaterials.SILVER, new StatusEffectInstance(StatusEffects.SATURATION, 400, 0,
-                            false, false, false))
-                    .put(ModArmorMaterials.SILVER, new StatusEffectInstance(StatusEffects.GLOWING, 400, 0,
-                    false, false, false))
-                    .put(ModArmorMaterials.SILVER, new StatusEffectInstance(StatusEffects.WEAKNESS, 800, 255,
-                            false, false, false))
-                    .put(ModArmorMaterials.SILVER, new StatusEffectInstance(StatusEffects.SATURATION, 400, 0,
-                            false, false, false))
-                    .put(ModArmorMaterials.SILVER, new StatusEffectInstance(StatusEffects.GLOWING, 400, 0,
-                            false, false, false))
-                    .put(ModArmorMaterials.RAILGUNNER, new StatusEffectInstance(StatusEffects.SPEED, 20, 2,
-                            false, false, false))
-                    .put(ModArmorMaterials.RAILGUNNER, new StatusEffectInstance(StatusEffects.WEAKNESS, 20, 255,
-                            false, false, false))
-                    .put(ModArmorMaterials.OBELISK, new StatusEffectInstance(StatusEffects.NIGHT_VISION, 400, 0,
-                            false, false, false))
-                    .put(ModArmorMaterials.OBELISK, new StatusEffectInstance(StatusEffects.STRENGTH, 400, 1,
-                            false, false, false))
-                    .put(ModArmorMaterials.OBELISK, new StatusEffectInstance(StatusEffects.RESISTANCE, 400, 1,
-                            false, false, false)).build();
+            new ImmutableMultimap.Builder<ArmorMaterial, StatusEffectInstance>()
+                    // Silver
+                    .put(ModArmorMaterials.SILVER, new StatusEffectInstance(StatusEffects.SATURATION, 200, 0, false, false, false))
+                    .put(ModArmorMaterials.SILVER, new StatusEffectInstance(StatusEffects.GLOWING, 200, 0, false, false, false))
+                    .put(ModArmorMaterials.SILVER, new StatusEffectInstance(StatusEffects.WEAKNESS, 200, 255, false, false, false))
 
+                    // Railgunner
+                    .put(ModArmorMaterials.RAILGUNNER, new StatusEffectInstance(StatusEffects.SPEED, 200, 2, false, false, false))
+                    .put(ModArmorMaterials.RAILGUNNER, new StatusEffectInstance(StatusEffects.WEAKNESS, 200, 255, false, false, false))
+
+                    // Obelisk
+                    .put(ModArmorMaterials.OBELISK, new StatusEffectInstance(StatusEffects.NIGHT_VISION, 300, 0, false, false, false))
+                    .put(ModArmorMaterials.OBELISK, new StatusEffectInstance(StatusEffects.STRENGTH, 300, 1, false, false, false))
+                    .put(ModArmorMaterials.OBELISK, new StatusEffectInstance(StatusEffects.RESISTANCE, 300, 1, false, false, false))
+
+                    // Resonant
+                    .put(ModArmorMaterials.RESONANT, new StatusEffectInstance(StatusEffects.RESISTANCE, 300, 0, false, false, false))
+                    .put(ModArmorMaterials.RESONANT, new StatusEffectInstance(ModEffect.MANA_REGEN, 300, 2, false, false, false))
+                    .build();
 
     public ModArmorItem(ArmorMaterial material, Type type, Settings settings) {
         super(material, type, settings);
     }
 
+    // === MAIN TICK ===
     @Override
     public void inventoryTick(ItemStack stack, World world, Entity entity, int slot, boolean selected) {
-        if(!world.isClient()) {
-            if(entity instanceof PlayerEntity player && hasFullSuitOfArmorOn(player)) {
-                evaluateArmorEffects(player);
-            }
+        if (world.isClient() || !(entity instanceof PlayerEntity player)) {
+            super.inventoryTick(stack, world, entity, slot, selected);
+            return;
+        }
+
+        if (!hasFullSuitOfArmor(player)) {
+            return;
+        }
+
+        ArmorMaterial material = getEquippedMaterial(player);
+        if (material != null) {
+            applyFullSetEffects(player, material);
         }
 
         super.inventoryTick(stack, world, entity, slot, selected);
     }
 
-    private void evaluateArmorEffects(PlayerEntity player) {
+    // === EFFECT LOGIC ===
+    private void applyFullSetEffects(PlayerEntity player, ArmorMaterial material) {
         for (Map.Entry<ArmorMaterial, StatusEffectInstance> entry : MATERIAL_TO_EFFECT_MAP.entries()) {
-            ArmorMaterial mapArmorMaterial = entry.getKey();
-            StatusEffectInstance mapStatusEffect = entry.getValue();
+            if (entry.getKey() == material) {
+                StatusEffectInstance effect = entry.getValue();
+                StatusEffect type = effect.getEffectType();
 
-                if (hasCorrectArmorOn(mapArmorMaterial, player)) {
-                addStatusEffectForMaterial(player, mapArmorMaterial, mapStatusEffect);
+                StatusEffectInstance current = player.getStatusEffect(type);
+                // Refresh only if missing or nearly expired
+                if (current == null || current.getDuration() <= 40) {
+                    player.addStatusEffect(new StatusEffectInstance(
+                            type,
+                            effect.getDuration(),
+                            effect.getAmplifier(),
+                            effect.isAmbient(),
+                            effect.shouldShowParticles(),
+                            effect.shouldShowIcon()
+                    ));
+                }
             }
         }
     }
 
-
-    private void addStatusEffectForMaterial(PlayerEntity player, ArmorMaterial mapArmorMaterial, StatusEffectInstance mapStatusEffect) {
-        boolean hasPlayerEffect = player.hasStatusEffect(mapStatusEffect.getEffectType());
-
-        if(hasCorrectArmorOn(mapArmorMaterial, player) && !hasPlayerEffect) {
-            player.addStatusEffect(new StatusEffectInstance(mapStatusEffect));
-        }
-    }
-
-    private boolean hasFullSuitOfArmorOn(PlayerEntity player) {
-        ItemStack boots = player.getInventory().getArmorStack(0);
-        ItemStack leggings = player.getInventory().getArmorStack(1);
-        ItemStack breastplate = player.getInventory().getArmorStack(2);
-        ItemStack helmet = player.getInventory().getArmorStack(3);
-
-        return !helmet.isEmpty() && !breastplate.isEmpty()
-                && !leggings.isEmpty() && !boots.isEmpty();
-    }
-
-    private boolean hasCorrectArmorOn(ArmorMaterial material, PlayerEntity player) {
-        for (ItemStack armorStack: player.getInventory().armor) {
-            if(!(armorStack.getItem() instanceof ArmorItem)) {
+    private boolean hasFullSuitOfArmor(PlayerEntity player) {
+        for (ItemStack armor : player.getInventory().armor) {
+            if (armor.isEmpty() || !(armor.getItem() instanceof ArmorItem)) {
                 return false;
             }
         }
+        return true;
+    }
 
-        ArmorItem boots = ((ArmorItem)player.getInventory().getArmorStack(0).getItem());
-        ArmorItem leggings = ((ArmorItem)player.getInventory().getArmorStack(1).getItem());
-        ArmorItem breastplate = ((ArmorItem)player.getInventory().getArmorStack(2).getItem());
-        ArmorItem helmet = ((ArmorItem)player.getInventory().getArmorStack(3).getItem());
+    private ArmorMaterial getEquippedMaterial(PlayerEntity player) {
+        ArmorItem first = (ArmorItem) player.getInventory().getArmorStack(0).getItem();
+        ArmorMaterial type = first.getMaterial();
 
-        return helmet.getMaterial() == material && breastplate.getMaterial() == material &&
-                leggings.getMaterial() == material && boots.getMaterial() == material;
+        for (ItemStack armor : player.getInventory().armor) {
+            if (!(armor.getItem() instanceof ArmorItem armorItem) || armorItem.getMaterial() != type) {
+                return null;
+            }
+        }
+        return type;
     }
 }

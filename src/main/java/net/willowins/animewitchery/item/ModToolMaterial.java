@@ -10,7 +10,15 @@ public enum ModToolMaterial implements ToolMaterial {
    SILVER(5,1561,13,3,22,
            () ->Ingredient.ofItems(ModItems.SILVER)),
    OBELISK(5,2031,12,5,25,
-           () ->Ingredient.ofItems(ModItems.ENCHANTED_CRYSTAL));
+           () ->Ingredient.ofItems(ModItems.ENCHANTED_CRYSTAL)),
+    RESONANT(
+            5, // Mining level: same as Netherite (4)
+            2031, // Durability: same as Netherite
+            9.0F, // Mining speed: same as Netherite
+            5.0F, // Attack damage bonus: same as Netherite
+            25, // Enchantability: same as Gold
+            () -> Ingredient.ofItems(ModItems.RESONANT_CATALYST)
+    );
 
 
     private final int miningLevel;

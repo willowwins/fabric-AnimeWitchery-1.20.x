@@ -67,35 +67,29 @@ public final class ServerScheduler {
         List<Task> tasks = TASKS.get(server);
         if (tasks == null || tasks.isEmpty()) return;
 
-        // Create a snapshot to iterate safely
-        List<Task> snapshot = new ArrayList<>(tasks);
-        List<Task> toRemove = new ArrayList<>();
-
-        for (Task t : snapshot) {
+        // Use iterator for safe removal during iteration - more efficient than creating snapshots
+        var iterator = tasks.iterator();
+        while (iterator.hasNext()) {
+            Task t = iterator.next();
             if (--t.ticksRemaining <= 0) {
                 try {
                     if (t.single != null) {
                         t.single.run();
-                        toRemove.add(t);
+                        iterator.remove(); // Safe removal during iteration
                     } else if (t.repeating != null) {
                         boolean keep = t.repeating.get();
                         if (keep) {
                             t.ticksRemaining = t.interval;
                         } else {
-                            toRemove.add(t);
+                            iterator.remove(); // Safe removal during iteration
                         }
                     }
                 } catch (Exception e) {
                     System.err.println("[ServerScheduler] Task exception:");
                     e.printStackTrace();
-                    toRemove.add(t);
+                    iterator.remove(); // Safe removal during iteration
                 }
             }
-        }
-
-        // Remove finished tasks safely after iteration
-        if (!toRemove.isEmpty()) {
-            tasks.removeAll(toRemove);
         }
     }
 

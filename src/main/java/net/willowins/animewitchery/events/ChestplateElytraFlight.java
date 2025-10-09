@@ -28,11 +28,11 @@ public final class ChestplateElytraFlight {
             // Side-effects (server only) while flying:
             if (tickElytra && !player.getWorld().isClient()) {
                 // Vanilla Elytra damages every 20 ticks; mirror that cadence.
-                if (player.age % Math.max(20 - (level - 1) * 5, 5) == 0) { // higher level = slightly cheaper upkeep
+                // Cache the damage interval calculation to avoid repeated math
+                int damageInterval = Math.max(20 - (level - 1) * 5, 5);
+                if (player.age % damageInterval == 0) { // higher level = slightly cheaper upkeep
                     chest.damage(1, player, p -> p.sendEquipmentBreakStatus(EquipmentSlot.CHEST));
                 }
-
-
             }
 
             // Returning true enables/continues elytra flight for this tick.

@@ -31,24 +31,26 @@ public final class ObeliskWorldListener {
             }
 
             int processed = 0;
-            while (!PENDING.isEmpty() && processed < 128) {
+            final int MAX_PROCESSED_PER_TICK = 64; // Reduced from 128 to spread load better
+            
+            while (!PENDING.isEmpty() && processed < MAX_PROCESSED_PER_TICK) {
                 QueuedRegistration entry = PENDING.poll();
                 if (entry == null) break;
 
                 ServerWorld world = entry.world();
                 BlockPos pos = entry.pos();
-// Only register if still valid and chunk is actually loaded
-                if (world.getChunkManager().isChunkLoaded(pos.getX() >> 4, pos.getZ() >> 4)
+                
+                // Only register if still valid and chunk is actually loaded
+                if (world != null && world.getChunkManager().isChunkLoaded(pos.getX() >> 4, pos.getZ() >> 4)
                         && world.getBlockState(pos).isOf(ModBlocks.OBELISK)) {
 
                     ObeliskRegistry registry = ObeliskRegistry.get(world);
-                    if (!registry.contains(pos)) {
+                    if (registry != null && !registry.contains(pos)) {
                         registry.register(pos);
                         // Debug print
                         // System.out.println("[AW] Registered obelisk at " + pos);
                     }
                 }
-
 
                 processed++;
             }

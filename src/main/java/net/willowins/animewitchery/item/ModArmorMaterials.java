@@ -15,6 +15,15 @@ public enum ModArmorMaterials implements ArmorMaterial {
             SoundEvents.ITEM_ARMOR_EQUIP_GOLD, 0.5f, .5f, () -> Ingredient.ofItems(ModItems.SILVER)),
     RAILGUNNER("railgunner",250,new int[] { 3,8,6,3},8,
     SoundEvents.ITEM_ARMOR_EQUIP_NETHERITE, 3f, .1f, () -> Ingredient.ofItems(Items.NETHERITE_INGOT)),
+
+    RESONANT("resonant", 37, new int[] {3, 8, 6, 3}, 25, // enchantability = 25 (like gold)
+            SoundEvents.ITEM_ARMOR_EQUIP_NETHERITE,
+            3.0F, // toughness same as Netherite
+            0.1F, // knockback resistance same as Netherite
+            () -> Ingredient.ofItems(ModItems.RESONANT_CATALYST)
+    ),
+
+
     OBELISK("obelisk",500,new int[] { 4,9,7,4},15,
     SoundEvents.ITEM_ARMOR_EQUIP_NETHERITE, 4f, .2f, () -> Ingredient.ofItems(ModItems.SILVER));
 

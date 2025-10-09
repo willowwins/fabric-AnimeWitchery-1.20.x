@@ -4,10 +4,11 @@ package net.willowins.animewitchery.util;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.minecraft.server.MinecraftServer;
 import java.util.Iterator;
-import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 public final class ModExplosionManager {
-    private static final java.util.ArrayList<TickableExplosion> ACTIVE = new java.util.ArrayList<>();
+    // Use ConcurrentLinkedQueue for better performance with concurrent access
+    private static final ConcurrentLinkedQueue<TickableExplosion> ACTIVE = new ConcurrentLinkedQueue<>();
 
     public interface TickableExplosion {
         /** @return true when finished (remove from list). */
@@ -15,16 +16,29 @@ public final class ModExplosionManager {
     }
 
     public static void add(TickableExplosion exp) {
-        ACTIVE.add(exp);
+        if (exp != null) {
+            ACTIVE.add(exp);
+        }
     }
 
     public static void init() {
         ServerTickEvents.END_SERVER_TICK.register(server -> {
-            java.util.ArrayList<TickableExplosion> done = new java.util.ArrayList<>();
-            for (TickableExplosion e : ACTIVE) {
-                if (e.tickOnce(server)) done.add(e);
+            if (ACTIVE.isEmpty()) return;
+            
+            // Use iterator for safe removal during iteration
+            Iterator<TickableExplosion> iterator = ACTIVE.iterator();
+            while (iterator.hasNext()) {
+                TickableExplosion explosion = iterator.next();
+                try {
+                    if (explosion.tickOnce(server)) {
+                        iterator.remove(); // Safe removal during iteration
+                    }
+                } catch (Exception e) {
+                    System.err.println("[ModExplosionManager] Explosion tick exception:");
+                    e.printStackTrace();
+                    iterator.remove(); // Remove failed explosions
+                }
             }
-            if (!done.isEmpty()) ACTIVE.removeAll(done);
         });
     }
 }
