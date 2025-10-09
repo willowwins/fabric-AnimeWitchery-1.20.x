@@ -5,6 +5,7 @@ import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.Inventories;
+import net.minecraft.inventory.Inventory;
 import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
@@ -19,20 +20,13 @@ import net.minecraft.text.Text;
 import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.math.BlockPos;
 import net.willowins.animewitchery.block.ModBlocks;
-import net.willowins.animewitchery.util.ImplementedInventory;
 import org.jetbrains.annotations.Nullable;
 
 public class GrandShulkerBoxBlockEntity extends BlockEntity
-        implements ImplementedInventory, ExtendedScreenHandlerFactory {
+        implements ExtendedScreenHandlerFactory, Inventory {
 
     private DefaultedList<ItemStack> inventory = DefaultedList.ofSize(54, ItemStack.EMPTY);
 
-    @Override
-    public DefaultedList<ItemStack> getInventory() {
-        return inventory;
-    }
-
-    @Override
     public boolean canPlayerUse(PlayerEntity player) {
         if (this.world == null || this.world.getBlockEntity(this.pos) != this) return false;
         return player.squaredDistanceTo(
@@ -79,35 +73,66 @@ public class GrandShulkerBoxBlockEntity extends BlockEntity
         this.inventory = DefaultedList.ofSize(54, ItemStack.EMPTY);
         Inventories.readNbt(nbt, this.inventory);
     }
-    
+
+    public int getMaxCountPerStack() {
+        return 256;
+    }
+
+    public int size() {
+        return 54; // Grand Shulker Box has 54 slots (6 rows of 9)
+    }
+
+    public ItemStack getStack(int slot) {
+        return this.inventory.get(slot);
+    }
+
+    public ItemStack removeStack(int slot, int amount) {
+        ItemStack result = Inventories.splitStack(this.inventory, slot, amount);
+        if (!result.isEmpty()) {
+            this.markDirty();
+        }
+        return result;
+    }
+
+    public ItemStack removeStack(int slot) {
+        return Inventories.removeStack(this.inventory, slot);
+    }
+
+    public void setStack(int slot, ItemStack stack) {
+        this.inventory.set(slot, stack);
+        if (stack.getCount() > this.getMaxCountPerStack()) {
+            stack.setCount(this.getMaxCountPerStack());
+        }
+        this.markDirty();
+    }
+
+    public void clear() {
+        this.inventory.clear();
+    }
+
     /**
      * Check if the inventory is empty (all slots contain empty stacks)
      */
     public boolean isEmpty() {
-        for (ItemStack stack : this.inventory) {
-            if (!stack.isEmpty()) {
+        for (int i = 0; i < this.size(); i++) {
+            if (!this.getStack(i).isEmpty()) {
                 return false;
             }
         }
         return true;
     }
-    
+
     /**
      * Get the number of non-empty slots
      */
     public int getOccupiedSlots() {
         int count = 0;
-        for (ItemStack stack : this.inventory) {
-            if (!stack.isEmpty()) {
+        for (int i = 0; i < this.size(); i++) {
+            if (!this.getStack(i).isEmpty()) {
                 count++;
             }
         }
         return count;
-    }
-
-    @Override
-    public int getMaxCountPerStack() {
-        return 128;
     }
 
     @Override

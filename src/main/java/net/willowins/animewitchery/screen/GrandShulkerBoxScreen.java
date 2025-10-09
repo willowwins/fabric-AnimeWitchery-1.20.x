@@ -7,7 +7,7 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 
 public class GrandShulkerBoxScreen extends HandledScreen<GrandShulkerBoxScreenHandler> {
-    private static final Identifier TEXTURE = new Identifier("minecraft", "textures/gui/container/shulker_box.png");
+    private static final Identifier TEXTURE = new Identifier("minecraft", "textures/gui/container/generic_54.png");
 
     public GrandShulkerBoxScreen(GrandShulkerBoxScreenHandler handler, PlayerInventory inventory, Text title) {
         super(handler, inventory, title);
@@ -19,6 +19,15 @@ public class GrandShulkerBoxScreen extends HandledScreen<GrandShulkerBoxScreenHa
         int x = (width - backgroundWidth) / 2;
         int y = (height - backgroundHeight) / 2;
         context.drawTexture(TEXTURE, x, y, 0, 0, backgroundWidth, backgroundHeight);
+    }
+
+    @Override
+    protected void drawForeground(DrawContext context, int mouseX, int mouseY) {
+        // Draw the Grand Shulker Box title
+        context.drawText(this.textRenderer, this.title, this.titleX, this.titleY, 0x404040, false);
+        
+        // Draw the player inventory label at the correct position
+        context.drawText(this.textRenderer, this.playerInventoryTitle, 8, 128, 0x404040, false);
     }
 
     @Override

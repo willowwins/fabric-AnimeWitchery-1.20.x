@@ -25,12 +25,12 @@ import net.minecraft.item.ItemPlacementContext;
 import net.willowins.animewitchery.block.entity.GrandShulkerBoxBlockEntity;
 import org.jetbrains.annotations.Nullable;
 
-public class GrandShulkerBoxBlock extends BlockWithEntity implements BlockEntityProvider {
+public class GrandShulkerBoxBlock extends ShulkerBoxBlock {
     public static final DirectionProperty FACING = Properties.FACING;
     public static final EnumProperty<DyeColor> COLOR = EnumProperty.of("color", DyeColor.class);
 
     public GrandShulkerBoxBlock(Settings settings) {
-        super(settings);
+        super(DyeColor.PURPLE, settings);
         this.setDefaultState(this.stateManager.getDefaultState()
                 .with(FACING, Direction.UP)
                 .with(COLOR, DyeColor.PURPLE)); // Default to purple like vanilla shulker boxes

@@ -20,10 +20,10 @@ public class GrandShulkerBoxScreenHandler extends ScreenHandler {
         this.blockEntity = blockEntity;
         this.inventory = blockEntity; // Use the block entity directly as inventory
 
-        // Add container slots (6 rows of 9 = 54 slots)
+        // Add container slots (6 rows of 9 = 54 slots) with custom stack size
         for (int row = 0; row < 6; ++row) {
             for (int col = 0; col < 9; ++col) {
-                this.addSlot(new Slot(inventory, col + row * 9, 8 + col * 18, 18 + row * 18));
+                this.addSlot(new GrandShulkerBoxSlot(inventory, col + row * 9, 8 + col * 18, 18 + row * 18));
             }
         }
 
