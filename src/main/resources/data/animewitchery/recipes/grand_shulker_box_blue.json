@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "animewitchery:grand_shulker_box"
+    },
+    {
+      "item": "minecraft:blue_dye"
+    }
+  ],
+  "result": {
+    "item": "animewitchery:grand_shulker_box",
+    "nbt": {
+      "color": "blue"
+    }
+  }
+}

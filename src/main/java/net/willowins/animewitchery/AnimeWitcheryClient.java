@@ -21,6 +21,7 @@ import net.minecraft.util.Identifier;
 import net.willowins.animewitchery.block.ModBlocks;
 import net.willowins.animewitchery.block.entity.ModBlockEntities;
 import net.willowins.animewitchery.block.entity.renderer.*;
+import net.willowins.animewitchery.block.entity.renderer.GrandShulkerBoxRenderer;
 import net.willowins.animewitchery.client.DebugScreenInterceptor;
 import net.willowins.animewitchery.client.render.FlightElytraRenderLayer;
 import net.willowins.animewitchery.entity.ModEntities;
@@ -75,8 +76,8 @@ public class AnimeWitcheryClient implements ClientModInitializer {
         BlockEntityRendererRegistry.register(ModBlockEntities.BARRIER_DISTANCE_GLYPH_BLOCK_ENTITY, (context) -> new BarrierDistanceGlyphRenderer(context));
         BlockEntityRendererRegistry.register(ModBlockEntities.BOSS_OBELISK_BLOCK_ENTITY, (context) -> new BossObeliskRenderer());
         BlockEntityRendererRegistry.register(ModBlockEntities.GUARDIAN_STATUE_BLOCK_ENTITY, GuardianStatueRenderer::new);
-        BlockEntityRendererRegistry.register(ModBlockEntities.PLATE_BLOCK_ENTITY, PlateRenderer::new);
-        BlockEntityRendererRegistry.register(ModBlocks.GRAND_SHULKER_BOX_ENTITY, net.willowins.animewitchery.block.entity.renderer.GrandShulkerBoxRenderer::new);
+                BlockEntityRendererRegistry.register(ModBlockEntities.PLATE_BLOCK_ENTITY, PlateRenderer::new);
+                BlockEntityRendererRegistry.register(ModBlocks.GRAND_SHULKER_BOX_ENTITY, GrandShulkerBoxRenderer::new);
 
         EntityRendererRegistry.register(ModEntities.NEEDLE_PROJECTILE, NeedleProjectileRenderer::new);
         EntityRendererRegistry.register(ModEntities.VOID_WISP, VoidWispRenderer::new);

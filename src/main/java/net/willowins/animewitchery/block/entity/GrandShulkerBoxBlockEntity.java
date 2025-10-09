@@ -6,7 +6,6 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.Inventories;
 import net.minecraft.inventory.Inventory;
-import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.listener.ClientPlayPacketListener;
@@ -27,15 +26,6 @@ public class GrandShulkerBoxBlockEntity extends BlockEntity
 
     private DefaultedList<ItemStack> inventory = DefaultedList.ofSize(54, ItemStack.EMPTY);
 
-    public boolean canPlayerUse(PlayerEntity player) {
-        if (this.world == null || this.world.getBlockEntity(this.pos) != this) return false;
-        return player.squaredDistanceTo(
-                (double) this.pos.getX() + 0.5D,
-                (double) this.pos.getY() + 0.5D,
-                (double) this.pos.getZ() + 0.5D
-        ) <= 64.0D;
-    }
-
     public GrandShulkerBoxBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlocks.GRAND_SHULKER_BOX_ENTITY, pos, state);
     }
@@ -44,7 +34,6 @@ public class GrandShulkerBoxBlockEntity extends BlockEntity
     public Text getDisplayName() {
         return Text.literal("Grand Shulker Box");
     }
-
 
     @Override
     public ScreenHandler createMenu(int syncId, PlayerInventory playerInventory, PlayerEntity player) {
@@ -74,18 +63,27 @@ public class GrandShulkerBoxBlockEntity extends BlockEntity
         Inventories.readNbt(nbt, this.inventory);
     }
 
-    public int getMaxCountPerStack() {
-        return 256;
-    }
-
+    @Override
     public int size() {
         return 54; // Grand Shulker Box has 54 slots (6 rows of 9)
     }
 
+    @Override
+    public boolean isEmpty() {
+        for (int i = 0; i < this.size(); i++) {
+            if (!this.getStack(i).isEmpty()) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    @Override
     public ItemStack getStack(int slot) {
         return this.inventory.get(slot);
     }
 
+    @Override
     public ItemStack removeStack(int slot, int amount) {
         ItemStack result = Inventories.splitStack(this.inventory, slot, amount);
         if (!result.isEmpty()) {
@@ -94,10 +92,12 @@ public class GrandShulkerBoxBlockEntity extends BlockEntity
         return result;
     }
 
+    @Override
     public ItemStack removeStack(int slot) {
         return Inventories.removeStack(this.inventory, slot);
     }
 
+    @Override
     public void setStack(int slot, ItemStack stack) {
         this.inventory.set(slot, stack);
         if (stack.getCount() > this.getMaxCountPerStack()) {
@@ -106,20 +106,23 @@ public class GrandShulkerBoxBlockEntity extends BlockEntity
         this.markDirty();
     }
 
+    @Override
     public void clear() {
         this.inventory.clear();
     }
 
-    /**
-     * Check if the inventory is empty (all slots contain empty stacks)
-     */
-    public boolean isEmpty() {
-        for (int i = 0; i < this.size(); i++) {
-            if (!this.getStack(i).isEmpty()) {
-                return false;
-            }
-        }
-        return true;
+    @Override
+    public boolean canPlayerUse(PlayerEntity player) {
+        if (this.world == null || this.world.getBlockEntity(this.pos) != this) return false;
+        return player.squaredDistanceTo(
+                (double) this.pos.getX() + 0.5D,
+                (double) this.pos.getY() + 0.5D,
+                (double) this.pos.getZ() + 0.5D
+        ) <= 64.0D;
+    }
+
+    public int getMaxCountPerStack() {
+        return 256;
     }
 
     /**

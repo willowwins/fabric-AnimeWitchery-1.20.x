@@ -1,7 +1,6 @@
 package net.willowins.animewitchery.block.entity.renderer;
 
 import net.minecraft.block.BlockState;
-import net.minecraft.block.ShulkerBoxBlock;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.block.entity.BlockEntityRenderer;
 import net.minecraft.client.render.block.entity.BlockEntityRendererFactory;
@@ -22,27 +21,30 @@ public class GrandShulkerBoxRenderer implements BlockEntityRenderer<GrandShulker
     public void render(GrandShulkerBoxBlockEntity entity, float tickDelta, MatrixStack matrices,
                        VertexConsumerProvider vertexConsumers, int light, int overlay) {
         // Create a temporary vanilla shulker box block entity to use with the vanilla renderer
-        // This is a workaround to use the vanilla rendering system
         if (entity.getWorld() != null) {
             BlockState state = entity.getWorld().getBlockState(entity.getPos());
-            if (state.getBlock() instanceof ShulkerBoxBlock) {
-                // Use the vanilla renderer to render our block
-                // We'll create a temporary vanilla shulker box entity for rendering
-                net.minecraft.block.entity.ShulkerBoxBlockEntity tempEntity = 
-                    new net.minecraft.block.entity.ShulkerBoxBlockEntity(
-                        DyeColor.PURPLE, // Default color
-                        entity.getPos(), 
-                        state
-                    );
-                
-                // Copy the inventory from our entity to the temp entity
-                for (int i = 0; i < Math.min(entity.size(), tempEntity.size()); i++) {
-                    tempEntity.setStack(i, entity.getStack(i));
-                }
-                
-                // Render using the vanilla renderer
-                vanillaRenderer.render(tempEntity, tickDelta, matrices, vertexConsumers, light, overlay);
+            
+            // Get the color from the block type
+            DyeColor color = DyeColor.PURPLE; // Default fallback
+            if (state.getBlock() instanceof net.willowins.animewitchery.block.custom.GrandShulkerBoxBlock grandBox) {
+                color = grandBox.getColor();
             }
+            
+            // Create a temporary vanilla shulker box entity for rendering
+            net.minecraft.block.entity.ShulkerBoxBlockEntity tempEntity = 
+                new net.minecraft.block.entity.ShulkerBoxBlockEntity(
+                    color, // Use the actual color from the block state
+                    entity.getPos(), 
+                    state
+                );
+            
+            // Copy the inventory from our entity to the temp entity (only first 27 slots)
+            for (int i = 0; i < Math.min(entity.size(), 27); i++) {
+                tempEntity.setStack(i, entity.getStack(i));
+            }
+            
+            // Render using the vanilla renderer
+            vanillaRenderer.render(tempEntity, tickDelta, matrices, vertexConsumers, light, overlay);
         }
     }
 }

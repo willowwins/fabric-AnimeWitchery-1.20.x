@@ -152,5 +152,36 @@
   "entity.animewitchery.void_wisp": "§5Void Wisp",
 
   "itemgroup.silver": "§5Anime Witchery",
-  "block.animewitchery.boss_obelisk": "Eidolon Obelisk"
+  "block.animewitchery.boss_obelisk": "Eidolon Obelisk",
+
+  "block.animewitchery.grand_shulker_box": "§5Grand Shulker Box",
+  "block.animewitchery.grand_shulker_box_white": "§fWhite Grand Shulker Box",
+  "block.animewitchery.grand_shulker_box_orange": "§6Orange Grand Shulker Box",
+  "block.animewitchery.grand_shulker_box_magenta": "§dMagenta Grand Shulker Box",
+  "block.animewitchery.grand_shulker_box_light_blue": "§bLight Blue Grand Shulker Box",
+  "block.animewitchery.grand_shulker_box_yellow": "§eYellow Grand Shulker Box",
+  "block.animewitchery.grand_shulker_box_lime": "§aLime Grand Shulker Box",
+  "block.animewitchery.grand_shulker_box_pink": "§dPink Grand Shulker Box",
+  "block.animewitchery.grand_shulker_box_gray": "§7Gray Grand Shulker Box",
+  "block.animewitchery.grand_shulker_box_light_gray": "§7Light Gray Grand Shulker Box",
+  "block.animewitchery.grand_shulker_box_cyan": "§3Cyan Grand Shulker Box",
+  "block.animewitchery.grand_shulker_box_purple": "§5Purple Grand Shulker Box",
+  "block.animewitchery.grand_shulker_box_blue": "§1Blue Grand Shulker Box",
+  "block.animewitchery.grand_shulker_box_brown": "§6Brown Grand Shulker Box",
+  "block.animewitchery.grand_shulker_box_green": "§2Green Grand Shulker Box",
+  "block.animewitchery.grand_shulker_box_red": "§cRed Grand Shulker Box",
+  "block.animewitchery.grand_shulker_box_black": "§0Black Grand Shulker Box",
+
+  "block.animewitchery.float_block": "§bFloat Block",
+  "block.animewitchery.barrier_distance_glyph": "§5Barrier Distance Glyph",
+  "block.animewitchery.active_binding_spell": "§5Active Binding Spell",
+  "block.animewitchery.strawberry_crop": "Strawberry Crop",
+  "block.animewitchery.lemon_crop": "Lemon Crop",
+
+  "item.animewitchery.life_rune_stone": "§aLife Rune Stone",
+
+  "enchantment.animewitchery.lead_coated_paint": "§7Lead Coated Paint",
+  "enchantment.animewitchery.exp_boost": "§6Experience Boost",
+
+  "effect.animewitchery.mana_regen": "§bMana Regeneration"
 }

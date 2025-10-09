@@ -177,23 +177,31 @@ public static final Item KINETIC_BLADE =registerItem("kinetic_breaker",
 
 
     private static void addItemsToIngredientItemGroup(FabricItemGroupEntries entries){
+        // Basic materials
         entries.add(SILVER);
         entries.add(SILVERNUGGET);
         entries.add(RAWSILVER);
         entries.add(SPOOL);
         entries.add(SILVERSPOOL);
+        entries.add(SILVER_TEMPLATE);
+        entries.add(STAFF_HEAD);
+        entries.add(BLAZE_SACK);
+        entries.add(VOID_ESSENCE);
+        entries.add(RUNE_STONE);
+        entries.add(BLOOD_RUNE_STONE);
+        entries.add(OBELISK_SHARD);
         
-        // Add new alchemy and magic items
+        // Alchemy and magic items
         entries.add(MORTAR_AND_PESTLE);
         entries.add(CHALK);
         entries.add(MAGIC_CHALK);
         entries.add(ENCHANTED_CRYSTAL);
         
-        // Add dust items
+        // Dust items
         entries.add(BONE_DUST);
         entries.add(AMETHYST_DUST);
         
-        // Add rune stones
+        // Rune stones
         entries.add(FIRE_RUNE_STONE);
         entries.add(WATER_RUNE_STONE);
         entries.add(EARTH_RUNE_STONE);
@@ -203,12 +211,22 @@ public static final Item KINETIC_BLADE =registerItem("kinetic_breaker",
         entries.add(LIGHT_RUNE_STONE);
         entries.add(DARKNESS_RUNE_STONE);
         
-        // Add barrier items
+        // Barrier items
         entries.add(BARRIER_CATALYST);
         entries.add(REPAIR_ESSENCE);
-        entries.add(OBELISK_SHARD);
         
-        // Add spawn eggs
+        // Food items
+        entries.add(LEMON);
+        entries.add(STRAWBERRY);
+        entries.add(TART_CRUST);
+        entries.add(UNBAKED_LEMON_TART);
+        entries.add(UNBAKED_STRAWBERRY_TART);
+        entries.add(LEMON_TART);
+        entries.add(STRAWBERRY_TART);
+        entries.add(STRAWBERRY_SEEDS);
+        entries.add(LEMON_SEEDS);
+        
+        // Spawn eggs
         entries.add(VOID_WISP_SPAWN_EGG);
     }
 
@@ -226,15 +244,125 @@ public static final Item KINETIC_BLADE =registerItem("kinetic_breaker",
     }
     
     private static void addItemsToCombatItemGroup(FabricItemGroupEntries entries) {
+        // Silver Armor Set
+        entries.add(SILVER_HELMET);
+        entries.add(SILVER_CHESTPLATE);
+        entries.add(SILVER_LEGGINGS);
+        entries.add(SILVER_BOOTS);
+        
+        // Railgunner Armor Set
+        entries.add(RAILGUNNER_HELMET);
+        entries.add(RAILGUNNER_CHESTPLATE);
+        entries.add(RAILGUNNER_LEGGINGS);
+        entries.add(RAILGUNNER_BOOTS);
+        
+        // Obelisk Armor Set
         entries.add(OBELISK_HELMET);
         entries.add(OBELISK_CHESTPLATE);
         entries.add(OBELISK_LEGGINGS);
         entries.add(OBELISK_BOOTS);
+        
+        // Resonant Armor Set
+        entries.add(RESONANT_HELMET);
+        entries.add(RESONANT_CHESTPLATE);
+        entries.add(RESONANT_LEGGINGS);
+        entries.add(RESONANT_BOOTS);
+        
+        // Weapons and Tools
+        entries.add(NEEDLE);
+        entries.add(SILVER_PICKAXE);
         entries.add(OBELISK_SWORD);
         entries.add(CHISEL);
+        entries.add(RAILGUN);
+        entries.add(KINETIC_BLADE);
+        entries.add(HEALING_STAFF);
+        
+        // Special Items
+        entries.add(SILVER_PENDANT);
+        entries.add(OVERHEATED_FUEL_ROD);
+        entries.add(FUEL_ROD);
+        entries.add(KAMIKAZE_RITUAL_SCROLL);
     }
     
     private static void addItemsToFunctionalItemGroup(FabricItemGroupEntries entries) {
+        // Grand Shulker Boxes (all colors)
         entries.add(ModBlocks.GRAND_SHULKER_BOX);
+        entries.add(ModBlocks.GRAND_SHULKER_BOX_WHITE);
+        entries.add(ModBlocks.GRAND_SHULKER_BOX_ORANGE);
+        entries.add(ModBlocks.GRAND_SHULKER_BOX_MAGENTA);
+        entries.add(ModBlocks.GRAND_SHULKER_BOX_LIGHT_BLUE);
+        entries.add(ModBlocks.GRAND_SHULKER_BOX_YELLOW);
+        entries.add(ModBlocks.GRAND_SHULKER_BOX_LIME);
+        entries.add(ModBlocks.GRAND_SHULKER_BOX_PINK);
+        entries.add(ModBlocks.GRAND_SHULKER_BOX_GRAY);
+        entries.add(ModBlocks.GRAND_SHULKER_BOX_LIGHT_GRAY);
+        entries.add(ModBlocks.GRAND_SHULKER_BOX_CYAN);
+        entries.add(ModBlocks.GRAND_SHULKER_BOX_PURPLE);
+        entries.add(ModBlocks.GRAND_SHULKER_BOX_BLUE);
+        entries.add(ModBlocks.GRAND_SHULKER_BOX_BROWN);
+        entries.add(ModBlocks.GRAND_SHULKER_BOX_GREEN);
+        entries.add(ModBlocks.GRAND_SHULKER_BOX_RED);
+        entries.add(ModBlocks.GRAND_SHULKER_BOX_BLACK);
+        
+        // Functional Blocks
+        entries.add(ModBlocks.AUTO_CRAFTER_BLOCK);
+        entries.add(ModBlocks.BLOCK_MINER);
+        entries.add(ModBlocks.GROWTH_ACCELERATOR);
+        entries.add(ModBlocks.BLOCK_PLACER);
+        entries.add(ModBlocks.INTERACTOR);
+        entries.add(ModBlocks.PARTICLE_BLOCK);
+        entries.add(ModBlocks.PARTICLE_SINK_BLOCK);
+        entries.add(ModBlocks.PLATE_BLOCK);
+        entries.add(ModBlocks.ALCHEMY_TABLE);
+        entries.add(ModBlocks.OBELISK);
+        entries.add(ModBlocks.ACTIVE_OBELISK);
+        entries.add(ModBlocks.BOSS_OBELISK);
+        entries.add(ModBlocks.BARRIER_CIRCLE);
+        entries.add(ModBlocks.BARRIER_DISTANCE_GLYPH);
+        entries.add(ModBlocks.EFFIGY_FOUNTAIN);
+        entries.add(ModBlocks.ACTIVE_EFFIGY_FOUNTAIN);
+        entries.add(ModBlocks.BINDING_SPELL);
+        entries.add(ModBlocks.ACTIVE_BINDING_SPELL);
+        entries.add(ModBlocks.GUARDIAN_STATUE);
+        entries.add(ModBlocks.PILLAR);
+        entries.add(ModBlocks.DECORATIVE_FOUNTAIN);
+        entries.add(ModBlocks.SOUND_BLOCK);
+        entries.add(ModBlocks.SOUND_BLOCK2);
+        entries.add(ModBlocks.FLOAT_BLOCK);
+        
+        // Silver Building Blocks
+        entries.add(ModBlocks.SILVER_BLOCK);
+        entries.add(ModBlocks.SILVER_STAIRS);
+        entries.add(ModBlocks.SILVER_SLAB);
+        entries.add(ModBlocks.SILVER_BUTTON);
+        entries.add(ModBlocks.SILVER_PRESSURE_PLATE);
+        entries.add(ModBlocks.SILVER_FENCE);
+        entries.add(ModBlocks.SILVER_FENCE_GATE);
+        entries.add(ModBlocks.SILVER_WALL);
+        entries.add(ModBlocks.SILVER_DOOR);
+        entries.add(ModBlocks.SILVER_TRAPDOOR);
+        
+        // Ores
+        entries.add(ModBlocks.SILVER_ORE);
+        entries.add(ModBlocks.DEEPSLATE_SILVER_ORE);
+        entries.add(ModBlocks.CHARCOAL_BLOCK);
+        
+        // Special Items
+        entries.add(METAL_DETECTOR);
+        entries.add(ALCHEMICAL_CATALYST);
+        entries.add(RESONANT_CATALYST);
+        entries.add(OBELISK_COMPASS);
+        entries.add(WEATHERITEM);
+        entries.add(MOD_TOTEM);
+        entries.add(DIMENSION_HOPPER);
+        entries.add(RESPAWN_BEACON);
+        entries.add(DEFIANT_RIFT);
+        entries.add(JOB_APPLICATION);
+        entries.add(NBT_TOOL);
+        entries.add(FIRE_RES_CRYSTAL);
+        entries.add(SPEED_CRYSTAL);
+        entries.add(REPAIR_CHARM);
+        entries.add(MANA_ROCKET);
+        entries.add(DEEP_DARK_DEEP_DISH);
     }
 }

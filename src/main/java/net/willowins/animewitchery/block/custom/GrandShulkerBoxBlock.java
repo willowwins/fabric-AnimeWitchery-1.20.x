@@ -10,7 +10,6 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.DirectionProperty;
-import net.minecraft.state.property.EnumProperty;
 import net.minecraft.state.property.Properties;
 import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
@@ -27,13 +26,16 @@ import org.jetbrains.annotations.Nullable;
 
 public class GrandShulkerBoxBlock extends ShulkerBoxBlock {
     public static final DirectionProperty FACING = Properties.FACING;
-    public static final EnumProperty<DyeColor> COLOR = EnumProperty.of("color", DyeColor.class);
+    private final DyeColor color;
 
-    public GrandShulkerBoxBlock(Settings settings) {
-        super(DyeColor.PURPLE, settings);
-        this.setDefaultState(this.stateManager.getDefaultState()
-                .with(FACING, Direction.UP)
-                .with(COLOR, DyeColor.PURPLE)); // Default to purple like vanilla shulker boxes
+    public GrandShulkerBoxBlock(DyeColor color, Settings settings) {
+        super(color, settings);
+        this.color = color;
+        this.setDefaultState(this.stateManager.getDefaultState().with(FACING, Direction.UP));
+    }
+
+    public DyeColor getColor() {
+        return this.color;
     }
 
     @Override
@@ -42,21 +44,8 @@ public class GrandShulkerBoxBlock extends ShulkerBoxBlock {
     }
 
     @Override
-    public void onPlaced(World world, BlockPos pos, BlockState state, LivingEntity placer, ItemStack itemStack) {
-        if (!world.isClient && itemStack.hasNbt()) {
-            NbtCompound tag = itemStack.getNbt();
-            if (tag != null && tag.contains("BlockEntityTag")) {
-                BlockEntity be = world.getBlockEntity(pos);
-                if (be instanceof GrandShulkerBoxBlockEntity grandBox) {
-                    grandBox.readNbt(tag.getCompound("BlockEntityTag"));
-                }
-            }
-        }
-    }
-
-    @Override
     protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
-        builder.add(FACING, COLOR);
+        builder.add(FACING);
     }
 
     @Override
@@ -70,12 +59,33 @@ public class GrandShulkerBoxBlock extends ShulkerBoxBlock {
         if (!world.isClient) {
             ItemStack itemStack = player.getStackInHand(hand);
             
-            // Check if player is holding a dye
+            // Check if player is holding a dye - handle this FIRST to prevent vanilla behavior
             if (itemStack.getItem() instanceof DyeItem dyeItem) {
                 DyeColor dyeColor = dyeItem.getColor();
-                if (dyeColor != state.get(COLOR)) {
-                    // Change the color of the shulker box
-                    world.setBlockState(pos, state.with(COLOR, dyeColor));
+                if (dyeColor != this.color) {
+                    // Change the color of the Grand Shulker Box by replacing the block
+                    BlockState newState = getColoredBlock(dyeColor).getDefaultState().with(FACING, state.get(FACING));
+                    world.setBlockState(pos, newState);
+                    
+                    // Transfer block entity data
+                    BlockEntity oldEntity = world.getBlockEntity(pos);
+                    if (oldEntity instanceof GrandShulkerBoxBlockEntity oldGrandBox) {
+                        // Store the old data
+                        NbtCompound oldNbt = oldGrandBox.createNbt();
+                        
+                        // Remove the old block entity
+                        world.removeBlockEntity(pos);
+                        
+                        // The new block will create its own block entity automatically
+                        // We'll transfer the data after the block is placed
+                        BlockEntity newEntity = world.getBlockEntity(pos);
+                        if (newEntity instanceof GrandShulkerBoxBlockEntity newGrandBox) {
+                            newGrandBox.readNbt(oldNbt);
+                        }
+                    }
+                    
+                    // Force block update to ensure client synchronization
+                    world.updateListeners(pos, state, newState, 3);
                     
                     // Consume the dye if not in creative mode
                     if (!player.getAbilities().creativeMode) {
@@ -84,6 +94,8 @@ public class GrandShulkerBoxBlock extends ShulkerBoxBlock {
                     
                     return ActionResult.SUCCESS;
                 }
+                // If it's the same color, don't do anything
+                return ActionResult.SUCCESS;
             }
             
             // Open the inventory if not dyeing
@@ -93,6 +105,8 @@ public class GrandShulkerBoxBlock extends ShulkerBoxBlock {
                 return ActionResult.SUCCESS;
             }
         }
+        
+        // Don't call super.onUse() to prevent vanilla shulker box behavior
         return ActionResult.SUCCESS;
     }
 
@@ -104,7 +118,7 @@ public class GrandShulkerBoxBlock extends ShulkerBoxBlock {
                 if (!world.isClient && !world.getBlockState(pos).isOf(this)) {
                     // Create an item stack
                     ItemStack itemStack = new ItemStack(this);
-                    
+
                     // Only add NBT data if the inventory is not empty
                     if (!entity.isEmpty()) {
                         NbtCompound blockEntityTag = entity.createNbtWithIdentifyingData();
@@ -112,7 +126,7 @@ public class GrandShulkerBoxBlock extends ShulkerBoxBlock {
                         itemNbt.put("BlockEntityTag", blockEntityTag);
                         itemStack.setNbt(itemNbt);
                     }
-                    
+
                     // Drop the item with preserved NBT (if any)
                     ItemScatterer.spawn(world, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, itemStack);
                     world.updateComparators(pos, this);
@@ -130,5 +144,27 @@ public class GrandShulkerBoxBlock extends ShulkerBoxBlock {
     @Override
     public int getComparatorOutput(BlockState state, World world, BlockPos pos) {
         return ScreenHandler.calculateComparatorOutput(world.getBlockEntity(pos));
+    }
+
+    // Helper method to get the colored block for a given dye color
+    private static Block getColoredBlock(DyeColor color) {
+        return switch (color) {
+            case WHITE -> net.willowins.animewitchery.block.ModBlocks.GRAND_SHULKER_BOX_WHITE;
+            case ORANGE -> net.willowins.animewitchery.block.ModBlocks.GRAND_SHULKER_BOX_ORANGE;
+            case MAGENTA -> net.willowins.animewitchery.block.ModBlocks.GRAND_SHULKER_BOX_MAGENTA;
+            case LIGHT_BLUE -> net.willowins.animewitchery.block.ModBlocks.GRAND_SHULKER_BOX_LIGHT_BLUE;
+            case YELLOW -> net.willowins.animewitchery.block.ModBlocks.GRAND_SHULKER_BOX_YELLOW;
+            case LIME -> net.willowins.animewitchery.block.ModBlocks.GRAND_SHULKER_BOX_LIME;
+            case PINK -> net.willowins.animewitchery.block.ModBlocks.GRAND_SHULKER_BOX_PINK;
+            case GRAY -> net.willowins.animewitchery.block.ModBlocks.GRAND_SHULKER_BOX_GRAY;
+            case LIGHT_GRAY -> net.willowins.animewitchery.block.ModBlocks.GRAND_SHULKER_BOX_LIGHT_GRAY;
+            case CYAN -> net.willowins.animewitchery.block.ModBlocks.GRAND_SHULKER_BOX_CYAN;
+            case PURPLE -> net.willowins.animewitchery.block.ModBlocks.GRAND_SHULKER_BOX_PURPLE;
+            case BLUE -> net.willowins.animewitchery.block.ModBlocks.GRAND_SHULKER_BOX_BLUE;
+            case BROWN -> net.willowins.animewitchery.block.ModBlocks.GRAND_SHULKER_BOX_BROWN;
+            case GREEN -> net.willowins.animewitchery.block.ModBlocks.GRAND_SHULKER_BOX_GREEN;
+            case RED -> net.willowins.animewitchery.block.ModBlocks.GRAND_SHULKER_BOX_RED;
+            case BLACK -> net.willowins.animewitchery.block.ModBlocks.GRAND_SHULKER_BOX_BLACK;
+        };
     }
 }
