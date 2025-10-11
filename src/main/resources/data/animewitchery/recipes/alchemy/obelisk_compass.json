@@ -3,7 +3,12 @@
   "ingredients": [
     { "item": "minecraft:compass" },
     { "item": "minecraft:echo_shard" },
-    { "item": "animewitchery:resonant_catalyst" }
+    { 
+      "item": "animewitchery:resonant_catalyst",
+      "nbt": {
+        "StoredMana": 10000
+      }
+    }
   ],
   "result": {
     "item": "animewitchery:obelisk_compass",

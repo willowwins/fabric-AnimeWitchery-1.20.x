@@ -11,6 +11,6 @@ public class GrandShulkerBoxSlot extends Slot {
 
     @Override
     public int getMaxItemCount(ItemStack stack) {
-        return 256; // Allow up to 256 items per stack in the Grand Shulker Box
+        return stack.getMaxCount(); // Use the item's default max stack size
     }
 }

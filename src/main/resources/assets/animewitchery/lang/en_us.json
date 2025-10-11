@@ -156,6 +156,7 @@
 
   "block.animewitchery.grand_shulker_box": "§5Grand Shulker Box",
   "item.animewitchery.grand_shulker_box": "§5Grand Shulker Box",
+  "item.animewitchery.rituals_book": "§5Grimoire of the Four Quarters",
 
   "block.animewitchery.float_block": "§bFloat Block",
   "block.animewitchery.barrier_distance_glyph": "§5Barrier Distance Glyph",
@@ -163,10 +164,26 @@
   "block.animewitchery.strawberry_crop": "Strawberry Crop",
   "block.animewitchery.lemon_crop": "Lemon Crop",
 
-  "item.animewitchery.life_rune_stone": "§aLife Rune Stone",
+  "item.animewitchery.resonant_helmet": "§5Resonant Helmet",
+  "item.animewitchery.resonant_chestplate": "§5Resonant Chestplate",
+  "item.animewitchery.resonant_leggings": "§5Resonant Leggings",
+  "item.animewitchery.resonant_boots": "§5Resonant Boots",
+
+  "item.animewitchery.obelisk_compass": "§5Obelisk Compass",
 
   "enchantment.animewitchery.lead_coated_paint": "§7Lead Coated Paint",
   "enchantment.animewitchery.exp_boost": "§6Experience Boost",
 
-  "effect.animewitchery.mana_regen": "§bMana Regeneration"
+  "effect.animewitchery.mana_regen": "§bMana Regeneration",
+
+  "advancements.animewitchery.root.title": "Anime Witchery",
+  "advancements.animewitchery.root.description": "Begin your journey into magical alchemy",
+  
+  "container.animewitchery.alchemy_table": "Alchemy Table",
+  "container.animewitchery.grand_shulker_box": "Grand Shulker Box",
+  "container.animewitchery.auto_crafter": "Auto Crafter",
+  "container.animewitchery.block_miner": "Block Miner",
+  "container.animewitchery.block_placer": "Block Placer",
+  "container.animewitchery.growth_accelerator": "Growth Accelerator",
+  "container.animewitchery.interactor": "Interactor"
 }

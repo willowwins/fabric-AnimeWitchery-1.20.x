@@ -169,11 +169,15 @@ public static final Item KINETIC_BLADE =registerItem("kinetic_breaker",
     
     // Barrier items
     public static final Item BARRIER_CATALYST = registerItem("barrier_catalyst", new Item(new FabricItemSettings().rarity(Rarity.RARE)));
-    public static final Item REPAIR_ESSENCE = registerItem("repair_essence", new Item(new FabricItemSettings().rarity(Rarity.RARE)));
+    public static final Item REPAIR_ESSENCE = registerItem("repair_essence", new RepairEssenceItem(new FabricItemSettings().rarity(Rarity.RARE)));
 
     // Entity spawn eggs
     public static final Item VOID_WISP_SPAWN_EGG = registerItem("void_wisp_spawn_egg", 
             new VoidWispSpawnEggItem(new FabricItemSettings().maxCount(64)));
+
+    // Patchouli book
+    public static final Item RITUALS_BOOK = registerItem("rituals_book", 
+            new net.willowins.animewitchery.item.custom.PatchouliBookItem(new FabricItemSettings().maxCount(1).rarity(Rarity.UNCOMMON), "animewitchery:rituals"));
 
 
     private static void addItemsToIngredientItemGroup(FabricItemGroupEntries entries){
@@ -228,6 +232,9 @@ public static final Item KINETIC_BLADE =registerItem("kinetic_breaker",
         
         // Spawn eggs
         entries.add(VOID_WISP_SPAWN_EGG);
+        
+        // Books
+        entries.add(RITUALS_BOOK);
     }
 
 

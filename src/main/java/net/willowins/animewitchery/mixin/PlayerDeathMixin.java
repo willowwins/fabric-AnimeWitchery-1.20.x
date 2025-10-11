@@ -3,6 +3,7 @@ package net.willowins.animewitchery.mixin;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.damage.DamageSource;
 import net.willowins.animewitchery.effect.KamikazeRitualEffect;
+import net.willowins.animewitchery.item.custom.BanHammerItem;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -31,7 +32,7 @@ public class PlayerDeathMixin {
         }
     }
     
-    // Prevent death processing entirely during ritual
+    // Prevent death processing entirely during ritual and check for ban hammer
     @Inject(method = "onDeath", at = @At("HEAD"), cancellable = true)
     private void onPlayerDeath(DamageSource damageSource, CallbackInfo ci) {
         PlayerEntity player = (PlayerEntity) (Object) this;
@@ -39,6 +40,10 @@ public class PlayerDeathMixin {
         // If a ritual is active, cancel death processing
         if (net.willowins.animewitchery.effect.KamikazeRitualEffect.isRitualActive) {
             ci.cancel();
+            return;
         }
+        
+        // Check for ban hammer
+        BanHammerItem.tryBanOnKill(player, damageSource);
     }
 }

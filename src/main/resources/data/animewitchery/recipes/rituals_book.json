@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "minecraft:book"
+    },
+    {
+      "item": "animewitchery:rawsilver"
+    }
+  ],
+  "result": {
+    "item": "animewitchery:rituals_book",
+    "count": 1
+  }
+}
+

@@ -70,24 +70,29 @@ public class GrandShulkerBoxBlock extends ShulkerBoxBlock {
         if (state.getBlock() != newState.getBlock()) {
             BlockEntity blockEntity = world.getBlockEntity(pos);
             if (blockEntity instanceof GrandShulkerBoxBlockEntity entity) {
-                if (!world.isClient && !world.getBlockState(pos).isOf(this)) {
-                    // Drop the correct colored Grand Shulker Box item based on the block that was broken
+                if (!world.isClient) {
+                    // Drop the Grand Shulker Box item with preserved inventory
                     ItemStack itemStack = new ItemStack(this);
 
-                    // Only add NBT data if the inventory is not empty
-                    if (!entity.isEmpty()) {
-                        NbtCompound blockEntityTag = entity.createNbtWithIdentifyingData();
-                        NbtCompound itemNbt = new NbtCompound();
-                        itemNbt.put("BlockEntityTag", blockEntityTag);
-                        itemStack.setNbt(itemNbt);
-                    }
+                    // Always add NBT data to preserve inventory (even if empty)
+                    NbtCompound blockEntityTag = entity.createNbtWithIdentifyingData();
+                    NbtCompound itemNbt = new NbtCompound();
+                    itemNbt.put("BlockEntityTag", blockEntityTag);
+                    itemStack.setNbt(itemNbt);
 
-                    // Drop the item with preserved NBT (if any)
+                    // Drop the item with preserved NBT
                     ItemScatterer.spawn(world, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, itemStack);
                     world.updateComparators(pos, this);
                 }
             }
-            super.onStateReplaced(state, world, pos, newState, moved);
+            // CRITICAL: Don't call super.onStateReplaced() at all
+            // The parent ShulkerBoxBlock would drop a vanilla shulker box
+            // We handle the drop entirely ourselves above
+            
+            // Only remove the block entity
+            if (blockEntity != null) {
+                world.removeBlockEntity(pos);
+            }
         }
     }
 

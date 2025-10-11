@@ -5,7 +5,10 @@
       "item": "animewitchery:chalk"
     },
     {
-      "item": "animewitchery:alchemical_catalyst"
+      "item": "animewitchery:alchemical_catalyst",
+      "nbt": {
+        "StoredMana": 10000
+      }
     },
     {
       "item": "minecraft:glow_ink_sac"

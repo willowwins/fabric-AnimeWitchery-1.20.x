@@ -1,7 +1,7 @@
 {
-  "name": "Table of Transmutations",
-  "description": "The observances of the Alchemy Table: its workings, the Spark, and the stones it brings forth.",
+  "id": "alchemy",
+  "name": "Alchemy",
+  "description": "The Alchemy Table and its recipes",
   "icon": "animewitchery:alchemy_table"
 }
-
 

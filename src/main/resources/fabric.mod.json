@@ -40,9 +40,9 @@
 		"java": ">=17",
 		"geckolib": "*",
 		"lodestone": "*",
-		"veil": "*",
 		"trinkets": "*",
-		"fabric-api": "*"
+		"fabric-api": "*",
+		"patchouli": "*"
 	},
 	"suggests": {
 		"another-mod": "*"

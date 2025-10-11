@@ -2,6 +2,9 @@ package net.willowins.animewitchery.item.custom;
 
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
+import net.fabricmc.fabric.api.tag.convention.v1.ConventionalBlockTags;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.attribute.EntityAttribute;
@@ -13,7 +16,11 @@ import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.MiningToolItem;
+import net.minecraft.item.ToolMaterial;
 import net.minecraft.particle.ParticleTypes;
+import net.minecraft.registry.tag.BlockTags;
+import net.minecraft.registry.tag.TagKey;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
@@ -21,9 +28,11 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
 import net.minecraft.util.UseAction;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.willowins.animewitchery.entity.KineticBladeHitboxEntity;
+import net.willowins.animewitchery.item.ModToolMaterial;
 import net.willowins.animewitchery.mana.IManaComponent;
 import net.willowins.animewitchery.mana.ModComponents;
 
@@ -31,7 +40,7 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.WeakHashMap;
 
-public class KineticBladeItem extends Item {
+public class KineticBladeItem extends MiningToolItem {
 
     private static final float BASE_DAMAGE = 7.0f;
     private static final int BOOST_MANA_COST = 500;
@@ -39,39 +48,139 @@ public class KineticBladeItem extends Item {
 
     private static final UUID ATTACK_DAMAGE_MODIFIER_ID = UUID.fromString("fa233e1c-4180-4865-b01b-bcce9785aca3");
     private static final UUID ATTACK_SPEED_MODIFIER_ID = UUID.fromString("22653b89-116e-49dc-9b6b-9971489b5be5");
-    private final Multimap<EntityAttribute, EntityAttributeModifier> attributeModifiers;
+
+    // Create a custom tool material with mining level 5
+    private static final ToolMaterial KINETIC_MATERIAL = new ToolMaterial() {
+        @Override
+        public int getDurability() {
+            return 3000; // High durability
+        }
+
+        @Override
+        public float getMiningSpeedMultiplier() {
+            return 15.0f; // Very fast mining speed
+        }
+
+        @Override
+        public float getAttackDamage() {
+            return 7.0f; // Base attack damage
+        }
+
+        @Override
+        public int getMiningLevel() {
+            return 5; // Level 5 mining (can mine anything)
+        }
+
+        @Override
+        public int getEnchantability() {
+            return 25;
+        }
+
+        @Override
+        public net.minecraft.recipe.Ingredient getRepairIngredient() {
+            return net.minecraft.recipe.Ingredient.ofItems(net.willowins.animewitchery.item.ModItems.RESONANT_CATALYST);
+        }
+    };
 
     public KineticBladeItem(Settings settings) {
-        super(settings);
-        ImmutableMultimap.Builder<EntityAttribute, EntityAttributeModifier> builder = ImmutableMultimap.builder();
-        builder.put(EntityAttributes.GENERIC_ATTACK_DAMAGE,
-                new EntityAttributeModifier(ATTACK_DAMAGE_MODIFIER_ID, "Weapon modifier", 7.0, EntityAttributeModifier.Operation.ADDITION));
-        builder.put(EntityAttributes.GENERIC_ATTACK_SPEED,
-                new EntityAttributeModifier(ATTACK_SPEED_MODIFIER_ID, "Weapon modifier", -2.4, EntityAttributeModifier.Operation.ADDITION));
-        this.attributeModifiers = builder.build();
+        super(7.0f, -2.4f, KINETIC_MATERIAL, BlockTags.PICKAXE_MINEABLE, settings);
     }
 
-
-    public Multimap<EntityAttribute, EntityAttributeModifier> getAttributeModifiers(EquipmentSlot slot, ItemStack stack) {
-        if (slot == EquipmentSlot.MAINHAND) {
-            return this.attributeModifiers;
+    @Override
+    public float getMiningSpeedMultiplier(ItemStack stack, BlockState state) {
+        // Make it effective on both pickaxe and axe blocks
+        if (state.isIn(BlockTags.PICKAXE_MINEABLE) || state.isIn(BlockTags.AXE_MINEABLE)) {
+            return this.miningSpeed;
         }
-        return super.getAttributeModifiers( stack,slot);
+        return super.getMiningSpeedMultiplier(stack, state);
     }
 
-    // === Right-click behavior (now restricted to Elytra flight) ===
+    @Override
+    public boolean isSuitableFor(BlockState state) {
+        // Allow mining both pickaxe and axe blocks
+        return state.isIn(BlockTags.PICKAXE_MINEABLE) || state.isIn(BlockTags.AXE_MINEABLE);
+    }
+
+    // === Wood stripping functionality ===
+    @Override
+    public net.minecraft.util.ActionResult useOnBlock(net.minecraft.item.ItemUsageContext context) {
+        World world = context.getWorld();
+        BlockPos pos = context.getBlockPos();
+        BlockState state = world.getBlockState(pos);
+        PlayerEntity player = context.getPlayer();
+
+        // Only strip wood when not gliding
+        if (player != null && player.isFallFlying()) {
+            return net.minecraft.util.ActionResult.PASS;
+        }
+
+        // Get the stripped version of the block
+        BlockState strippedState = getStrippedState(state);
+        
+        if (strippedState != null) {
+            // Play the stripping sound
+            world.playSound(player, pos, SoundEvents.ITEM_AXE_STRIP, SoundCategory.BLOCKS, 1.0F, 1.0F);
+            
+            if (!world.isClient) {
+                // Set the stripped block
+                world.setBlockState(pos, strippedState, 11);
+                
+                // Damage the tool
+                if (player != null) {
+                    context.getStack().damage(1, player, (p) -> p.sendToolBreakStatus(context.getHand()));
+                }
+            }
+            
+            return net.minecraft.util.ActionResult.success(world.isClient);
+        }
+        
+        return net.minecraft.util.ActionResult.PASS;
+    }
+
+    // Map of logs/wood to their stripped versions
+    private BlockState getStrippedState(BlockState state) {
+        Block block = state.getBlock();
+        
+        // Vanilla logs
+        if (block == net.minecraft.block.Blocks.OAK_LOG) return net.minecraft.block.Blocks.STRIPPED_OAK_LOG.getDefaultState();
+        if (block == net.minecraft.block.Blocks.SPRUCE_LOG) return net.minecraft.block.Blocks.STRIPPED_SPRUCE_LOG.getDefaultState();
+        if (block == net.minecraft.block.Blocks.BIRCH_LOG) return net.minecraft.block.Blocks.STRIPPED_BIRCH_LOG.getDefaultState();
+        if (block == net.minecraft.block.Blocks.JUNGLE_LOG) return net.minecraft.block.Blocks.STRIPPED_JUNGLE_LOG.getDefaultState();
+        if (block == net.minecraft.block.Blocks.ACACIA_LOG) return net.minecraft.block.Blocks.STRIPPED_ACACIA_LOG.getDefaultState();
+        if (block == net.minecraft.block.Blocks.DARK_OAK_LOG) return net.minecraft.block.Blocks.STRIPPED_DARK_OAK_LOG.getDefaultState();
+        if (block == net.minecraft.block.Blocks.MANGROVE_LOG) return net.minecraft.block.Blocks.STRIPPED_MANGROVE_LOG.getDefaultState();
+        if (block == net.minecraft.block.Blocks.CHERRY_LOG) return net.minecraft.block.Blocks.STRIPPED_CHERRY_LOG.getDefaultState();
+        
+        // Vanilla wood blocks
+        if (block == net.minecraft.block.Blocks.OAK_WOOD) return net.minecraft.block.Blocks.STRIPPED_OAK_WOOD.getDefaultState();
+        if (block == net.minecraft.block.Blocks.SPRUCE_WOOD) return net.minecraft.block.Blocks.STRIPPED_SPRUCE_WOOD.getDefaultState();
+        if (block == net.minecraft.block.Blocks.BIRCH_WOOD) return net.minecraft.block.Blocks.STRIPPED_BIRCH_WOOD.getDefaultState();
+        if (block == net.minecraft.block.Blocks.JUNGLE_WOOD) return net.minecraft.block.Blocks.STRIPPED_JUNGLE_WOOD.getDefaultState();
+        if (block == net.minecraft.block.Blocks.ACACIA_WOOD) return net.minecraft.block.Blocks.STRIPPED_ACACIA_WOOD.getDefaultState();
+        if (block == net.minecraft.block.Blocks.DARK_OAK_WOOD) return net.minecraft.block.Blocks.STRIPPED_DARK_OAK_WOOD.getDefaultState();
+        if (block == net.minecraft.block.Blocks.MANGROVE_WOOD) return net.minecraft.block.Blocks.STRIPPED_MANGROVE_WOOD.getDefaultState();
+        if (block == net.minecraft.block.Blocks.CHERRY_WOOD) return net.minecraft.block.Blocks.STRIPPED_CHERRY_WOOD.getDefaultState();
+        
+        // Nether stems
+        if (block == net.minecraft.block.Blocks.CRIMSON_STEM) return net.minecraft.block.Blocks.STRIPPED_CRIMSON_STEM.getDefaultState();
+        if (block == net.minecraft.block.Blocks.WARPED_STEM) return net.minecraft.block.Blocks.STRIPPED_WARPED_STEM.getDefaultState();
+        if (block == net.minecraft.block.Blocks.CRIMSON_HYPHAE) return net.minecraft.block.Blocks.STRIPPED_CRIMSON_HYPHAE.getDefaultState();
+        if (block == net.minecraft.block.Blocks.WARPED_HYPHAE) return net.minecraft.block.Blocks.STRIPPED_WARPED_HYPHAE.getDefaultState();
+        
+        // Bamboo
+        if (block == net.minecraft.block.Blocks.BAMBOO_BLOCK) return net.minecraft.block.Blocks.STRIPPED_BAMBOO_BLOCK.getDefaultState();
+        
+        return null;
+    }
+
+    // === Right-click behavior ===
     @Override
     public TypedActionResult<ItemStack> use(World world, PlayerEntity player, Hand hand) {
         ItemStack stack = player.getStackInHand(hand);
 
-        // ❌ Block use unless the player is fall-flying (Elytra gliding)
+        // If not gliding, allow normal use (for wood stripping via useOnBlock)
         if (!player.isFallFlying()) {
-            if (!world.isClient) {
-                player.sendMessage(Text.literal("§7§oYou must be gliding to channel kinetic energy."), true);
-                world.playSound(null, player.getX(), player.getY(), player.getZ(),
-                        SoundEvents.ENTITY_PHANTOM_FLAP, SoundCategory.PLAYERS, 0.5f, 0.7f);
-            }
-            return TypedActionResult.fail(stack);
+            return TypedActionResult.pass(stack);
         }
 
         if (!world.isClient) {
@@ -213,8 +322,10 @@ public class KineticBladeItem extends Item {
 
         target.damage(world.getDamageSources().playerAttack(player), finalDamage);
 
-        // 🛡 Apply Resistance V for 1 second on melee hit
-        player.addStatusEffect(new StatusEffectInstance(StatusEffects.RESISTANCE, 20, 4, false, false, true));
+        // 🛡 Apply Resistance V for 1 second on melee hit - only when gliding
+        if (player.isFallFlying()) {
+            player.addStatusEffect(new StatusEffectInstance(StatusEffects.RESISTANCE, 20, 4, false, false, true));
+        }
 
         if (!world.isClient) {
             world.playSound(null, player.getX(), player.getY(), player.getZ(),

@@ -2,7 +2,7 @@
   "type": "animewitchery:alchemy",
   "ingredients": [
     {
-      "item": "minecraft:stone"
+      "item": "animewitchery:rune_stone"
     },
     {
       "item": "animewitchery:amethyst_dust"

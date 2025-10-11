@@ -48,6 +48,7 @@ import net.willowins.animewitchery.world.ObeliskWorldListener;
 import net.willowins.animewitchery.world.gen.ModWorldGeneration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import vazkii.patchouli.api.PatchouliAPI;
 
 public class AnimeWitchery implements ModInitializer {
 	public static final String MOD_ID = "animewitchery";
@@ -86,6 +87,9 @@ public class AnimeWitchery implements ModInitializer {
 
 		ModItems.registerModItems();
 		ModBlocks.registerModBlocks();
+
+		// Register Patchouli book
+		PatchouliAPI.get().setConfigFlag("animewitchery:rituals", true);
 
 		ManaTicker.register();
 
@@ -128,6 +132,15 @@ public class AnimeWitchery implements ModInitializer {
 		ModWorldGeneration.generateModWorldGen();
 		// Register explosion absorber hook
 		BarrierExplosionHandler.register();
+		
+		// Register barrier interaction handler (allows unauthorized players to interact with barrier circles)
+		BarrierInteractionHandler.register();
+		
+		// Register barrier collision handler (prevents unauthorized entry)
+		BarrierCollisionHandler.register();
+		
+		// Register barrier protection handler (prevents unauthorized block breaking/interaction)
+		BarrierProtectionHandler.register();
 
 		ModExplosionManager.init();
 

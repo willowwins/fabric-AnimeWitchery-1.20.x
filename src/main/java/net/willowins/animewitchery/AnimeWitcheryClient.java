@@ -39,7 +39,7 @@ import net.willowins.animewitchery.screen.*;
 import net.willowins.animewitchery.client.sky.SkyRitualRenderer;
 import net.fabricmc.fabric.api.client.rendering.v1.BuiltinItemRendererRegistry;
 import net.willowins.animewitchery.item.renderer.ObeliskBuiltinItemRenderer;
-import net.willowins.animewitchery.client.shader.VoidBoundShaderRenderer;
+import net.willowins.animewitchery.client.shader.VoidBoundPostProcessor;
 
 
 
@@ -103,8 +103,8 @@ public class AnimeWitcheryClient implements ClientModInitializer {
 
         BuiltinItemRendererRegistry.INSTANCE.register(ModBlocks.OBELISK.asItem(), new ObeliskBuiltinItemRenderer());
 
-        VoidBoundShaderRenderer.cleanup();
-        VoidBoundShaderRenderer.init();
+        VoidBoundPostProcessor.cleanup();
+        VoidBoundPostProcessor.init();
         ModelPredicateProviderRegistry.register(
                 Items.CROSSBOW,
                 new Identifier("animewitchery", "mana_charged"),

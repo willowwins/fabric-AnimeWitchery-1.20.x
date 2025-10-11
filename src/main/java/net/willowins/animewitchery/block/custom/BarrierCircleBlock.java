@@ -6,6 +6,7 @@ import net.minecraft.block.entity.BlockEntityTicker;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
@@ -56,6 +57,85 @@ public class BarrierCircleBlock extends BlockWithEntity {
             if (blockEntity instanceof BarrierCircleBlockEntity circleEntity) {
                 ItemStack heldItem = player.getStackInHand(hand);
                 
+                // Paper with custom name adds/removes player from allowlist
+                if (heldItem.isOf(net.minecraft.item.Items.PAPER) && heldItem.hasCustomName()) {
+                    String rawName = heldItem.getName().getString();
+                    
+                    // Check if name is in quotation marks (for removal)
+                    boolean isRemoval = rawName.startsWith("\"") && rawName.endsWith("\"");
+                    String playerName = isRemoval ? rawName.substring(1, rawName.length() - 1) : rawName;
+                    
+                    // Find player by name - try both online and user cache
+                    if (world instanceof net.minecraft.server.world.ServerWorld serverWorld) {
+                        java.util.UUID targetUUID = null;
+                        
+                        // First try to find online player
+                        net.minecraft.server.network.ServerPlayerEntity onlinePlayer = serverWorld.getServer().getPlayerManager().getPlayer(playerName);
+                        if (onlinePlayer != null) {
+                            targetUUID = onlinePlayer.getUuid();
+                        } else {
+                            // If not online, try user cache (for offline players or current player)
+                            targetUUID = serverWorld.getServer().getUserCache()
+                                    .findByName(playerName)
+                                    .map(com.mojang.authlib.GameProfile::getId)
+                                    .orElse(null);
+                        }
+                        
+                        if (targetUUID != null) {
+                            if (isRemoval) {
+                                // Remove player from allowlist
+                                circleEntity.removeAllowedPlayer(targetUUID);
+                                
+                                // Consume the paper
+                                heldItem.decrement(1);
+                                
+                                // Play sound
+                                world.playSound(null, pos, net.minecraft.sound.SoundEvents.BLOCK_ENCHANTMENT_TABLE_USE, 
+                                              net.minecraft.sound.SoundCategory.BLOCKS, 1.0f, 0.8f);
+                                
+                                // Send message
+                                player.sendMessage(
+                                    Text.literal("✗ " + playerName + " has been revoked passage through the barrier.")
+                                        .formatted(net.minecraft.util.Formatting.YELLOW),
+                                    true
+                                );
+                            } else {
+                                // Add player to allowlist
+                                circleEntity.addAllowedPlayer(targetUUID);
+                                
+                                // Consume the paper
+                                heldItem.decrement(1);
+                                
+                                // Play success sound
+                                world.playSound(null, pos, net.minecraft.sound.SoundEvents.BLOCK_ENCHANTMENT_TABLE_USE, 
+                                              net.minecraft.sound.SoundCategory.BLOCKS, 1.0f, 1.2f);
+                                
+                                // Send success message
+                                player.sendMessage(
+                                    Text.literal("✓ " + playerName + " has been granted passage through the barrier.")
+                                        .formatted(net.minecraft.util.Formatting.GREEN),
+                                    true
+                                );
+                            }
+                            
+                            return ActionResult.SUCCESS;
+                        } else {
+                            // Player not found
+                            player.sendMessage(
+                                Text.literal("⚠️ No player named '" + playerName + "' was found.")
+                                    .formatted(net.minecraft.util.Formatting.RED),
+                                true
+                            );
+                            
+                            // Play failure sound
+                            world.playSound(null, pos, SoundEvents.BLOCK_NOTE_BLOCK_BASS.value(), 
+                                          SoundCategory.BLOCKS, 0.5f, 0.5f);
+                            
+                            return ActionResult.SUCCESS;
+                        }
+                    }
+                }
+                
                 // Normal Chalk can convert this to a distance glyph
                 if (heldItem.isOf(ModItems.CHALK)) {
                     System.out.println("BarrierCircle: Converting to BARRIER_DISTANCE_GLYPH");
@@ -91,6 +171,23 @@ public class BarrierCircleBlock extends BlockWithEntity {
                 
                 // RITUAL ACTIVATION: Alchemy Catalyst activates the ritual
                 if (heldItem.isOf(ModItems.ALCHEMICAL_CATALYST)) {
+                    // Check if catalyst is full before proceeding
+                    int storedMana = net.willowins.animewitchery.item.custom.AlchemicalCatalystItem.getStoredMana(heldItem);
+                    int maxMana = net.willowins.animewitchery.item.custom.AlchemicalCatalystItem.MAX_MANA;
+                    
+                    if (storedMana < maxMana) {
+                        if (!world.isClient) {
+                            player.sendMessage(
+                                Text.literal("⚠️ The catalyst must brim with power before the ritual may begin.")
+                                    .formatted(net.minecraft.util.Formatting.GRAY),
+                                true
+                            );
+                        }
+                        // Play failure sound
+                        world.playSound(null, pos, SoundEvents.BLOCK_NOTE_BLOCK_BASS.value(), SoundCategory.BLOCKS, 0.5f, 0.5f);
+                        return ActionResult.SUCCESS;
+                    }
+                    
                     if (circleEntity.getStage() == BarrierCircleBlockEntity.CircleStage.COMPLETE && world.isSkyVisible(pos)) {
                         System.out.println("BarrierCircle: Attempting ritual activation...");
                         if (checkRitualObelisks(world, pos)) {
@@ -162,8 +259,8 @@ public class BarrierCircleBlock extends BlockWithEntity {
     }
     
     private BlockPos findDistanceGlyph(World world, BlockPos circlePos, Direction direction) {
-        // Scan from 0 to 25 blocks in the specified direction
-        for (int distance = 0; distance <= 25; distance++) {
+        // Scan from 0 to 100 blocks in the specified direction
+        for (int distance = 0; distance <= 100; distance++) {
             BlockPos checkPos = circlePos.offset(direction, distance);
             if (world.getBlockState(checkPos).isOf(ModBlocks.BARRIER_DISTANCE_GLYPH)) {
                 return checkPos;

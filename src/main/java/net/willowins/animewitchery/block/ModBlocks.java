@@ -166,7 +166,7 @@ public class ModBlocks {
 
         // Register Grand Shulker Box item
         Registry.register(Registries.ITEM, new Identifier(AnimeWitchery.MOD_ID, "grand_shulker_box"),
-                new net.willowins.animewitchery.item.custom.GrandShulkerBoxItem(GRAND_SHULKER_BOX, new FabricItemSettings()));
+                new net.willowins.animewitchery.item.custom.GrandShulkerBoxItem(GRAND_SHULKER_BOX, new FabricItemSettings().maxCount(1)));
 
         // Register block entity type
         GRAND_SHULKER_BOX_ENTITY = Registry.register(

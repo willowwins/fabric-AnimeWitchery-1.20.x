@@ -453,7 +453,7 @@ public class BarrierCircleBlockEntity extends BlockEntity {
         System.out.println("BarrierCircle: Allowed players captured = " + allowedPlayerUuids.size());
     }
 
-    private double[] computeExtents() {
+    public double[] computeExtents() {
         // Check if we have a ritual configuration
         if (ritualConfiguration != null) {
             if (ritualConfiguration.getRitualType() == RitualConfiguration.RitualType.BARRIER) {
@@ -495,6 +495,22 @@ public class BarrierCircleBlockEntity extends BlockEntity {
 
     private boolean isPlayerAllowed(ServerPlayerEntity player) {
         return allowedPlayerUuids.contains(player.getUuid());
+    }
+
+    public boolean isPlayerAllowedByUuid(UUID playerUuid) {
+        return allowedPlayerUuids.contains(playerUuid);
+    }
+
+    public void addAllowedPlayer(UUID playerUuid) {
+        allowedPlayerUuids.add(playerUuid);
+        markDirty();
+        System.out.println("BarrierCircle: Added player to allowlist. Total allowed: " + allowedPlayerUuids.size());
+    }
+
+    public void removeAllowedPlayer(UUID playerUuid) {
+        allowedPlayerUuids.remove(playerUuid);
+        markDirty();
+        System.out.println("BarrierCircle: Removed player from allowlist. Total allowed: " + allowedPlayerUuids.size());
     }
 
     private void enforceBarrier() {
@@ -684,8 +700,8 @@ public class BarrierCircleBlockEntity extends BlockEntity {
     }
     
     private BlockPos findDistanceGlyph(BlockPos circlePos, Direction direction) {
-        // Scan from 0 to 25 blocks in the specified direction
-        for (int distance = 0; distance <= 25; distance++) {
+        // Scan from 0 to 100 blocks in the specified direction
+        for (int distance = 0; distance <= 100; distance++) {
             BlockPos checkPos = circlePos.offset(direction, distance);
             if (world.getBlockState(checkPos).isOf(ModBlocks.BARRIER_DISTANCE_GLYPH)) {
                 return checkPos;

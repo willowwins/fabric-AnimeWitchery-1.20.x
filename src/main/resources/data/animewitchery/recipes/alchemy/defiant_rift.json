@@ -1,0 +1,48 @@
+{
+  "type": "animewitchery:alchemy",
+  "ingredients": [
+    {
+      "item": "minecraft:netherite_sword"
+    },
+    {
+      "item": "animewitchery:obelisk_shard"
+    },
+    {
+      "item": "animewitchery:obelisk_shard"
+    },
+    {
+      "item": "minecraft:wither_skeleton_skull"
+    },
+    {
+      "item": "animewitchery:death_rune_stone"
+    },
+    {
+      "item": "animewitchery:darkness_rune_stone"
+    },
+    {
+      "item": "minecraft:totem_of_undying"
+    },
+    {
+      "item": "minecraft:nether_star"
+    },
+    {
+      "item": "animewitchery:blood_rune_stone"
+    },
+    {
+      "item": "animewitchery:resonant_catalyst",
+      "nbt": {
+        "StoredMana": 10000
+      }
+    }
+  ],
+  "result": {
+    "item": "animewitchery:defiant_rift",
+    "count": 1
+  },
+  "xp_cost": 60,
+  "processing_time": 2400
+}
+
+
+
+
