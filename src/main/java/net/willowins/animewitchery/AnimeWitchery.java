@@ -14,7 +14,6 @@ import net.fabricmc.fabric.api.registry.FuelRegistry;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRegistry;
 import net.kyrptonaught.customportalapi.api.CustomPortalBuilder;
 import net.minecraft.block.Blocks;
-import net.minecraft.client.item.ModelPredicateProviderRegistry;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.ActionResult;
@@ -136,7 +135,14 @@ public class AnimeWitchery implements ModInitializer {
 
 		FuelRegistry.INSTANCE.add(ModBlocks.CHARCOAL_BLOCK, 16000);
 
-		ModWorldGeneration.generateModWorldGen();
+		// Initialize world generation (ore generation)
+		try {
+			ModWorldGeneration.generateModWorldGen();
+			LOGGER.info("✅ World generation initialized successfully");
+		} catch (Exception e) {
+			LOGGER.error("❌ Failed to initialize world generation: " + e.getMessage());
+			e.printStackTrace();
+		}
 		// Register explosion absorber hook
 		BarrierExplosionHandler.register();
 		
@@ -199,13 +205,6 @@ public class AnimeWitchery implements ModInitializer {
 				}
 			});
 		});
-		ModelPredicateProviderRegistry.register(ModItems.OBELISK_COMPASS, new Identifier("angle"),
-				(stack, world, entity, seed) -> {
-					if (stack.hasNbt()) {
-						return stack.getNbt().getFloat("ObeliskCompassAngle") / 360f;
-					}
-					return 0f;
-				});
 
 	}
 }

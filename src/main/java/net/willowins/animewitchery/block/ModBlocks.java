@@ -25,6 +25,11 @@ public class ModBlocks {
        ---------------------------------------------------------- */
     public static Block GRAND_SHULKER_BOX;
     public static BlockEntityType<GrandShulkerBoxBlockEntity> GRAND_SHULKER_BOX_ENTITY;
+    
+    /* ----------------------------------------------------------
+       🔒 PROTECTED CHEST (DEFERRED REGISTRATION)
+       ---------------------------------------------------------- */
+    public static Block PROTECTED_CHEST;
 
     /* ----------------------------------------------------------
        ⚙️ OTHER BLOCKS
@@ -182,6 +187,22 @@ public class ModBlocks {
         );
 
         AnimeWitchery.LOGGER.info("✅ Registered Grand Shulker Box successfully.");
+        
+        // 🔒 Create & register Protected Chest
+        PROTECTED_CHEST = new ProtectedChestBlock(
+                FabricBlockSettings.copyOf(Blocks.CHEST)
+        );
+
+        // Register Protected Chest
+        Registry.register(Registries.BLOCK, new Identifier(AnimeWitchery.MOD_ID, "protected_chest"), PROTECTED_CHEST);
+
+        // Register Protected Chest item
+        Registry.register(Registries.ITEM, new Identifier(AnimeWitchery.MOD_ID, "protected_chest"),
+                new BlockItem(PROTECTED_CHEST, new FabricItemSettings()));
+
+        // Note: Protected Chest uses vanilla TrappedChestBlockEntity, no custom block entity type needed
+
+        AnimeWitchery.LOGGER.info("✅ Registered Protected Chest successfully.");
     }
 
     /* ----------------------------------------------------------
