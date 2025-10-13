@@ -23,13 +23,13 @@
     "PlayerEntityMixin",
     "LivingEntityMixin2",
     "ExplosionMixin",
-    "PlayerRendererMixin",
     "PlayerDeathMixin",
     "CrossbowItemMixin",
     "ParadiseLostWeatherMixin"
 
   ],
   "client": [
+    "PlayerRendererMixin",
     "ItemRendererAccessor",
     "ItemRendererMixin",
     "ModelLoaderMixin",

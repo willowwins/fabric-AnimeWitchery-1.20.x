@@ -56,6 +56,11 @@ public class ProtectedChestBlockEntity extends TrappedChestBlockEntity {
     }
 
     @Override
+    public BlockEntityType<?> getType() {
+        return BlockEntityType.TRAPPED_CHEST;
+    }
+
+    @Override
     protected Text getContainerName() {
         return Text.literal("Protected Chest");
     }
