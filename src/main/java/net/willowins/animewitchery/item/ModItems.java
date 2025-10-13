@@ -52,8 +52,20 @@ public static final Item OBELISK_COMPASS =registerItem("obelisk_compass",
     public static final Item NEEDLE =registerItem("needle",
             new NeedleItem(ModToolMaterial.SILVER,4,-2.2f,new FabricItemSettings().maxCount(1)));
 
+    public static final Item SILVER_SWORD =registerItem("silver_sword",
+            new SwordItem(ModToolMaterial.SILVER,3, -2.4f,new FabricItemSettings()));
+
     public static final Item SILVER_PICKAXE =registerItem("silver_pickaxe",
             new PickaxeItem(ModToolMaterial.SILVER,0, -3f,new FabricItemSettings()));
+
+    public static final Item SILVER_AXE =registerItem("silver_axe",
+            new AxeItem(ModToolMaterial.SILVER,6, -3.1f,new FabricItemSettings()));
+
+    public static final Item SILVER_SHOVEL =registerItem("silver_shovel",
+            new ShovelItem(ModToolMaterial.SILVER,1.5f, -3f,new FabricItemSettings()));
+
+    public static final Item SILVER_HOE =registerItem("silver_hoe",
+            new HoeItem(ModToolMaterial.SILVER,-2, 0f,new FabricItemSettings()));
 
     public static final Item SILVER_HELMET =registerItem("silver_helmet",
             new ModArmorItem(ModArmorMaterials.SILVER,ArmorItem.Type.HELMET,new FabricItemSettings()));
@@ -93,6 +105,20 @@ public static final Item OBELISK_COMPASS =registerItem("obelisk_compass",
     public static final Item RESONANT_BOOTS =registerItem("resonant_boots",
             new ResonantArmorItem(ModArmorMaterials.RESONANT,ArmorItem.Type.BOOTS,new FabricItemSettings()));
 
+    public static final Item RESONANT_SWORD =registerItem("resonant_sword",
+            new SwordItem(ModToolMaterial.RESONANT,3, -2.4f,new FabricItemSettings()));
+
+    public static final Item RESONANT_PICKAXE =registerItem("resonant_pickaxe",
+            new PickaxeItem(ModToolMaterial.RESONANT,1, -2.8f,new FabricItemSettings()));
+
+    public static final Item RESONANT_AXE =registerItem("resonant_axe",
+            new AxeItem(ModToolMaterial.RESONANT,6, -3.1f,new FabricItemSettings()));
+
+    public static final Item RESONANT_SHOVEL =registerItem("resonant_shovel",
+            new ShovelItem(ModToolMaterial.RESONANT,1.5f, -3f,new FabricItemSettings()));
+
+    public static final Item RESONANT_HOE =registerItem("resonant_hoe",
+            new HoeItem(ModToolMaterial.RESONANT,-2, 0f,new FabricItemSettings()));
 
     public static final Item LEMON =registerItem("lemon", new Item(new FabricItemSettings().food(ModFoodComponents.LEMON)));
 
@@ -179,6 +205,36 @@ public static final Item KINETIC_BLADE =registerItem("kinetic_breaker",
     public static final Item RITUALS_BOOK = registerItem("rituals_book", 
             new net.willowins.animewitchery.item.custom.PatchouliBookItem(new FabricItemSettings().maxCount(1).rarity(Rarity.UNCOMMON), "animewitchery:rituals"));
 
+    // Magic wand
+    public static final Item WAND = registerItem("wand", 
+            new net.willowins.animewitchery.item.custom.WandItem(new FabricItemSettings().maxCount(1).rarity(Rarity.RARE)));
+
+    // Spellbook
+    public static final Item SPELLBOOK = registerItem("spellbook",
+            new net.willowins.animewitchery.item.custom.SpellbookItem(new FabricItemSettings().maxCount(1).rarity(Rarity.EPIC)));
+    
+    // Spellbook Page
+    public static final Item SPELLBOOK_PAGE = registerItem("spellbook_page",
+            new net.willowins.animewitchery.item.custom.SpellbookPageItem(new FabricItemSettings().maxCount(1).rarity(Rarity.RARE)));
+
+    // Spell Scrolls
+    public static final Item FIRE_SPELL_SCROLL = registerItem("fire_spell_scroll",
+            new net.willowins.animewitchery.item.custom.SpellScrollItem(new FabricItemSettings().maxCount(1).rarity(Rarity.UNCOMMON), "Fire Blast"));
+    public static final Item WATER_SPELL_SCROLL = registerItem("water_spell_scroll",
+            new net.willowins.animewitchery.item.custom.SpellScrollItem(new FabricItemSettings().maxCount(1).rarity(Rarity.UNCOMMON), "Water Shield"));
+    public static final Item EARTH_SPELL_SCROLL = registerItem("earth_spell_scroll",
+            new net.willowins.animewitchery.item.custom.SpellScrollItem(new FabricItemSettings().maxCount(1).rarity(Rarity.UNCOMMON), "Earth Spike"));
+    public static final Item AIR_SPELL_SCROLL = registerItem("air_spell_scroll",
+            new net.willowins.animewitchery.item.custom.SpellScrollItem(new FabricItemSettings().maxCount(1).rarity(Rarity.UNCOMMON), "Wind Gust"));
+    public static final Item LIFE_SPELL_SCROLL = registerItem("life_spell_scroll",
+            new net.willowins.animewitchery.item.custom.SpellScrollItem(new FabricItemSettings().maxCount(1).rarity(Rarity.UNCOMMON), "Healing Wave"));
+    public static final Item DEATH_SPELL_SCROLL = registerItem("death_spell_scroll",
+            new net.willowins.animewitchery.item.custom.SpellScrollItem(new FabricItemSettings().maxCount(1).rarity(Rarity.UNCOMMON), "Wither Touch"));
+    public static final Item LIGHT_SPELL_SCROLL = registerItem("light_spell_scroll",
+            new net.willowins.animewitchery.item.custom.SpellScrollItem(new FabricItemSettings().maxCount(1).rarity(Rarity.UNCOMMON), "Light Burst"));
+    public static final Item DARKNESS_SPELL_SCROLL = registerItem("darkness_spell_scroll",
+            new net.willowins.animewitchery.item.custom.SpellScrollItem(new FabricItemSettings().maxCount(1).rarity(Rarity.UNCOMMON), "Shadow Bind"));
+
 
     private static void addItemsToIngredientItemGroup(FabricItemGroupEntries entries){
         // Basic materials
@@ -233,8 +289,18 @@ public static final Item KINETIC_BLADE =registerItem("kinetic_breaker",
         // Spawn eggs
         entries.add(VOID_WISP_SPAWN_EGG);
         
-        // Books
-        entries.add(RITUALS_BOOK);
+        // Spell Scrolls
+        entries.add(FIRE_SPELL_SCROLL);
+        entries.add(WATER_SPELL_SCROLL);
+        entries.add(EARTH_SPELL_SCROLL);
+        entries.add(AIR_SPELL_SCROLL);
+        entries.add(LIFE_SPELL_SCROLL);
+        entries.add(DEATH_SPELL_SCROLL);
+        entries.add(LIGHT_SPELL_SCROLL);
+        entries.add(DARKNESS_SPELL_SCROLL);
+        
+        // Books (hidden from JEI)
+        // entries.add(RITUALS_BOOK);
     }
 
 
@@ -275,14 +341,30 @@ public static final Item KINETIC_BLADE =registerItem("kinetic_breaker",
         entries.add(RESONANT_LEGGINGS);
         entries.add(RESONANT_BOOTS);
         
-        // Weapons and Tools
-        entries.add(NEEDLE);
+        // Silver Tools
+        entries.add(SILVER_SWORD);
         entries.add(SILVER_PICKAXE);
+        entries.add(SILVER_AXE);
+        entries.add(SILVER_SHOVEL);
+        entries.add(SILVER_HOE);
+        
+        // Resonant Tools
+        entries.add(RESONANT_SWORD);
+        entries.add(RESONANT_PICKAXE);
+        entries.add(RESONANT_AXE);
+        entries.add(RESONANT_SHOVEL);
+        entries.add(RESONANT_HOE);
+        
+        // Other Weapons and Tools
+        entries.add(NEEDLE);
         entries.add(OBELISK_SWORD);
         entries.add(CHISEL);
         entries.add(RAILGUN);
         entries.add(KINETIC_BLADE);
         entries.add(HEALING_STAFF);
+        entries.add(WAND);
+        entries.add(SPELLBOOK);
+        entries.add(SPELLBOOK_PAGE);
         
         // Special Items
         entries.add(SILVER_PENDANT);
@@ -317,6 +399,7 @@ public static final Item KINETIC_BLADE =registerItem("kinetic_breaker",
         entries.add(ModBlocks.GUARDIAN_STATUE);
         entries.add(ModBlocks.PILLAR);
         entries.add(ModBlocks.DECORATIVE_FOUNTAIN);
+        entries.add(ModBlocks.SPELL_TRIGGER_BLOCK);
         entries.add(ModBlocks.SOUND_BLOCK);
         entries.add(ModBlocks.SOUND_BLOCK2);
         // Note: FLOAT_BLOCK doesn't have an item - it's excluded from item creation

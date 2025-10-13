@@ -6,6 +6,7 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.world.ServerWorld;
 
 import java.util.*;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.function.Supplier;
 
 /**
@@ -67,29 +68,34 @@ public final class ServerScheduler {
         List<Task> tasks = TASKS.get(server);
         if (tasks == null || tasks.isEmpty()) return;
 
-        // Use iterator for safe removal during iteration - more efficient than creating snapshots
-        var iterator = tasks.iterator();
-        while (iterator.hasNext()) {
-            Task t = iterator.next();
+        // CopyOnWriteArrayList doesn't support iterator.remove(), so we collect tasks to remove
+        List<Task> toRemove = new ArrayList<>();
+        
+        for (Task t : tasks) {
             if (--t.ticksRemaining <= 0) {
                 try {
                     if (t.single != null) {
                         t.single.run();
-                        iterator.remove(); // Safe removal during iteration
+                        toRemove.add(t);
                     } else if (t.repeating != null) {
                         boolean keep = t.repeating.get();
                         if (keep) {
                             t.ticksRemaining = t.interval;
                         } else {
-                            iterator.remove(); // Safe removal during iteration
+                            toRemove.add(t);
                         }
                     }
                 } catch (Exception e) {
                     System.err.println("[ServerScheduler] Task exception:");
                     e.printStackTrace();
-                    iterator.remove(); // Safe removal during iteration
+                    toRemove.add(t);
                 }
             }
+        }
+        
+        // Remove completed tasks
+        if (!toRemove.isEmpty()) {
+            tasks.removeAll(toRemove);
         }
     }
 
@@ -98,12 +104,12 @@ public final class ServerScheduler {
 
     /** Run once after delayTicks */
     public static void schedule(MinecraftServer server, int delayTicks, Runnable task) {
-        TASKS.computeIfAbsent(server, s -> new ArrayList<>()).add(new Task(delayTicks, task));
+        TASKS.computeIfAbsent(server, s -> new CopyOnWriteArrayList<>()).add(new Task(delayTicks, task));
     }
 
     /** Repeat every intervalTicks until the supplier returns false */
     public static void repeat(MinecraftServer server, int intervalTicks, Supplier<Boolean> repeating) {
-        TASKS.computeIfAbsent(server, s -> new ArrayList<>()).add(new Task(intervalTicks, repeating));
+        TASKS.computeIfAbsent(server, s -> new CopyOnWriteArrayList<>()).add(new Task(intervalTicks, repeating));
     }
 
     /** Removes all tasks associated with this server */

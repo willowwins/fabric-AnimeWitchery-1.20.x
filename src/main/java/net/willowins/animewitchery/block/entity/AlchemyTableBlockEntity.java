@@ -179,6 +179,61 @@ public class AlchemyTableBlockEntity extends BlockEntity
                         SoundCategory.BLOCKS, 1.0f, 1.5f);
                 entity.sync();
             }
+        } 
+        // TEMPORARILY DISABLED: Spellbook combining
+        /*else if (entity.isActivated && net.willowins.animewitchery.events.AlchemySpellbookHandler.canCombineSpellScroll(entity)) {
+            // Spellbook + spell scroll combining
+            if (entity.currentRecipe == null) {
+                // Set up spellbook combining with fixed time
+                entity.maxProgress = 200; // 10 seconds
+            }
+
+            entity.isProcessing = true;
+            entity.progress++;
+
+            if (world instanceof ServerWorld serverWorld) {
+                spawnPortalParticles(serverWorld, pos, entity.progress, entity.maxProgress);
+            }
+
+            if (entity.progress >= entity.maxProgress) {
+                // Process spellbook combining
+                if (net.willowins.animewitchery.events.AlchemySpellbookHandler.tryProcessSpellbookCombining(entity, world)) {
+                    entity.isActivated = false;
+                    world.playSound(null, pos, SoundEvents.BLOCK_ENCHANTMENT_TABLE_USE,
+                            SoundCategory.BLOCKS, 1.0f, 1.5f);
+                    entity.sync();
+                }
+            }
+        }*/ else if (entity.isActivated && net.willowins.animewitchery.events.AlchemyEnchantmentHandler.canCombineEnchantments(entity)) {
+            // Enchantment combining - use crafting animation
+            if (entity.currentRecipe == null) {
+                // Set up enchantment combining with fixed time
+                entity.maxProgress = 300; // 15 seconds (15 * 20 ticks)
+            }
+
+            entity.isProcessing = true;
+            entity.progress++;
+
+            if (world instanceof ServerWorld serverWorld) {
+                spawnPortalParticles(serverWorld, pos, entity.progress, entity.maxProgress);
+            }
+
+            if (entity.progress >= entity.maxProgress) {
+                // Process enchantment combining
+                if (net.willowins.animewitchery.events.AlchemyEnchantmentHandler.tryProcessEnchantmentCombining(entity, world)) {
+                    entity.isActivated = false;
+                    world.playSound(null, pos, SoundEvents.BLOCK_ENCHANTMENT_TABLE_USE,
+                            SoundCategory.BLOCKS, 1.0f, 1.0f);
+                    entity.sync();
+                }
+            }
+        } else if (entity.isActivated) {
+            // No valid recipe or enchantment combining found
+            entity.isProcessing = false;
+            entity.progress = 0;
+            entity.currentRecipe = null;
+            entity.isActivated = false;
+            entity.sync();
         } else {
             entity.isProcessing = false;
             entity.progress = 0;
@@ -324,31 +379,35 @@ public class AlchemyTableBlockEntity extends BlockEntity
 
     // === ACTIVATION ===
     public boolean activateWithCatalyst(PlayerEntity player) {
-        if (!isActivated && hasRecipe()) {
-            AlchemyRecipe recipe = findRecipe();
-            if (recipe != null) {
-                int xpCost = recipe.getXpCost();
-
-                // --- NEW: Check if player holds a *full* catalyst ---
-                ItemStack held = player.getMainHandStack();
-                if (!(held.getItem() instanceof net.willowins.animewitchery.item.custom.AlchemicalCatalystItem catalyst)) {
-                    // Try offhand instead if main hand isn’t a catalyst
-                    held = player.getOffHandStack();
-                    if (!(held.getItem() instanceof net.willowins.animewitchery.item.custom.AlchemicalCatalystItem))
-                        return false;
-                }
-
-                int storedMana = net.willowins.animewitchery.item.custom.AlchemicalCatalystItem.getStoredMana(held);
-                int maxMana = net.willowins.animewitchery.item.custom.AlchemicalCatalystItem.MAX_MANA;
-
-                if (storedMana < maxMana) {
-                    player.sendMessage(
-                            Text.literal("⚠️ The catalyst must brim with power before alchemy may begin.")
-                                    .formatted(Formatting.GRAY),
-                            true
-                    );
+        if (!isActivated) {
+            // --- NEW: Check if player holds a *full* catalyst ---
+            ItemStack held = player.getMainHandStack();
+            if (!(held.getItem() instanceof net.willowins.animewitchery.item.custom.AlchemicalCatalystItem catalyst)) {
+                // Try offhand instead if main hand isn't a catalyst
+                held = player.getOffHandStack();
+                if (!(held.getItem() instanceof net.willowins.animewitchery.item.custom.AlchemicalCatalystItem))
                     return false;
-                }
+            }
+
+            int storedMana = net.willowins.animewitchery.item.custom.AlchemicalCatalystItem.getStoredMana(held);
+            int maxMana = net.willowins.animewitchery.item.custom.AlchemicalCatalystItem.MAX_MANA;
+
+            if (storedMana < maxMana) {
+                player.sendMessage(
+                        Text.literal("⚠️ The catalyst must brim with power before alchemy may begin.")
+                                .formatted(Formatting.GRAY),
+                        true
+                );
+                return false;
+            }
+
+            // Check for valid recipe OR enchantment combining (spellbook combining TEMPORARILY DISABLED)
+            boolean hasValidRecipe = hasRecipe();
+            //boolean hasSpellbookCombining = net.willowins.animewitchery.events.AlchemySpellbookHandler.canCombineSpellScroll(this);
+            boolean hasEnchantmentCombining = net.willowins.animewitchery.events.AlchemyEnchantmentHandler.canCombineEnchantments(this);
+            
+            if (hasValidRecipe || /*hasSpellbookCombining ||*/ hasEnchantmentCombining) {
+                int xpCost = hasValidRecipe ? getCurrentRecipeXpCost() : 5; // 5 XP for enchantments (spellbook disabled)
 
                 // --- If catalyst full and player has XP, proceed ---
                 if (player.experienceLevel >= xpCost) {
@@ -356,11 +415,35 @@ public class AlchemyTableBlockEntity extends BlockEntity
                     isActivated = true;
                     progress = 0;
 
-                    player.sendMessage(
-                            Text.literal("✨ The table hums to life as the catalyst discharges its energy.")
-                                    .formatted(Formatting.DARK_AQUA),
-                            true
-                    );
+                    if (hasValidRecipe) {
+                        player.sendMessage(
+                                Text.literal("✨ The table hums to life as the catalyst discharges its energy.")
+                                        .formatted(Formatting.DARK_AQUA),
+                                true
+                        );
+                    } /*else if (hasSpellbookCombining) {
+                        player.sendMessage(
+                                Text.literal("✨ Arcane knowledge flows from scroll to book...")
+                                        .formatted(Formatting.LIGHT_PURPLE),
+                                true
+                        );
+                        player.sendMessage(
+                                Text.literal("§7Processing time: 10 seconds")
+                                        .formatted(Formatting.GRAY),
+                                true
+                        );
+                    }*/ else {
+                        player.sendMessage(
+                                Text.literal("✨ Enchantment energies swirl as the catalyst activates the table.")
+                                        .formatted(Formatting.DARK_PURPLE),
+                                true
+                        );
+                        player.sendMessage(
+                                Text.literal("§7Processing time: 15 seconds")
+                                        .formatted(Formatting.GRAY),
+                                true
+                        );
+                    }
 
                     markDirty();
                     sync();
@@ -372,6 +455,12 @@ public class AlchemyTableBlockEntity extends BlockEntity
                             true
                     );
                 }
+            } else {
+                player.sendMessage(
+                        Text.literal("§7No valid alchemy or enchantment combination found.")
+                                .formatted(Formatting.GRAY),
+                        true
+                );
             }
         }
         return false;

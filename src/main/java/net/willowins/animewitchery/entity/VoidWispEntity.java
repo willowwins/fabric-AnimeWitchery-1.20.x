@@ -109,10 +109,52 @@ public class VoidWispEntity extends PhantomEntity implements GeoEntity {
 
 
 
-    @Override
-    public boolean canSpawn(WorldAccess world, SpawnReason spawnReason) {
-        // Flying entities can spawn in the air, just need low light
-        return world.getBaseLightLevel(getBlockPos(), 0) <= 7;
+    public static boolean canSpawn(EntityType<VoidWispEntity> type, WorldAccess world, SpawnReason spawnReason, BlockPos pos, net.minecraft.util.math.random.Random random) {
+        int y = pos.getY();
+        
+        // Check light level (must be dark)
+        if (world.getBaseLightLevel(pos, 0) > 7) {
+            return false;
+        }
+        
+        // Check dimension-specific conditions
+        if (world instanceof net.minecraft.server.world.ServerWorld serverWorld) {
+            String dimensionKey = serverWorld.getRegistryKey().getValue().toString();
+            
+            if (dimensionKey.contains("overworld")) {
+                // In Overworld: spawn near bedrock (Y -64 to -50)
+                return y >= -64 && y <= -50 && isNearBedrock(world, pos, 16);
+            } else if (dimensionKey.contains("the_nether")) {
+                // In Nether: spawn near bottom bedrock (Y 0-15) or top bedrock (Y 120-127)
+                // Make Nether roof (Y 120-127) more common by not requiring as strict bedrock proximity
+                boolean nearBottomBedrock = y >= 0 && y <= 15 && isNearBedrock(world, pos, 16);
+                boolean nearTopBedrock = y >= 120 && y <= 127; // No strict bedrock check for roof - more common
+                return nearBottomBedrock || nearTopBedrock;
+            } else if (dimensionKey.contains("the_end")) {
+                // In the End: can spawn anywhere (just needs low light)
+                return true;
+            }
+        }
+        
+        return false;
+    }
+    
+    /**
+     * Check if there's bedrock within a certain radius
+     */
+    private static boolean isNearBedrock(WorldAccess world, BlockPos pos, int radius) {
+        // Check in a vertical column and small horizontal area
+        for (int dx = -2; dx <= 2; dx++) {
+            for (int dz = -2; dz <= 2; dz++) {
+                for (int dy = -radius; dy <= radius; dy++) {
+                    BlockPos checkPos = pos.add(dx, dy, dz);
+                    if (world.getBlockState(checkPos).isOf(net.minecraft.block.Blocks.BEDROCK)) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
     }
 
     @Override

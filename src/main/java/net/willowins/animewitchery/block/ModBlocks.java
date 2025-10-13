@@ -151,6 +151,9 @@ public class ModBlocks {
     public static final Block FLOAT_BLOCK = registerBlock("float_block",
             new FloatBlock(FabricBlockSettings.copyOf(Blocks.BARRIER)));
 
+    public static final Block SPELL_TRIGGER_BLOCK = registerBlock("spell_trigger_block",
+            new net.willowins.animewitchery.block.custom.SpellTriggerBlock(FabricBlockSettings.copyOf(Blocks.STONE).strength(2.0f)));
+
     /* ----------------------------------------------------------
        🧩 REGISTRATION LOGIC
        ---------------------------------------------------------- */
@@ -166,7 +169,7 @@ public class ModBlocks {
 
         // Register Grand Shulker Box item
         Registry.register(Registries.ITEM, new Identifier(AnimeWitchery.MOD_ID, "grand_shulker_box"),
-                new net.willowins.animewitchery.item.custom.GrandShulkerBoxItem(GRAND_SHULKER_BOX, new FabricItemSettings().maxCount(1)));
+                new net.willowins.animewitchery.item.custom.GrandShulkerBoxItem(GRAND_SHULKER_BOX, new FabricItemSettings().maxCount(8)));
 
         // Register block entity type
         GRAND_SHULKER_BOX_ENTITY = Registry.register(

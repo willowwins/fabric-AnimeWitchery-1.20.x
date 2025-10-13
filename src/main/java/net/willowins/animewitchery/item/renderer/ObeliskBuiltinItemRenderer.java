@@ -40,13 +40,18 @@ public final class ObeliskBuiltinItemRenderer implements BuiltinItemRendererRegi
         }
 
         // Create a transient block entity at the player's position for proper lighting
-        var client = MinecraftClient.getInstance();
-        var world = client.world;
-        var player = client.player;
-        BlockPos renderPos = player != null ? player.getBlockPos() : BlockPos.ORIGIN;
+        MinecraftClient client = MinecraftClient.getInstance();
+        BlockPos renderPos = BlockPos.ORIGIN;
+        
+        if (client.player != null) {
+            renderPos = client.player.getBlockPos();
+        }
 
         ObeliskBlockEntity be = new ObeliskBlockEntity(renderPos, ModBlocks.OBELISK.getDefaultState());
-        be.setWorld(world);
+        
+        if (client.world != null) {
+            be.setWorld(client.world);
+        }
 
         client.getBlockEntityRenderDispatcher().render(be, 0.0f, matrices, vertexConsumers);
 

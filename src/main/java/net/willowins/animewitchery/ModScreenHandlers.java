@@ -4,6 +4,8 @@ import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerType;
 import net.fabricmc.fabric.api.screenhandler.v1.ScreenHandlerRegistry;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.inventory.Inventory;
+import net.minecraft.inventory.SimpleInventory;
+import net.minecraft.item.ItemStack;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.screen.GenericContainerScreenHandler;
@@ -29,6 +31,8 @@ public class ModScreenHandlers {
     public static ScreenHandlerType<GrowthAcceleratorScreenHandler> GROWTH_ACCELERATOR_SCREEN_HANDLER;
     public static ScreenHandlerType<AlchemyTableScreenHandler> ALCHEMY_TABLE_SCREEN_HANDLER;
     public static ScreenHandlerType<GrandShulkerBoxScreenHandler> GRAND_SHULKER_BOX_SCREEN_HANDLER;
+    public static ScreenHandlerType<AdvancedSpellbookScreenHandler> ADVANCED_SPELLBOOK_SCREEN_HANDLER;
+    
     public static void registerAll() {
 
 
@@ -112,6 +116,12 @@ public class ModScreenHandlers {
                     }
                     return null;
                 }
+        );
+        
+        
+        ADVANCED_SPELLBOOK_SCREEN_HANDLER = ScreenHandlerRegistry.registerSimple(
+                new Identifier("animewitchery", "advanced_spellbook"),
+                (syncId, playerInventory) -> new AdvancedSpellbookScreenHandler(syncId, playerInventory, new SimpleInventory(9), ItemStack.EMPTY)
         );
     }
 }

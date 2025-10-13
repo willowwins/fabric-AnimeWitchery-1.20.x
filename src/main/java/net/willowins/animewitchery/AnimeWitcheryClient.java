@@ -46,6 +46,7 @@ import net.willowins.animewitchery.client.shader.VoidBoundPostProcessor;
 public class AnimeWitcheryClient implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
+
         BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.SILVER_DOOR, RenderLayer.getCutout());
         BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.ACTIVE_EFFIGY_FOUNTAIN, RenderLayer.getCutout());
         BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.ACTIVE_BINDING_SPELL, RenderLayer.getCutout());
@@ -96,6 +97,7 @@ public class AnimeWitcheryClient implements ClientModInitializer {
         ScreenRegistry.register(ModScreenHandlers.GROWTH_ACCELERATOR_SCREEN_HANDLER, GrowthAcceleratorScreen::new);
         ScreenRegistry.register(ModScreenHandlers.ALCHEMY_TABLE_SCREEN_HANDLER, AlchemyTableScreen::new);
         ScreenRegistry.register(ModScreenHandlers.GRAND_SHULKER_BOX_SCREEN_HANDLER, net.willowins.animewitchery.screen.GrandShulkerBoxScreen::new);
+        ScreenRegistry.register(ModScreenHandlers.ADVANCED_SPELLBOOK_SCREEN_HANDLER, net.willowins.animewitchery.screen.AdvancedSpellbookScreen::new);
 
         new DebugScreenInterceptor().onInitializeClient();
 

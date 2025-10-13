@@ -25,11 +25,16 @@ public class FlightEnchantment extends Enchantment {
 
     @Override
     public boolean isAvailableForRandomSelection() {
-        return false;
+        return false; // Disabled - only obtainable through alchemy table
     }
 
     @Override
     public boolean isAvailableForEnchantedBookOffer() {
-        return true;
+        return false; // Disabled - only obtainable through alchemy table
+    }
+    
+    @Override
+    public boolean isTreasure() {
+        return true; // Mark as treasure to prevent enchanting table generation
     }
 }

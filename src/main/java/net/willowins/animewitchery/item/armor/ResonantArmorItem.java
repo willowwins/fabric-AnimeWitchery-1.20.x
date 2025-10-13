@@ -11,8 +11,10 @@ import net.minecraft.item.ArmorMaterial;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.world.World;
 import net.willowins.animewitchery.item.ModItems;
 import net.willowins.animewitchery.item.armor.client.ResonantArmorRenderer;
+import net.willowins.animewitchery.item.custom.ModArmorItem;
 import software.bernie.geckolib.animatable.GeoItem;
 import software.bernie.geckolib.animatable.client.RenderProvider;
 import software.bernie.geckolib.constant.DataTickets;
@@ -29,10 +31,11 @@ import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 /**
- * Resonant Armor — GeckoLib-based animated armor.
+ * Resonant Armor — GeckoLib-based animated armor with status effects.
  * Plays idle animation when the full set is equipped.
+ * Grants Resistance and Mana Regen when wearing full set.
  */
-public final class ResonantArmorItem extends ArmorItem implements GeoItem {
+public final class ResonantArmorItem extends ModArmorItem implements GeoItem {
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
     private final Supplier<Object> renderProvider = GeoItem.makeRenderer(this);
 
@@ -98,6 +101,12 @@ public final class ResonantArmorItem extends ArmorItem implements GeoItem {
                 && chest.isOf(ModItems.RESONANT_CHESTPLATE)
                 && legs.isOf(ModItems.RESONANT_LEGGINGS)
                 && feet.isOf(ModItems.RESONANT_BOOTS);
+    }
+
+    @Override
+    public void inventoryTick(ItemStack stack, World world, Entity entity, int slot, boolean selected) {
+        // Call parent to apply status effects
+        super.inventoryTick(stack, world, entity, slot, selected);
     }
 
     @Override

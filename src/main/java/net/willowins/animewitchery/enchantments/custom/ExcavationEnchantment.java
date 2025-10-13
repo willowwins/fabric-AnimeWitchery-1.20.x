@@ -24,19 +24,24 @@ public class ExcavationEnchantment extends Enchantment {
         return false;
     }
 
-    // Only allow enchanted books, not tools
     @Override
     public boolean isAcceptableItem(ItemStack stack) {
-        return stack.isOf(Items.ENCHANTED_BOOK);
+        // Accept enchanted books and all digger tools (pickaxes, shovels, axes, hoes)
+        return stack.isOf(Items.ENCHANTED_BOOK) || super.isAcceptableItem(stack);
     }
 
     @Override
     public boolean isAvailableForRandomSelection() {
-        return true;
+        return false; // Disabled - only obtainable through alchemy table
     }
 
     @Override
     public boolean isAvailableForEnchantedBookOffer() {
-        return false;
+        return false; // Disabled - only obtainable through alchemy table
+    }
+    
+    @Override
+    public boolean isTreasure() {
+        return true; // Mark as treasure to prevent enchanting table generation
     }
 }

@@ -42,48 +42,15 @@ import java.util.WeakHashMap;
 
 public class KineticBladeItem extends MiningToolItem {
 
-    private static final float BASE_DAMAGE = 7.0f;
+    private static final float BASE_DAMAGE = 1.0f;
     private static final int BOOST_MANA_COST = 500;
     private static final Map<PlayerEntity, KineticBladeHitboxEntity> ACTIVE_HITBOXES = new WeakHashMap<>();
 
     private static final UUID ATTACK_DAMAGE_MODIFIER_ID = UUID.fromString("fa233e1c-4180-4865-b01b-bcce9785aca3");
     private static final UUID ATTACK_SPEED_MODIFIER_ID = UUID.fromString("22653b89-116e-49dc-9b6b-9971489b5be5");
 
-    // Create a custom tool material with mining level 5
-    private static final ToolMaterial KINETIC_MATERIAL = new ToolMaterial() {
-        @Override
-        public int getDurability() {
-            return 3000; // High durability
-        }
-
-        @Override
-        public float getMiningSpeedMultiplier() {
-            return 15.0f; // Very fast mining speed
-        }
-
-        @Override
-        public float getAttackDamage() {
-            return 7.0f; // Base attack damage
-        }
-
-        @Override
-        public int getMiningLevel() {
-            return 5; // Level 5 mining (can mine anything)
-        }
-
-        @Override
-        public int getEnchantability() {
-            return 25;
-        }
-
-        @Override
-        public net.minecraft.recipe.Ingredient getRepairIngredient() {
-            return net.minecraft.recipe.Ingredient.ofItems(net.willowins.animewitchery.item.ModItems.RESONANT_CATALYST);
-        }
-    };
-
     public KineticBladeItem(Settings settings) {
-        super(7.0f, -2.4f, KINETIC_MATERIAL, BlockTags.PICKAXE_MINEABLE, settings);
+        super(1.0f, -3.4f, net.willowins.animewitchery.item.ModToolMaterial.RESONANT, BlockTags.PICKAXE_MINEABLE, settings);
     }
 
     @Override
@@ -101,16 +68,51 @@ public class KineticBladeItem extends MiningToolItem {
         return state.isIn(BlockTags.PICKAXE_MINEABLE) || state.isIn(BlockTags.AXE_MINEABLE);
     }
 
-    // === Wood stripping functionality ===
+    // === Right-click block functionality ===
     @Override
     public net.minecraft.util.ActionResult useOnBlock(net.minecraft.item.ItemUsageContext context) {
         World world = context.getWorld();
         BlockPos pos = context.getBlockPos();
         BlockState state = world.getBlockState(pos);
         PlayerEntity player = context.getPlayer();
+        
+        if (player == null) return net.minecraft.util.ActionResult.PASS;
+
+        // Check for bedrock breaking first (highest priority)
+        if (state.isOf(net.minecraft.block.Blocks.BEDROCK)) {
+            // Check cooldown
+            if (player.getItemCooldownManager().isCoolingDown(this)) {
+                if (!world.isClient) {
+                    player.sendMessage(Text.literal("§7⏳ Kinetic systems still cooling down..."), true);
+                }
+                return net.minecraft.util.ActionResult.FAIL;
+            }
+            
+            if (!world.isClient) {
+                // Manually drop bedrock item
+                net.minecraft.block.Block.dropStack(world, pos, new ItemStack(net.minecraft.block.Blocks.BEDROCK));
+                
+                // Break bedrock block
+                world.setBlockState(pos, net.minecraft.block.Blocks.AIR.getDefaultState());
+                
+                // Play powerful break sound
+                world.playSound(null, pos, SoundEvents.ENTITY_GENERIC_EXPLODE, SoundCategory.BLOCKS, 0.8f, 1.2f);
+                world.playSound(null, pos, SoundEvents.BLOCK_STONE_BREAK, SoundCategory.BLOCKS, 1.0f, 0.5f);
+                
+                // Damage tool
+                context.getStack().damage(5, player, (p) -> p.sendToolBreakStatus(context.getHand()));
+                
+                // Apply 30 second cooldown (600 ticks)
+                player.getItemCooldownManager().set(this, 600);
+                
+                player.sendMessage(Text.literal("§b⚡ Bedrock shattered!"), true);
+            }
+            
+            return net.minecraft.util.ActionResult.success(world.isClient);
+        }
 
         // Only strip wood when not gliding
-        if (player != null && player.isFallFlying()) {
+        if (player.isFallFlying()) {
             return net.minecraft.util.ActionResult.PASS;
         }
 
@@ -126,9 +128,7 @@ public class KineticBladeItem extends MiningToolItem {
                 world.setBlockState(pos, strippedState, 11);
                 
                 // Damage the tool
-                if (player != null) {
-                    context.getStack().damage(1, player, (p) -> p.sendToolBreakStatus(context.getHand()));
-                }
+                context.getStack().damage(1, player, (p) -> p.sendToolBreakStatus(context.getHand()));
             }
             
             return net.minecraft.util.ActionResult.success(world.isClient);

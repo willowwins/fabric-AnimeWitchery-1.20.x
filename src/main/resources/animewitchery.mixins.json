@@ -25,7 +25,8 @@
     "ExplosionMixin",
     "PlayerRendererMixin",
     "PlayerDeathMixin",
-    "CrossbowItemMixin"
+    "CrossbowItemMixin",
+    "ParadiseLostWeatherMixin"
 
   ],
   "client": [
@@ -35,7 +36,8 @@
     "PlayerEntityRendererMixin",
     "WorldRendererMixin",
     "client.ForceRiptideAnimationMixin",
-    "client.LivingEntityRiptideAccessor"
+    "client.LivingEntityRiptideAccessor",
+    "MouseMixin"
 
   ],
   "injectors": {

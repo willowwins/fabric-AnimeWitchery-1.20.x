@@ -7,6 +7,7 @@ import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.Inventories;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.nbt.NbtList;
 import net.minecraft.network.listener.ClientPlayPacketListener;
 import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.s2c.play.BlockEntityUpdateS2CPacket;
@@ -81,16 +82,41 @@ public class GrandShulkerBoxBlockEntity extends net.minecraft.block.entity.Shulk
     @Override
     public void writeNbt(NbtCompound nbt) {
         super.writeNbt(nbt);
-        // Serialize our custom 54-slot inventory
-        Inventories.writeNbt(nbt, this.inventory);
+        // Custom serialization to support 8x stack sizes
+        NbtList itemsList = new NbtList();
+        for (int i = 0; i < this.inventory.size(); i++) {
+            ItemStack stack = this.inventory.get(i);
+            if (!stack.isEmpty()) {
+                NbtCompound itemNbt = new NbtCompound();
+                itemNbt.putByte("Slot", (byte) i);
+                stack.writeNbt(itemNbt);
+                // Store the actual count separately to bypass validation
+                itemNbt.putInt("ActualCount", stack.getCount());
+                itemsList.add(itemNbt);
+            }
+        }
+        nbt.put("GrandItems", itemsList);
         nbt.putBoolean("isOpen", this.isOpen);
     }
 
     @Override
     public void readNbt(NbtCompound nbt) {
         super.readNbt(nbt);
-        // Deserialize our custom 54-slot inventory
-        Inventories.readNbt(nbt, this.inventory);
+        // Custom deserialization to support 8x stack sizes
+        this.inventory.clear();
+        NbtList itemsList = nbt.getList("GrandItems", 10); // 10 = NbtCompound type
+        for (int i = 0; i < itemsList.size(); i++) {
+            NbtCompound itemNbt = itemsList.getCompound(i);
+            int slot = itemNbt.getByte("Slot") & 255;
+            if (slot >= 0 && slot < this.inventory.size()) {
+                ItemStack stack = ItemStack.fromNbt(itemNbt);
+                // Restore the actual count (bypassing the default validation)
+                if (itemNbt.contains("ActualCount")) {
+                    stack.setCount(itemNbt.getInt("ActualCount"));
+                }
+                this.inventory.set(slot, stack);
+            }
+        }
         this.isOpen = nbt.getBoolean("isOpen");
     }
 
@@ -117,9 +143,8 @@ public class GrandShulkerBoxBlockEntity extends net.minecraft.block.entity.Shulk
     @Override
     public void setStack(int slot, ItemStack stack) {
         this.inventory.set(slot, stack);
-        if (stack.getCount() > this.getMaxCountPerStack()) {
-            stack.setCount(this.getMaxCountPerStack());
-        }
+        // Don't clamp - let the slot handle max stack sizes (8x normal)
+        // The slot's getMaxItemCount will enforce the correct limit
     }
     
     @Override
@@ -136,8 +161,10 @@ public class GrandShulkerBoxBlockEntity extends net.minecraft.block.entity.Shulk
         this.inventory.clear();
     }
 
+    @Override
     public int getMaxCountPerStack() {
-        return 256;
+        // Return a high value to allow 8x stacks (max vanilla item is 64, so 64*8 = 512)
+        return 512;
     }
 
     /**

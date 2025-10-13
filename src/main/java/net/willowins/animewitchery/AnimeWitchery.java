@@ -81,6 +81,9 @@ public class AnimeWitchery implements ModInitializer {
 
 		ObeliskWorldListener.register();
 
+		// Register spellbook packet receivers
+		net.willowins.animewitchery.networking.SpellbookPackets.registerServerReceivers();
+
 		ModItemGroups.registerItemGroups();
 
 		ModScreenHandlers.registerAll();
@@ -90,6 +93,9 @@ public class AnimeWitchery implements ModInitializer {
 
 		// Register Patchouli book
 		PatchouliAPI.get().setConfigFlag("animewitchery:rituals", true);
+
+		// Register book interaction handler
+		net.willowins.animewitchery.util.BookInteractionHandler.register();
 
 		ManaTicker.register();
 
@@ -114,12 +120,13 @@ public class AnimeWitchery implements ModInitializer {
         // Register entity attributes
         FabricDefaultAttributeRegistry.register(ModEntities.VOID_WISP, VoidWispEntity.createVoidWispAttributes());
 
+        // Register void wisp spawning
+        net.willowins.animewitchery.world.spawn.VoidWispSpawnHandler.registerSpawns();
+
         ExcavationBreakHandler.register();
+		BarrierBlockProtectionHandler.register();
 
 		ExpBoostHandler.register();
-
-
-
 
 		BlastingBreakHandler.register();
 
@@ -141,6 +148,10 @@ public class AnimeWitchery implements ModInitializer {
 		
 		// Register barrier protection handler (prevents unauthorized block breaking/interaction)
 		BarrierProtectionHandler.register();
+		
+		// Register spellbook enchanting table handlers
+		SpellbookEnchantingHandler.register();
+		SpellbookInteractionHandler.register();
 
 		ModExplosionManager.init();
 

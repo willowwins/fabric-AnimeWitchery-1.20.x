@@ -116,6 +116,12 @@ public class ModBlockEntities {
             FabricBlockEntityTypeBuilder.create(GuardianStatueBlockEntity::new, ModBlocks.GUARDIAN_STATUE).build(null)
     );
 
+    public static final BlockEntityType<SpellTriggerBlockEntity> SPELL_TRIGGER_BLOCK_ENTITY = Registry.register(
+            Registries.BLOCK_ENTITY_TYPE,
+            new Identifier(MOD_ID, "spell_trigger_block_be"),
+            FabricBlockEntityTypeBuilder.create(SpellTriggerBlockEntity::new, ModBlocks.SPELL_TRIGGER_BLOCK).build(null)
+    );
+
     public static void registerBlockEntities() {
         AnimeWitchery.LOGGER.info("Registering Block Entities For {}", MOD_ID);
     }

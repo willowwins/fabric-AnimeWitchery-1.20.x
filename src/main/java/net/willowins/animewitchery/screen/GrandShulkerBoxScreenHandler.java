@@ -48,11 +48,15 @@ public class GrandShulkerBoxScreenHandler extends ScreenHandler {
             ItemStack itemStack2 = slot2.getStack();
             itemStack = itemStack2.copy();
             if (slot < 54) {
+                // From container to player inventory
                 if (!this.insertItem(itemStack2, 54, this.slots.size(), true)) {
                     return ItemStack.EMPTY;
                 }
-            } else if (!this.insertItem(itemStack2, 0, 54, false)) {
-                return ItemStack.EMPTY;
+            } else {
+                // From player inventory to container
+                if (!this.insertItem(itemStack2, 0, 54, false)) {
+                    return ItemStack.EMPTY;
+                }
             }
 
             if (itemStack2.isEmpty()) {
@@ -63,6 +67,101 @@ public class GrandShulkerBoxScreenHandler extends ScreenHandler {
         }
 
         return itemStack;
+    }
+    
+    @Override
+    protected boolean insertItem(ItemStack stack, int startIndex, int endIndex, boolean fromLast) {
+        boolean success = false;
+        int currentIndex = startIndex;
+        
+        if (fromLast) {
+            currentIndex = endIndex - 1;
+        }
+
+        // First try to stack with existing items
+        if (stack.isStackable()) {
+            while (!stack.isEmpty()) {
+                if (fromLast) {
+                    if (currentIndex < startIndex) {
+                        break;
+                    }
+                } else {
+                    if (currentIndex >= endIndex) {
+                        break;
+                    }
+                }
+
+                Slot slot = this.slots.get(currentIndex);
+                ItemStack existingStack = slot.getStack();
+                
+                if (!existingStack.isEmpty() && ItemStack.canCombine(stack, existingStack)) {
+                    int maxCount = slot.getMaxItemCount(stack);
+                    int combinedCount = existingStack.getCount() + stack.getCount();
+                    
+                    if (combinedCount <= maxCount) {
+                        stack.setCount(0);
+                        existingStack.setCount(combinedCount);
+                        slot.markDirty();
+                        success = true;
+                    } else if (existingStack.getCount() < maxCount) {
+                        stack.decrement(maxCount - existingStack.getCount());
+                        existingStack.setCount(maxCount);
+                        slot.markDirty();
+                        success = true;
+                    }
+                }
+
+                if (fromLast) {
+                    --currentIndex;
+                } else {
+                    ++currentIndex;
+                }
+            }
+        }
+
+        // Then try to put in empty slots
+        if (!stack.isEmpty()) {
+            if (fromLast) {
+                currentIndex = endIndex - 1;
+            } else {
+                currentIndex = startIndex;
+            }
+
+            while (true) {
+                if (fromLast) {
+                    if (currentIndex < startIndex) {
+                        break;
+                    }
+                } else {
+                    if (currentIndex >= endIndex) {
+                        break;
+                    }
+                }
+
+                Slot slot = this.slots.get(currentIndex);
+                ItemStack existingStack = slot.getStack();
+                
+                if (existingStack.isEmpty() && slot.canInsert(stack)) {
+                    int maxCount = slot.getMaxItemCount(stack);
+                    int insertCount = Math.min(stack.getCount(), maxCount);
+                    slot.setStack(stack.split(insertCount));
+                    slot.markDirty();
+                    success = true;
+                    
+                    if (stack.isEmpty()) {
+                        break;
+                    }
+                }
+
+                if (fromLast) {
+                    --currentIndex;
+                } else {
+                    ++currentIndex;
+                }
+            }
+        }
+
+        return success;
     }
 
     @Override

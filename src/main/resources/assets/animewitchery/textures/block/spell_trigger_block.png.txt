@@ -1,0 +1,6 @@
+This is a placeholder texture file marker.
+The actual spell_trigger_block.png texture should be created as a 16x16 pixel image.
+For now, the game will use the missing texture (purple/black checkerboard).
+
+Suggested design: A stone block with magical runes carved into it.
+

@@ -1,0 +1,6 @@
+{
+  "parent": "block/cube_all",
+  "textures": {
+    "all": "animewitchery:block/spell_trigger_block_active"
+  }
+}
