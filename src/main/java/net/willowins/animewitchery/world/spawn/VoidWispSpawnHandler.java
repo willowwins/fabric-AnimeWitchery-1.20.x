@@ -24,20 +24,20 @@ public class VoidWispSpawnHandler {
             BiomeSelectors.foundInOverworld(),
             SpawnGroup.MONSTER,
             ModEntities.VOID_WISP,
-            5,  // Lower weight for rarity near bedrock
+            1,  // Very rare (reduced from 5)
             1,
-            2
+            1
         );
         
         // Spawn in Nether near bottom bedrock (Y 0 to 15) and top bedrock/roof (Y 120 to 127)
-        // Higher weight makes them more common, especially on the Nether roof
+        // Reduced spawn rate significantly
         BiomeModifications.addSpawn(
             BiomeSelectors.foundInTheNether(),
             SpawnGroup.MONSTER,
             ModEntities.VOID_WISP,
-            20,  // Much more common in Nether, especially on the roof
-            2,
-            4
+            4,  // Rare (reduced from 20)
+            1,
+            2
         );
         
         // Spawn rarely in the End
