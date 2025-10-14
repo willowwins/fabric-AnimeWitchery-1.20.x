@@ -4,7 +4,7 @@
     "item": "animewitchery:silveringot"
   },
   "base": {
-    "item": "minecraft:netherite_sword"
+    "item": "animewitchery:silver_sword"
   },
   "result": {
     "item": "animewitchery:needle"
