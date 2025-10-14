@@ -1,0 +1,21 @@
+{
+  "type": "animewitchery:alchemy",
+  "ingredients": [
+    {
+      "item": "minecraft:iron_shovel"
+    },
+    {
+      "item": "animewitchery:silver_ingot"
+    },
+    {
+      "item": "animewitchery:alchemical_catalyst"
+    }
+  ],
+  "result": {
+    "item": "animewitchery:silver_shovel",
+    "count": 1
+  },
+  "xp_cost": 3,
+  "processing_time": 200
+}
+
