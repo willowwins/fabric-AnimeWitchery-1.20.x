@@ -103,6 +103,8 @@ public class GrowthAcceleratorBlockEntity extends BlockEntity implements NamedSc
                                 budding.randomTick(checkState, serverWorld, checkPos, world.random);
                             } else if (block instanceof AmethystClusterBlock cluster) {
                                 cluster.randomTick(checkState, serverWorld, checkPos, world.random);
+                            } else if (block instanceof PointedDripstoneBlock dripstone) {
+                                dripstone.randomTick(checkState, serverWorld, checkPos, world.random);
                             }
                         }
                     }
