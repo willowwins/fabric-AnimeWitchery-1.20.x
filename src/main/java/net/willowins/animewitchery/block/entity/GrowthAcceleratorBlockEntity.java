@@ -98,7 +98,10 @@ public class GrowthAcceleratorBlockEntity extends BlockEntity implements NamedSc
                             if (block instanceof CropBlock crop && !crop.isMature(checkState)) {
                                 crop.randomTick(checkState, serverWorld, checkPos, world.random);
                             } else if (block instanceof SaplingBlock sapling) {
-                                sapling.randomTick(checkState, serverWorld, checkPos, world.random);
+                                // Call randomTick multiple times for faster tree growth
+                                for (int i = 0; i < 5; i++) {
+                                    sapling.randomTick(checkState, serverWorld, checkPos, world.random);
+                                }
                             } else if (block instanceof BuddingAmethystBlock budding) {
                                 budding.randomTick(checkState, serverWorld, checkPos, world.random);
                             } else if (block instanceof AmethystClusterBlock cluster) {
