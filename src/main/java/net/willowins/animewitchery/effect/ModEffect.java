@@ -18,10 +18,10 @@ public class ModEffect {
             new MarkedEffect(StatusEffectCategory.NEUTRAL,0x672c12));
 
     public static final StatusEffect VOID_BOUND = registerStatusEffect("void_bound",
-            new VoidBoundEffect());
+            new VoidBoundEffect(StatusEffectCategory.NEUTRAL));
 
     public static final StatusEffect KAMIKAZE_RITUAL = registerStatusEffect("kamikaze_ritual",
-            new KamikazeRitualEffect(StatusEffectCategory.HARMFUL, 0x8B0000));
+            new KamikazeRitualEffect(StatusEffectCategory.NEUTRAL, 0x8B0000));
 
     public static final StatusEffect MANA_REGEN = registerStatusEffect("mana_regen",
             new ManaRegenEffect(StatusEffectCategory.BENEFICIAL, 0x3B9EFF));
