@@ -41,6 +41,6 @@ public class ModDimensions {
                 BlockTags.INFINIBURN_OVERWORLD, // infiniburn - allows nether portals
                 DimensionTypes.OVERWORLD_ID, // effectsLocation
                 0.5f, // ambientLight
-                new DimensionType.MonsterSettings(false, false, UniformIntProvider.create(0, 0), 0)));
+                new DimensionType.MonsterSettings(true, false, UniformIntProvider.create(0, 0), 0))); // piglinSafe = true
     }
 }

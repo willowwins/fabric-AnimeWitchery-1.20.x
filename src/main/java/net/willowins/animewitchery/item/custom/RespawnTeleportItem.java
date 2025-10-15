@@ -1,18 +1,24 @@
 package net.willowins.animewitchery.item.custom;
 
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.text.Text;
+import net.minecraft.util.Formatting;
 import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
 import net.minecraft.util.UseAction;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraft.registry.RegistryKey;
+
+import java.util.List;
 
 public class RespawnTeleportItem extends Item {
 
@@ -61,12 +67,34 @@ public class RespawnTeleportItem extends Item {
                 if (destinationWorld != null) {
                     // Consume XP and teleport
                     serverPlayer.addExperienceLevels(-1);
+
+                    // Find nearby entities within 2 block radius
+                    Vec3d currentPos = serverPlayer.getPos();
+                    Box searchBox = new Box(currentPos.subtract(2, 2, 2), currentPos.add(2, 2, 2));
+                    List<Entity> nearbyEntities = world.getOtherEntities(serverPlayer, searchBox);
+
+                    // Teleport the player first
                     serverPlayer.teleport(destinationWorld,
                             teleportPos.x,
                             teleportPos.y,
                             teleportPos.z,
                             serverPlayer.getYaw(),
                             serverPlayer.getPitch());
+
+                    // Teleport nearby entities
+                    for (Entity entity : nearbyEntities) {
+                        entity.moveToWorld(destinationWorld);
+                        entity.teleport(teleportPos.x, teleportPos.y, teleportPos.z);
+                    }
+
+                    // Notify player
+                    if (!nearbyEntities.isEmpty()) {
+                        serverPlayer.sendMessage(
+                            Text.literal("Teleported " + nearbyEntities.size() + " nearby entities with you!")
+                                .formatted(Formatting.AQUA),
+                            false
+                        );
+                    }
                 }
             }
         }

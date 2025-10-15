@@ -1,5 +1,6 @@
 package net.willowins.animewitchery.item.custom;
 
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
@@ -10,10 +11,13 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
+import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
+
+import java.util.List;
 
 import net.willowins.animewitchery.mana.IManaComponent;
 import net.willowins.animewitchery.mana.ModComponents;
@@ -50,11 +54,32 @@ public class DimensionTeleportItem extends Item {
             if (destinationWorld != null) {
                 Vec3d pos = serverPlayer.getPos();
 
+                // Find nearby entities within 2 block radius
+                Box searchBox = new Box(pos.subtract(2, 2, 2), pos.add(2, 2, 2));
+                List<Entity> nearbyEntities = world.getOtherEntities(serverPlayer, searchBox);
+
+                // Teleport the player first
                 serverPlayer.teleport(destinationWorld, pos.x, pos.y, pos.z,
                         serverPlayer.getYaw(), serverPlayer.getPitch());
 
                 // Grant short protective effects
                 serverPlayer.addStatusEffect(new StatusEffectInstance(StatusEffects.SLOW_FALLING, 40, 0));
+
+                // Teleport nearby entities
+                for (Entity entity : nearbyEntities) {
+                    Vec3d entityPos = entity.getPos();
+                    entity.moveToWorld(destinationWorld);
+                    entity.teleport(entityPos.x, entityPos.y, entityPos.z);
+                }
+
+                // Notify player
+                if (!nearbyEntities.isEmpty()) {
+                    serverPlayer.sendMessage(
+                        Text.literal("Teleported " + nearbyEntities.size() + " nearby entities with you!")
+                            .formatted(Formatting.AQUA),
+                        false
+                    );
+                }
             }
         }
 
