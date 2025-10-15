@@ -38,7 +38,7 @@ public class ModDimensions {
                 -64, // minY
                 256, // height
                 256, // logicalHeight
-                BlockTags.WITHER_IMMUNE, // immune to wither
+                BlockTags.INFINIBURN_OVERWORLD, // infiniburn - allows nether portals
                 DimensionTypes.OVERWORLD_ID, // effectsLocation
                 0.5f, // ambientLight
                 new DimensionType.MonsterSettings(false, false, UniformIntProvider.create(0, 0), 0)));

@@ -18,7 +18,7 @@ public class ModEffect {
             new MarkedEffect(StatusEffectCategory.NEUTRAL,0x672c12));
 
     public static final StatusEffect VOID_BOUND = registerStatusEffect("void_bound",
-            new VoidBoundEffect(StatusEffectCategory.NEUTRAL));
+            new VoidBoundEffect());
 
     public static final StatusEffect KAMIKAZE_RITUAL = registerStatusEffect("kamikaze_ritual",
             new KamikazeRitualEffect(StatusEffectCategory.NEUTRAL, 0x8B0000));
