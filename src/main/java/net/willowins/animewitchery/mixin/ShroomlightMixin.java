@@ -28,7 +28,6 @@ public class ShroomlightMixin {
         if (world.getBlockState(pos).isOf(Blocks.SHROOMLIGHT) && !world.isClient) {
             if (player.getOffHandStack().isOf(Items.WOODEN_HOE.asItem())){
                 Block.dropStack(world,pos,new ItemStack(Items.BLAZE_POWDER.asItem(),1));
-                player.getMainHandStack().decrement(1);
                 world.playSound(null, pos, SoundEvents.BLOCK_SHROOMLIGHT_BREAK, SoundCategory.BLOCKS, 1f,1f);
             }
         }
