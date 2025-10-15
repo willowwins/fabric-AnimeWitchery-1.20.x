@@ -192,6 +192,21 @@
   "effect.animewitchery.mana_regen": "Mana Regeneration",
   "effect.animewitchery.void_bound": "Void Bound",
   
+  "item.minecraft.potion.effect.mana_regen": "Potion of Mana Regeneration",
+  "item.minecraft.splash_potion.effect.mana_regen": "Splash Potion of Mana Regeneration",
+  "item.minecraft.lingering_potion.effect.mana_regen": "Lingering Potion of Mana Regeneration",
+  "item.minecraft.tipped_arrow.effect.mana_regen": "Arrow of Mana Regeneration",
+  
+  "item.minecraft.potion.effect.long_mana_regen": "Potion of Mana Regeneration",
+  "item.minecraft.splash_potion.effect.long_mana_regen": "Splash Potion of Mana Regeneration",
+  "item.minecraft.lingering_potion.effect.long_mana_regen": "Lingering Potion of Mana Regeneration",
+  "item.minecraft.tipped_arrow.effect.long_mana_regen": "Arrow of Mana Regeneration",
+  
+  "item.minecraft.potion.effect.strong_mana_regen": "Potion of Mana Regeneration",
+  "item.minecraft.splash_potion.effect.strong_mana_regen": "Splash Potion of Mana Regeneration",
+  "item.minecraft.lingering_potion.effect.strong_mana_regen": "Lingering Potion of Mana Regeneration",
+  "item.minecraft.tipped_arrow.effect.strong_mana_regen": "Arrow of Mana Regeneration",
+  
   "enchantment.animewitchery.blasting": "Blasting",
   "enchantment.animewitchery.excavation": "Excavation",
   "enchantment.animewitchery.excavate_enchant": "Excavation",

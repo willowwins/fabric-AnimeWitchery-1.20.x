@@ -27,6 +27,8 @@ import net.willowins.animewitchery.block.entity.ModBlockEntities;
 import net.willowins.animewitchery.effect.ModEffect;
 import net.willowins.animewitchery.enchantments.ModEnchantments;
 import net.willowins.animewitchery.entity.ModEntities;
+import net.willowins.animewitchery.potion.ModBrewingRecipes;
+import net.willowins.animewitchery.potion.ModPotions;
 import net.willowins.animewitchery.entity.VoidWispEntity;
 import net.willowins.animewitchery.events.*;
 import net.willowins.animewitchery.item.ModItemGroups;
@@ -113,6 +115,9 @@ public class AnimeWitchery implements ModInitializer {
 		ModParticles.registerParticles();
 
 		ModEffect.registerEffects();
+		
+		ModPotions.registerPotions();
+		ModBrewingRecipes.registerBrewingRecipes();
 
 		        ModEntities.registerModEntities();
 

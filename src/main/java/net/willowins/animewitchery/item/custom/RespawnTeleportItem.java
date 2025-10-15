@@ -68,11 +68,6 @@ public class RespawnTeleportItem extends Item {
                     // Consume XP and teleport
                     serverPlayer.addExperienceLevels(-1);
 
-                    // Find nearby entities within 2 block radius
-                    Vec3d currentPos = serverPlayer.getPos();
-                    Box searchBox = new Box(currentPos.subtract(2, 2, 2), currentPos.add(2, 2, 2));
-                    List<Entity> nearbyEntities = world.getOtherEntities(serverPlayer, searchBox);
-
                     // Teleport the player first
                     serverPlayer.teleport(destinationWorld,
                             teleportPos.x,
@@ -81,19 +76,27 @@ public class RespawnTeleportItem extends Item {
                             serverPlayer.getYaw(),
                             serverPlayer.getPitch());
 
-                    // Teleport nearby entities
-                    for (Entity entity : nearbyEntities) {
-                        entity.moveToWorld(destinationWorld);
-                        entity.teleport(teleportPos.x, teleportPos.y, teleportPos.z);
-                    }
+                    // Only teleport nearby entities if player is sneaking
+                    if (serverPlayer.isSneaking()) {
+                        // Find nearby entities within 2 block radius
+                        Vec3d currentPos = serverPlayer.getPos();
+                        Box searchBox = new Box(currentPos.subtract(2, 2, 2), currentPos.add(2, 2, 2));
+                        List<Entity> nearbyEntities = world.getOtherEntities(serverPlayer, searchBox);
 
-                    // Notify player
-                    if (!nearbyEntities.isEmpty()) {
-                        serverPlayer.sendMessage(
-                            Text.literal("Teleported " + nearbyEntities.size() + " nearby entities with you!")
-                                .formatted(Formatting.AQUA),
-                            false
-                        );
+                        // Teleport nearby entities
+                        for (Entity entity : nearbyEntities) {
+                            entity.moveToWorld(destinationWorld);
+                            entity.teleport(teleportPos.x, teleportPos.y, teleportPos.z);
+                        }
+
+                        // Notify player
+                        if (!nearbyEntities.isEmpty()) {
+                            serverPlayer.sendMessage(
+                                Text.literal("Teleported " + nearbyEntities.size() + " nearby entities with you!")
+                                    .formatted(Formatting.AQUA),
+                                false
+                            );
+                        }
                     }
                 }
             }

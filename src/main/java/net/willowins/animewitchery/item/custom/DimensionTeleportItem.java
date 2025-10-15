@@ -54,10 +54,6 @@ public class DimensionTeleportItem extends Item {
             if (destinationWorld != null) {
                 Vec3d pos = serverPlayer.getPos();
 
-                // Find nearby entities within 2 block radius
-                Box searchBox = new Box(pos.subtract(2, 2, 2), pos.add(2, 2, 2));
-                List<Entity> nearbyEntities = world.getOtherEntities(serverPlayer, searchBox);
-
                 // Teleport the player first
                 serverPlayer.teleport(destinationWorld, pos.x, pos.y, pos.z,
                         serverPlayer.getYaw(), serverPlayer.getPitch());
@@ -65,20 +61,27 @@ public class DimensionTeleportItem extends Item {
                 // Grant short protective effects
                 serverPlayer.addStatusEffect(new StatusEffectInstance(StatusEffects.SLOW_FALLING, 40, 0));
 
-                // Teleport nearby entities
-                for (Entity entity : nearbyEntities) {
-                    Vec3d entityPos = entity.getPos();
-                    entity.moveToWorld(destinationWorld);
-                    entity.teleport(entityPos.x, entityPos.y, entityPos.z);
-                }
+                // Only teleport nearby entities if player is sneaking
+                if (serverPlayer.isSneaking()) {
+                    // Find nearby entities within 2 block radius
+                    Box searchBox = new Box(pos.subtract(2, 2, 2), pos.add(2, 2, 2));
+                    List<Entity> nearbyEntities = world.getOtherEntities(serverPlayer, searchBox);
 
-                // Notify player
-                if (!nearbyEntities.isEmpty()) {
-                    serverPlayer.sendMessage(
-                        Text.literal("Teleported " + nearbyEntities.size() + " nearby entities with you!")
-                            .formatted(Formatting.AQUA),
-                        false
-                    );
+                    // Teleport nearby entities
+                    for (Entity entity : nearbyEntities) {
+                        Vec3d entityPos = entity.getPos();
+                        entity.moveToWorld(destinationWorld);
+                        entity.teleport(entityPos.x, entityPos.y, entityPos.z);
+                    }
+
+                    // Notify player
+                    if (!nearbyEntities.isEmpty()) {
+                        serverPlayer.sendMessage(
+                            Text.literal("Teleported " + nearbyEntities.size() + " nearby entities with you!")
+                                .formatted(Formatting.AQUA),
+                            false
+                        );
+                    }
                 }
             }
         }
