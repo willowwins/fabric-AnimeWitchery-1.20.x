@@ -19,6 +19,7 @@ public interface ModEnchantments {
     Enchantment SLIVER = createEnchantment("sliver_enchant", new NeedleThrowEnchantment());
     Enchantment LEAD_COATED_PAINT = createEnchantment("lead_coated_paint", new LeadCoatedEnchantment());
     Enchantment EXP_BOOST = createEnchantment("exp_boost", new ExpBoostEnchantment(Enchantment.Rarity.RARE));
+    Enchantment CAPTURING = createEnchantment("capturing", new CapturingEnchantment());
 
 
 

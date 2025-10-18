@@ -52,6 +52,9 @@ public static final Item OBELISK_COMPASS =registerItem("obelisk_compass",
     public static final Item NEEDLE =registerItem("needle",
             new NeedleItem(ModToolMaterial.SILVER,4,-2.2f,new FabricItemSettings().maxCount(1)));
 
+    public static final Item RESONANT_GREATSWORD =registerItem("resonant_greatword",
+            new ResonantGreatSwordItem(ModToolMaterial.RESONANT,7,-2.5f,new FabricItemSettings().maxCount(1)));
+
     public static final Item SILVER_SWORD =registerItem("silver_sword",
             new SwordItem(ModToolMaterial.SILVER,3, -2.4f,new FabricItemSettings()));
 

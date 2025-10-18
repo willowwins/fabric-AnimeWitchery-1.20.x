@@ -1,6 +1,0 @@
-This is a placeholder texture file marker.
-The actual wand.png texture should be created as a 16x16 pixel image.
-For now, the game will use the missing texture (purple/black checkerboard).
-
-Suggested design: A wooden stick with a glowing crystal on top.
-

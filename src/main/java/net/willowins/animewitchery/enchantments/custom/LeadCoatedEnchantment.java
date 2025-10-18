@@ -6,8 +6,10 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import net.willowins.animewitchery.item.custom.ResonantGreatSwordItem;
 
 public class LeadCoatedEnchantment extends Enchantment {
     // base percentage bonus per block/sec of velocity
@@ -38,6 +40,15 @@ public class LeadCoatedEnchantment extends Enchantment {
     @Override
     public boolean isAvailableForEnchantedBookOffer() {
         return true;
+    }
+
+    @Override
+    public boolean isAcceptableItem(ItemStack stack) {
+        // Don't allow on Resonant Greatsword
+        if (stack.getItem() instanceof ResonantGreatSwordItem) {
+            return false;
+        }
+        return super.isAcceptableItem(stack);
     }
 
     @Override

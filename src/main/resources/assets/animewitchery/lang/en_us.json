@@ -112,6 +112,7 @@
   "item.animewitchery.resonant_pickaxe": "Resonant Pickaxe",
   "item.animewitchery.resonant_shovel": "Resonant Shovel",
   "item.animewitchery.resonant_sword": "Resonant Sword",
+  "item.animewitchery.resonant_greatword": "Resonant Greatsword",
   "item.animewitchery.respawn_beacon": "Respawn Beacon",
   "item.animewitchery.rituals_book": "Grimoire of Quarters",
   "item.animewitchery.rune_stone": "Rune Stone",
@@ -216,6 +217,7 @@
   "enchantment.animewitchery.flight_enchant": "Elytra Flight",
   "enchantment.animewitchery.sliver_enchant": "Needle Throw",
   "enchantment.animewitchery.lead_coated_paint": "Lead Coated",
+  "enchantment.animewitchery.capturing": "Capturing",
   
   "itemGroup.animewitchery.animewitchery": "Anime Witchery"
 }

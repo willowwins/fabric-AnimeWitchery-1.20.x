@@ -401,10 +401,11 @@ public class AlchemyTableBlockEntity extends BlockEntity
                 return false;
             }
 
-            // Check for valid recipe OR enchantment combining (spellbook combining TEMPORARILY DISABLED)
+            // Check for valid recipe FIRST, then enchantment combining (spellbook combining TEMPORARILY DISABLED)
             boolean hasValidRecipe = hasRecipe();
             //boolean hasSpellbookCombining = net.willowins.animewitchery.events.AlchemySpellbookHandler.canCombineSpellScroll(this);
-            boolean hasEnchantmentCombining = net.willowins.animewitchery.events.AlchemyEnchantmentHandler.canCombineEnchantments(this);
+            // Only check for enchantment combining if there's no regular recipe
+            boolean hasEnchantmentCombining = !hasValidRecipe && net.willowins.animewitchery.events.AlchemyEnchantmentHandler.canCombineEnchantments(this);
             
             if (hasValidRecipe || /*hasSpellbookCombining ||*/ hasEnchantmentCombining) {
                 int xpCost = hasValidRecipe ? getCurrentRecipeXpCost() : 5; // 5 XP for enchantments (spellbook disabled)

@@ -75,6 +75,9 @@ public class AnimeWitchery implements ModInitializer {
 	@Override
 	public void onInitialize() {
 
+		// Register custom game rules
+		net.willowins.animewitchery.util.ModGameRules.register();
+
 		ManaStorageRegistry.register(ModItems.RESONANT_CATALYST);
 		ManaStorageRegistry.register(ModItems.ALCHEMICAL_CATALYST);
 
@@ -84,6 +87,9 @@ public class AnimeWitchery implements ModInitializer {
 
 		// Register spellbook packet receivers
 		net.willowins.animewitchery.networking.SpellbookPackets.registerServerReceivers();
+		
+		// Register C2S packets (Client-to-Server)
+		net.willowins.animewitchery.networking.ModPackets.registerC2SPackets();
 
 		ModItemGroups.registerItemGroups();
 
@@ -135,6 +141,10 @@ public class AnimeWitchery implements ModInitializer {
 		BlastingBreakHandler.register();
 
 		ChestplateElytraFlight.register();
+		
+		NetherrackTransformHandler.register();
+		
+		SpawnerNbtHandler.register();
 
 		LOGGER.info("Hello Fabric world!");
 
@@ -170,19 +180,20 @@ public class AnimeWitchery implements ModInitializer {
 				.frameBlock(Blocks.REINFORCED_DEEPSLATE)
 				.lightWithItem(ModItems.NEEDLE)
 				.destDimID(new Identifier(AnimeWitchery.MOD_ID, "paradiselostdim"))
+				.returnDim(new Identifier("minecraft", "overworld"), false)
 				.tintColor(0x94ecff)
-				.forcedSize(3, 3)
 				.registerPortal();
 
 		ServerTickEvents.END_SERVER_TICK.register(minecraftServer -> {
 			if (EffigyFountainBlock.active) {
 				EffigyFountainBlock.ticks++;
-				if (EffigyFountainBlock.ticks == 20*36000) {
+				// Fountain now acts infinitely - deactivation disabled
+				/*if (EffigyFountainBlock.ticks == 20*36000) {
 					World world = EffigyFountainBlock.effigyworld;
 					BlockPos blockPos = EffigyFountainBlock.lastEffigyPos;
 					world.setBlockState(blockPos, ModBlocks.EFFIGY_FOUNTAIN.getDefaultState());
 					EffigyFountainBlock.active = false;
-				}
+				}*/
 			}
 		});
 

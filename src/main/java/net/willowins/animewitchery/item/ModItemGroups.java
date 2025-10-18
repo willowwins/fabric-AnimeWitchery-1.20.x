@@ -71,6 +71,7 @@ public class ModItemGroups {
                         entries.add(ModItems.RESONANT_CHESTPLATE);
                         entries.add(ModItems.RESONANT_LEGGINGS);
                         entries.add(ModItems.RESONANT_BOOTS);
+                        entries.add(ModItems.RESONANT_GREATSWORD);
 
                         entries.add(ModItems.METAL_DETECTOR);
                         entries.add(ModItems.RESPAWN_BEACON);

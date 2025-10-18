@@ -25,7 +25,12 @@
     "ExplosionMixin",
     "PlayerDeathMixin",
     "CrossbowItemMixin",
-    "ParadiseLostWeatherMixin"
+    "ParadiseLostWeatherMixin",
+    "EntityDeathMixin",
+    "CreativeDefiantRiftMixin",
+    "PortalTeleportMixin",
+    "GreatswordBlockingMixin",
+    "GreatswordSweepingMixin"
 
   ],
   "client": [
@@ -37,7 +42,9 @@
     "WorldRendererMixin",
     "client.ForceRiptideAnimationMixin",
     "client.LivingEntityRiptideAccessor",
-    "MouseMixin"
+    "MouseMixin",
+    "HideOffhandMixin",
+    "GreatswordRenderMixin"
 
   ],
   "injectors": {

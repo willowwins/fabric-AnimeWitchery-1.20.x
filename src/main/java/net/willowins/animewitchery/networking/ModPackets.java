@@ -16,12 +16,8 @@ public class ModPackets {
     public static final Identifier CREATE_PLATFORM_ID = new Identifier("animewitchery", "create_platform");
 
 
-    public static void registerS2CPackets(){
-        ClientPlayNetworking.registerGlobalReceiver(KAMIKAZE_FX, KamikazeFxPacket::receive);
-        ClientPlayNetworking.registerGlobalReceiver(LASER_BEAM, LaserBeamPacket::receive);
-        ClientPlayNetworking.registerGlobalReceiver(LASER_CHARGE, LaserChargePacket::receive);
-        ClientPlayNetworking.registerGlobalReceiver(LASER_HIT, LaserHitPacket::receive);
-        ClientPlayNetworking.registerGlobalReceiver(OBELISK_SHAKE, ObeliskShake::receive);
+    public static void registerC2SPackets() {
+        // Client-to-Server packets (registered on the server)
         ServerPlayNetworking.registerGlobalReceiver(CREATE_PLATFORM_ID, (server, player, handler, buf, responseSender) -> {
             server.execute(() -> {
                 if (player != null) {
@@ -29,4 +25,13 @@ public class ModPackets {
                 }
             });
         });
+    }
+
+    public static void registerS2CPackets(){
+        // Server-to-Client packets (registered on the client)
+        ClientPlayNetworking.registerGlobalReceiver(KAMIKAZE_FX, KamikazeFxPacket::receive);
+        ClientPlayNetworking.registerGlobalReceiver(LASER_BEAM, LaserBeamPacket::receive);
+        ClientPlayNetworking.registerGlobalReceiver(LASER_CHARGE, LaserChargePacket::receive);
+        ClientPlayNetworking.registerGlobalReceiver(LASER_HIT, LaserHitPacket::receive);
+        ClientPlayNetworking.registerGlobalReceiver(OBELISK_SHAKE, ObeliskShake::receive);
     }}

@@ -37,7 +37,8 @@ public abstract class CrossbowItemMixin {
     private static final double BEAM_LENGTH = 80.0;
     private static final double AOE_RADIUS = 6.0;
     private static final int MANA_COST = 5000;
-    private static final float BASE_DAMAGE = 30.0f;
+    private static final float BASE_DAMAGE = 14.0f;
+    private static final int COOLDOWN_TICKS = 60; // 3 seconds cooldown
 
     @Inject(method = "getProjectiles", at = @At("RETURN"), cancellable = true)
     private void animewitchery$allowManaRocket(CallbackInfoReturnable<Predicate<ItemStack>> cir) {
@@ -176,7 +177,7 @@ public abstract class CrossbowItemMixin {
                     6, 0.2, 0.2, 0.2, 0.05);
         }
 
-        // Decrement one “charge” from the NBT (not the inventory item)
+        // Decrement one "charge" from the NBT (not the inventory item)
         boolean removed = false;
         NbtList rebuilt = new NbtList();
         for (ItemStack s : charged) {
@@ -190,5 +191,10 @@ public abstract class CrossbowItemMixin {
         }
         crossbow.getOrCreateNbt().put("ChargedProjectiles", rebuilt);
         CrossbowItem.setCharged(crossbow, !rebuilt.isEmpty());
+        
+        // Apply cooldown to crossbow
+        if (shooter instanceof net.minecraft.entity.player.PlayerEntity player) {
+            player.getItemCooldownManager().set(crossbow.getItem(), COOLDOWN_TICKS);
+        }
     }
 }

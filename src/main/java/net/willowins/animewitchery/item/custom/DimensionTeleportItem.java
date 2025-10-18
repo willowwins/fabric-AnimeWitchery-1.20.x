@@ -54,6 +54,15 @@ public class DimensionTeleportItem extends Item {
             if (destinationWorld != null) {
                 Vec3d pos = serverPlayer.getPos();
 
+                // Only teleport nearby entities if player is sneaking
+                // Must find entities BEFORE player teleports
+                List<Entity> nearbyEntities = List.of();
+                if (serverPlayer.isSneaking()) {
+                    // Find nearby entities within 2 block radius in CURRENT world
+                    Box searchBox = new Box(pos.subtract(2, 2, 2), pos.add(2, 2, 2));
+                    nearbyEntities = world.getOtherEntities(serverPlayer, searchBox);
+                }
+
                 // Teleport the player first
                 serverPlayer.teleport(destinationWorld, pos.x, pos.y, pos.z,
                         serverPlayer.getYaw(), serverPlayer.getPitch());
@@ -61,13 +70,8 @@ public class DimensionTeleportItem extends Item {
                 // Grant short protective effects
                 serverPlayer.addStatusEffect(new StatusEffectInstance(StatusEffects.SLOW_FALLING, 40, 0));
 
-                // Only teleport nearby entities if player is sneaking
-                if (serverPlayer.isSneaking()) {
-                    // Find nearby entities within 2 block radius
-                    Box searchBox = new Box(pos.subtract(2, 2, 2), pos.add(2, 2, 2));
-                    List<Entity> nearbyEntities = world.getOtherEntities(serverPlayer, searchBox);
-
-                    // Teleport nearby entities
+                // Teleport nearby entities if we found any
+                if (!nearbyEntities.isEmpty()) {
                     for (Entity entity : nearbyEntities) {
                         Vec3d entityPos = entity.getPos();
                         entity.moveToWorld(destinationWorld);
