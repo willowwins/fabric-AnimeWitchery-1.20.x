@@ -33,15 +33,11 @@ public class CreeperBlockDamageMixin {
         // Check the gamerule
         boolean allowBlockDamage = world.getGameRules().getBoolean(ModGameRules.DO_CREEPER_BLOCK_DAMAGE);
         
-        // If block damage is disabled, create explosion with damage entities but no blocks
-        // NONE still damages entities, it just doesn't break blocks or cause fire
-        if (!allowBlockDamage) {
-            // Create explosion that damages entities but doesn't destroy blocks
-            return world.createExplosion(entity, x, y, z, power, false, World.ExplosionSourceType.NONE);
-        }
+        // If block damage is disabled, use NONE mode (no block damage but still entity damage)
+        // Otherwise use the original mode
+        World.ExplosionSourceType mode = allowBlockDamage ? explosionSourceType : World.ExplosionSourceType.NONE;
         
-        // Otherwise use the original mode (usually MOB which breaks blocks)
-        return world.createExplosion(entity, x, y, z, power, explosionSourceType);
+        return world.createExplosion(entity, x, y, z, power, mode);
     }
 }
 
