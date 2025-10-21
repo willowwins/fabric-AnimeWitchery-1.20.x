@@ -31,6 +31,7 @@
     "PortalTeleportMixin",
     "GreatswordBlockingMixin",
     "GreatswordSweepingMixin",
+    "GreatswordWardenBeamMixin",
     "PiglinGoldTrimMixin",
     "CreeperBlockDamageMixin",
     "VillagerMobGriefingMixin",
