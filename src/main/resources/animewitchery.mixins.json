@@ -32,7 +32,9 @@
     "GreatswordBlockingMixin",
     "GreatswordSweepingMixin",
     "PiglinGoldTrimMixin",
-    "CreeperBlockDamageMixin"
+    "CreeperBlockDamageMixin",
+    "VillagerMobGriefingMixin",
+    "CapturingLootingMixin"
 
   ],
   "client": [

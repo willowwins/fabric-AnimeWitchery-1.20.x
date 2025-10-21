@@ -134,6 +134,12 @@ public static final Item OBELISK_COMPASS =registerItem("obelisk_compass",
  public static final Item REPAIR_CHARM =registerItem("creeping_prevailance",
             new RepairCharmItem(new FabricItemSettings().maxCount(1)));
 
+public static final Item FULFILLING_BRACELET =registerItem("fulfilling_bracelet",
+            new FulfillingBraceletItem(new FabricItemSettings().maxCount(1)));
+
+public static final Item FULFILLING_RESONANT_BAND =registerItem("fulfilling_resonant_band",
+            new FulfillingResonantBandItem(new FabricItemSettings().maxCount(1)));
+
 public static final Item MANA_ROCKET =registerItem("mana_rocket",
             new ManaRocketItem(new FabricItemSettings().maxCount(1)));
 
@@ -441,6 +447,8 @@ public static final Item KINETIC_BLADE =registerItem("kinetic_breaker",
         entries.add(FIRE_RES_CRYSTAL);
         entries.add(SPEED_CRYSTAL);
         entries.add(REPAIR_CHARM);
+        entries.add(FULFILLING_BRACELET);
+        entries.add(FULFILLING_RESONANT_BAND);
         entries.add(MANA_ROCKET);
         entries.add(DEEP_DARK_DEEP_DISH);
     }
