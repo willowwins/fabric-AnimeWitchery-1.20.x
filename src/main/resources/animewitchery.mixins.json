@@ -30,7 +30,9 @@
     "CreativeDefiantRiftMixin",
     "PortalTeleportMixin",
     "GreatswordBlockingMixin",
-    "GreatswordSweepingMixin"
+    "GreatswordSweepingMixin",
+    "PiglinGoldTrimMixin",
+    "CreeperBlockDamageMixin"
 
   ],
   "client": [

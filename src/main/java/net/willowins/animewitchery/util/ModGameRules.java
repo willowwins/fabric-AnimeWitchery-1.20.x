@@ -13,6 +13,13 @@ public class ModGameRules {
             GameRuleFactory.createBooleanRule(true) // Default to true (enabled)
         );
     
+    public static final GameRules.Key<GameRules.BooleanRule> DO_CREEPER_BLOCK_DAMAGE = 
+        GameRuleRegistry.register(
+            "doCreeperBlockDamage", 
+            GameRules.Category.MOBS, 
+            GameRuleFactory.createBooleanRule(true) // Default to true (vanilla behavior)
+        );
+    
     public static void register() {
         // Registration happens during static initialization
     }
