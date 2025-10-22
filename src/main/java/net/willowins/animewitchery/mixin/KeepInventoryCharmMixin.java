@@ -5,16 +5,19 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.willowins.animewitchery.item.custom.KeepInventoryCharmItem;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import java.util.HashSet;
+import java.util.Set;
+import java.util.UUID;
+
 @Mixin(PlayerEntity.class)
 public class KeepInventoryCharmMixin {
     
-    @Unique
-    private boolean animewitchery$shouldKeepInventory = false;
+    // Static set to track players who should keep inventory (persists across instance changes)
+    private static final Set<UUID> playersWithCharm = new HashSet<>();
     
     /**
      * Check for Keep Inventory Charm before death.
@@ -28,7 +31,8 @@ public class KeepInventoryCharmMixin {
         // Check for Keep Inventory Charm in player inventory
         for (ItemStack stack : player.getInventory().main) {
             if (stack.getItem() instanceof KeepInventoryCharmItem) {
-                animewitchery$shouldKeepInventory = true;
+                // Track this player
+                playersWithCharm.add(player.getUuid());
                 // Consume the charm
                 stack.decrement(1);
                 return;
@@ -41,9 +45,12 @@ public class KeepInventoryCharmMixin {
      */
     @Inject(method = "dropInventory", at = @At("HEAD"), cancellable = true)
     private void preventInventoryDrop(CallbackInfo ci) {
-        if (animewitchery$shouldKeepInventory) {
+        PlayerEntity player = (PlayerEntity) (Object) this;
+        
+        if (playersWithCharm.contains(player.getUuid())) {
             ci.cancel();
-            animewitchery$shouldKeepInventory = false;
+            // Remove from set after use
+            playersWithCharm.remove(player.getUuid());
         }
     }
 }
