@@ -2,6 +2,8 @@
   "replace": false,
   "values": [
     "animewitchery:silver_pendant",
-    "animewitchery:latent_mana_pendant"
+    "animewitchery:latent_mana_pendant",
+    "animewitchery:keep_inventory_charm",
+    "animewitchery:emergency_recall"
   ]
 }

@@ -143,6 +143,12 @@ public static final Item RESONANT_TIARA =registerItem("resonant_tiara",
 public static final Item LATENT_MANA_PENDANT =registerItem("latent_mana_pendant",
             new LatentManaPendantItem(new FabricItemSettings().maxCount(1)));
 
+public static final Item KEEP_INVENTORY_CHARM =registerItem("keep_inventory_charm",
+            new KeepInventoryCharmItem(new FabricItemSettings().maxCount(1)));
+
+public static final Item EMERGENCY_RECALL =registerItem("emergency_recall",
+            new EmergencyRecallItem(new FabricItemSettings().maxCount(1)));
+
 public static final Item MANA_ROCKET =registerItem("mana_rocket",
             new ManaRocketItem(new FabricItemSettings().maxCount(1)));
 
@@ -453,6 +459,8 @@ public static final Item KINETIC_BLADE =registerItem("kinetic_breaker",
         entries.add(FULFILLING_TIARA);
         entries.add(RESONANT_TIARA);
         entries.add(LATENT_MANA_PENDANT);
+        entries.add(KEEP_INVENTORY_CHARM);
+        entries.add(EMERGENCY_RECALL);
         entries.add(MANA_ROCKET);
         entries.add(DEEP_DARK_DEEP_DISH);
     }

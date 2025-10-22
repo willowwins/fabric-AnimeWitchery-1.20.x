@@ -35,7 +35,8 @@
     "PiglinGoldTrimMixin",
     "CreeperBlockDamageMixin",
     "VillagerMobGriefingMixin",
-    "CapturingLootingMixin"
+    "CapturingLootingMixin",
+    "KeepInventoryCharmMixin"
 
   ],
   "client": [
