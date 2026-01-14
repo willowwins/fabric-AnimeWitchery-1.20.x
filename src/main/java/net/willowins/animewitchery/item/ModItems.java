@@ -268,6 +268,11 @@ public class ModItems {
         public static final Item REPAIR_ESSENCE = registerItem("repair_essence",
                         new RepairEssenceItem(new FabricItemSettings().rarity(Rarity.RARE)));
 
+        public static final Item HALOIC_SCRAP = registerItem("haloic_scrap",
+                        new Item(new FabricItemSettings().rarity(Rarity.RARE)));
+        public static final Item HALOIC_INGOT = registerItem("haloic_ingot",
+                        new Item(new FabricItemSettings().rarity(Rarity.EPIC)));
+
         // Entity spawn eggs
         public static final Item VOID_WISP_SPAWN_EGG = registerItem("void_wisp_spawn_egg",
                         new VoidWispSpawnEggItem(new FabricItemSettings().maxCount(64)));
@@ -333,6 +338,8 @@ public class ModItems {
                 entries.add(RUNE_STONE);
                 entries.add(BLOOD_RUNE_STONE);
                 entries.add(OBELISK_SHARD);
+                entries.add(HALOIC_SCRAP);
+                entries.add(HALOIC_INGOT);
 
                 // Alchemy and magic items
                 entries.add(MORTAR_AND_PESTLE);
@@ -473,6 +480,7 @@ public class ModItems {
                 entries.add(ModBlocks.PARTICLE_SINK_BLOCK);
                 entries.add(ModBlocks.PLATE_BLOCK);
                 entries.add(ModBlocks.ALCHEMY_TABLE);
+                entries.add(ModBlocks.TRANSMUTATION_PYRE);
                 entries.add(ModBlocks.OBELISK);
                 entries.add(ModBlocks.ACTIVE_OBELISK);
                 entries.add(ModBlocks.BOSS_OBELISK);

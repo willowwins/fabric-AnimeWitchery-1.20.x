@@ -37,20 +37,20 @@ public class BarrierCircleBlockEntity extends BlockEntity {
     private long step3StartTime = 0; // Track when step 3 started for energy ball timing
     private boolean ritualActive = false; // Track if ritual is currently active
     private long lastIntegrityCheck = 0; // Track last integrity check time
-    
+
     // Barrier durability settings
     private int barrierMaxDurability = 1000;
     private int barrierDurability = 1000;
     private int barrierRegenPerSecond = 5;
     private long lastRegenTick = 0;
     private long lastEffectTick = 0;
-    
+
     // Barrier distance storage (from distance glyphs)
     private int northDistance = 5;
     private int southDistance = 5;
     private int eastDistance = 5;
     private int westDistance = 5;
-    
+
     // Cached glyph positions (stored when ritual is activated)
     private BlockPos northGlyphPos = null;
     private BlockPos southGlyphPos = null;
@@ -59,40 +59,46 @@ public class BarrierCircleBlockEntity extends BlockEntity {
 
     // Whitelist of players allowed to cross the barrier
     private final Set<UUID> allowedPlayerUuids = new HashSet<>();
-    
+
     // Ritual configuration based on obelisk variants
     private RitualConfiguration ritualConfiguration = null;
-    
+
+    // Cache for barrier extents
+    private double[] cachedExtents = null;
+    private boolean extentsDirty = true;
+
     public enum CircleStage {
-        BASIC,      // Just created - shows basic outline
-        DEFINED,    // Type set with Barrier Catalyst
-        COMPLETE    // Fully drawn circle
+        BASIC, // Just created - shows basic outline
+        DEFINED, // Type set with Barrier Catalyst
+        COMPLETE // Fully drawn circle
     }
-    
+
     public enum CircleType {
         NONE,
-        BARRIER     // For obelisk placement
+        BARRIER // For obelisk placement
     }
 
     // Global registry of loaded barriers
-    private static final Set<BarrierCircleBlockEntity> LOADED_BARRIERS =
-            Collections.newSetFromMap(new WeakHashMap<>());
+    private static final Set<BarrierCircleBlockEntity> LOADED_BARRIERS = Collections.newSetFromMap(new WeakHashMap<>());
 
     public BarrierCircleBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntities.BARRIER_CIRCLE_BLOCK_ENTITY, pos, state);
         LOADED_BARRIERS.add(this);
     }
-    
+
     @Override
     public void setWorld(World world) {
         super.setWorld(world);
-        
+
         // Register with sky renderer on client side if ritual is active
         if (world != null && world.isClient && isRitualActive()) {
-            System.out.println("BarrierCircleBlockEntity.setWorld: Registering with sky renderer at " + pos + " (ritualActive: " + ritualActive + ", step: " + ritualActivationStep + ")");
+            System.out.println("BarrierCircleBlockEntity.setWorld: Registering with sky renderer at " + pos
+                    + " (ritualActive: " + ritualActive + ", step: " + ritualActivationStep + ")");
             SkyRitualRenderer.addActiveRitual(pos);
         } else {
-            System.out.println("BarrierCircleBlockEntity.setWorld: Not registering with sky renderer - world: " + (world != null) + ", isClient: " + (world != null && world.isClient) + ", isRitualActive: " + isRitualActive());
+            System.out.println("BarrierCircleBlockEntity.setWorld: Not registering with sky renderer - world: "
+                    + (world != null) + ", isClient: " + (world != null && world.isClient) + ", isRitualActive: "
+                    + isRitualActive());
         }
     }
 
@@ -113,7 +119,7 @@ public class BarrierCircleBlockEntity extends BlockEntity {
         nbt.putInt("barrierDurability", barrierDurability);
         nbt.putInt("barrierRegenPerSecond", barrierRegenPerSecond);
         nbt.putLong("lastRegenTick", lastRegenTick);
-        
+
         // Save cached glyph positions
         if (northGlyphPos != null) {
             nbt.putLong("northGlyphPos", northGlyphPos.asLong());
@@ -136,7 +142,7 @@ public class BarrierCircleBlockEntity extends BlockEntity {
         }
         allowed.putInt("count", index);
         nbt.put("allowedPlayers", allowed);
-        
+
         // Save ritual configuration
         if (ritualConfiguration != null) {
             NbtCompound ritualNbt = new NbtCompound();
@@ -165,11 +171,15 @@ public class BarrierCircleBlockEntity extends BlockEntity {
         this.southDistance = nbt.getInt("southDistance");
         this.eastDistance = nbt.getInt("eastDistance");
         this.westDistance = nbt.getInt("westDistance");
-        if (nbt.contains("barrierMaxDurability")) this.barrierMaxDurability = nbt.getInt("barrierMaxDurability");
-        if (nbt.contains("barrierDurability")) this.barrierDurability = nbt.getInt("barrierDurability");
-        if (nbt.contains("barrierRegenPerSecond")) this.barrierRegenPerSecond = nbt.getInt("barrierRegenPerSecond");
-        if (nbt.contains("lastRegenTick")) this.lastRegenTick = nbt.getLong("lastRegenTick");
-        
+        if (nbt.contains("barrierMaxDurability"))
+            this.barrierMaxDurability = nbt.getInt("barrierMaxDurability");
+        if (nbt.contains("barrierDurability"))
+            this.barrierDurability = nbt.getInt("barrierDurability");
+        if (nbt.contains("barrierRegenPerSecond"))
+            this.barrierRegenPerSecond = nbt.getInt("barrierRegenPerSecond");
+        if (nbt.contains("lastRegenTick"))
+            this.lastRegenTick = nbt.getLong("lastRegenTick");
+
         // Load cached glyph positions
         if (nbt.contains("northGlyphPos")) {
             this.northGlyphPos = BlockPos.fromLong(nbt.getLong("northGlyphPos"));
@@ -183,7 +193,7 @@ public class BarrierCircleBlockEntity extends BlockEntity {
         if (nbt.contains("westGlyphPos")) {
             this.westGlyphPos = BlockPos.fromLong(nbt.getLong("westGlyphPos"));
         }
-        
+
         // Load allowed players
         this.allowedPlayerUuids.clear();
         if (nbt.contains("allowedPlayers")) {
@@ -196,29 +206,36 @@ public class BarrierCircleBlockEntity extends BlockEntity {
                 }
             }
         }
-        
+
         // Load ritual configuration
         if (nbt.contains("ritualConfiguration")) {
             NbtCompound ritualNbt = nbt.getCompound("ritualConfiguration");
             RitualConfiguration.RitualType type = RitualConfiguration.RitualType.valueOf(ritualNbt.getString("type"));
             int strength = ritualNbt.getInt("strength");
             int regenRate = ritualNbt.getInt("regenRate");
-            
+
             if (type == RitualConfiguration.RitualType.BARRIER) {
-                RitualConfiguration.BarrierShape shape = RitualConfiguration.BarrierShape.valueOf(ritualNbt.getString("shape"));
-                this.ritualConfiguration = new RitualConfiguration(type, shape, null, strength, regenRate, new HashMap<>());
+                RitualConfiguration.BarrierShape shape = RitualConfiguration.BarrierShape
+                        .valueOf(ritualNbt.getString("shape"));
+                this.ritualConfiguration = new RitualConfiguration(type, shape, null, strength, regenRate,
+                        new HashMap<>());
             } else if (type == RitualConfiguration.RitualType.EFFECT) {
-                RitualConfiguration.EffectType effect = RitualConfiguration.EffectType.valueOf(ritualNbt.getString("effect"));
-                this.ritualConfiguration = new RitualConfiguration(type, null, effect, strength, regenRate, new HashMap<>());
+                RitualConfiguration.EffectType effect = RitualConfiguration.EffectType
+                        .valueOf(ritualNbt.getString("effect"));
+                this.ritualConfiguration = new RitualConfiguration(type, null, effect, strength, regenRate,
+                        new HashMap<>());
             }
         }
-        
+
         // Register with sky renderer on client side if ritual is active
         if (world != null && world.isClient && isRitualActive()) {
-            System.out.println("BarrierCircleBlockEntity.readNbt: Registering with sky renderer at " + pos + " (ritualActive: " + ritualActive + ", step: " + ritualActivationStep + ")");
+            System.out.println("BarrierCircleBlockEntity.readNbt: Registering with sky renderer at " + pos
+                    + " (ritualActive: " + ritualActive + ", step: " + ritualActivationStep + ")");
             SkyRitualRenderer.addActiveRitual(pos);
         } else {
-            System.out.println("BarrierCircleBlockEntity.readNbt: Not registering with sky renderer - world: " + (world != null) + ", isClient: " + (world != null && world.isClient) + ", isRitualActive: " + isRitualActive());
+            System.out.println("BarrierCircleBlockEntity.readNbt: Not registering with sky renderer - world: "
+                    + (world != null) + ", isClient: " + (world != null && world.isClient) + ", isRitualActive: "
+                    + isRitualActive());
         }
     }
 
@@ -242,7 +259,8 @@ public class BarrierCircleBlockEntity extends BlockEntity {
     }
 
     public void setCircleType(CircleType circleType) {
-        System.out.println("BarrierCircleBlockEntity: Setting circle type from " + this.circleType + " to " + circleType);
+        System.out
+                .println("BarrierCircleBlockEntity: Setting circle type from " + this.circleType + " to " + circleType);
         this.circleType = circleType;
         markDirty();
         if (world != null) {
@@ -259,11 +277,11 @@ public class BarrierCircleBlockEntity extends BlockEntity {
     public boolean isDefined() {
         return stage == CircleStage.DEFINED || stage == CircleStage.COMPLETE;
     }
-    
+
     public int getRitualActivationStep() {
         return ritualActivationStep;
     }
-    
+
     public void setRitualActivationStep(int step) {
         this.ritualActivationStep = step;
         markDirty();
@@ -271,10 +289,10 @@ public class BarrierCircleBlockEntity extends BlockEntity {
             world.updateListeners(pos, getCachedState(), getCachedState(), 3);
         }
     }
-    
+
     public void advanceRitualStep() {
         this.ritualActivationStep++;
-        
+
         // Record when step 3 starts for energy ball timing
         if (this.ritualActivationStep == 3 && world != null) {
             this.step3StartTime = world.getTime();
@@ -290,66 +308,77 @@ public class BarrierCircleBlockEntity extends BlockEntity {
                 }
             }
         }
-        
+
         // Mark ritual as active when we start the ritual
         if (this.ritualActivationStep > 0) {
             this.ritualActive = true;
         }
-        
+
         markDirty();
         if (world != null && !world.isClient) {
             world.updateListeners(pos, getCachedState(), getCachedState(), 3);
         }
     }
-    
+
     /**
-     * Builds the ritual configuration based on the obelisk variants around this barrier circle
+     * Builds the ritual configuration based on the obelisk variants around this
+     * barrier circle
+     * Returns true if configuration is valid, false if invalid
+     */
+    /**
+     * Builds the ritual configuration based on the obelisk variants around this
+     * barrier circle
      * Returns true if configuration is valid, false if invalid
      */
     private boolean buildRitualConfiguration() {
-        if (world == null || world.isClient) return false;
-        
+        if (world == null || world.isClient)
+            return false;
+
         RitualConfiguration config = RitualConfigurationBuilder.buildConfiguration(world, pos);
         if (RitualConfigurationBuilder.isValidConfiguration(config)) {
             this.ritualConfiguration = config;
             System.out.println("BarrierCircle: Built ritual configuration: " + config);
-            
+
             // Apply configuration to barrier properties
             applyRitualConfiguration(config);
+            this.extentsDirty = true; // Invalidate cache
             return true;
         } else {
             System.out.println("BarrierCircle: Invalid ritual configuration - ritual cannot activate!");
             return false;
         }
     }
-    
+
     /**
      * Applies the ritual configuration to modify barrier properties
      */
     private void applyRitualConfiguration(RitualConfiguration config) {
-        if (config == null) return;
-        
+        if (config == null)
+            return;
+
         if (config.getRitualType() == RitualConfiguration.RitualType.BARRIER) {
             // Barrier mode: Apply barrier properties
             int strengthMultiplier = config.getStrength();
             int newMaxDurability = 1000 * strengthMultiplier;
             setBarrierMaxDurability(newMaxDurability);
             this.barrierDurability = newMaxDurability; // Reset to full
-            
+
             int regenMultiplier = config.getRegenRate();
             int newRegenRate = 5 * regenMultiplier;
             setBarrierRegenPerSecond(newRegenRate);
-            
-            System.out.println("BarrierCircle: Applied barrier configuration - Durability: " + newMaxDurability + ", Regen: " + newRegenRate + "/s");
+
+            System.out.println("BarrierCircle: Applied barrier configuration - Durability: " + newMaxDurability
+                    + ", Regen: " + newRegenRate + "/s");
             System.out.println("BarrierCircle: Barrier shape: " + config.getBarrierShape());
-            
+
         } else if (config.getRitualType() == RitualConfiguration.RitualType.EFFECT) {
             // Effect mode: Apply effect properties
             int strengthMultiplier = config.getStrength();
             int durationMultiplier = config.getRegenRate(); // In effect mode, regenRate represents duration
-            
-            System.out.println("BarrierCircle: Applied effect configuration - Effect: " + config.getEffectType() + ", Strength: " + strengthMultiplier + ", Duration: " + durationMultiplier);
-            
+
+            System.out.println("BarrierCircle: Applied effect configuration - Effect: " + config.getEffectType()
+                    + ", Strength: " + strengthMultiplier + ", Duration: " + durationMultiplier);
+
             // TODO: Implement effect application logic
             // For now, just set barrier to minimal values since we're in effect mode
             setBarrierMaxDurability(100);
@@ -357,19 +386,19 @@ public class BarrierCircleBlockEntity extends BlockEntity {
             setBarrierRegenPerSecond(0);
         }
     }
-    
+
     public long getStep3StartTime() {
         return step3StartTime;
     }
-    
+
     public boolean isRitualActive() {
         return ritualActive && ritualActivationStep >= 3;
     }
-    
+
     public boolean isBarrierFunctional() {
         return isRitualActive() && barrierDurability > 0;
     }
-    
+
     public void setRitualActive(boolean active) {
         this.ritualActive = active;
         markDirty();
@@ -377,29 +406,48 @@ public class BarrierCircleBlockEntity extends BlockEntity {
             world.updateListeners(pos, getCachedState(), getCachedState(), 3);
         }
     }
-    
-    public int getBarrierDurability() { return barrierDurability; }
-    public int getBarrierMaxDurability() { return barrierMaxDurability; }
-    public void setBarrierMaxDurability(int max) { this.barrierMaxDurability = Math.max(1, max); markDirty(); }
-    public int getBarrierRegenPerSecond() { return barrierRegenPerSecond; }
-    public void setBarrierRegenPerSecond(int regen) { this.barrierRegenPerSecond = Math.max(0, regen); markDirty(); }
+
+    public int getBarrierDurability() {
+        return barrierDurability;
+    }
+
+    public int getBarrierMaxDurability() {
+        return barrierMaxDurability;
+    }
+
+    public void setBarrierMaxDurability(int max) {
+        this.barrierMaxDurability = Math.max(1, max);
+        markDirty();
+    }
+
+    public int getBarrierRegenPerSecond() {
+        return barrierRegenPerSecond;
+    }
+
+    public void setBarrierRegenPerSecond(int regen) {
+        this.barrierRegenPerSecond = Math.max(0, regen);
+        markDirty();
+    }
+
     public void drainBarrierDurability(int amount) {
-        if (amount <= 0) return;
+        if (amount <= 0)
+            return;
         this.barrierDurability = Math.max(0, this.barrierDurability - amount);
         markDirty();
     }
-    
+
     public void setBarrierDistances(int north, int south, int east, int west) {
         this.northDistance = north;
         this.southDistance = south;
         this.eastDistance = east;
         this.westDistance = west;
+        this.extentsDirty = true; // Invalidate cache
         markDirty();
         if (world != null && !world.isClient) {
             world.updateListeners(pos, getCachedState(), getCachedState(), 3);
         }
     }
-    
+
     public void setCachedGlyphPositions(BlockPos north, BlockPos south, BlockPos east, BlockPos west) {
         this.northGlyphPos = north;
         this.southGlyphPos = south;
@@ -410,27 +458,46 @@ public class BarrierCircleBlockEntity extends BlockEntity {
             world.updateListeners(pos, getCachedState(), getCachedState(), 3);
         }
     }
-    
-    public int getNorthDistance() { return northDistance; }
-    public int getSouthDistance() { return southDistance; }
-    public int getEastDistance() { return eastDistance; }
-    public int getWestDistance() { return westDistance; }
-    
+
+    public int getNorthDistance() {
+        return northDistance;
+    }
+
+    public int getSouthDistance() {
+        return southDistance;
+    }
+
+    public int getEastDistance() {
+        return eastDistance;
+    }
+
+    public int getWestDistance() {
+        return westDistance;
+    }
+
     // Ritual configuration methods
-    public RitualConfiguration getRitualConfiguration() { return ritualConfiguration; }
-    public void setRitualConfiguration(RitualConfiguration config) { 
-        this.ritualConfiguration = config; 
+    public RitualConfiguration getRitualConfiguration() {
+        return ritualConfiguration;
+    }
+
+    public void setRitualConfiguration(RitualConfiguration config) {
+        this.ritualConfiguration = config;
+        this.extentsDirty = true;
         markDirty();
     }
-    
+
     public BlockPos[] getDistanceGlyphs() {
         // Use cached glyph positions if available
         List<BlockPos> foundGlyphs = new ArrayList<>();
-        if (northGlyphPos != null) foundGlyphs.add(northGlyphPos);
-        if (southGlyphPos != null) foundGlyphs.add(southGlyphPos);
-        if (eastGlyphPos != null) foundGlyphs.add(eastGlyphPos);
-        if (westGlyphPos != null) foundGlyphs.add(westGlyphPos);
-        
+        if (northGlyphPos != null)
+            foundGlyphs.add(northGlyphPos);
+        if (southGlyphPos != null)
+            foundGlyphs.add(southGlyphPos);
+        if (eastGlyphPos != null)
+            foundGlyphs.add(eastGlyphPos);
+        if (westGlyphPos != null)
+            foundGlyphs.add(westGlyphPos);
+
         return foundGlyphs.toArray(new BlockPos[0]);
     }
 
@@ -454,19 +521,27 @@ public class BarrierCircleBlockEntity extends BlockEntity {
     }
 
     public double[] computeExtents() {
+        if (!extentsDirty && cachedExtents != null) {
+            return cachedExtents;
+        }
+
         // Check if we have a ritual configuration
         if (ritualConfiguration != null) {
             if (ritualConfiguration.getRitualType() == RitualConfiguration.RitualType.BARRIER) {
                 // Barrier mode: Check barrier shape
                 if (ritualConfiguration.getBarrierShape() == RitualConfiguration.BarrierShape.CIRCULAR) {
-                    return computeCircularExtents();
+                    cachedExtents = computeCircularExtents();
+                    extentsDirty = false;
+                    return cachedExtents;
                 }
             } else if (ritualConfiguration.getRitualType() == RitualConfiguration.RitualType.EFFECT) {
                 // Effect mode: Always use circular area for effects
-                return computeCircularExtents();
+                cachedExtents = computeCircularExtents();
+                extentsDirty = false;
+                return cachedExtents;
             }
         }
-        
+
         // Default rectangular barrier
         int northRadius = Math.max(0, northDistance * 2);
         int southRadius = Math.max(0, southDistance * 2);
@@ -478,9 +553,12 @@ public class BarrierCircleBlockEntity extends BlockEntity {
         double maxX = centerX + eastRadius;
         double minZ = centerZ - northRadius;
         double maxZ = centerZ + southRadius;
-        return new double[]{minX, maxX, minZ, maxZ};
+
+        cachedExtents = new double[] { minX, maxX, minZ, maxZ };
+        extentsDirty = false;
+        return cachedExtents;
     }
-    
+
     private double[] computeCircularExtents() {
         // For circular barriers, we need to compute the radius and center
         // Use the maximum distance from any direction as the radius
@@ -488,9 +566,9 @@ public class BarrierCircleBlockEntity extends BlockEntity {
         double radius = maxRadius * 2.0;
         double centerX = pos.getX() + 0.5;
         double centerZ = pos.getZ() + 0.5;
-        
+
         // Return circular bounds (we'll use these for distance calculations)
-        return new double[]{centerX, centerZ, radius, 0}; // centerX, centerZ, radius, unused
+        return new double[] { centerX, centerZ, radius, 0 }; // centerX, centerZ, radius, unused
     }
 
     private boolean isPlayerAllowed(ServerPlayerEntity player) {
@@ -514,27 +592,31 @@ public class BarrierCircleBlockEntity extends BlockEntity {
     }
 
     private void enforceBarrier() {
-        if (world == null || world.isClient) return;
-        if (!isBarrierFunctional()) return;
-        
+        if (world == null || world.isClient)
+            return;
+        if (!isBarrierFunctional())
+            return;
+
         // Check if we have a ritual configuration and use appropriate barrier logic
-        if (ritualConfiguration != null && ritualConfiguration.getRitualType() == RitualConfiguration.RitualType.EFFECT) {
+        if (ritualConfiguration != null
+                && ritualConfiguration.getRitualType() == RitualConfiguration.RitualType.EFFECT) {
             // EFFECT mode doesn't push players out
             return;
         }
-        
+
         double[] extents = computeExtents();
-        
+
         if (world instanceof ServerWorld serverWorld) {
             for (ServerPlayerEntity player : serverWorld.getPlayers()) {
                 double x = player.getX();
                 double y = player.getY();
                 double z = player.getZ();
-                
+
                 boolean inside;
                 double nx = 0, nz = 0, targetX = 0, targetZ = 0;
-                
-                if (ritualConfiguration != null && ritualConfiguration.getBarrierShape() == RitualConfiguration.BarrierShape.CIRCULAR) {
+
+                if (ritualConfiguration != null
+                        && ritualConfiguration.getBarrierShape() == RitualConfiguration.BarrierShape.CIRCULAR) {
                     // Circular barrier logic
                     double centerX = extents[0];
                     double centerZ = extents[1];
@@ -543,7 +625,7 @@ public class BarrierCircleBlockEntity extends BlockEntity {
                     double dz = z - centerZ;
                     double distanceSq = dx * dx + dz * dz;
                     inside = distanceSq <= (radius * radius);
-                    
+
                     if (inside && !isPlayerAllowed(player)) {
                         // Calculate outward normal from center
                         double distance = Math.sqrt(distanceSq);
@@ -554,7 +636,7 @@ public class BarrierCircleBlockEntity extends BlockEntity {
                             nx = 1.0;
                             nz = 0.0;
                         }
-                        
+
                         // Push to just outside the circle
                         targetX = centerX + nx * (radius + 0.01);
                         targetZ = centerZ + nz * (radius + 0.01);
@@ -565,7 +647,7 @@ public class BarrierCircleBlockEntity extends BlockEntity {
                     // Rectangular barrier logic
                     double minX = extents[0], maxX = extents[1], minZ = extents[2], maxZ = extents[3];
                     inside = x >= minX && x <= maxX && z >= minZ && z <= maxZ;
-                    
+
                     if (inside && !isPlayerAllowed(player)) {
                         // Compute nearest boundary normal
                         double distToWest = x - minX;
@@ -573,12 +655,21 @@ public class BarrierCircleBlockEntity extends BlockEntity {
                         double distToNorth = z - minZ;
                         double distToSouth = maxZ - z;
                         double min = Math.min(Math.min(distToWest, distToEast), Math.min(distToNorth, distToSouth));
-                        
-                        if (min == distToWest) { nx = -1.0; targetX = minX - 0.01; }
-                        else if (min == distToEast) { nx = 1.0; targetX = maxX + 0.01; }
-                        else if (min == distToNorth) { nz = -1.0; targetZ = minZ - 0.01; }
-                        else { nz = 1.0; targetZ = maxZ + 0.01; }
-                        
+
+                        if (min == distToWest) {
+                            nx = -1.0;
+                            targetX = minX - 0.01;
+                        } else if (min == distToEast) {
+                            nx = 1.0;
+                            targetX = maxX + 0.01;
+                        } else if (min == distToNorth) {
+                            nz = -1.0;
+                            targetZ = minZ - 0.01;
+                        } else {
+                            nz = 1.0;
+                            targetZ = maxZ + 0.01;
+                        }
+
                         if (min == distToWest || min == distToEast) {
                             nz = 0.0;
                             targetZ = z;
@@ -590,7 +681,7 @@ public class BarrierCircleBlockEntity extends BlockEntity {
                         continue; // Player not inside or allowed
                     }
                 }
-                
+
                 // Apply barrier physics (same for both shapes)
                 var v = player.getVelocity();
                 double inward = v.x * (-nx) + v.z * (-nz);
@@ -600,7 +691,7 @@ public class BarrierCircleBlockEntity extends BlockEntity {
                     double rz = inward * (-nz);
                     v = v.add(-rx, 0, -rz);
                 }
-                
+
                 // Apply outward push
                 double push = 0.4;
                 v = v.add(nx * push, 0, nz * push);
@@ -612,19 +703,20 @@ public class BarrierCircleBlockEntity extends BlockEntity {
 
                 // Optional feedback
                 if (serverWorld.getTime() % 10 == 0) {
-                    serverWorld.playSound(null, player.getBlockPos(), SoundEvents.BLOCK_AMETHYST_BLOCK_HIT, SoundCategory.PLAYERS, 0.2f, 1.5f);
+                    serverWorld.playSound(null, player.getBlockPos(), SoundEvents.BLOCK_AMETHYST_BLOCK_HIT,
+                            SoundCategory.PLAYERS, 0.2f, 1.5f);
                 }
             }
         }
     }
-    
+
     public boolean containsPosition(Vec3d position) {
         double[] extents = computeExtents();
-        
+
         // EFFECT mode is always circular; BARRIER is circular only if configured
-        if (ritualConfiguration != null && (
-                ritualConfiguration.getRitualType() == RitualConfiguration.RitualType.EFFECT ||
-                ritualConfiguration.getBarrierShape() == RitualConfiguration.BarrierShape.CIRCULAR)) {
+        if (ritualConfiguration != null
+                && (ritualConfiguration.getRitualType() == RitualConfiguration.RitualType.EFFECT ||
+                        ritualConfiguration.getBarrierShape() == RitualConfiguration.BarrierShape.CIRCULAR)) {
             // Circular area check
             double centerX = extents[0];
             double centerZ = extents[1];
@@ -640,7 +732,8 @@ public class BarrierCircleBlockEntity extends BlockEntity {
     }
 
     public void absorbExplosion(Vec3d explosionPos, float power) {
-        if (!isRitualActive()) return;
+        if (!isRitualActive())
+            return;
         int damage = Math.max(1, Math.round(power * 50.0f));
         drainBarrierDurability(damage);
     }
@@ -653,7 +746,7 @@ public class BarrierCircleBlockEntity extends BlockEntity {
         }
         return null;
     }
-    
+
     /**
      * Check if the ritual integrity is maintained
      * Returns true if the ritual is intact, false if it should be deactivated
@@ -662,43 +755,50 @@ public class BarrierCircleBlockEntity extends BlockEntity {
         if (!ritualActive || world == null || world.isClient) {
             return true; // No integrity check needed if not active or on client
         }
-        
+
         // Check if the barrier circle itself is still intact
         if (!world.getBlockState(pos).isOf(ModBlocks.BARRIER_CIRCLE)) {
             System.out.println("BarrierCircle: Circle destroyed - ritual integrity broken!");
             return false;
         }
-        
+
         // Check if all required obelisks are still present and active
         BlockPos northPos = pos.north(5);
         BlockPos southPos = pos.south(5);
         BlockPos eastPos = pos.east(5);
         BlockPos westPos = pos.west(5);
-        
+
         boolean hasNorth = world.getBlockState(northPos).isOf(ModBlocks.ACTIVE_OBELISK);
         boolean hasSouth = world.getBlockState(southPos).isOf(ModBlocks.ACTIVE_OBELISK);
         boolean hasEast = world.getBlockState(eastPos).isOf(ModBlocks.ACTIVE_OBELISK);
         boolean hasWest = world.getBlockState(westPos).isOf(ModBlocks.ACTIVE_OBELISK);
-        
-        // Check if all required distance glyphs are still present (use cached positions)
-        boolean hasNorthGlyph = northGlyphPos != null && world.getBlockState(northGlyphPos).isOf(ModBlocks.BARRIER_DISTANCE_GLYPH);
-        boolean hasSouthGlyph = southGlyphPos != null && world.getBlockState(southGlyphPos).isOf(ModBlocks.BARRIER_DISTANCE_GLYPH);
-        boolean hasEastGlyph = eastGlyphPos != null && world.getBlockState(eastGlyphPos).isOf(ModBlocks.BARRIER_DISTANCE_GLYPH);
-        boolean hasWestGlyph = westGlyphPos != null && world.getBlockState(westGlyphPos).isOf(ModBlocks.BARRIER_DISTANCE_GLYPH);
-        
+
+        // Check if all required distance glyphs are still present (use cached
+        // positions)
+        boolean hasNorthGlyph = northGlyphPos != null
+                && world.getBlockState(northGlyphPos).isOf(ModBlocks.BARRIER_DISTANCE_GLYPH);
+        boolean hasSouthGlyph = southGlyphPos != null
+                && world.getBlockState(southGlyphPos).isOf(ModBlocks.BARRIER_DISTANCE_GLYPH);
+        boolean hasEastGlyph = eastGlyphPos != null
+                && world.getBlockState(eastGlyphPos).isOf(ModBlocks.BARRIER_DISTANCE_GLYPH);
+        boolean hasWestGlyph = westGlyphPos != null
+                && world.getBlockState(westGlyphPos).isOf(ModBlocks.BARRIER_DISTANCE_GLYPH);
+
         if (!hasNorth || !hasSouth || !hasEast || !hasWest) {
-            System.out.println("BarrierCircle: Obelisk missing - ritual integrity broken! N:" + hasNorth + " S:" + hasSouth + " E:" + hasEast + " W:" + hasWest);
+            System.out.println("BarrierCircle: Obelisk missing - ritual integrity broken! N:" + hasNorth + " S:"
+                    + hasSouth + " E:" + hasEast + " W:" + hasWest);
             return false;
         }
-        
+
         if (!hasNorthGlyph || !hasSouthGlyph || !hasEastGlyph || !hasWestGlyph) {
-            System.out.println("BarrierCircle: Distance glyph missing - ritual integrity broken! N:" + hasNorthGlyph + " S:" + hasSouthGlyph + " E:" + hasEastGlyph + " W:" + hasWestGlyph);
+            System.out.println("BarrierCircle: Distance glyph missing - ritual integrity broken! N:" + hasNorthGlyph
+                    + " S:" + hasSouthGlyph + " E:" + hasEastGlyph + " W:" + hasWestGlyph);
             return false;
         }
-        
+
         return true;
     }
-    
+
     private BlockPos findDistanceGlyph(BlockPos circlePos, Direction direction) {
         // Scan from 0 to 100 blocks in the specified direction
         for (int distance = 0; distance <= 100; distance++) {
@@ -709,13 +809,14 @@ public class BarrierCircleBlockEntity extends BlockEntity {
         }
         return null; // No glyph found in this direction
     }
-    
+
     /**
      * Deactivate the ritual and all obelisks
      */
     public void deactivateRitual() {
-        if (world == null || world.isClient) return;
-        
+        if (world == null || world.isClient)
+            return;
+
         System.out.println("BarrierCircle: Deactivating ritual due to integrity failure!");
         SkyRitualRenderer.removeActiveRitual(pos);
 
@@ -724,27 +825,27 @@ public class BarrierCircleBlockEntity extends BlockEntity {
         this.ritualActivationStep = 0;
         this.step3StartTime = 0;
         this.allowedPlayerUuids.clear();
-        
+
         // Deactivate all obelisks
         BlockPos northPos = pos.north(5);
         BlockPos southPos = pos.south(5);
         BlockPos eastPos = pos.east(5);
         BlockPos westPos = pos.west(5);
-        
+
         deactivateObelisk(world, northPos);
         deactivateObelisk(world, southPos);
         deactivateObelisk(world, eastPos);
         deactivateObelisk(world, westPos);
-        
+
         // Play deactivation sound
         world.playSound(null, pos, SoundEvents.BLOCK_BEACON_DEACTIVATE, SoundCategory.BLOCKS, 1.0f, 1.0f);
-        
+
         markDirty();
         if (world != null) {
             world.updateListeners(pos, getCachedState(), getCachedState(), 3);
         }
     }
-    
+
     private void deactivateObelisk(World world, BlockPos obeliskPos) {
         if (world.getBlockState(obeliskPos).isOf(ModBlocks.ACTIVE_OBELISK)) {
             // Get the texture variant from the active obelisk before converting
@@ -753,36 +854,37 @@ public class BarrierCircleBlockEntity extends BlockEntity {
             if (activeObelisk instanceof ActiveObeliskBlockEntity activeObeliskEntity) {
                 textureVariant = activeObeliskEntity.getTextureVariant();
             }
-            
+
             world.setBlockState(obeliskPos, ModBlocks.OBELISK.getDefaultState());
-            
+
             // Set the texture variant on the new obelisk block entity
             BlockEntity newObelisk = world.getBlockEntity(obeliskPos);
             if (newObelisk instanceof ObeliskBlockEntity obeliskEntity) {
                 obeliskEntity.setTextureVariant(textureVariant);
             }
-            
+
             // Spawn deactivation particles
             for (int i = 0; i < 10; i++) {
                 double x = obeliskPos.getX() + 0.5 + (world.random.nextDouble() - 0.5) * 2.0;
                 double y = obeliskPos.getY() + 1.0 + world.random.nextDouble() * 3.0;
                 double z = obeliskPos.getZ() + 0.5 + (world.random.nextDouble() - 0.5) * 2.0;
-                
+
                 world.addParticle(ParticleTypes.SMOKE, x, y, z, 0, 0.1, 0);
             }
         }
     }
-    
+
     /**
      * Static tick method for integrity checking
      */
     public static void tick(World world, BlockPos pos, BlockState state, BarrierCircleBlockEntity entity) {
-        if (world.isClient) return;
-        
+        if (world.isClient)
+            return;
+
         // Check integrity every 20 ticks (1 second) if ritual is active
         if (entity.isRitualActive() && world.getTime() - entity.lastIntegrityCheck >= 20) {
             entity.lastIntegrityCheck = world.getTime();
-            
+
             if (!entity.checkRitualIntegrity()) {
                 entity.deactivateRitual();
             }
@@ -792,7 +894,7 @@ public class BarrierCircleBlockEntity extends BlockEntity {
         if (entity.isBarrierFunctional()) {
             entity.enforceBarrier();
         }
-        
+
         // Apply EFFECT mode pulses once per second
         if (entity.isRitualActive() && entity.ritualConfiguration != null &&
                 entity.ritualConfiguration.getRitualType() == RitualConfiguration.RitualType.EFFECT) {
@@ -802,7 +904,7 @@ public class BarrierCircleBlockEntity extends BlockEntity {
                 entity.pulseEffectArea();
             }
         }
-        
+
         // Regenerate durability each second
         if (entity.isRitualActive() && entity.barrierDurability < entity.barrierMaxDurability) {
             long now = world.getTime();
@@ -816,9 +918,11 @@ public class BarrierCircleBlockEntity extends BlockEntity {
     }
 
     private void pulseEffectArea() {
-        if (!(world instanceof ServerWorld serverWorld)) return;
+        if (!(world instanceof ServerWorld serverWorld))
+            return;
         RitualConfiguration cfg = this.ritualConfiguration;
-        if (cfg == null || cfg.getRitualType() != RitualConfiguration.RitualType.EFFECT) return;
+        if (cfg == null || cfg.getRitualType() != RitualConfiguration.RitualType.EFFECT)
+            return;
 
         // Determine circular area
         int maxRadius = Math.max(Math.max(northDistance, southDistance), Math.max(eastDistance, westDistance)) * 2;
@@ -828,7 +932,7 @@ public class BarrierCircleBlockEntity extends BlockEntity {
 
         // Search box around the circle area (full chunk height for maximum coverage)
         Box search = new Box(centerX - radius, 0, centerZ - radius,
-                             centerX + radius, 256, centerZ + radius);
+                centerX + radius, 256, centerZ + radius);
 
         // Map ritual effect type to status effect
         StatusEffect effect = switch (cfg.getEffectType()) {
@@ -836,7 +940,8 @@ public class BarrierCircleBlockEntity extends BlockEntity {
             case REGENERATION -> StatusEffects.REGENERATION;
             default -> null;
         };
-        if (effect == null) return;
+        if (effect == null)
+            return;
 
         // Amplifier and duration mapping
         int amplifier = Math.max(0, cfg.getStrength() - 1); // 1..3 -> 0..2
@@ -848,11 +953,11 @@ public class BarrierCircleBlockEntity extends BlockEntity {
                     double dx = e.getX() - centerX;
                     double dz = e.getZ() - centerZ;
                     return (dx * dx + dz * dz) <= (radius * radius);
-                }
-        );
+                });
 
         if (!targets.isEmpty()) {
-            StatusEffectInstance instance = new StatusEffectInstance(effect, durationTicks, amplifier, true, true, true);
+            StatusEffectInstance instance = new StatusEffectInstance(effect, durationTicks, amplifier, true, true,
+                    true);
             for (LivingEntity entity : targets) {
                 // For negative effects (poison), only apply to denied players
                 // For positive effects (regeneration), apply to allowed players
@@ -861,8 +966,7 @@ public class BarrierCircleBlockEntity extends BlockEntity {
                     if (entity instanceof ServerPlayerEntity player && isPlayerAllowed(player)) {
                         continue; // Skip allowed players for poison
                     }
-                }
-                else if (cfg.getEffectType() == RitualConfiguration.EffectType.REGENERATION) {
+                } else if (cfg.getEffectType() == RitualConfiguration.EffectType.REGENERATION) {
                     // Regeneration affects everyone, poison only affects denied players
                     if (entity instanceof ServerPlayerEntity player && !isPlayerAllowed(player)) {
                         continue; // Skip denied players for regeneration
@@ -891,4 +995,4 @@ public class BarrierCircleBlockEntity extends BlockEntity {
         LOADED_BARRIERS.remove(this);
     }
 
-} 
+}

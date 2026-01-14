@@ -55,22 +55,21 @@ public class AnimeWitchery implements ModInitializer {
 	public static final String MOD_ID = "animewitchery";
 	public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 	public static final Identifier SWING_MISS_PACKET = new Identifier(MOD_ID, "swing_miss");
+
 	public class AnimeWitcheryComponents implements EntityComponentInitializer {
-		public static final ComponentKey<ManaComponent> MANA =
-				ComponentRegistryV3.INSTANCE.getOrCreate(
-						new Identifier("animewitchery", "mana"),
-						ManaComponent.class
-				);
+		public static final ComponentKey<ManaComponent> MANA = ComponentRegistryV3.INSTANCE.getOrCreate(
+				new Identifier("animewitchery", "mana"),
+				ManaComponent.class);
 
 		@Override
 		public void registerEntityComponentFactories(EntityComponentFactoryRegistry registry) {
 			registry.registerFor(
 					PlayerEntity.class,
 					MANA,
-					player -> new ManaComponent(player)
-			);
+					player -> new ManaComponent(player));
 
-		}}
+		}
+	}
 
 	@Override
 	public void onInitialize() {
@@ -87,7 +86,7 @@ public class AnimeWitchery implements ModInitializer {
 
 		// Register spellbook packet receivers
 		net.willowins.animewitchery.networking.SpellbookPackets.registerServerReceivers();
-		
+
 		// Register C2S packets (Client-to-Server)
 		net.willowins.animewitchery.networking.ModPackets.registerC2SPackets();
 
@@ -121,19 +120,19 @@ public class AnimeWitchery implements ModInitializer {
 		ModParticles.registerParticles();
 
 		ModEffect.registerEffects();
-		
+
 		ModPotions.registerPotions();
 		ModBrewingRecipes.registerBrewingRecipes();
 
-		        ModEntities.registerModEntities();
+		ModEntities.registerModEntities();
 
-        // Register entity attributes
-        FabricDefaultAttributeRegistry.register(ModEntities.VOID_WISP, VoidWispEntity.createVoidWispAttributes());
+		// Register entity attributes
+		FabricDefaultAttributeRegistry.register(ModEntities.VOID_WISP, VoidWispEntity.createVoidWispAttributes());
 
-        // Register void wisp spawning
-        net.willowins.animewitchery.world.spawn.VoidWispSpawnHandler.registerSpawns();
+		// Register void wisp spawning
+		net.willowins.animewitchery.world.spawn.VoidWispSpawnHandler.registerSpawns();
 
-        ExcavationBreakHandler.register();
+		ExcavationBreakHandler.register();
 		BarrierBlockProtectionHandler.register();
 
 		ExpBoostHandler.register();
@@ -141,9 +140,9 @@ public class AnimeWitchery implements ModInitializer {
 		BlastingBreakHandler.register();
 
 		ChestplateElytraFlight.register();
-		
+
 		NetherrackTransformHandler.register();
-		
+
 		SpawnerNbtHandler.register();
 
 		LOGGER.info("Hello Fabric world!");
@@ -160,16 +159,18 @@ public class AnimeWitchery implements ModInitializer {
 		}
 		// Register explosion absorber hook
 		BarrierExplosionHandler.register();
-		
-		// Register barrier interaction handler (allows unauthorized players to interact with barrier circles)
+
+		// Register barrier interaction handler (allows unauthorized players to interact
+		// with barrier circles)
 		BarrierInteractionHandler.register();
-		
+
 		// Register barrier collision handler (prevents unauthorized entry)
-		BarrierCollisionHandler.register();
-		
-		// Register barrier protection handler (prevents unauthorized block breaking/interaction)
+		// BarrierCollisionHandler.register();
+
+		// Register barrier protection handler (prevents unauthorized block
+		// breaking/interaction)
 		BarrierProtectionHandler.register();
-		
+
 		// Register spellbook enchanting table handlers
 		SpellbookEnchantingHandler.register();
 		SpellbookInteractionHandler.register();
@@ -188,12 +189,14 @@ public class AnimeWitchery implements ModInitializer {
 			if (EffigyFountainBlock.active) {
 				EffigyFountainBlock.ticks++;
 				// Fountain now acts infinitely - deactivation disabled
-				/*if (EffigyFountainBlock.ticks == 20*36000) {
-					World world = EffigyFountainBlock.effigyworld;
-					BlockPos blockPos = EffigyFountainBlock.lastEffigyPos;
-					world.setBlockState(blockPos, ModBlocks.EFFIGY_FOUNTAIN.getDefaultState());
-					EffigyFountainBlock.active = false;
-				}*/
+				/*
+				 * if (EffigyFountainBlock.ticks == 20*36000) {
+				 * World world = EffigyFountainBlock.effigyworld;
+				 * BlockPos blockPos = EffigyFountainBlock.lastEffigyPos;
+				 * world.setBlockState(blockPos, ModBlocks.EFFIGY_FOUNTAIN.getDefaultState());
+				 * EffigyFountainBlock.active = false;
+				 * }
+				 */
 			}
 		});
 
@@ -224,4 +227,3 @@ public class AnimeWitchery implements ModInitializer {
 
 	}
 }
-
