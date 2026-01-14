@@ -33,15 +33,15 @@ public class NeedleItem extends SwordItem {
             if (!world.isClient) {
                 if (!tryConsumeFromPlayerAndCatalysts(user, USE_MANA_COST)) {
                     user.sendMessage(
-                            Text.literal("Not enough mana or stored mana in catalysts to throw needle (requires " + USE_MANA_COST + ")")
+                            Text.literal("Not enough mana or stored mana in catalysts to throw needle (requires "
+                                    + USE_MANA_COST + ")")
                                     .formatted(Formatting.RED),
-                            true
-                    );
+                            true);
                     return TypedActionResult.fail(stack);
                 }
 
                 // Spawn the projectile
-                NeedleProjectileEntity needle = new NeedleProjectileEntity(world, user);
+                NeedleProjectileEntity needle = new NeedleProjectileEntity(world, user, stack);
                 needle.setVelocity(user, user.getPitch(), user.getYaw(), 0.0f, 3.5f, 0.0f);
                 world.spawnEntity(needle);
 
@@ -53,8 +53,12 @@ public class NeedleItem extends SwordItem {
                 // Damage the item
                 stack.damage(1, user, p -> p.sendToolBreakStatus(hand));
 
+                if (!user.getAbilities().creativeMode) {
+                    stack.decrement(1);
+                }
+
                 // Cooldown
-                user.getItemCooldownManager().set(stack.getItem(), 200);
+                user.getItemCooldownManager().set(stack.getItem(), 30);
             }
             return TypedActionResult.success(stack, world.isClient());
         }
@@ -84,7 +88,8 @@ public class NeedleItem extends SwordItem {
         for (ItemStack stack : player.getInventory().main) {
             if (stack.getItem() instanceof AlchemicalCatalystItem) {
                 int stored = AlchemicalCatalystItem.getStoredMana(stack);
-                if (stored <= 0) continue;
+                if (stored <= 0)
+                    continue;
                 int take = Math.min(stored, remaining);
                 AlchemicalCatalystItem.setStoredMana(stack, stored - take);
                 remaining -= take;

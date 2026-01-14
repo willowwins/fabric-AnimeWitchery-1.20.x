@@ -1,4 +1,5 @@
 {
+  "item.animewitchery.copper_warhammer": "Copper Warhammer",
   "message.animewitchery.inventory_full": "Your inventory is full!",
   "message.animewitchery.rituals_book_created": "The raw silver reacts with the book, creating a Grimoire of Quarters!",
   "message.animewitchery.wand_cast_spell": "Casting spell: %s",
@@ -33,7 +34,6 @@
   "message.animewitchery.page_exported": "Spellbook page exported: %s",
   "message.animewitchery.page_imported": "Spellbook page imported: %s",
   "message.animewitchery.spellbook_configurations_full": "Spellbook is full! (Maximum 10 configurations)",
-  
   "item.animewitchery.wand": "Magic Wand",
   "item.animewitchery.spellbook": "Spellbook",
   "item.animewitchery.spellbook_page": "Spellbook Page",
@@ -149,7 +149,6 @@
   "item.animewitchery.water_rune_stone": "Water Rune Stone",
   "item.animewitchery.water_spell_scroll": "Water Spell Scroll",
   "item.animewitchery.weatheritem": "Weather Changer",
-  
   "block.animewitchery.active_binding_spell": "Active Binding Spell",
   "block.animewitchery.active_effigy_fountain": "Active Effigy Fountain",
   "block.animewitchery.active_obelisk": "Active Obelisk",
@@ -194,25 +193,20 @@
   "block.animewitchery.spell_trigger_block": "Spell Trigger Block",
   "block.animewitchery.strawberry_crop": "Strawberry Crop",
   "block.animewitchery.protected_chest": "Protected Chest",
-  
   "effect.animewitchery.mana_regen": "Mana Regeneration",
   "effect.animewitchery.void_bound": "Void Bound",
-  
   "item.minecraft.potion.effect.mana_regen": "Potion of Mana Regeneration",
   "item.minecraft.splash_potion.effect.mana_regen": "Splash Potion of Mana Regeneration",
   "item.minecraft.lingering_potion.effect.mana_regen": "Lingering Potion of Mana Regeneration",
   "item.minecraft.tipped_arrow.effect.mana_regen": "Arrow of Mana Regeneration",
-  
   "item.minecraft.potion.effect.long_mana_regen": "Potion of Mana Regeneration",
   "item.minecraft.splash_potion.effect.long_mana_regen": "Splash Potion of Mana Regeneration",
   "item.minecraft.lingering_potion.effect.long_mana_regen": "Lingering Potion of Mana Regeneration",
   "item.minecraft.tipped_arrow.effect.long_mana_regen": "Arrow of Mana Regeneration",
-  
   "item.minecraft.potion.effect.strong_mana_regen": "Potion of Mana Regeneration",
   "item.minecraft.splash_potion.effect.strong_mana_regen": "Splash Potion of Mana Regeneration",
   "item.minecraft.lingering_potion.effect.strong_mana_regen": "Lingering Potion of Mana Regeneration",
   "item.minecraft.tipped_arrow.effect.strong_mana_regen": "Arrow of Mana Regeneration",
-  
   "enchantment.animewitchery.blasting": "Blasting",
   "enchantment.animewitchery.excavation": "Excavation",
   "enchantment.animewitchery.excavate_enchant": "Excavation",
@@ -223,6 +217,5 @@
   "enchantment.animewitchery.sliver_enchant": "Needle Throw",
   "enchantment.animewitchery.lead_coated_paint": "Lead Coated",
   "enchantment.animewitchery.capturing": "Capturing",
-  
   "itemGroup.animewitchery.animewitchery": "Anime Witchery"
 }
