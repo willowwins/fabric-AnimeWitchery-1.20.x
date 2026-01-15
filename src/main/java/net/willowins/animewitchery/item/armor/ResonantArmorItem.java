@@ -72,7 +72,8 @@ public final class ResonantArmorItem extends ModArmorItem implements GeoItem {
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
         controllers.add(new AnimationController<>(this, 20, state -> {
             Entity entity = state.getData(DataTickets.ENTITY);
-            if (entity == null) return PlayState.STOP;
+            if (entity == null)
+                return PlayState.STOP;
 
             // Always play idle for armor stands
             if (entity instanceof ArmorStandEntity) {
@@ -105,8 +106,71 @@ public final class ResonantArmorItem extends ModArmorItem implements GeoItem {
 
     @Override
     public void inventoryTick(ItemStack stack, World world, Entity entity, int slot, boolean selected) {
+        if (world.isClient() && entity instanceof PlayerEntity player) {
+            if (hasFullSet(player) && shouldSpawnAura(player)) {
+                spawnResonantAura(world, player);
+            }
+        }
         // Call parent to apply status effects
         super.inventoryTick(stack, world, entity, slot, selected);
+    }
+
+    private boolean shouldSpawnAura(PlayerEntity player) {
+        // 1. Check for Full Mana
+        var manaComponent = net.willowins.animewitchery.mana.ModComponents.PLAYER_MANA.get(player);
+        if (manaComponent.getMana() < manaComponent.getMaxMana()) {
+            return false;
+        }
+
+        // 2. Check for Resonant Greatsword in Main Hand
+        ItemStack mainHand = player.getMainHandStack();
+        if (!(mainHand.getItem() instanceof net.willowins.animewitchery.item.custom.ResonantGreatSwordItem)) {
+            return false;
+        }
+
+        // 3. Check for >75% Charge
+        float charge = net.willowins.animewitchery.item.custom.ResonantGreatSwordItem.getCharge(mainHand);
+        float maxCharge = net.willowins.animewitchery.item.custom.ResonantGreatSwordItem.getMaxCharge();
+        return charge >= (maxCharge * 0.75f);
+    }
+
+    private void spawnResonantAura(World world, PlayerEntity player) {
+        double x = player.getX() + (world.random.nextDouble() - 0.5) * 1.5;
+        double y = player.getY() + world.random.nextDouble() * 2.0;
+        double z = player.getZ() + (world.random.nextDouble() - 0.5) * 1.5;
+
+        // Rising Wisp Particles (Purple to Green)
+        team.lodestar.lodestone.systems.particle.builder.WorldParticleBuilder
+                .create(team.lodestar.lodestone.registry.common.particle.LodestoneParticleRegistry.WISP_PARTICLE)
+                .setScaleData(
+                        team.lodestar.lodestone.systems.particle.data.GenericParticleData.create(0.35f, 0f).build())
+                .setTransparencyData(
+                        team.lodestar.lodestone.systems.particle.data.GenericParticleData.create(0.7f, 0f).build())
+                .setColorData(team.lodestar.lodestone.systems.particle.data.color.ColorParticleData
+                        .create(new java.awt.Color(148, 0, 211), new java.awt.Color(50, 205, 50)) // Dark Violet to Lime
+                                                                                                  // Green
+                        .setCoefficient(1.2f)
+                        .setEasing(team.lodestar.lodestone.systems.easing.Easing.EXPO_OUT)
+                        .build())
+                .setLifetime(30)
+                .addMotion(0, 0.12 + world.random.nextDouble() * 0.1, 0)
+                .enableNoClip()
+                .spawn(world, x, y, z);
+
+        // Occasional intense sparkles
+        if (world.random.nextInt(15) == 0) {
+            team.lodestar.lodestone.systems.particle.builder.WorldParticleBuilder
+                    .create(team.lodestar.lodestone.registry.common.particle.LodestoneParticleRegistry.SPARKLE_PARTICLE)
+                    .setScaleData(
+                            team.lodestar.lodestone.systems.particle.data.GenericParticleData.create(0.6f, 0f).build())
+                    .setColorData(team.lodestar.lodestone.systems.particle.data.color.ColorParticleData
+                            .create(new java.awt.Color(200, 100, 255), new java.awt.Color(100, 255, 100))
+                            .build())
+                    .setLifetime(20)
+                    .spawn(world, player.getX() + (world.random.nextDouble() - 0.5) * 2,
+                            player.getY() + world.random.nextDouble() * 2.5,
+                            player.getZ() + (world.random.nextDouble() - 0.5) * 2);
+        }
     }
 
     @Override

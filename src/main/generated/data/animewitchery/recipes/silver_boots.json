@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "d": {
+      "item": "minecraft:diamond_boots"
+    },
+    "n": {
+      "item": "animewitchery:silveringot"
+    }
+  },
+  "pattern": [
+    "   ",
+    "ndn",
+    "n n"
+  ],
+  "result": {
+    "item": "animewitchery:silver_boots"
+  },
+  "show_notification": true
+}

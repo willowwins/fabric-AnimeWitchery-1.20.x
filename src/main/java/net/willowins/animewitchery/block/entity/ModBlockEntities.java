@@ -124,7 +124,7 @@ public class ModBlockEntities {
                 TRANSMUTATION_PYRE_BLOCK_ENTITY = Registry.register(Registries.BLOCK_ENTITY_TYPE,
                                 new Identifier(AnimeWitchery.MOD_ID, "transmutation_pyre_be"),
                                 FabricBlockEntityTypeBuilder.create(TransmutationPyreBlockEntity::new,
-                                                ModBlocks.TRANSMUTATION_PYRE).build());
+                                                ModBlocks.TRANSMUTATION_PYRE_BLOCK).build());
                 AnimeWitchery.LOGGER.info("Registering Block Entities For {}", MOD_ID);
         }
 }

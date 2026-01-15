@@ -24,7 +24,14 @@ public enum ModToolMaterial implements ToolMaterial {
             6.0f,
             2.0f,
             18,
-            () -> Ingredient.ofItems(net.minecraft.item.Items.COPPER_INGOT));
+            () -> Ingredient.ofItems(net.minecraft.item.Items.COPPER_INGOT)),
+    HALOIC(
+            5, // Mining level
+            2500, // Durability
+            10.0F, // Mining speed
+            6.0F, // Attack damage bonus
+            25, // Enchantability
+            () -> Ingredient.ofItems(ModItems.HALOIC_INGOT));
 
     private final int miningLevel;
     private final int itemDurability;

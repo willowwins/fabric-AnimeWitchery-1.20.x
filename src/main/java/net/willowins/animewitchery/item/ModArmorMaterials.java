@@ -11,23 +11,22 @@ import net.willowins.animewitchery.AnimeWitchery;
 import java.util.function.Supplier;
 
 public enum ModArmorMaterials implements ArmorMaterial {
-    SILVER("silver",25,new int[] { 3,8,6,3},10,
+    SILVER("silver", 25, new int[] { 3, 8, 6, 3 }, 10,
             SoundEvents.ITEM_ARMOR_EQUIP_GOLD, 0.5f, .5f, () -> Ingredient.ofItems(ModItems.SILVER)),
-    RAILGUNNER("railgunner",250,new int[] { 3,8,6,3},8,
-    SoundEvents.ITEM_ARMOR_EQUIP_NETHERITE, 3f, .1f, () -> Ingredient.ofItems(Items.NETHERITE_INGOT)),
+    RAILGUNNER("railgunner", 250, new int[] { 3, 8, 6, 3 }, 8,
+            SoundEvents.ITEM_ARMOR_EQUIP_NETHERITE, 3f, .1f, () -> Ingredient.ofItems(Items.NETHERITE_INGOT)),
 
-    RESONANT("resonant", 37, new int[] {3, 8, 6, 3}, 25, // enchantability = 25 (like gold)
+    RESONANT("resonant", 37, new int[] { 3, 8, 6, 3 }, 25, // enchantability = 25 (like gold)
             SoundEvents.ITEM_ARMOR_EQUIP_NETHERITE,
             3.0F, // toughness same as Netherite
             0.1F, // knockback resistance same as Netherite
-            () -> Ingredient.ofItems(ModItems.RESONANT_CATALYST)
-    ),
+            () -> Ingredient.ofItems(ModItems.RESONANT_CATALYST)),
 
+    OBELISK("obelisk", 500, new int[] { 4, 9, 7, 4 }, 15,
+            SoundEvents.ITEM_ARMOR_EQUIP_NETHERITE, 4f, .2f, () -> Ingredient.ofItems(ModItems.SILVER)),
 
-    OBELISK("obelisk",500,new int[] { 4,9,7,4},15,
-    SoundEvents.ITEM_ARMOR_EQUIP_NETHERITE, 4f, .2f, () -> Ingredient.ofItems(ModItems.SILVER));
-
-
+    HALOIC("haloic", 75, new int[] { 4, 9, 7, 4 }, 25,
+            SoundEvents.ITEM_ARMOR_EQUIP_GOLD, 4.0F, 0.2F, () -> Ingredient.ofItems(ModItems.HALOIC_INGOT));
 
     private final String name;
     private final int durabilityMultiplier;
@@ -38,10 +37,11 @@ public enum ModArmorMaterials implements ArmorMaterial {
     private final float knockbackResistance;
     private final Supplier<Ingredient> repairIngredient;
 
-    private static final int[] BASE_DURABILITY = {11,16,15,13};
+    private static final int[] BASE_DURABILITY = { 11, 16, 15, 13 };
 
-    ModArmorMaterials(String name, int durabilityMultiplier, int[] protectionAmounts, int enchantability, SoundEvent equipSound,
-                      float toughness, float knockbackResistance, Supplier<Ingredient> repairIngredient) {
+    ModArmorMaterials(String name, int durabilityMultiplier, int[] protectionAmounts, int enchantability,
+            SoundEvent equipSound,
+            float toughness, float knockbackResistance, Supplier<Ingredient> repairIngredient) {
         this.name = name;
         this.durabilityMultiplier = durabilityMultiplier;
         this.protectionAmounts = protectionAmounts;
@@ -51,7 +51,6 @@ public enum ModArmorMaterials implements ArmorMaterial {
         this.knockbackResistance = knockbackResistance;
         this.repairIngredient = repairIngredient;
     }
-
 
     @Override
     public int getDurability(ArmorItem.Type type) {

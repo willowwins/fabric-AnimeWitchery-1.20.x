@@ -69,6 +69,7 @@ processResources {
 	filesMatching("fabric.mod.json") {
 		expand "version": inputs.properties.version
 	}
+	duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 }
 
 tasks.withType(JavaCompile).configureEach {
@@ -102,6 +103,9 @@ loom {
 	runs {
 		client {
 			vmArgs "-Ddevauth.enabled=true"
+		}
+		datagen {
+			vmArgs "-Dporting_lib.datagen.existing_resources=${file('src/main/resources').absolutePath}", "-Dfabric-api.datagen.modid=animewitchery"
 		}
 	}
 }

@@ -212,6 +212,30 @@ public class ModItems {
         public static final Item LEMON_SEEDS = registerItem("lemon_seeds",
                         new AliasedBlockItem(ModBlocks.LEMON_CROP, new FabricItemSettings()));
 
+        // Haloic Equipment
+        // Armor
+        public static final Item HALOIC_HELMET = registerItem("haloic_helmet",
+                        new ModArmorItem(ModArmorMaterials.HALOIC, ArmorItem.Type.HELMET, new FabricItemSettings()));
+        public static final Item HALOIC_CHESTPLATE = registerItem("haloic_chestplate",
+                        new ModArmorItem(ModArmorMaterials.HALOIC, ArmorItem.Type.CHESTPLATE,
+                                        new FabricItemSettings()));
+        public static final Item HALOIC_LEGGINGS = registerItem("haloic_leggings",
+                        new ModArmorItem(ModArmorMaterials.HALOIC, ArmorItem.Type.LEGGINGS, new FabricItemSettings()));
+        public static final Item HALOIC_BOOTS = registerItem("haloic_boots",
+                        new ModArmorItem(ModArmorMaterials.HALOIC, ArmorItem.Type.BOOTS, new FabricItemSettings()));
+
+        // Tools
+        public static final Item HALOIC_SWORD = registerItem("haloic_sword",
+                        new HaloicSwordItem(ModToolMaterial.HALOIC, 3, -2.4f, new FabricItemSettings()));
+        public static final Item HALOIC_PICKAXE = registerItem("haloic_pickaxe",
+                        new PickaxeItem(ModToolMaterial.HALOIC, 1, -2.8f, new FabricItemSettings()));
+        public static final Item HALOIC_AXE = registerItem("haloic_axe",
+                        new AxeItem(ModToolMaterial.HALOIC, 5, -3.0f, new FabricItemSettings()));
+        public static final Item HALOIC_SHOVEL = registerItem("haloic_shovel",
+                        new ShovelItem(ModToolMaterial.HALOIC, 1.5f, -3.0f, new FabricItemSettings()));
+        public static final Item HALOIC_HOE = registerItem("haloic_hoe",
+                        new HoeItem(ModToolMaterial.HALOIC, -4, 0.0f, new FabricItemSettings()));
+
         public static final Item SILVER_PENDANT = registerItem("silver_pendant",
                         new SilverPendant(new FabricItemSettings().maxCount(1).rarity(Rarity.RARE)));
         public static final Item HEALING_STAFF = registerItem("healing_staff",
@@ -239,6 +263,16 @@ public class ModItems {
                         new MagicChalkItem(new FabricItemSettings().rarity(Rarity.UNCOMMON).maxCount(1)));
         public static final Item ENCHANTED_CRYSTAL = registerItem("enchanted_crystal",
                         new Item(new FabricItemSettings().rarity(Rarity.UNCOMMON)));
+
+        public static final Item SOUL_JAR = registerItem("soul_jar",
+                        new SoulJarItem(new FabricItemSettings().maxCount(1).rarity(Rarity.RARE)));
+
+        public static final Item SOUL_SCYTHE = registerItem("soul_scythe",
+                        new SoulScytheItem(ModToolMaterial.HALOIC, 8, -3.0f,
+                                        new FabricItemSettings().rarity(Rarity.EPIC)));
+
+        public static final Item SUMMONER_STAFF = registerItem("summoner_staff",
+                        new SummonerStaffItem(new FabricItemSettings().maxCount(1).rarity(Rarity.EPIC)));
 
         // Dust items
         public static final Item BONE_DUST = registerItem("bone_dust", new Item(new FabricItemSettings()));
@@ -446,6 +480,19 @@ public class ModItems {
                 entries.add(RESONANT_SHOVEL);
                 entries.add(RESONANT_HOE);
 
+                // Haloic Armor Set
+                entries.add(HALOIC_HELMET);
+                entries.add(HALOIC_CHESTPLATE);
+                entries.add(HALOIC_LEGGINGS);
+                entries.add(HALOIC_BOOTS);
+
+                // Haloic Tools
+                entries.add(HALOIC_SWORD);
+                entries.add(HALOIC_PICKAXE);
+                entries.add(HALOIC_AXE);
+                entries.add(HALOIC_SHOVEL);
+                entries.add(HALOIC_HOE);
+
                 // Other Weapons and Tools
                 entries.add(NEEDLE);
                 entries.add(OBELISK_SWORD);
@@ -456,7 +503,11 @@ public class ModItems {
                 entries.add(WAND);
                 entries.add(SPELLBOOK);
                 entries.add(SPELLBOOK_PAGE);
+                entries.add(SPELLBOOK_PAGE);
                 entries.add(COPPER_WARHAMMER);
+                entries.add(SOUL_SCYTHE);
+                entries.add(SUMMONER_STAFF);
+                entries.add(SOUL_JAR);
 
                 // Special Items
                 entries.add(SILVER_PENDANT);
@@ -480,7 +531,10 @@ public class ModItems {
                 entries.add(ModBlocks.PARTICLE_SINK_BLOCK);
                 entries.add(ModBlocks.PLATE_BLOCK);
                 entries.add(ModBlocks.ALCHEMY_TABLE);
-                entries.add(ModBlocks.TRANSMUTATION_PYRE);
+                entries.add(ModBlocks.TRANSMUTATION_PYRE_BLOCK);
+                entries.add(ModBlocks.CAUTION_BLOCK);
+                entries.add(ModBlocks.CAUTION_BLOCK_SLAB);
+                entries.add(ModBlocks.CAUTION_BLOCK_STAIRS);
                 entries.add(ModBlocks.OBELISK);
                 entries.add(ModBlocks.ACTIVE_OBELISK);
                 entries.add(ModBlocks.BOSS_OBELISK);
@@ -509,6 +563,44 @@ public class ModItems {
                 entries.add(ModBlocks.SILVER_WALL);
                 entries.add(ModBlocks.SILVER_DOOR);
                 entries.add(ModBlocks.SILVER_TRAPDOOR);
+
+                // Iron Building Blocks
+                entries.add(ModBlocks.IRON_STAIRS);
+                entries.add(ModBlocks.IRON_SLAB);
+
+                // Concrete Building Blocks
+                entries.add(ModBlocks.WHITE_CONCRETE_STAIRS);
+                entries.add(ModBlocks.WHITE_CONCRETE_SLAB);
+                entries.add(ModBlocks.ORANGE_CONCRETE_STAIRS);
+                entries.add(ModBlocks.ORANGE_CONCRETE_SLAB);
+                entries.add(ModBlocks.MAGENTA_CONCRETE_STAIRS);
+                entries.add(ModBlocks.MAGENTA_CONCRETE_SLAB);
+                entries.add(ModBlocks.LIGHT_BLUE_CONCRETE_STAIRS);
+                entries.add(ModBlocks.LIGHT_BLUE_CONCRETE_SLAB);
+                entries.add(ModBlocks.YELLOW_CONCRETE_STAIRS);
+                entries.add(ModBlocks.YELLOW_CONCRETE_SLAB);
+                entries.add(ModBlocks.LIME_CONCRETE_STAIRS);
+                entries.add(ModBlocks.LIME_CONCRETE_SLAB);
+                entries.add(ModBlocks.PINK_CONCRETE_STAIRS);
+                entries.add(ModBlocks.PINK_CONCRETE_SLAB);
+                entries.add(ModBlocks.GRAY_CONCRETE_STAIRS);
+                entries.add(ModBlocks.GRAY_CONCRETE_SLAB);
+                entries.add(ModBlocks.LIGHT_GRAY_CONCRETE_STAIRS);
+                entries.add(ModBlocks.LIGHT_GRAY_CONCRETE_SLAB);
+                entries.add(ModBlocks.CYAN_CONCRETE_STAIRS);
+                entries.add(ModBlocks.CYAN_CONCRETE_SLAB);
+                entries.add(ModBlocks.PURPLE_CONCRETE_STAIRS);
+                entries.add(ModBlocks.PURPLE_CONCRETE_SLAB);
+                entries.add(ModBlocks.BLUE_CONCRETE_STAIRS);
+                entries.add(ModBlocks.BLUE_CONCRETE_SLAB);
+                entries.add(ModBlocks.BROWN_CONCRETE_STAIRS);
+                entries.add(ModBlocks.BROWN_CONCRETE_SLAB);
+                entries.add(ModBlocks.GREEN_CONCRETE_STAIRS);
+                entries.add(ModBlocks.GREEN_CONCRETE_SLAB);
+                entries.add(ModBlocks.RED_CONCRETE_STAIRS);
+                entries.add(ModBlocks.RED_CONCRETE_SLAB);
+                entries.add(ModBlocks.BLACK_CONCRETE_STAIRS);
+                entries.add(ModBlocks.BLACK_CONCRETE_SLAB);
 
                 // Ores
                 entries.add(ModBlocks.SILVER_ORE);

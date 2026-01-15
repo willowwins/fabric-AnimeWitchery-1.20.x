@@ -15,25 +15,22 @@ import net.willowins.animewitchery.item.ModItems;
 import java.util.function.BiConsumer;
 
 public class ModEntityLootTableProvider extends SimpleFabricLootTableProvider {
-    public ModEntityLootTableProvider(FabricDataOutput dataOutput) {
-        super(dataOutput, LootContextTypes.ENTITY);
-    }
+        public ModEntityLootTableProvider(FabricDataOutput dataOutput) {
+                super(dataOutput, LootContextTypes.ENTITY);
+        }
 
-    @Override
-    public void accept(BiConsumer<Identifier, LootTable.Builder> identifierLootTableBuilderBiConsumer) {
-        // Void Wisp loot table - use the entity's ID directly
-        identifierLootTableBuilderBiConsumer.accept(
-            new Identifier("animewitchery", "entities/void_wisp"),
-            LootTable.builder()
-                .pool(LootPool.builder()
-                    .rolls(UniformLootNumberProvider.create(1.0f, 1.0f))
-                    .with(ItemEntry.builder(ModItems.VOID_ESSENCE)
-                        .apply(SetCountLootFunction.builder(UniformLootNumberProvider.create(1.0f, 3.0f))))
-                )
-        );
-        
-        // Note: GeckoLib bat loot table is NOT generated here
-        // We only modify it at runtime via ModLootTableModifiers
-        // This avoids conflicts with dependency loot tables
-    }
+        @Override
+        public void accept(BiConsumer<Identifier, LootTable.Builder> identifierLootTableBuilderBiConsumer) {
+                // Void Wisp loot table - use the entity's ID directly
+                identifierLootTableBuilderBiConsumer.accept(
+                                new Identifier("animewitchery", "entities/void_wisp"),
+                                LootTable.builder()
+                                                .pool(LootPool.builder()
+                                                                .rolls(UniformLootNumberProvider.create(1.0f, 1.0f))
+                                                                .with(ItemEntry.builder(ModItems.VOID_ESSENCE)
+                                                                                .apply(SetCountLootFunction
+                                                                                                .builder(UniformLootNumberProvider
+                                                                                                                .create(1.0f, 3.0f))))));
+
+        }
 }

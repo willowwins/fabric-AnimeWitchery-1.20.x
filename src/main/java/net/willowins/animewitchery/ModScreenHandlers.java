@@ -20,7 +20,6 @@ import net.minecraft.entity.player.PlayerInventory;
 
 import static net.willowins.animewitchery.AnimeWitchery.MOD_ID;
 
-
 public class ModScreenHandlers {
     public static ScreenHandlerType<ItemActionScreenHandler> ITEM_ACTION_SCREEN_HANDLER;
     public static ScreenHandlerType<PlayerUseDispenserScreenHandler> PLAYER_USE_DISPENSER_SCREEN_HANDLER;
@@ -32,16 +31,15 @@ public class ModScreenHandlers {
     public static ScreenHandlerType<AlchemyTableScreenHandler> ALCHEMY_TABLE_SCREEN_HANDLER;
     public static ScreenHandlerType<GrandShulkerBoxScreenHandler> GRAND_SHULKER_BOX_SCREEN_HANDLER;
     public static ScreenHandlerType<AdvancedSpellbookScreenHandler> ADVANCED_SPELLBOOK_SCREEN_HANDLER;
-    
+    public static ScreenHandlerType<SoulJarScreenHandler> SOUL_JAR_SCREEN_HANDLER;
+
     public static void registerAll() {
-
-
 
         DISPENSER_HANDLER = ScreenHandlerRegistry.registerSimple(
                 new Identifier("animewitchery", "dispenser_handler"),
-                (syncId, playerInventory) -> GenericContainerScreenHandler.createGeneric9x1(syncId, playerInventory)
-        );
-        ITEM_ACTION_SCREEN_HANDLER = ScreenHandlerRegistry.registerExtended(new Identifier("animewitchery", "item_action"),
+                (syncId, playerInventory) -> GenericContainerScreenHandler.createGeneric9x1(syncId, playerInventory));
+        ITEM_ACTION_SCREEN_HANDLER = ScreenHandlerRegistry.registerExtended(
+                new Identifier("animewitchery", "item_action"),
                 (syncId, playerInventory, buf) -> {
                     BlockPos pos = buf.readBlockPos();
                     World world = playerInventory.player.getWorld();
@@ -50,19 +48,18 @@ public class ModScreenHandlers {
                         return new ItemActionScreenHandler(ITEM_ACTION_SCREEN_HANDLER, syncId, playerInventory, entity);
                     }
                     return null;
-                }
-        );
-        GROWTH_ACCELERATOR_SCREEN_HANDLER =
-                Registry.register(Registries.SCREEN_HANDLER, new Identifier(MOD_ID, "growth_accelerator"),
-                        new ExtendedScreenHandlerType<>((syncId, inventory, buf) -> {
-                            BlockPos pos = buf.readBlockPos();
-                            World world = inventory.player.getWorld();
-                            BlockEntity be = world.getBlockEntity(pos);
-                            if (!(be instanceof GrowthAcceleratorBlockEntity accelerator)) {
-                                throw new IllegalStateException("Expected GrowthAcceleratorBlockEntity at " + pos);
-                            }
-                            return new GrowthAcceleratorScreenHandler(syncId, inventory, accelerator);
-                        }));
+                });
+        GROWTH_ACCELERATOR_SCREEN_HANDLER = Registry.register(Registries.SCREEN_HANDLER,
+                new Identifier(MOD_ID, "growth_accelerator"),
+                new ExtendedScreenHandlerType<>((syncId, inventory, buf) -> {
+                    BlockPos pos = buf.readBlockPos();
+                    World world = inventory.player.getWorld();
+                    BlockEntity be = world.getBlockEntity(pos);
+                    if (!(be instanceof GrowthAcceleratorBlockEntity accelerator)) {
+                        throw new IllegalStateException("Expected GrowthAcceleratorBlockEntity at " + pos);
+                    }
+                    return new GrowthAcceleratorScreenHandler(syncId, inventory, accelerator);
+                }));
         AUTO_CRAFTER_SCREEN_HANDLER = ScreenHandlerRegistry.registerExtended(
                 new Identifier("animewitchery", "auto_crafter"),
                 (syncId, playerInventory, buf) -> {
@@ -73,9 +70,9 @@ public class ModScreenHandlers {
                         throw new IllegalStateException("Block entity is not an AutoCrafterBlockEntity!");
                     }
 
-                    return new AutoCrafterScreenHandler(AUTO_CRAFTER_SCREEN_HANDLER, syncId, playerInventory, autoCrafterBE);
-                }
-        );
+                    return new AutoCrafterScreenHandler(AUTO_CRAFTER_SCREEN_HANDLER, syncId, playerInventory,
+                            autoCrafterBE);
+                });
         BLOCK_MINER_SCREEN_HANDLER = ScreenHandlerRegistry.registerExtended(
                 new Identifier("animewitchery", "block_miner"),
                 (syncId, playerInventory, buf) -> {
@@ -86,12 +83,11 @@ public class ModScreenHandlers {
                         return new BlockMinerScreenHandler(syncId, playerInventory, miner);
                     }
                     return null;
-                }
-        );           BLOCK_PLACER_SCREEN_HANDLER = ScreenHandlerRegistry.registerExtended(
+                });
+        BLOCK_PLACER_SCREEN_HANDLER = ScreenHandlerRegistry.registerExtended(
                 new Identifier("animewitchery", "block_placer"),
-                (syncId, inventory, buf) -> new BlockPlacerScreenHandler(syncId, inventory, buf)
-        );
-        
+                (syncId, inventory, buf) -> new BlockPlacerScreenHandler(syncId, inventory, buf));
+
         ALCHEMY_TABLE_SCREEN_HANDLER = ScreenHandlerRegistry.registerExtended(
                 new Identifier("animewitchery", "alchemy_table"),
                 (syncId, playerInventory, buf) -> {
@@ -102,9 +98,8 @@ public class ModScreenHandlers {
                         return new AlchemyTableScreenHandler(syncId, playerInventory, alchemyTable);
                     }
                     return null;
-                }
-        );
-        
+                });
+
         GRAND_SHULKER_BOX_SCREEN_HANDLER = ScreenHandlerRegistry.registerExtended(
                 new Identifier("animewitchery", "grand_shulker_box"),
                 (syncId, playerInventory, buf) -> {
@@ -112,17 +107,19 @@ public class ModScreenHandlers {
                     World world = playerInventory.player.getWorld();
                     BlockEntity be = world.getBlockEntity(pos);
                     if (be instanceof GrandShulkerBoxBlockEntity grandBox) {
-                        return new GrandShulkerBoxScreenHandler(GRAND_SHULKER_BOX_SCREEN_HANDLER, syncId, playerInventory, grandBox);
+                        return new GrandShulkerBoxScreenHandler(GRAND_SHULKER_BOX_SCREEN_HANDLER, syncId,
+                                playerInventory, grandBox);
                     }
                     return null;
-                }
-        );
-        
-        
+                });
+
         ADVANCED_SPELLBOOK_SCREEN_HANDLER = ScreenHandlerRegistry.registerSimple(
                 new Identifier("animewitchery", "advanced_spellbook"),
-                (syncId, playerInventory) -> new AdvancedSpellbookScreenHandler(syncId, playerInventory, new SimpleInventory(9), ItemStack.EMPTY)
-        );
+                (syncId, playerInventory) -> new AdvancedSpellbookScreenHandler(syncId, playerInventory,
+                        new SimpleInventory(9), ItemStack.EMPTY));
+
+        SOUL_JAR_SCREEN_HANDLER = ScreenHandlerRegistry.registerSimple(
+                new Identifier(MOD_ID, "soul_jar"),
+                (syncId, playerInventory) -> new SoulJarScreenHandler(syncId, playerInventory));
     }
 }
-

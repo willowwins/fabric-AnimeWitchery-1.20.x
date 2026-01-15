@@ -42,6 +42,24 @@ public class TransmutationPyreRenderer implements BlockEntityRenderer<Transmutat
         // Spawn particles for the beam
         // Spawning fewer particles per frame than the barrier since it's a smaller
         // block, but still impressive
+        int resultType = entity.getResultType();
+        Color color1;
+        Color color2;
+
+        if (resultType == 2) { // Haloic: Gold/Orange
+            color1 = new Color(255, 215, 0);
+            color2 = new Color(255, 140, 0);
+        } else if (resultType == 1) { // Netherite: Red/Dark Red
+            color1 = new Color(255, 0, 0);
+            color2 = new Color(139, 0, 0);
+        } else { // Normal: Purple (BlueViolet to Indigo)
+            color1 = new Color(138, 43, 226);
+            color2 = new Color(75, 0, 130);
+        }
+
+        // Spawn particles for the beam
+        // Spawning fewer particles per frame than the barrier since it's a smaller
+        // block, but still impressive
         for (int i = 0; i < 5; i++) {
             double x = center.x + (Math.random() - 0.5) * 0.8; // 0.8 block width
             double y = center.y + 0.5 + Math.random() * 2.0;
@@ -50,8 +68,7 @@ public class TransmutationPyreRenderer implements BlockEntityRenderer<Transmutat
             WorldParticleBuilder.create(LodestoneParticleRegistry.WISP_PARTICLE)
                     .setScaleData(GenericParticleData.create(0.2f, 0).build())
                     .setTransparencyData(GenericParticleData.create(1.0f, 0.0f).build())
-                    .setColorData(ColorParticleData.create(new Color(255, 215, 0), new Color(255, 140, 0)) // Gold to
-                                                                                                           // Orange
+                    .setColorData(ColorParticleData.create(color1, color2)
                             .setCoefficient(1.2f).setEasing(Easing.EXPO_OUT).build())
                     .setLifetime(40)
                     .addMotion(0, 0.4, 0) // Upward motion

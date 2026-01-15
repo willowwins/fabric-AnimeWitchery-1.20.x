@@ -35,6 +35,9 @@ public class TransmutationPyreBlockEntity extends BlockEntity {
     private int processingTicks = 0;
     private static final int PROCESS_TIME = 100; // 5 seconds of beam
 
+    private int resultType = 0; // 0=Normal, 1=Netherite, 2=Haloic
+    private int rollsCount = 0;
+
     public TransmutationPyreBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntities.TRANSMUTATION_PYRE_BLOCK_ENTITY, pos, state);
     }
@@ -62,7 +65,7 @@ public class TransmutationPyreBlockEntity extends BlockEntity {
             // Auto-activate if full and multiblock is valid
             if (woodCount >= MAX_WOOD) {
                 if (checkMultiblock()) {
-                    startTransmutation();
+                    startTransmutation(player.isCreative());
                 } else {
                     player.sendMessage(Text.of("Structure incomplete! Place 3x3 Magma Blocks below."), true);
                 }
@@ -92,9 +95,36 @@ public class TransmutationPyreBlockEntity extends BlockEntity {
         return true;
     }
 
-    private void startTransmutation() {
+    private void startTransmutation(boolean isCreative) {
         this.isActive = true;
         this.processingTicks = PROCESS_TIME;
+
+        this.rollsCount++;
+        this.resultType = 0;
+        Random random = new Random();
+
+        boolean success = false;
+
+        // Pity System: Every 25 rolls, 50% chance to guarantee rare
+        if (this.rollsCount >= 25) {
+            if (random.nextBoolean()) { // 50% chance
+                success = true;
+            }
+        }
+
+        // Standard Roll if pity didn't trigger
+        if (!success) {
+            int chance = isCreative ? 10 : 50; // 1/10 for Creative, 1/50 for Survival
+            if (random.nextInt(chance) == 0) {
+                success = true;
+            }
+        }
+
+        if (success) {
+            this.resultType = random.nextBoolean() ? 1 : 2; // 1=Netherite, 2=Haloic
+            this.rollsCount = 0; // Reset pity on success
+        }
+
         world.playSound(null, pos, SoundEvents.BLOCK_BEACON_ACTIVATE, SoundCategory.BLOCKS, 1f, 1f);
         markDirty();
         world.updateListeners(pos, getCachedState(), getCachedState(), 3);
@@ -130,7 +160,7 @@ public class TransmutationPyreBlockEntity extends BlockEntity {
         rewards.add(Items.IRON_INGOT);
         rewards.add(Items.GOLD_INGOT);
         rewards.add(Items.COPPER_INGOT);
-        rewards.add(ModItems.SILVER); // Assuming ModItems.SILVER is the ingot
+        rewards.add(ModItems.SILVER);
 
         Random random = new Random();
 
@@ -143,7 +173,22 @@ public class TransmutationPyreBlockEntity extends BlockEntity {
             world.spawnEntity(itemEntity);
         }
 
+        // Rare Drop based on pre-calculated result
+        if (resultType > 0) {
+            Item rareReward = (resultType == 1) ? Items.NETHERITE_SCRAP : ModItems.HALOIC_SCRAP;
+            ItemStack rareDrop = new ItemStack(rareReward);
+
+            ItemEntity rareEntity = new ItemEntity(world, pos.getX() + 0.5, pos.getY() + 1.2, pos.getZ() + 0.5,
+                    rareDrop);
+            rareEntity.setVelocity((random.nextDouble() - 0.5) * 0.2, 0.8, (random.nextDouble() - 0.5) * 0.2);
+            rareEntity.setGlowing(true);
+            world.spawnEntity(rareEntity);
+
+            world.playSound(null, pos, SoundEvents.UI_TOAST_CHALLENGE_COMPLETE, SoundCategory.BLOCKS, 1f, 1f);
+        }
+
         world.playSound(null, pos, SoundEvents.ENTITY_PLAYER_LEVELUP, SoundCategory.BLOCKS, 1f, 1f);
+        this.resultType = 0; // Reset
         markDirty();
         world.updateListeners(pos, getCachedState(), getCachedState(), 3);
     }
@@ -152,12 +197,18 @@ public class TransmutationPyreBlockEntity extends BlockEntity {
         return isActive;
     }
 
+    public int getResultType() {
+        return resultType;
+    }
+
     @Override
     public void writeNbt(NbtCompound nbt) {
         super.writeNbt(nbt);
         nbt.putInt("woodCount", woodCount);
         nbt.putBoolean("isActive", isActive);
         nbt.putInt("processingTicks", processingTicks);
+        nbt.putInt("resultType", resultType);
+        nbt.putInt("rollsCount", rollsCount);
     }
 
     @Override
@@ -166,6 +217,8 @@ public class TransmutationPyreBlockEntity extends BlockEntity {
         this.woodCount = nbt.getInt("woodCount");
         this.isActive = nbt.getBoolean("isActive");
         this.processingTicks = nbt.getInt("processingTicks");
+        this.resultType = nbt.getInt("resultType");
+        this.rollsCount = nbt.getInt("rollsCount");
     }
 
     @Nullable
