@@ -12,7 +12,7 @@ import net.willowins.animewitchery.block.ModBlocks;
 
 public class ModItemGroups {
     public static final ItemGroup SILVER_GROUP = Registry.register(Registries.ITEM_GROUP,
-            new Identifier(AnimeWitchery.MOD_ID,"silver"),
+            new Identifier(AnimeWitchery.MOD_ID, "silver"),
             FabricItemGroup.builder().displayName(Text.translatable("itemgroup.silver"))
                     .icon(() -> new ItemStack(ModItems.SILVERSPOOL)).entries((displayContext, entries) -> {
                         entries.add(ModItems.SILVER);
@@ -31,7 +31,6 @@ public class ModItemGroups {
                         entries.add(ModItems.LEMON_TART);
                         entries.add(ModItems.REPAIR_CHARM);
                         entries.add(ModItems.KINETIC_BLADE);
-                        
 
                         entries.add(ModItems.STRAWBERRY_SEEDS);
                         entries.add(ModItems.LEMON_SEEDS);
@@ -142,9 +141,13 @@ public class ModItemGroups {
                         entries.add(ModItems.OBELISK_LEGGINGS);
                         entries.add(ModItems.OBELISK_BOOTS);
                         entries.add(ModItems.OBELISK_SWORD);
-                     } ).build());
 
-    public static void registerItemGroups(){
-        AnimeWitchery.LOGGER.info("registering Item Groups For " +AnimeWitchery.MOD_ID);
+                        entries.add(ModItems.SOUL_JAR);
+                        entries.add(ModItems.SUMMONER_STAFF);
+                        entries.add(ModItems.SOUL_SCYTHE);
+                    }).build());
+
+    public static void registerItemGroups() {
+        AnimeWitchery.LOGGER.info("registering Item Groups For " + AnimeWitchery.MOD_ID);
     }
 }

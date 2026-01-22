@@ -25,7 +25,7 @@
     "ExplosionMixin",
     "PlayerDeathMixin",
     "CrossbowItemMixin",
-    "ParadiseLostWeatherMixin",
+    "ParadiseLostMixin",
     "EntityDeathMixin",
     "CreativeDefiantRiftMixin",
     "PortalTeleportMixin",
@@ -37,7 +37,6 @@
     "VillagerMobGriefingMixin",
     "CapturingLootingMixin",
     "KeepInventoryCharmMixin"
-
   ],
   "client": [
     "PlayerRendererMixin",
@@ -50,10 +49,11 @@
     "client.LivingEntityRiptideAccessor",
     "MouseMixin",
     "HideOffhandMixin",
-    "GreatswordRenderMixin"
-
+    "GreatswordRenderMixin",
+    "client.ParadiseLostSkyMixin",
+    "client.ParadiseLostFogMixin"
   ],
   "injectors": {
     "defaultRequire": 1
-	}
+  }
 }

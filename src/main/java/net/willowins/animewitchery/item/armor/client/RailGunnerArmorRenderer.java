@@ -8,8 +8,10 @@ import software.bernie.geckolib.renderer.GeoArmorRenderer;
 
 import java.util.function.Supplier;
 
+import net.willowins.animewitchery.item.client.model.RailGunnerArmorModel;
+
 public final class RailGunnerArmorRenderer extends GeoArmorRenderer<RailGunnerArmorItem> {
     public RailGunnerArmorRenderer() {
-        super(new DefaultedItemGeoModel<>(new Identifier(AnimeWitchery.MOD_ID, "armor/railgunner_armor")));
+        super(new RailGunnerArmorModel());
     }
 }

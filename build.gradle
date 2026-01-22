@@ -56,6 +56,14 @@ dependencies {
 	// Patchouli (guide book system)
 	modImplementation "vazkii.patchouli:Patchouli:${project.patchouli_version}"
 
+	// User requested runtime mods (Sodium + Iris) - Sodium & Iris ENABLED
+	modImplementation "maven.modrinth:sodium:mc1.20.1-0.5.11"
+	modImplementation "maven.modrinth:iris:1.7.5+1.20.1"
+	implementation 'org.anarres:jcpp:1.4.14' // Fix for Iris NoClassDefFoundError
+	implementation 'io.github.douira:glsl-transformer:2.0.0-pre13' // Fix for Iris NoClassDefFoundError
+	// modImplementation "maven.modrinth:jade:11.8.0" // Removed at user request (Not working)
+
+
 }
 
 fabricApi {

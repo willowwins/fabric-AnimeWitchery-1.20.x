@@ -61,7 +61,7 @@
   "item.animewitchery.death_spell_scroll": "Death Spell Scroll",
   "item.animewitchery.deep_dark_deep_dish": "Deep Dark Deep Dish",
   "item.animewitchery.defiant_rift": "Defiant Rift",
-  "item.animewitchery.dimension": "Dimension Hopper",
+  "item.animewitchery.dimension": "Shift Mirror",
   "item.animewitchery.earth_rune_stone": "Earth Rune Stone",
   "item.animewitchery.earth_spell_scroll": "Earth Spell Scroll",
   "item.animewitchery.enchanted_crystal": "Enchanted Crystal",
@@ -84,7 +84,7 @@
   "item.animewitchery.magic_chalk": "Magic Chalk",
   "item.animewitchery.mana_rocket": "Mana Rocket",
   "item.animewitchery.metal_detector": "Metal Detector",
-  "item.animewitchery.mod_totem": "Totem of Undying",
+  "item.animewitchery.mod_totem": "Ether Totem",
   "item.animewitchery.mortar_and_pestle": "Mortar and Pestle",
   "item.animewitchery.nbt_preserving_tool": "NBT Preserving Tool",
   "item.animewitchery.needle": "Needle",
@@ -119,7 +119,7 @@
   "item.animewitchery.resonant_shovel": "Resonant Shovel",
   "item.animewitchery.resonant_sword": "Resonant Sword",
   "item.animewitchery.resonant_greatword": "Resonant Greatsword",
-  "item.animewitchery.respawn_beacon": "Respawn Beacon",
+  "item.animewitchery.respawn_beacon": "Respawn Mirror",
   "item.animewitchery.rituals_book": "Grimoire of Quarters",
   "item.animewitchery.rune_stone": "Rune Stone",
   "item.animewitchery.silver_axe": "Silver Axe",
@@ -209,6 +209,9 @@
   "item.animewitchery.haloic_chestplate": "Haloic Chestplate",
   "item.animewitchery.haloic_leggings": "Haloic Leggings",
   "item.animewitchery.haloic_boots": "Haloic Boots",
+  "item.animewitchery.soul_jar": "Soul Jar",
+  "item.animewitchery.summoner_staff": "Summoner Staff",
+  "item.animewitchery.soul_scythe": "Soul Scythe",
   "effect.animewitchery.mana_regen": "Mana Regeneration",
   "effect.animewitchery.void_bound": "Void Bound",
   "item.minecraft.potion.effect.mana_regen": "Potion of Mana Regeneration",
@@ -267,5 +270,5 @@
   "block.animewitchery.red_concrete_slab": "Red Concrete Slab",
   "block.animewitchery.black_concrete_stairs": "Black Concrete Stairs",
   "block.animewitchery.black_concrete_slab": "Black Concrete Slab",
-  "itemGroup.animewitchery.animewitchery": "Anime Witchery"
+  "itemGroup.animewitchery.silver": "Anime Witchery"
 }

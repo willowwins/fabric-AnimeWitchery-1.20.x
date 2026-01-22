@@ -12,6 +12,7 @@ public class ModPackets {
     public static final Identifier LASER_CHARGE = new Identifier(AnimeWitchery.MOD_ID, "laser_charge");
     public static final Identifier LASER_HIT = new Identifier(AnimeWitchery.MOD_ID, "laser_hit");
     public static final Identifier OBELISK_SHAKE = new Identifier(AnimeWitchery.MOD_ID, "obelisk_shake");
+    public static final Identifier RAILGUN_BEAM = new Identifier(AnimeWitchery.MOD_ID, "railgun_beam");
     public static final Identifier KAMIKAZE_FX = new Identifier(AnimeWitchery.MOD_ID, "kamikaze_fx");
     public static final Identifier CREATE_PLATFORM_ID = new Identifier("animewitchery", "create_platform");
     public static final Identifier REMOVE_SOUL = new Identifier(AnimeWitchery.MOD_ID, "remove_soul");
@@ -67,5 +68,6 @@ public class ModPackets {
         ClientPlayNetworking.registerGlobalReceiver(LASER_CHARGE, LaserChargePacket::receive);
         ClientPlayNetworking.registerGlobalReceiver(LASER_HIT, LaserHitPacket::receive);
         ClientPlayNetworking.registerGlobalReceiver(OBELISK_SHAKE, ObeliskShake::receive);
+        ClientPlayNetworking.registerGlobalReceiver(RAILGUN_BEAM, RailgunBeamPacket::receive);
     }
 }

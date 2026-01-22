@@ -18,29 +18,32 @@ import net.willowins.animewitchery.AnimeWitchery;
 import java.util.OptionalLong;
 
 public class ModDimensions {
-    public static final RegistryKey<DimensionOptions> PARADISELOSTDIM_KEY = RegistryKey.of(RegistryKeys.DIMENSION,
-            new Identifier(AnimeWitchery.MOD_ID, "paradiselostdim"));
-    public static final RegistryKey<World> PARADISELOSTDIM_LEVEL_KEY = RegistryKey.of(RegistryKeys.WORLD,
-            new Identifier(AnimeWitchery.MOD_ID, "paradiselostdim"));
-    public static final RegistryKey<DimensionType> PARADISELOSTDIM_DIM_TYPE = RegistryKey.of(RegistryKeys.DIMENSION_TYPE,
-            new Identifier(AnimeWitchery.MOD_ID, "paradiselostdim_type"));
+        public static final RegistryKey<DimensionOptions> PARADISELOSTDIM_KEY = RegistryKey.of(RegistryKeys.DIMENSION,
+                        new Identifier(AnimeWitchery.MOD_ID, "paradiselostdim"));
+        public static final RegistryKey<World> PARADISELOSTDIM_LEVEL_KEY = RegistryKey.of(RegistryKeys.WORLD,
+                        new Identifier(AnimeWitchery.MOD_ID, "paradiselostdim"));
+        public static final RegistryKey<DimensionType> PARADISELOSTDIM_DIM_TYPE = RegistryKey.of(
+                        RegistryKeys.DIMENSION_TYPE,
+                        new Identifier(AnimeWitchery.MOD_ID, "paradiselostdim_type"));
 
-    public static void bootstrapType(Registerable<DimensionType> context) {
-        context.register(PARADISELOSTDIM_DIM_TYPE, new DimensionType(
-                OptionalLong.of(18000), // fixedTime
-                true, // hasSkylight
-                false, // hasCeiling
-                false, // ultraWarm
-                true, // natural
-                1.0, // coordinateScale
-                true, // bedWorks
-                false, // respawnAnchorWorks
-                -64, // minY
-                256, // height
-                256, // logicalHeight
-                BlockTags.INFINIBURN_OVERWORLD, // infiniburn - allows nether portals
-                DimensionTypes.OVERWORLD_ID, // effectsLocation
-                0.5f, // ambientLight
-                new DimensionType.MonsterSettings(true, false, UniformIntProvider.create(0, 0), 0))); // piglinSafe = true
-    }
+        public static void bootstrapType(Registerable<DimensionType> context) {
+                context.register(PARADISELOSTDIM_DIM_TYPE, new DimensionType(
+                                OptionalLong.of(18000), // fixedTime (Midnight)
+                                false, // hasSkylight (No sun - Cave Lighting - Pitch Black Ambient)
+                                false, // hasCeiling
+                                false, // ultraWarm
+                                false, // natural (No day cycle logic)
+                                1.0, // coordinateScale
+                                true, // bedWorks
+                                false, // respawnAnchorWorks
+                                -64, // minY
+                                256, // height
+                                256, // logicalHeight
+                                BlockTags.INFINIBURN_OVERWORLD, // infiniburn - allows nether portals
+                                new Identifier(AnimeWitchery.MOD_ID, "paradiselost"), // effectsLocation (Custom Fog)
+                                0.05f, // ambientLight (Non-zero value to prevent fullbright bug)
+                                new DimensionType.MonsterSettings(true, false, UniformIntProvider.create(0, 0), 0))); // piglinSafe
+                                                                                                                      // =
+                                                                                                                      // true
+        }
 }

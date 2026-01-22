@@ -39,11 +39,22 @@ import net.willowins.animewitchery.screen.*;
 import net.willowins.animewitchery.client.sky.SkyRitualRenderer;
 import net.fabricmc.fabric.api.client.rendering.v1.BuiltinItemRendererRegistry;
 import net.willowins.animewitchery.item.renderer.ObeliskBuiltinItemRenderer;
+import net.willowins.animewitchery.item.renderer.RailgunRenderer;
+import net.willowins.animewitchery.item.renderer.HealingStaffRenderer;
+import net.willowins.animewitchery.item.renderer.ObeliskSwordRenderer;
 import net.willowins.animewitchery.client.shader.VoidBoundPostProcessor;
 
 public class AnimeWitcheryClient implements ClientModInitializer {
         @Override
         public void onInitializeClient() {
+                // Register Dimension Effects for Paradise Lost
+                net.fabricmc.fabric.api.client.rendering.v1.DimensionRenderingRegistry.registerDimensionEffects(
+                                new net.minecraft.util.Identifier(AnimeWitchery.MOD_ID, "paradiselost"),
+                                new net.willowins.animewitchery.client.render.ParadiseLostDimensionEffects());
+
+                net.fabricmc.fabric.api.client.rendering.v1.DimensionRenderingRegistry.registerSkyRenderer(
+                                net.willowins.animewitchery.world.dimension.ModDimensions.PARADISELOSTDIM_LEVEL_KEY,
+                                new net.willowins.animewitchery.client.render.ParadiseLostSkyRenderer());
 
                 BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.SILVER_DOOR, RenderLayer.getCutout());
                 BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.ACTIVE_EFFIGY_FOUNTAIN, RenderLayer.getCutout());
@@ -119,6 +130,14 @@ public class AnimeWitcheryClient implements ClientModInitializer {
                 new DebugScreenInterceptor().onInitializeClient();
 
                 ModPackets.registerS2CPackets();
+
+                // Manual Registration of GeckoLib Renderers
+                System.out.println("ANIMEWITCHERY: Registering Manual Renderers [DEBUG]");
+                BuiltinItemRendererRegistry.INSTANCE.register(ModItems.RAILGUN, new RailgunRenderer()::render);
+                BuiltinItemRendererRegistry.INSTANCE.register(ModItems.HEALING_STAFF,
+                                new HealingStaffRenderer()::render);
+                BuiltinItemRendererRegistry.INSTANCE.register(ModItems.OBELISK_SWORD,
+                                new ObeliskSwordRenderer()::render);
 
                 BuiltinItemRendererRegistry.INSTANCE.register(ModBlocks.OBELISK.asItem(),
                                 new ObeliskBuiltinItemRenderer());

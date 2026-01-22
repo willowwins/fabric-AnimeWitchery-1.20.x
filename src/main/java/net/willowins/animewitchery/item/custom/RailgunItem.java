@@ -83,12 +83,14 @@ public class RailgunItem extends Item implements GeoItem {
     // === Stop charging ===
     @Override
     public void onStoppedUsing(ItemStack stack, World world, LivingEntity user, int remainingUseTicks) {
-        if (!(user instanceof PlayerEntity player)) return;
+        if (!(user instanceof PlayerEntity player))
+            return;
 
         // Stop charge sound
         for (PlayerEntity p : world.getPlayers()) {
             if (p instanceof ServerPlayerEntity sp)
-                sp.networkHandler.sendPacket(new StopSoundS2CPacket(ModSounds.LASER_CHARGE.getId(), SoundCategory.PLAYERS));
+                sp.networkHandler
+                        .sendPacket(new StopSoundS2CPacket(ModSounds.LASER_CHARGE.getId(), SoundCategory.PLAYERS));
         }
 
         int used = getMaxUseTime(stack) - remainingUseTicks;
@@ -117,7 +119,8 @@ public class RailgunItem extends Item implements GeoItem {
 
     // === Fire Laser ===
     private void fireLaser(World world, PlayerEntity player) {
-        if (!isCharged(player.getMainHandStack())) return;
+        if (!isCharged(player.getMainHandStack()))
+            return;
 
         ItemStack stack = player.getMainHandStack();
         stack.getOrCreateNbt().putBoolean("charged", false); // Reset
@@ -134,32 +137,38 @@ public class RailgunItem extends Item implements GeoItem {
             serverWorld.playSound(null, player.getX(), player.getY(), player.getZ(),
                     ModSounds.LASER_SHOOT, SoundCategory.PLAYERS, 1.5f, 1.0f);
 
-            // Beam core flash
-            for (int i = 1; i <= 3; i++) {
-                serverWorld.spawnParticles(ModParticles.LASER_PARTICLE,
-                        pos.x + (4 * i * look.x),
-                        pos.y + (4 * i * look.y),
-                        pos.z + (4 * i * look.z),
-                        5, 0, 0, 0, 0.02);
-            }
+            // Send Lodestone Particle Packet to all players tracking the event
+            PacketByteBuf buf = PacketByteBufs.create();
+            buf.writeDouble(pos.x);
+            buf.writeDouble(pos.y);
+            buf.writeDouble(pos.z);
 
-            // Lodestone-style purple + reverse portal beam
-            for (int i = 10; i < 1000; i++) {
+            // Calculate end point (max distance or block hit)
+            Vec3d endPos = pos.add(look.multiply(100)); // Default max range
+            for (int i = 0; i < 1000; i++) {
                 double bx = pos.x + (((double) i / 10) * look.x);
                 double by = pos.y + (((double) i / 10) * look.y);
                 double bz = pos.z + (((double) i / 10) * look.z);
+                if (!world.getBlockState(BlockPos.ofFloored(bx, by, bz)).isOf(Blocks.AIR)) {
+                    endPos = new Vec3d(bx, by, bz);
+                    break;
+                }
+            }
 
-                serverWorld.spawnParticles(PURPLE_BEAM, bx, by, bz, 1, 0, 0, 0, 0);
-                serverWorld.spawnParticles(ParticleTypes.REVERSE_PORTAL, bx, by, bz, 2, 0, 0, 0, 0);
+            buf.writeDouble(endPos.x);
+            buf.writeDouble(endPos.y);
+            buf.writeDouble(endPos.z);
 
-                if (!world.getBlockState(BlockPos.ofFloored(bx, by, bz)).isOf(Blocks.AIR)) break;
+            for (ServerPlayerEntity p : serverWorld.getPlayers()) {
+                ServerPlayNetworking.send(p, ModPackets.RAILGUN_BEAM, buf);
             }
 
             // Damage entities
             for (int i = 0; i < 100; i++) {
                 Vec3d checkVec = pos.add(look.multiply(i));
                 BlockPos checkPos = BlockPos.ofFloored(checkVec);
-                if (!world.getBlockState(checkPos).isOf(Blocks.AIR)) break;
+                if (!world.getBlockState(checkPos).isOf(Blocks.AIR))
+                    break;
                 findEntities(world, 1.5, checkPos, player);
                 glowEntities(world, 1.5, checkPos, player);
             }
@@ -172,7 +181,8 @@ public class RailgunItem extends Item implements GeoItem {
 
     // === Entity interaction ===
     private void findEntities(World world, double radius, BlockPos pos, PlayerEntity owner) {
-        if (!(world instanceof ServerWorld sw)) return;
+        if (!(world instanceof ServerWorld sw))
+            return;
         Box box = new Box(pos).expand(radius);
         List<LivingEntity> targets = sw.getEntitiesByClass(LivingEntity.class, box, e -> e != owner);
         for (LivingEntity t : targets) {
@@ -182,7 +192,8 @@ public class RailgunItem extends Item implements GeoItem {
     }
 
     private void glowEntities(World world, double radius, BlockPos pos, PlayerEntity owner) {
-        if (!(world instanceof ServerWorld sw)) return;
+        if (!(world instanceof ServerWorld sw))
+            return;
         Box box = new Box(pos).expand(radius);
         List<LivingEntity> targets = sw.getEntitiesByClass(LivingEntity.class, box, e -> e != owner);
         for (LivingEntity t : targets) {
@@ -215,15 +226,19 @@ public class RailgunItem extends Item implements GeoItem {
     public void createRenderer(Consumer<Object> consumer) {
         consumer.accept(new RenderProvider() {
             private RailgunRenderer renderer;
+
             public BuiltinModelItemRenderer getCustomRenderer() {
-                if (renderer == null) renderer = new RailgunRenderer();
+                if (renderer == null)
+                    renderer = new RailgunRenderer();
                 return renderer;
             }
         });
     }
 
     @Override
-    public Supplier<Object> getRenderProvider() { return renderProvider; }
+    public Supplier<Object> getRenderProvider() {
+        return renderProvider;
+    }
 
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllerRegistrar) {
@@ -232,5 +247,7 @@ public class RailgunItem extends Item implements GeoItem {
     }
 
     @Override
-    public AnimatableInstanceCache getAnimatableInstanceCache() { return cache; }
+    public AnimatableInstanceCache getAnimatableInstanceCache() {
+        return cache;
+    }
 }

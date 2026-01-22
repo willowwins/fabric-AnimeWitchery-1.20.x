@@ -248,11 +248,11 @@ public class ModModelProvider extends FabricModelProvider {
 
                 // Special weapons and tools
                 itemModelGenerator.register(ModItems.NEEDLE, Models.HANDHELD);
-                itemModelGenerator.register(ModItems.OBELISK_SWORD, Models.HANDHELD);
+                // itemModelGenerator.register(ModItems.OBELISK_SWORD, Models.HANDHELD);
                 itemModelGenerator.register(ModItems.CHISEL, Models.HANDHELD);
-                itemModelGenerator.register(ModItems.RAILGUN, Models.HANDHELD);
+                // itemModelGenerator.register(ModItems.RAILGUN, Models.HANDHELD);
                 itemModelGenerator.register(ModItems.KINETIC_BLADE, Models.HANDHELD);
-                itemModelGenerator.register(ModItems.HEALING_STAFF, Models.HANDHELD);
+                // itemModelGenerator.register(ModItems.HEALING_STAFF, Models.HANDHELD);
                 itemModelGenerator.register(ModItems.WAND, Models.HANDHELD);
 
                 // Silver armor set
@@ -293,11 +293,14 @@ public class ModModelProvider extends FabricModelProvider {
                 Identifier innerId = Models.INNER_STAIRS.upload(stair, textures, generator.modelCollector);
                 Identifier outerId = Models.OUTER_STAIRS.upload(stair, textures, generator.modelCollector);
                 generator.blockStateCollector.accept(
-                                BlockStateModelGenerator.createStairsBlockState(stair, innerId, outerId, stairId));
+                                BlockStateModelGenerator.createStairsBlockState(stair, innerId, stairId, outerId));
                 // Slab
                 Identifier slabId = Models.SLAB.upload(slab, textures, generator.modelCollector);
                 Identifier slabTopId = Models.SLAB_TOP.upload(slab, textures, generator.modelCollector);
                 generator.blockStateCollector
                                 .accept(BlockStateModelGenerator.createSlabBlockState(slab, slabId, slabTopId, baseId));
+
+                generator.registerParentedItemModel(stair, stairId);
+                generator.registerParentedItemModel(slab, slabId);
         }
 }

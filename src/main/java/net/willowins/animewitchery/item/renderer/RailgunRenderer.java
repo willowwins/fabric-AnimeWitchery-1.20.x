@@ -10,14 +10,19 @@ import net.willowins.animewitchery.item.custom.HealingStaff;
 import software.bernie.geckolib.model.DefaultedItemGeoModel;
 import software.bernie.geckolib.renderer.GeoItemRenderer;
 
-public class RailgunRenderer extends GeoItemRenderer<HealingStaff> {
+import net.willowins.animewitchery.item.client.model.RailgunModel;
+import net.willowins.animewitchery.item.custom.RailgunItem;
+
+public class RailgunRenderer extends GeoItemRenderer<RailgunItem> {
     public RailgunRenderer() {
-        super(new DefaultedItemGeoModel(new Identifier(AnimeWitchery.MOD_ID, "railgun_model")));
+        super(new RailgunModel());
     }
 
     @Override
-    public void render(ItemStack stack, ModelTransformationMode transformType, MatrixStack poseStack, VertexConsumerProvider bufferSource, int packedLight, int packedOverlay) {
-        if (transformType.isFirstPerson() && stack.getOrCreateNbt().getFloat("charge") > 0.0f && stack.getOrCreateNbt().getFloat("charge") < 1.0f) {
+    public void render(ItemStack stack, ModelTransformationMode transformType, MatrixStack poseStack,
+            VertexConsumerProvider bufferSource, int packedLight, int packedOverlay) {
+        if (transformType.isFirstPerson() && stack.getOrCreateNbt().getFloat("charge") > 0.0f
+                && stack.getOrCreateNbt().getFloat("charge") < 1.0f) {
             poseStack.push();
 
             poseStack.translate(0, 0.6, 0);
