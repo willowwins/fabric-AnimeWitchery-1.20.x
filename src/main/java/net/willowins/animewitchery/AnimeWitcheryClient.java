@@ -130,6 +130,7 @@ public class AnimeWitcheryClient implements ClientModInitializer {
                 new DebugScreenInterceptor().onInitializeClient();
 
                 ModPackets.registerS2CPackets();
+                new net.willowins.animewitchery.client.ManaHudOverlay().onInitializeClient();
 
                 // Manual Registration of GeckoLib Renderers
                 System.out.println("ANIMEWITCHERY: Registering Manual Renderers [DEBUG]");

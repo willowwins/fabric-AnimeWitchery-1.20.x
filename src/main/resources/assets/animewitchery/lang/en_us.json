@@ -270,5 +270,13 @@
   "block.animewitchery.red_concrete_slab": "Red Concrete Slab",
   "block.animewitchery.black_concrete_stairs": "Black Concrete Stairs",
   "block.animewitchery.black_concrete_slab": "Black Concrete Slab",
+  "block.animewitchery.copper_stairs": "Copper Stairs",
+  "block.animewitchery.copper_slab": "Copper Slab",
+  "block.animewitchery.gold_stairs": "Gold Stairs",
+  "block.animewitchery.gold_slab": "Gold Slab",
+  "block.animewitchery.diamond_stairs": "Diamond Stairs",
+  "block.animewitchery.diamond_slab": "Diamond Slab",
+  "block.animewitchery.netherite_stairs": "Netherite Stairs",
+  "block.animewitchery.netherite_slab": "Netherite Slab",
   "itemGroup.animewitchery.silver": "Anime Witchery"
 }

@@ -274,6 +274,9 @@ public class ModItems {
         public static final Item SUMMONER_STAFF = registerItem("summoner_staff",
                         new SummonerStaffItem(new FabricItemSettings().maxCount(1).rarity(Rarity.EPIC)));
 
+        public static final Item SOUL = registerItem("soul",
+                        new SoulItem(new FabricItemSettings().maxCount(1)));
+
         // Dust items
         public static final Item BONE_DUST = registerItem("bone_dust", new Item(new FabricItemSettings()));
         public static final Item AMETHYST_DUST = registerItem("amethyst_dust", new Item(new FabricItemSettings()));

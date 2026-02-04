@@ -39,7 +39,12 @@ public class ModPackets {
                     stack = player.getOffHandStack();
                 }
                 if (stack.getItem() instanceof net.willowins.animewitchery.item.custom.SoulJarItem) {
-                    net.willowins.animewitchery.item.custom.SoulJarItem.removeSoulAtIndex(stack, index);
+                    net.minecraft.inventory.SimpleInventory inv = new net.minecraft.inventory.SimpleInventory(27);
+                    net.willowins.animewitchery.item.custom.SoulJarItem.loadInventory(stack, inv);
+                    if (index >= 0 && index < inv.size()) {
+                        inv.setStack(index, net.minecraft.item.ItemStack.EMPTY);
+                        net.willowins.animewitchery.item.custom.SoulJarItem.saveInventory(stack, inv);
+                    }
                 }
             });
         });
@@ -55,7 +60,16 @@ public class ModPackets {
                     stack = player.getOffHandStack();
                 }
                 if (stack.getItem() instanceof net.willowins.animewitchery.item.custom.SoulJarItem) {
-                    net.willowins.animewitchery.item.custom.SoulJarItem.swapSouls(stack, idx1, idx2);
+                    net.minecraft.inventory.SimpleInventory inv = new net.minecraft.inventory.SimpleInventory(27);
+                    net.willowins.animewitchery.item.custom.SoulJarItem.loadInventory(stack, inv);
+
+                    if (idx1 >= 0 && idx1 < inv.size() && idx2 >= 0 && idx2 < inv.size()) {
+                        net.minecraft.item.ItemStack s1 = inv.getStack(idx1);
+                        net.minecraft.item.ItemStack s2 = inv.getStack(idx2);
+                        inv.setStack(idx1, s2);
+                        inv.setStack(idx2, s1);
+                        net.willowins.animewitchery.item.custom.SoulJarItem.saveInventory(stack, inv);
+                    }
                 }
             });
         });

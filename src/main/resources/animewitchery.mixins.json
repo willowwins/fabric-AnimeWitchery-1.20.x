@@ -36,7 +36,11 @@
     "CreeperBlockDamageMixin",
     "VillagerMobGriefingMixin",
     "CapturingLootingMixin",
-    "KeepInventoryCharmMixin"
+    "KeepInventoryCharmMixin",
+    "FluidBlockMixin",
+    "MobEntityMixin",
+    "GlobalTotemMixin",
+    "TorchflowerLightMixin"
   ],
   "client": [
     "PlayerRendererMixin",

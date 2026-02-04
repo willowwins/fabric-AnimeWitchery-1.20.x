@@ -55,6 +55,12 @@ public class ModBlocks {
         public static final Block INTERACTOR = registerBlock("interactor",
                         new ItemActionBlock(FabricBlockSettings.copyOf(Blocks.IRON_BLOCK)));
 
+        public static Block WORLD_BUTTON = registerBlock("world_button",
+                        new WorldButtonBlock(FabricBlockSettings.copyOf(Blocks.STONE_BUTTON).nonOpaque()));
+
+        public static Block SERVER_BUTTON = registerBlock("server_button",
+                        new ServerButtonBlock(FabricBlockSettings.copyOf(Blocks.STONE_BUTTON).nonOpaque()));
+
         public static final Block SILVER_BLOCK = registerBlock("silver_block",
                         new Block(FabricBlockSettings.copyOf(Blocks.IRON_BLOCK)));
 
@@ -185,6 +191,30 @@ public class ModBlocks {
                                         FabricBlockSettings.copyOf(Blocks.IRON_BLOCK)));
         public static final Block IRON_SLAB = registerBlock("iron_slab",
                         new SlabBlock(FabricBlockSettings.copyOf(Blocks.IRON_BLOCK)));
+
+        public static final Block COPPER_STAIRS = registerBlock("copper_stairs",
+                        new StairsBlock(Blocks.COPPER_BLOCK.getDefaultState(),
+                                        FabricBlockSettings.copyOf(Blocks.COPPER_BLOCK)));
+        public static final Block COPPER_SLAB = registerBlock("copper_slab",
+                        new SlabBlock(FabricBlockSettings.copyOf(Blocks.COPPER_BLOCK)));
+
+        public static final Block GOLD_STAIRS = registerBlock("gold_stairs",
+                        new StairsBlock(Blocks.GOLD_BLOCK.getDefaultState(),
+                                        FabricBlockSettings.copyOf(Blocks.GOLD_BLOCK)));
+        public static final Block GOLD_SLAB = registerBlock("gold_slab",
+                        new SlabBlock(FabricBlockSettings.copyOf(Blocks.GOLD_BLOCK)));
+
+        public static final Block DIAMOND_STAIRS = registerBlock("diamond_stairs",
+                        new StairsBlock(Blocks.DIAMOND_BLOCK.getDefaultState(),
+                                        FabricBlockSettings.copyOf(Blocks.DIAMOND_BLOCK)));
+        public static final Block DIAMOND_SLAB = registerBlock("diamond_slab",
+                        new SlabBlock(FabricBlockSettings.copyOf(Blocks.DIAMOND_BLOCK)));
+
+        public static final Block NETHERITE_STAIRS = registerBlock("netherite_stairs",
+                        new StairsBlock(Blocks.NETHERITE_BLOCK.getDefaultState(),
+                                        FabricBlockSettings.copyOf(Blocks.NETHERITE_BLOCK)));
+        public static final Block NETHERITE_SLAB = registerBlock("netherite_slab",
+                        new SlabBlock(FabricBlockSettings.copyOf(Blocks.NETHERITE_BLOCK)));
 
         // Concrete Stairs and Slabs
         public static final Block WHITE_CONCRETE_STAIRS = registerBlock("white_concrete_stairs",

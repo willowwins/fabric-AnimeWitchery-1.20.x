@@ -42,7 +42,8 @@ public class BlockMinerBlockEntity extends BlockEntity implements ExtendedScreen
     }
 
     public static void tick(World world, BlockPos pos, BlockState state, BlockMinerBlockEntity be) {
-        if (world.isClient) return;
+        if (world.isClient)
+            return;
 
         boolean isPowered = world.isReceivingRedstonePower(pos);
         if (isPowered && !be.wasPowered) {
@@ -55,32 +56,75 @@ public class BlockMinerBlockEntity extends BlockEntity implements ExtendedScreen
         BLOCK_MINER_BLOCK_ENTITY = Registry.register(
                 Registries.BLOCK_ENTITY_TYPE,
                 new Identifier(AnimeWitchery.MOD_ID, "block_miner"),
-                BlockEntityType.Builder.create(BlockMinerBlockEntity::new, ModBlocks.BLOCK_MINER).build(null)
-        );
+                BlockEntityType.Builder.create(BlockMinerBlockEntity::new, ModBlocks.BLOCK_MINER).build(null));
     }
 
     private void mineBlock(World world, BlockPos pos) {
-        Direction facing = getCachedState().get(Properties.HORIZONTAL_FACING);
+        Direction facing = getCachedState().get(Properties.FACING);
         BlockPos targetPos = pos.offset(facing);
         BlockState targetState = world.getBlockState(targetPos);
 
-        if (!(world instanceof ServerWorld serverWorld)) return;
+        if (!(world instanceof ServerWorld serverWorld))
+            return;
 
         float hardness = targetState.getHardness(world, targetPos);
 
         // Check if block hardness is >= 0 (breakable)
-        if (hardness < 0) return;
+        if (hardness < 0)
+            return;
 
         // Check if the block is obsidian or hardness <= 5 (diamond pickaxe breakable)
         boolean canMineObsidian = targetState.isOf(net.minecraft.block.Blocks.OBSIDIAN);
 
         if (hardness <= 5.0F || canMineObsidian) {
             var drops = Block.getDroppedStacks(targetState, serverWorld, targetPos, world.getBlockEntity(targetPos));
+
+            // Check if drops fit in inventory
+            if (!canFitDrops(drops)) {
+                return;
+            }
+
             world.breakBlock(targetPos, false);
             for (ItemStack stack : drops) {
                 insertStack(stack);
             }
         }
+    }
+
+    private boolean canFitDrops(java.util.List<ItemStack> drops) {
+        // Clone inventory to simulate insertion
+        DefaultedList<ItemStack> testInv = DefaultedList.ofSize(inventory.size(), ItemStack.EMPTY);
+        for (int i = 0; i < inventory.size(); i++) {
+            testInv.set(i, inventory.get(i).copy());
+        }
+
+        for (ItemStack drop : drops) {
+            ItemStack remaining = drop.copy();
+            for (int i = 0; i < testInv.size(); i++) {
+                ItemStack slotStack = testInv.get(i);
+                if (slotStack.isEmpty()) {
+                    testInv.set(i, remaining.copy());
+                    remaining.setCount(0);
+                    break;
+                } else if (ItemStack.canCombine(slotStack, remaining)) {
+                    int combined = slotStack.getCount() + remaining.getCount();
+                    int max = Math.min(64, slotStack.getMaxCount());
+                    if (combined <= max) {
+                        slotStack.increment(remaining.getCount());
+                        remaining.setCount(0);
+                        break;
+                    } else {
+                        int diff = max - slotStack.getCount();
+                        slotStack.increment(diff);
+                        remaining.decrement(diff);
+                    }
+                }
+            }
+            if (!remaining.isEmpty()) {
+                return false;
+            }
+        }
+        return true;
     }
 
     private void insertStack(ItemStack stack) {
@@ -143,14 +187,16 @@ public class BlockMinerBlockEntity extends BlockEntity implements ExtendedScreen
     @Override
     public ItemStack removeStack(int slot, int amount) {
         ItemStack stack = Inventories.splitStack(inventory, slot, amount);
-        if (!stack.isEmpty()) markDirty();
+        if (!stack.isEmpty())
+            markDirty();
         return stack;
     }
 
     @Override
     public ItemStack removeStack(int slot) {
         ItemStack stack = Inventories.removeStack(inventory, slot);
-        if (!stack.isEmpty()) markDirty();
+        if (!stack.isEmpty())
+            markDirty();
         return stack;
     }
 
@@ -173,7 +219,7 @@ public class BlockMinerBlockEntity extends BlockEntity implements ExtendedScreen
 
     @Override
     public int[] getAvailableSlots(Direction side) {
-        return new int[]{0, 1, 2, 3, 4, 5, 6, 7, 8};
+        return new int[] { 0, 1, 2, 3, 4, 5, 6, 7, 8 };
     }
 
     @Override
@@ -197,11 +243,14 @@ public class BlockMinerBlockEntity extends BlockEntity implements ExtendedScreen
         Inventories.writeNbt(nbt, inventory);
         super.writeNbt(nbt);
     }
+
     public void dropInventory(World world, BlockPos pos) {
-        if (world == null || world.isClient()) return;
+        if (world == null || world.isClient())
+            return;
         for (ItemStack stack : inventory) {
             if (!stack.isEmpty()) {
-                ItemEntity itemEntity = new ItemEntity(world, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, stack);
+                ItemEntity itemEntity = new ItemEntity(world, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5,
+                        stack);
                 world.spawnEntity(itemEntity);
             }
         }

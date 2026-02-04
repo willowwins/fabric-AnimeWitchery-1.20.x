@@ -1,6 +1,6 @@
 {
-  "parent": "item/generated",
+  "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "animewitchery:item/silver_effigy"
+    "layer0": "animewitchery:item/defiant_rift"
   }
 }

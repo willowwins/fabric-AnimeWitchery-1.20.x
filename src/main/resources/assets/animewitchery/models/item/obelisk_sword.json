@@ -80,6 +80,6 @@
     }
   },
   "textures": {
-    "particle": "item/obelisk_sword"
+    "particle": "item/sword_texture"
   }
 }

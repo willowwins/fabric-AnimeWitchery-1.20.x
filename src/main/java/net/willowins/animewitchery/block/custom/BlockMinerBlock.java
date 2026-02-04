@@ -21,7 +21,7 @@ import net.willowins.animewitchery.block.entity.ModBlockEntities;
 
 public class BlockMinerBlock extends BlockWithEntity implements BlockEntityProvider {
 
-    public static final DirectionProperty FACING = Properties.HORIZONTAL_FACING;  // Fixed here
+    public static final DirectionProperty FACING = Properties.FACING;
 
     public BlockMinerBlock(Settings settings) {
         super(settings);
@@ -35,16 +35,17 @@ public class BlockMinerBlock extends BlockWithEntity implements BlockEntityProvi
 
     @Override
     public BlockState getPlacementState(ItemPlacementContext ctx) {
-        return this.getDefaultState().with(FACING, ctx.getHorizontalPlayerFacing().getOpposite());
+        return this.getDefaultState().with(FACING, ctx.getPlayerLookDirection().getOpposite());
     }
 
     @Override
     public BlockEntity createBlockEntity(BlockPos pos, BlockState state) {
         return new BlockMinerBlockEntity(pos, state);
     }
+
     @Override
     public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player,
-                              Hand hand, BlockHitResult hit) {
+            Hand hand, BlockHitResult hit) {
         if (!world.isClient) {
             BlockEntity blockEntity = world.getBlockEntity(pos);
             if (blockEntity instanceof BlockMinerBlockEntity minerBlockEntity) {
@@ -53,6 +54,7 @@ public class BlockMinerBlock extends BlockWithEntity implements BlockEntityProvi
         }
         return ActionResult.SUCCESS;
     }
+
     @Override
     public void onStateReplaced(BlockState state, World world, BlockPos pos, BlockState newState, boolean moved) {
         if (!state.isOf(newState.getBlock())) {
@@ -66,8 +68,10 @@ public class BlockMinerBlock extends BlockWithEntity implements BlockEntityProvi
     }
 
     @Override
-    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type) {
-        return world.isClient ? null : checkType(type, ModBlockEntities.BLOCK_MINER_BLOCK_ENTITY, BlockMinerBlockEntity::tick);
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state,
+            BlockEntityType<T> type) {
+        return world.isClient ? null
+                : checkType(type, ModBlockEntities.BLOCK_MINER_BLOCK_ENTITY, BlockMinerBlockEntity::tick);
     }
 
     @Override

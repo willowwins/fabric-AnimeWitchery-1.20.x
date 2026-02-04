@@ -22,58 +22,69 @@ import net.willowins.animewitchery.block.custom.StrawberryCropBlock;
 import net.willowins.animewitchery.item.ModItems;
 
 public class ModLootTableProvider extends FabricBlockLootTableProvider {
-    public ModLootTableProvider(FabricDataOutput dataOutput) {
-        super(dataOutput);
-    }
+        public ModLootTableProvider(FabricDataOutput dataOutput) {
+                super(dataOutput);
+        }
 
-    @Override
-    public void generate() {
-        addDrop(ModBlocks.SOUND_BLOCK2);
-        addDrop(ModBlocks.SOUND_BLOCK);
-        addDrop(ModBlocks.SILVER_BLOCK);
-        addDrop(ModBlocks.CHARCOAL_BLOCK);
+        @Override
+        public void generate() {
+                addDrop(ModBlocks.SOUND_BLOCK2);
+                addDrop(ModBlocks.SOUND_BLOCK);
+                addDrop(ModBlocks.SILVER_BLOCK);
+                addDrop(ModBlocks.CHARCOAL_BLOCK);
+                addDrop(ModBlocks.TRANSMUTATION_PYRE_BLOCK);
+                addDrop(ModBlocks.CAUTION_BLOCK);
+                addDrop(ModBlocks.CAUTION_BLOCK_STAIRS);
+                addDrop(ModBlocks.CAUTION_BLOCK_SLAB);
+                addDrop(ModBlocks.CAUTION_BLOCK);
+                addDrop(ModBlocks.CAUTION_BLOCK_STAIRS);
+                addDrop(ModBlocks.CAUTION_BLOCK_SLAB);
 
+                addDrop(ModBlocks.EFFIGY_FOUNTAIN, ModBlocks.EFFIGY_FOUNTAIN);
+                addDrop(ModBlocks.DECORATIVE_FOUNTAIN, ModBlocks.DECORATIVE_FOUNTAIN);
+                addDrop(ModBlocks.ACTIVE_EFFIGY_FOUNTAIN, ModBlocks.EFFIGY_FOUNTAIN);
+                addDrop(ModBlocks.SILVER_ORE, copperlikeOreDrops(ModBlocks.SILVER_ORE, ModItems.RAWSILVER));
+                addDrop(ModBlocks.DEEPSLATE_SILVER_ORE,
+                                copperlikeOreDrops(ModBlocks.DEEPSLATE_SILVER_ORE, ModItems.RAWSILVER));
 
-        addDrop(ModBlocks.EFFIGY_FOUNTAIN,ModBlocks.EFFIGY_FOUNTAIN);
-        addDrop(ModBlocks.DECORATIVE_FOUNTAIN,ModBlocks.DECORATIVE_FOUNTAIN);
-        addDrop(ModBlocks.ACTIVE_EFFIGY_FOUNTAIN,ModBlocks.EFFIGY_FOUNTAIN);
-        addDrop(ModBlocks.SILVER_ORE, copperlikeOreDrops(ModBlocks.SILVER_ORE, ModItems.RAWSILVER));
-        addDrop(ModBlocks.DEEPSLATE_SILVER_ORE, copperlikeOreDrops(ModBlocks.DEEPSLATE_SILVER_ORE, ModItems.RAWSILVER));
+                addDrop(ModBlocks.SILVER_FENCE);
+                addDrop(ModBlocks.SILVER_FENCE_GATE);
+                addDrop(ModBlocks.SILVER_WALL);
+                addDrop(ModBlocks.SILVER_TRAPDOOR);
+                addDrop(ModBlocks.SILVER_BUTTON);
+                addDrop(ModBlocks.SILVER_PRESSURE_PLATE);
+                addDrop(ModBlocks.SILVER_STAIRS);
+                addDrop(Blocks.REINFORCED_DEEPSLATE);
 
-        addDrop(ModBlocks.SILVER_FENCE);
-        addDrop(ModBlocks.SILVER_FENCE_GATE);
-        addDrop(ModBlocks.SILVER_WALL);
-        addDrop(ModBlocks.SILVER_TRAPDOOR);
-        addDrop(ModBlocks.SILVER_BUTTON);
-        addDrop(ModBlocks.SILVER_PRESSURE_PLATE);
-        addDrop(ModBlocks.SILVER_STAIRS);
-        addDrop(Blocks.REINFORCED_DEEPSLATE);
+                addDrop(ModBlocks.SILVER_DOOR, doorDrops(ModBlocks.SILVER_DOOR));
+                addDrop(ModBlocks.SILVER_SLAB, slabDrops(ModBlocks.SILVER_SLAB));
 
+                BlockStatePropertyLootCondition.Builder builder = BlockStatePropertyLootCondition
+                                .builder(ModBlocks.STRAWBERRY_CROP).properties(StatePredicate.Builder.create()
+                                                .exactMatch(StrawberryCropBlock.AGE, 3));
+                addDrop(ModBlocks.STRAWBERRY_CROP, cropDrops(ModBlocks.STRAWBERRY_CROP, ModItems.STRAWBERRY,
+                                ModItems.STRAWBERRY_SEEDS, builder));
 
-        addDrop(ModBlocks.SILVER_DOOR, doorDrops(ModBlocks.SILVER_DOOR));
-        addDrop(ModBlocks.SILVER_SLAB, slabDrops(ModBlocks.SILVER_SLAB));
+                AnyOfLootCondition.Builder builder2 = BlockStatePropertyLootCondition.builder(ModBlocks.LEMON_CROP)
+                                .properties(StatePredicate.Builder.create()
+                                                .exactMatch(LemonCropBlock.AGE, 7))
+                                .or(BlockStatePropertyLootCondition.builder(ModBlocks.LEMON_CROP)
+                                                .properties(StatePredicate.Builder.create()
+                                                                .exactMatch(LemonCropBlock.AGE, 8)));
+                addDrop(ModBlocks.LEMON_CROP,
+                                cropDrops(ModBlocks.LEMON_CROP, ModItems.LEMON, ModItems.LEMON_SEEDS, builder2));
+        }
 
-        BlockStatePropertyLootCondition.Builder builder = BlockStatePropertyLootCondition.builder(ModBlocks.STRAWBERRY_CROP).properties(StatePredicate.Builder.create()
-                .exactMatch(StrawberryCropBlock.AGE, 3));
-        addDrop(ModBlocks.STRAWBERRY_CROP, cropDrops(ModBlocks.STRAWBERRY_CROP, ModItems.STRAWBERRY, ModItems.STRAWBERRY_SEEDS, builder));
-
-        AnyOfLootCondition.Builder builder2 =
-                BlockStatePropertyLootCondition.builder(ModBlocks.LEMON_CROP).properties(StatePredicate.Builder.create()
-                                .exactMatch(LemonCropBlock.AGE, 7))
-                        .or(BlockStatePropertyLootCondition.builder(ModBlocks.LEMON_CROP).properties(StatePredicate.Builder.create()
-                                .exactMatch(LemonCropBlock.AGE, 8)));
-        addDrop(ModBlocks.LEMON_CROP, cropDrops(ModBlocks.LEMON_CROP, ModItems.LEMON, ModItems.LEMON_SEEDS, builder2));
-    }
-
-    public LootTable.Builder copperlikeOreDrops(Block drop, Item item) {
-        return dropsWithSilkTouch(
-                drop,
-                (LootPoolEntry.Builder<?>) this.applyExplosionDecay(
-                        drop,
-                        ItemEntry.builder(item)
-                                .apply(SetCountLootFunction.builder(UniformLootNumberProvider.create(3.0F, 4.0F)))
-                                .apply(ApplyBonusLootFunction.oreDrops(Enchantments.FORTUNE))
-                )
-        );
-    }
+        public LootTable.Builder copperlikeOreDrops(Block drop, Item item) {
+                return dropsWithSilkTouch(
+                                drop,
+                                (LootPoolEntry.Builder<?>) this.applyExplosionDecay(
+                                                drop,
+                                                ItemEntry.builder(item)
+                                                                .apply(SetCountLootFunction
+                                                                                .builder(UniformLootNumberProvider
+                                                                                                .create(3.0F, 4.0F)))
+                                                                .apply(ApplyBonusLootFunction
+                                                                                .oreDrops(Enchantments.FORTUNE))));
+        }
 }

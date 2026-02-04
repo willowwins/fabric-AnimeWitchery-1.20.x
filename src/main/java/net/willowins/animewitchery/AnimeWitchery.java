@@ -74,6 +74,9 @@ public class AnimeWitchery implements ModInitializer {
 	@Override
 	public void onInitialize() {
 
+		ModBlocks.registerModBlocks();
+		ModItems.registerModItems();
+
 		// Register custom game rules
 		net.willowins.animewitchery.util.ModGameRules.register();
 
@@ -93,9 +96,6 @@ public class AnimeWitchery implements ModInitializer {
 		ModItemGroups.registerItemGroups();
 
 		ModScreenHandlers.registerAll();
-
-		ModItems.registerModItems();
-		ModBlocks.registerModBlocks();
 
 		// Register Patchouli book
 		PatchouliAPI.get().setConfigFlag("animewitchery:rituals", true);
@@ -144,6 +144,10 @@ public class AnimeWitchery implements ModInitializer {
 		NetherrackTransformHandler.register();
 
 		SpawnerNbtHandler.register();
+
+		net.willowins.animewitchery.events.SoulRecoveryHandler.register();
+		net.willowins.animewitchery.events.SoulJarInteractionHandler.register();
+		net.willowins.animewitchery.events.MobEquipmentHandler.register();
 
 		LOGGER.info("Hello Fabric world!");
 

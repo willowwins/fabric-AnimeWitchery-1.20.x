@@ -1,0 +1,23 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "animewitchery:block/warden_head"
+    },
+    "facing=east": {
+      "model": "animewitchery:block/warden_head",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "animewitchery:block/warden_head",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "animewitchery:block/warden_head",
+      "y": 270
+    }
+  }
+}
+
+
+
+

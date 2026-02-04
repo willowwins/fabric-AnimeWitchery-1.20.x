@@ -533,5 +533,41 @@ public class ModRecipeProvider extends FabricRecipeProvider {
                                 Blocks.BLACK_CONCRETE);
                 offerStonecuttingRecipe(exporter, RecipeCategory.BUILDING_BLOCKS, ModBlocks.BLACK_CONCRETE_SLAB,
                                 Blocks.BLACK_CONCRETE, 2);
+                ShapedRecipeJsonBuilder.create(RecipeCategory.MISC, ModBlocks.TRANSMUTATION_PYRE_BLOCK, 1)
+                                .pattern(" s ")
+                                .pattern("ici")
+                                .pattern(" s ")
+                                .input('s', Blocks.STONE)
+                                .input('i', ModItems.SILVER)
+                                .input('c', Blocks.CAMPFIRE)
+                                .criterion(hasItem(Blocks.STONE), conditionsFromItem(Blocks.STONE))
+                                .criterion(hasItem(ModItems.SILVER), conditionsFromItem(ModItems.SILVER))
+                                .criterion(hasItem(Blocks.CAMPFIRE), conditionsFromItem(Blocks.CAMPFIRE))
+                                .offerTo(exporter, new Identifier(getRecipeName(ModBlocks.TRANSMUTATION_PYRE_BLOCK)));
+
+                ShapedRecipeJsonBuilder.create(RecipeCategory.BUILDING_BLOCKS, ModBlocks.CAUTION_BLOCK, 4)
+                                .pattern("yb")
+                                .pattern("by")
+                                .input('y', Blocks.YELLOW_CONCRETE)
+                                .input('b', Blocks.BLACK_CONCRETE)
+                                .criterion(hasItem(Blocks.YELLOW_CONCRETE), conditionsFromItem(Blocks.YELLOW_CONCRETE))
+                                .criterion(hasItem(Blocks.BLACK_CONCRETE), conditionsFromItem(Blocks.BLACK_CONCRETE))
+                                .offerTo(exporter, new Identifier(getRecipeName(ModBlocks.CAUTION_BLOCK)));
+
+                createStairsRecipe(ModBlocks.CAUTION_BLOCK_STAIRS, Ingredient.ofItems(ModBlocks.CAUTION_BLOCK))
+                                .criterion(hasItem(ModBlocks.CAUTION_BLOCK),
+                                                conditionsFromItem(ModBlocks.CAUTION_BLOCK))
+                                .offerTo(exporter, new Identifier(getRecipeName(ModBlocks.CAUTION_BLOCK_STAIRS)));
+
+                createSlabRecipe(RecipeCategory.BUILDING_BLOCKS, ModBlocks.CAUTION_BLOCK_SLAB,
+                                Ingredient.ofItems(ModBlocks.CAUTION_BLOCK))
+                                .criterion(hasItem(ModBlocks.CAUTION_BLOCK),
+                                                conditionsFromItem(ModBlocks.CAUTION_BLOCK))
+                                .offerTo(exporter, new Identifier(getRecipeName(ModBlocks.CAUTION_BLOCK_SLAB)));
+
+                offerStonecuttingRecipe(exporter, RecipeCategory.BUILDING_BLOCKS, ModBlocks.CAUTION_BLOCK_STAIRS,
+                                ModBlocks.CAUTION_BLOCK);
+                offerStonecuttingRecipe(exporter, RecipeCategory.BUILDING_BLOCKS, ModBlocks.CAUTION_BLOCK_SLAB,
+                                ModBlocks.CAUTION_BLOCK, 2);
         }
 }

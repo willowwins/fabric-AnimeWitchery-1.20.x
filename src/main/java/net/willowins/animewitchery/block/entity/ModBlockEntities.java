@@ -120,6 +120,18 @@ public class ModBlockEntities {
 
         public static BlockEntityType<TransmutationPyreBlockEntity> TRANSMUTATION_PYRE_BLOCK_ENTITY;
 
+        public static final BlockEntityType<WorldButtonBlockEntity> WORLD_BUTTON_BLOCK_ENTITY = Registry.register(
+                        Registries.BLOCK_ENTITY_TYPE,
+                        new Identifier(AnimeWitchery.MOD_ID, "world_button_be"),
+                        FabricBlockEntityTypeBuilder.create(WorldButtonBlockEntity::new, ModBlocks.WORLD_BUTTON)
+                                        .build(null));
+
+        public static final BlockEntityType<ServerButtonBlockEntity> SERVER_BUTTON_BLOCK_ENTITY = Registry.register(
+                        Registries.BLOCK_ENTITY_TYPE,
+                        new Identifier(AnimeWitchery.MOD_ID, "server_button_be"),
+                        FabricBlockEntityTypeBuilder.create(ServerButtonBlockEntity::new, ModBlocks.SERVER_BUTTON)
+                                        .build(null));
+
         public static void registerBlockEntities() {
                 TRANSMUTATION_PYRE_BLOCK_ENTITY = Registry.register(Registries.BLOCK_ENTITY_TYPE,
                                 new Identifier(AnimeWitchery.MOD_ID, "transmutation_pyre_be"),
