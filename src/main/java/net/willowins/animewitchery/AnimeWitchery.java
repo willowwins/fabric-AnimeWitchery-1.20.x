@@ -16,13 +16,14 @@ import net.kyrptonaught.customportalapi.api.CustomPortalBuilder;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.item.ItemStack;
+import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
 import net.willowins.animewitchery.block.ModBlocks;
 import net.willowins.animewitchery.block.custom.EffigyFountainBlock;
+import net.willowins.animewitchery.fluid.ModFluids;
 import net.willowins.animewitchery.block.entity.ModBlockEntities;
 import net.willowins.animewitchery.effect.ModEffect;
 import net.willowins.animewitchery.enchantments.ModEnchantments;
@@ -74,8 +75,16 @@ public class AnimeWitchery implements ModInitializer {
 	@Override
 	public void onInitialize() {
 
+		ModFluids.register();
 		ModBlocks.registerModBlocks();
 		ModItems.registerModItems();
+		net.willowins.animewitchery.world.gen.ModFoliagePlacerTypes.registerModFoliagePlacerTypes();
+		net.willowins.animewitchery.world.gen.ModTreeDecoratorTypes.registerModTreeDecoratorTypes();
+		net.willowins.animewitchery.world.gen.ModFeatures.registerModFeatures();
+
+		// Register Pocket Collision Handler
+		net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents.START_WORLD_TICK.register(
+				net.willowins.animewitchery.world.dimension.PocketCollisionHandler::tick);
 
 		// Register custom game rules
 		net.willowins.animewitchery.util.ModGameRules.register();
@@ -86,6 +95,12 @@ public class AnimeWitchery implements ModInitializer {
 		ServerTickEvents.END_WORLD_TICK.register(ServerScheduler::tick);
 
 		ObeliskWorldListener.register();
+		// DimensionLoader.register(); // Disabled - using legacy static pocket
+		// dimension instead
+
+		// Register pocket dimension commands
+		net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback.EVENT.register(
+				net.willowins.animewitchery.command.PocketCommands::register);
 
 		// Register spellbook packet receivers
 		net.willowins.animewitchery.networking.SpellbookPackets.registerServerReceivers();
@@ -133,6 +148,7 @@ public class AnimeWitchery implements ModInitializer {
 		net.willowins.animewitchery.world.spawn.VoidWispSpawnHandler.registerSpawns();
 
 		ExcavationBreakHandler.register();
+		ChainsawBreakHandler.register();
 		BarrierBlockProtectionHandler.register();
 
 		ExpBoostHandler.register();
@@ -149,9 +165,37 @@ public class AnimeWitchery implements ModInitializer {
 		net.willowins.animewitchery.events.SoulJarInteractionHandler.register();
 		net.willowins.animewitchery.events.MobEquipmentHandler.register();
 
+		// Pacifism Effect - Handled via Mixin now for full damage coverage
+
+		// Class System Registries
+		net.willowins.animewitchery.effect.ModEffects.registerModEffects();
+		net.willowins.animewitchery.events.ClassCombatHandler.register();
+
 		LOGGER.info("Hello Fabric world!");
 
 		FuelRegistry.INSTANCE.add(ModBlocks.CHARCOAL_BLOCK, 16000);
+
+		// Flammability Registration
+		net.fabricmc.fabric.api.registry.FlammableBlockRegistry.getDefaultInstance().add(ModBlocks.ROSEWILLOW_LOG, 5,
+				5);
+		net.fabricmc.fabric.api.registry.FlammableBlockRegistry.getDefaultInstance()
+				.add(ModBlocks.ROSEWILLOW_LOG_BLOOMING, 5, 5);
+		net.fabricmc.fabric.api.registry.FlammableBlockRegistry.getDefaultInstance().add(ModBlocks.ROSEWILLOW_PLANKS, 5,
+				20);
+		net.fabricmc.fabric.api.registry.FlammableBlockRegistry.getDefaultInstance().add(ModBlocks.ROSEWILLOW_STAIRS, 5,
+				20);
+		net.fabricmc.fabric.api.registry.FlammableBlockRegistry.getDefaultInstance().add(ModBlocks.ROSEWILLOW_SLAB, 5,
+				20);
+		net.fabricmc.fabric.api.registry.FlammableBlockRegistry.getDefaultInstance().add(ModBlocks.ROSEWILLOW_FENCE, 5,
+				20);
+		net.fabricmc.fabric.api.registry.FlammableBlockRegistry.getDefaultInstance()
+				.add(ModBlocks.ROSEWILLOW_FENCE_GATE, 5, 20);
+		net.fabricmc.fabric.api.registry.FlammableBlockRegistry.getDefaultInstance().add(ModBlocks.ROSEWILLOW_LEAVES,
+				30, 60);
+		net.fabricmc.fabric.api.registry.FlammableBlockRegistry.getDefaultInstance().add(ModBlocks.ROSEWILLOW_VINES, 15,
+				100);
+		net.fabricmc.fabric.api.registry.FlammableBlockRegistry.getDefaultInstance().add(ModBlocks.ROSEWILLOW_VINES_TIP,
+				15, 100);
 
 		// Initialize world generation (ore generation)
 		try {
@@ -227,6 +271,63 @@ public class AnimeWitchery implements ModInitializer {
 					item.playSwing((ServerPlayerEntity) player, player.getStackInHand(hand));
 				}
 			});
+		});
+
+		net.fabricmc.fabric.api.event.player.UseEntityCallback.EVENT
+				.register((player, world, hand, entity, hitResult) -> {
+					if (entity instanceof net.minecraft.entity.decoration.ItemFrameEntity itemFrame
+							&& player.isSneaking()) {
+						if (player.getStackInHand(hand).isOf(ModItems.TORCH_FLOWER_ESSENCE)) {
+							if (!world.isClient) {
+								boolean currentlyInvisible = itemFrame.isInvisible();
+								itemFrame.setInvisible(!currentlyInvisible);
+								world.playSound(null, itemFrame.getBlockPos(),
+										net.minecraft.sound.SoundEvents.ENTITY_ITEM_FRAME_ADD_ITEM,
+										net.minecraft.sound.SoundCategory.BLOCKS, 1.0f, 1.0f);
+								if (!player.getAbilities().creativeMode) {
+									player.getStackInHand(hand).decrement(1);
+								}
+							}
+							return ActionResult.SUCCESS;
+						}
+					}
+					return ActionResult.PASS;
+				});
+
+		// Shift+Right-Click Protected Chest Pickup Logic (Global Handler)
+		net.fabricmc.fabric.api.event.player.UseBlockCallback.EVENT.register((player, world, hand, hitResult) -> {
+			if (hand == Hand.MAIN_HAND && player.isSneaking()) {
+				net.minecraft.util.math.BlockPos pos = hitResult.getBlockPos();
+				if (world.getBlockState(pos).isOf(ModBlocks.PROTECTED_CHEST)) {
+					net.willowins.animewitchery.block.entity.ProtectedChestBlockEntity chest = (net.willowins.animewitchery.block.entity.ProtectedChestBlockEntity) world
+							.getBlockEntity(pos);
+					if (chest != null) {
+						ItemStack mainHand = player.getMainHandStack();
+						boolean correctKey = chest.isLocked()
+								&& net.willowins.animewitchery.block.custom.ProtectedChestBlock.checkKey(player,
+										chest.getLockName());
+						boolean ownerUnlocked = !chest.isLocked() && chest.isOwner(player);
+
+						if (correctKey || ownerUnlocked) {
+							if (!world.isClient) {
+								world.breakBlock(pos, true, player);
+								player.sendMessage(Text.literal("§aProtected Chest retrieved."), true);
+							}
+							return ActionResult.SUCCESS;
+						} else if (chest.isLocked()) {
+							if (!world.isClient
+									&& mainHand.getItem() instanceof net.willowins.animewitchery.item.custom.KeyItem) {
+								player.sendMessage(
+										Text.literal("§cCannot pickup: Key '" + mainHand.getName().getString()
+												+ "' does not match lock '" + chest.getLockName() + "'."),
+										true);
+							}
+							return ActionResult.CONSUME;
+						}
+					}
+				}
+			}
+			return ActionResult.PASS;
 		});
 
 	}

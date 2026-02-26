@@ -58,5 +58,14 @@
     "sounds": [
       "animewitchery:kamikaze_explosion_wind_up"
     ]
+  },
+  "monster_statue_ambient": {
+    "subtitle": "subtitles.animewitchery.monster_statue_ambient",
+    "sounds": [
+      {
+        "name": "animewitchery:monster_statue_ambient",
+        "attenuation_distance": 16
+      }
+    ]
   }
 }

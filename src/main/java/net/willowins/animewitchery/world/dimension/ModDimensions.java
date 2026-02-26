@@ -37,13 +37,40 @@ public class ModDimensions {
                                 true, // bedWorks
                                 false, // respawnAnchorWorks
                                 -64, // minY
-                                256, // height
-                                256, // logicalHeight
+                                640, // height
+                                640, // logicalHeight
                                 BlockTags.INFINIBURN_OVERWORLD, // infiniburn - allows nether portals
                                 new Identifier(AnimeWitchery.MOD_ID, "paradiselost"), // effectsLocation (Custom Fog)
-                                0.05f, // ambientLight (Non-zero value to prevent fullbright bug)
+                                0.0f, // ambientLight (Set to 0 as requested)
                                 new DimensionType.MonsterSettings(true, false, UniformIntProvider.create(0, 0), 0))); // piglinSafe
                                                                                                                       // =
                                                                                                                       // true
+        }
+
+        public static final RegistryKey<DimensionOptions> POCKET_DIM_KEY = RegistryKey.of(RegistryKeys.DIMENSION,
+                        new Identifier(AnimeWitchery.MOD_ID, "pocket_dimension"));
+        public static final RegistryKey<World> POCKET_LEVEL_KEY = RegistryKey.of(RegistryKeys.WORLD,
+                        new Identifier(AnimeWitchery.MOD_ID, "pocket_dimension"));
+        public static final RegistryKey<DimensionType> POCKET_DIM_TYPE = RegistryKey.of(
+                        RegistryKeys.DIMENSION_TYPE,
+                        new Identifier(AnimeWitchery.MOD_ID, "pocket_type"));
+
+        public static void bootstrapPocketType(Registerable<DimensionType> context) {
+                context.register(POCKET_DIM_TYPE, new DimensionType(
+                                OptionalLong.of(18000), // has fixed time? Yes, Midnight.
+                                true, // hasSkylight
+                                false, // hasCeiling
+                                false, // ultraWarm
+                                false, // natural (False for fixed time)
+                                1.0, // coordinateScale
+                                true, // bedWorks (Allow sleeping/setting spawn)
+                                true, // respawnAnchorWorks
+                                0, // minY
+                                256, // height
+                                256, // logicalHeight
+                                BlockTags.INFINIBURN_OVERWORLD,
+                                DimensionTypes.OVERWORLD_ID, // effectsLocation
+                                0.0f, // ambientLight
+                                new DimensionType.MonsterSettings(false, false, UniformIntProvider.create(0, 0), 0))); // piglinSafe
         }
 }

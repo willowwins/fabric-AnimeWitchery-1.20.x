@@ -24,7 +24,7 @@ public class VoidWispSpawnHandler {
             BiomeSelectors.foundInOverworld(),
             SpawnGroup.MONSTER,
             ModEntities.VOID_WISP,
-            1,  // Very rare (reduced from 5)
+            2,  // Very rare (reduced from 5)
             1,
             1
         );
@@ -35,7 +35,7 @@ public class VoidWispSpawnHandler {
             BiomeSelectors.foundInTheNether(),
             SpawnGroup.MONSTER,
             ModEntities.VOID_WISP,
-            4,  // Rare (reduced from 20)
+            2,  // Rare (reduced from 20)
             1,
             2
         );
@@ -45,12 +45,12 @@ public class VoidWispSpawnHandler {
             BiomeSelectors.foundInTheEnd(),
             SpawnGroup.MONSTER,
             ModEntities.VOID_WISP,
-            3,  // Very rare in the End
+            2,  // Very rare in the End
             1,
-            1
+            3
         );
         
-        System.out.println("[AnimeWitchery] Registered Void Wisp spawning");
+
     }
 }
 

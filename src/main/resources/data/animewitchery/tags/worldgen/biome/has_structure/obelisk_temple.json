@@ -1,27 +1,16 @@
 {
   "replace": false,
   "values": [
-    "minecraft:dark_forest",
-    "minecraft:jungle",
     "minecraft:ice_spikes",
-    "minecraft:taiga",
-    "minecraft:old_growth_pine_taiga",
-    "minecraft:old_growth_spruce_taiga",
     "minecraft:snowy_taiga",
     "minecraft:grove",
     "minecraft:snowy_slopes",
     "minecraft:jagged_peaks",
     "minecraft:frozen_peaks",
-    "minecraft:stony_peaks",
-    "minecraft:nether_wastes",
-    "minecraft:crimson_forest",
-    "minecraft:warped_forest",
-    "minecraft:soul_sand_valley",
-    "minecraft:basalt_deltas",
-    "minecraft:the_end",
     "minecraft:end_midlands",
     "minecraft:end_highlands",
     "minecraft:end_barrens",
-    "minecraft:small_end_islands"
+    "minecraft:small_end_islands",
+    "animewitchery:paradise_lost"
   ]
 }

@@ -1,6 +1,6 @@
 {
-  "parent": "minecraft:item/generated",
-  "textures": {
-    "layer0": "animewitchery:item/alchemy_table"
-  }
+    "parent": "item/generated",
+    "textures": {
+        "layer0": "animewitchery:item/alchemy_table_2d"
+    }
 }

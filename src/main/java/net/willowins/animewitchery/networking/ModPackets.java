@@ -13,10 +13,16 @@ public class ModPackets {
     public static final Identifier LASER_HIT = new Identifier(AnimeWitchery.MOD_ID, "laser_hit");
     public static final Identifier OBELISK_SHAKE = new Identifier(AnimeWitchery.MOD_ID, "obelisk_shake");
     public static final Identifier RAILGUN_BEAM = new Identifier(AnimeWitchery.MOD_ID, "railgun_beam");
+    public static final Identifier RESONANT_BEAM_PARTICLE = new Identifier(AnimeWitchery.MOD_ID,
+            "resonant_beam_particle");
     public static final Identifier KAMIKAZE_FX = new Identifier(AnimeWitchery.MOD_ID, "kamikaze_fx");
     public static final Identifier CREATE_PLATFORM_ID = new Identifier("animewitchery", "create_platform");
     public static final Identifier REMOVE_SOUL = new Identifier(AnimeWitchery.MOD_ID, "remove_soul");
     public static final Identifier SWAP_SOULS = new Identifier(AnimeWitchery.MOD_ID, "swap_souls");
+    public static final Identifier SELECT_CLASS_ID = new Identifier(AnimeWitchery.MOD_ID, "select_class");
+    public static final Identifier UNLOCK_SKILL_ID = new Identifier(AnimeWitchery.MOD_ID, "unlock_skill");
+    public static final Identifier SYNC_ENCHANTMENT_LISTS = new Identifier(AnimeWitchery.MOD_ID,
+            "sync_enchantment_lists");
 
     public static void registerC2SPackets() {
         // Client-to-Server packets (registered on the server)
@@ -28,6 +34,48 @@ public class ModPackets {
                         }
                     });
                 });
+
+        ServerPlayNetworking.registerGlobalReceiver(SELECT_CLASS_ID, (server, player, handler, buf, responseSender) -> {
+            String className = buf.readString();
+            server.execute(() -> {
+                net.willowins.animewitchery.component.IClassComponent classData = net.willowins.animewitchery.mana.ModComponents.CLASS_DATA
+                        .get(player);
+
+                if (net.willowins.animewitchery.component.ClassRegistry.isValidClass(className)) {
+                    // Set Primary
+                    if (classData.getPrimaryClass().isEmpty()) {
+                        classData.setPrimaryClass(className);
+                    }
+                    // Set Secondary (Multiclass)
+                    else if (classData.getLevel() >= 100 && !classData.hasSecondaryClass()
+                            && !classData.getPrimaryClass().equals(className)) {
+                        classData.setSecondaryClass(className);
+                    }
+                }
+            });
+        });
+
+        ServerPlayNetworking.registerGlobalReceiver(UNLOCK_SKILL_ID, (server, player, handler, buf, responseSender) -> {
+            String skillId = buf.readString();
+            server.execute(() -> {
+                net.willowins.animewitchery.component.IClassComponent classData = net.willowins.animewitchery.mana.ModComponents.CLASS_DATA
+                        .get(player);
+
+                net.willowins.animewitchery.component.SkillRegistry.SkillDef skill = net.willowins.animewitchery.component.SkillRegistry
+                        .get(skillId);
+
+                if (skill != null && !classData.isSkillUnlocked(skillId)) {
+                    // Check cost
+                    if (classData.getSkillPoints() >= skill.cost) {
+                        // Check parent (if any)
+                        if (skill.parentId == null || classData.isSkillUnlocked(skill.parentId)) {
+                            classData.consumeSkillPoints(skill.cost);
+                            classData.unlockSkill(skillId);
+                        }
+                    }
+                }
+            });
+        });
 
         ServerPlayNetworking.registerGlobalReceiver(REMOVE_SOUL, (server, player, handler, buf, responseSender) -> {
             int index = buf.readInt();
@@ -83,5 +131,34 @@ public class ModPackets {
         ClientPlayNetworking.registerGlobalReceiver(LASER_HIT, LaserHitPacket::receive);
         ClientPlayNetworking.registerGlobalReceiver(OBELISK_SHAKE, ObeliskShake::receive);
         ClientPlayNetworking.registerGlobalReceiver(RAILGUN_BEAM, RailgunBeamPacket::receive);
+        ClientPlayNetworking.registerGlobalReceiver(RESONANT_BEAM_PARTICLE, ResonantBeamParticlePacket::receive);
+
+        ClientPlayNetworking.registerGlobalReceiver(SYNC_ENCHANTMENT_LISTS, (client, handler, buf, responseSender) -> {
+            int syncId = buf.readInt();
+            int count = buf.readInt();
+            java.util.List<net.minecraft.enchantment.EnchantmentLevelEntry> list = com.google.common.collect.Lists
+                    .newArrayList();
+
+            for (int i = 0; i < count; i++) {
+                int enchId = buf.readInt();
+                int maxLevel = buf.readInt();
+                net.minecraft.enchantment.Enchantment enchantment = net.minecraft.registry.Registries.ENCHANTMENT
+                        .get(enchId);
+                if (enchantment != null) {
+                    list.add(new net.minecraft.enchantment.EnchantmentLevelEntry(enchantment, maxLevel));
+                }
+            }
+
+            client.execute(() -> {
+                if (client.player != null
+                        && client.player.currentScreenHandler instanceof net.willowins.animewitchery.screen.AlchemicalEnchanterScreenHandler enchanterHandler
+                        && enchanterHandler.syncId == syncId) {
+                    enchanterHandler.updateClientEnchantmentLists(list);
+                    if (client.currentScreen instanceof net.willowins.animewitchery.screen.AlchemicalEnchanterScreen screen) {
+                        screen.onEnchantmentsUpdated();
+                    }
+                }
+            });
+        });
     }
 }

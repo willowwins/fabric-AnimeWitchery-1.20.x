@@ -1,8 +1,10 @@
-// 1.20.1	2026-01-25T01:45:22.8817524	Anime Witchery/World Gen
+// 1.20.1	2026-02-13T12:45:00.5185132	Anime Witchery/World Gen
 d6fa4c218e5c883ccdd8c1455611ea0257c0f5d9 data\animewitchery\worldgen\placed_feature\end_mod_ore_placed.json
 412224aadd91e011cca939cec0b71f2a040eada4 data\animewitchery\worldgen\placed_feature\nether_mod_ore_placed.json
 1a1b6349332605d82266102aa9d25fe0c62bf642 data\animewitchery\worldgen\configured_feature\nether_mod_ore.json
 228a416b3da443a8d8cef1ccde7fc4c12bf1d108 data\animewitchery\worldgen\configured_feature\silver_ore.json
+08cfc075d5e59d099a1ea1871e991d56f38adb91 data\animewitchery\dimension_type\pocket_type.json
 daa70082e5d9c1b6256a43155097436f15571fb3 data\animewitchery\dimension_type\paradiselostdim_type.json
 2c1b27531c7f5be6185752b560ed4f2c45c0bb85 data\animewitchery\worldgen\placed_feature\silver_ore_placed.json
 ef908e3b7cbf0df88edd1a13c31376aa0e88fdf7 data\animewitchery\worldgen\configured_feature\end_mod_ore.json
+1d3c9f3a813b885001c8df5a44bef36cc3a8aa83 data\animewitchery\worldgen\configured_feature\rosewillow_tree.json

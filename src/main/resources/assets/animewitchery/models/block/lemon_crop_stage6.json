@@ -1,6 +1,0 @@
-{
-  "parent": "minecraft:block/crop",
-  "textures": {
-    "crop": "animewitchery:block/lemon_crop_stage6"
-  }
-}

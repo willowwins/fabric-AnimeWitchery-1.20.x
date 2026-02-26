@@ -17,6 +17,7 @@ public class ModItemGroups {
                     .icon(() -> new ItemStack(ModItems.SILVERSPOOL)).entries((displayContext, entries) -> {
                         entries.add(ModItems.SILVER);
                         entries.add(ModItems.SILVERNUGGET);
+                        entries.add(ModItems.STAR_SHARD);
                         entries.add(ModItems.SILVERSPOOL);
                         entries.add(ModItems.SPOOL);
                         entries.add(ModItems.RAWSILVER);
@@ -34,6 +35,12 @@ public class ModItemGroups {
 
                         entries.add(ModItems.STRAWBERRY_SEEDS);
                         entries.add(ModItems.LEMON_SEEDS);
+                        entries.add(ModItems.ROSEWILLOW_BLOSSOM);
+                        // entries.add(ModBlocks.ROSEWILLOW_VINES_TIP); // Duplicate of
+                        // ModItems.ROSEWILLOW_VINES
+                        entries.add(ModBlocks.ROSEWILLOW_ROOTS);
+                        entries.add(ModBlocks.ROSEWILLOW_BULB);
+                        entries.add(ModItems.ROSEWILLOW_VINES);
 
                         entries.add(ModItems.NEEDLE);
 
@@ -69,7 +76,8 @@ public class ModItemGroups {
                         entries.add(ModItems.RESONANT_HELMET);
                         entries.add(ModItems.RESONANT_CHESTPLATE);
                         entries.add(ModItems.RESONANT_LEGGINGS);
-                        entries.add(ModItems.RESONANT_BOOTS);
+                        entries.add(ModItems.RESONANT_SPARK);
+                        entries.add(ModBlocks.MONSTER_STATUE);
                         entries.add(ModItems.RESONANT_GREATSWORD);
 
                         entries.add(ModItems.METAL_DETECTOR);
@@ -92,11 +100,16 @@ public class ModItemGroups {
                         entries.add(ModBlocks.GUARDIAN_STATUE);
                         entries.add(ModBlocks.PILLAR);
                         entries.add(ModBlocks.DEEPSLATE_SILVER_ORE);
+                        entries.add(ModBlocks.DEEPSLATE_THRESHOLD);
                         entries.add(ModBlocks.ALCHEMY_TABLE);
+                        entries.add(ModBlocks.ALCHEMICAL_ENCHANTER);
+                        entries.add(ModBlocks.GACHA_ALTAR);
                         entries.add(ModBlocks.AUTO_CRAFTER_BLOCK);
                         entries.add(ModBlocks.INTERACTOR);
                         entries.add(ModBlocks.BLOCK_MINER);
                         entries.add(ModBlocks.BLOCK_PLACER);
+                        entries.add(ModBlocks.LANDING_PLATFORM);
+                        entries.add(ModBlocks.ENEMY_LANDING_PLATFORM);
 
                         entries.add(ModBlocks.SILVER_BUTTON);
                         entries.add(ModBlocks.SILVER_PRESSURE_PLATE);
@@ -113,6 +126,9 @@ public class ModItemGroups {
 
                         entries.add(ModBlocks.OBELISK);
                         entries.add(ModBlocks.GRAND_SHULKER_BOX);
+                        entries.add(ModBlocks.PROTECTED_CHEST);
+                        entries.add(ModItems.KEY);
+                        entries.add(ModItems.MASTER_KEY);
 
                         entries.add(ModItems.SILVER_PENDANT);
                         entries.add(ModItems.HEALING_STAFF);
@@ -136,6 +152,11 @@ public class ModItemGroups {
                         entries.add(ModItems.BARRIER_CATALYST);
                         entries.add(ModItems.REPAIR_ESSENCE);
 
+                        entries.add(ModItems.MINOR_SKILL_ORB);
+                        entries.add(ModItems.MAJOR_SKILL_ORB);
+                        entries.add(ModItems.GRAND_SKILL_ORB);
+                        entries.add(ModItems.ASCENDANT_SKILL_ORB);
+
                         entries.add(ModItems.OBELISK_HELMET);
                         entries.add(ModItems.OBELISK_CHESTPLATE);
                         entries.add(ModItems.OBELISK_LEGGINGS);
@@ -145,6 +166,154 @@ public class ModItemGroups {
                         entries.add(ModItems.SOUL_JAR);
                         entries.add(ModItems.SUMMONER_STAFF);
                         entries.add(ModItems.SOUL_SCYTHE);
+                    }).build());
+
+    public static final ItemGroup RPG_CLASSES = Registry.register(Registries.ITEM_GROUP,
+            new Identifier(AnimeWitchery.MOD_ID, "rpg_classes"),
+            FabricItemGroup.builder().displayName(Text.translatable("itemgroup.rpg_classes"))
+                    .icon(() -> new ItemStack(ModItems.ASSASSIN_HOOD)).entries((displayContext, entries) -> {
+                        // Assassin
+                        entries.add(ModItems.ASSASSIN_DAGGER);
+                        entries.add(ModItems.ASSASSIN_HOOD);
+                        entries.add(ModItems.ASSASSIN_CHESTPLATE);
+                        entries.add(ModItems.ASSASSIN_LEGGINGS);
+                        entries.add(ModItems.ASSASSIN_BOOTS);
+
+                        // Butcher
+                        entries.add(ModItems.BUTCHER_KNIFE);
+                        entries.add(ModItems.BUTCHER_HELMET);
+                        entries.add(ModItems.BUTCHER_APRON);
+                        entries.add(ModItems.BUTCHER_LEGGINGS);
+                        entries.add(ModItems.BUTCHER_BOOTS);
+
+                        // Brute
+                        entries.add(ModItems.HEAVY_MACE);
+                        entries.add(ModItems.HEAVY_PLATE_HELMET);
+                        entries.add(ModItems.HEAVY_PLATE_CHESTPLATE);
+                        entries.add(ModItems.HEAVY_PLATE_LEGGINGS);
+                        entries.add(ModItems.HEAVY_PLATE_BOOTS);
+
+                        // Monk
+                        entries.add(ModItems.IRON_SHACKLE);
+                        entries.add(ModItems.MONK_HEAD);
+                        entries.add(ModItems.SPARSE_TUNIC);
+                        entries.add(ModItems.MONK_LEGGINGS);
+                        entries.add(ModItems.MONK_BOOTS);
+
+                        // Healer
+                        entries.add(ModItems.HEALING_STAFF);
+                        entries.add(ModItems.SILVER_HELMET);
+                        entries.add(ModItems.SILVER_CHESTPLATE);
+                        entries.add(ModItems.SILVER_LEGGINGS);
+                        entries.add(ModItems.SILVER_BOOTS);
+
+                        // Sanguine
+                        entries.add(ModItems.BLOODLETTER);
+                        entries.add(ModItems.SANGUINE_HOOD);
+                        entries.add(ModItems.HOODED_CAPE);
+                        entries.add(ModItems.SANGUINE_LEGGINGS);
+                        entries.add(ModItems.SANGUINE_BOOTS);
+
+                        // Druid
+                        entries.add(ModItems.NATURE_STAFF);
+                        entries.add(ModItems.DRUID_HOOD);
+                        entries.add(ModItems.COTTON_GOWN);
+                        entries.add(ModItems.DRUID_LEGGINGS);
+                        entries.add(ModItems.DRUID_BOOTS);
+
+                        // Alchemist
+                        entries.add(ModItems.POTION_FLASK);
+                        entries.add(ModItems.ALCHEMIST_HOOD);
+                        entries.add(ModItems.STAINED_ROBES);
+                        entries.add(ModItems.ALCHEMIST_LEGGINGS);
+                        entries.add(ModItems.ALCHEMIST_BOOTS);
+
+                        // Gunslinger
+                        entries.add(ModItems.BULLET);
+                        entries.add(ModItems.REVOLVER);
+                        entries.add(ModItems.COWBOY_HAT);
+                        entries.add(ModItems.GUNSLINGER_VEST);
+                        entries.add(ModItems.CHAPS);
+                        entries.add(ModItems.GUNSLINGER_BOOTS);
+
+                        // Railgunner
+                        entries.add(ModItems.RAILGUN);
+                        entries.add(ModItems.RAILGUNNER_HELMET);
+                        entries.add(ModItems.RAILGUNNER_CHESTPLATE);
+                        entries.add(ModItems.RAILGUNNER_LEGGINGS);
+                        entries.add(ModItems.RAILGUNNER_BOOTS);
+
+                        // Femboy
+                        entries.add(ModItems.STUFFED_ANIMAL);
+                        entries.add(ModItems.CAT_EARS);
+                        entries.add(ModItems.FEMBOY_HOODIE);
+                        entries.add(ModItems.THIGH_HIGHS);
+                        entries.add(ModItems.PLATFORM_BOOTS);
+
+                        // Gambler
+                        entries.add(ModItems.DECK_OF_CARDS);
+                        entries.add(ModItems.CHIPPED_DICE);
+                        entries.add(ModItems.GAMBLER_VISOR);
+                        entries.add(ModItems.SOILED_JACKET);
+                        entries.add(ModItems.GAMBLER_PANTS);
+                        entries.add(ModItems.GAMBLER_SHOES);
+
+                        // Knight
+                        entries.add(ModItems.LONGSWORD);
+                        entries.add(ModItems.CROWN);
+                        entries.add(ModItems.PLATE_CHESTPLATE);
+                        entries.add(ModItems.PLATE_LEGGINGS);
+                        entries.add(ModItems.PLATE_BOOTS);
+
+                        // Paladin
+                        entries.add(ModItems.GREAT_HAMMER);
+                        entries.add(ModItems.PALADIN_HELMET);
+                        entries.add(ModItems.PALADIN_CHESTPLATE);
+                        entries.add(ModItems.PALADIN_LEGGINGS);
+                        entries.add(ModItems.PALADIN_BOOTS);
+
+                        // Deathbringer
+                        entries.add(ModItems.SCYTHE);
+                        entries.add(ModItems.DEATHBRINGER_HOOD);
+                        entries.add(ModItems.DEATHBRINGER_ROBES);
+                        entries.add(ModItems.DEATHBRINGER_LEGGINGS);
+                        entries.add(ModItems.DEATHBRINGER_BOOTS);
+
+                        // Summoner
+                        entries.add(ModItems.SUMMONER_STAFF);
+                        entries.add(ModItems.SUMMONER_HOOD);
+                        entries.add(ModItems.SUMMONER_ROBES);
+                        entries.add(ModItems.SUMMONER_LEGGINGS);
+                        entries.add(ModItems.SUMMONER_BOOTS);
+
+                        // Mage
+                        entries.add(ModItems.MAGE_STAFF);
+                        entries.add(ModItems.MAGE_HAT);
+                        entries.add(ModItems.MAGE_ROBES);
+                        entries.add(ModItems.MAGE_LEGGINGS);
+                        entries.add(ModItems.MAGE_BOOTS);
+
+                        // Farmer
+                        entries.add(ModItems.FARMING_HOE);
+                        entries.add(ModItems.STRAW_HAT);
+                        entries.add(ModItems.FARMER_OVERALLS);
+                        entries.add(ModItems.FARMER_LEGGINGS);
+                        entries.add(ModItems.FARMER_BOOTS);
+
+                        // Prospector
+                        entries.add(ModItems.PROSPECTOR_SHOVEL);
+                        entries.add(ModItems.DIVINING_ROD);
+                        entries.add(ModItems.PROSPECTOR_HAT);
+                        entries.add(ModItems.PROSPECTOR_TUNIC);
+                        entries.add(ModItems.PROSPECTOR_LEGGINGS);
+                        entries.add(ModItems.PROSPECTOR_BOOTS);
+
+                        // Hoarder
+                        entries.add(ModItems.SWORD_OF_MIDAS);
+                        entries.add(ModItems.HOARDER_HELMET);
+                        entries.add(ModItems.HOARDER_CHESTPLATE);
+                        entries.add(ModItems.HOARDER_LEGGINGS);
+                        entries.add(ModItems.HOARDER_BOOTS);
                     }).build());
 
     public static void registerItemGroups() {

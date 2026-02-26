@@ -20,11 +20,11 @@ public interface ModEnchantments {
     Enchantment LEAD_COATED_PAINT = createEnchantment("lead_coated_paint", new LeadCoatedEnchantment());
     Enchantment EXP_BOOST = createEnchantment("exp_boost", new ExpBoostEnchantment(Enchantment.Rarity.RARE));
     Enchantment CAPTURING = createEnchantment("capturing", new CapturingEnchantment());
-
-
+    Enchantment CHAINSAW_ENCHANT = createEnchantment("chainsaw_enchant", new ChainsawEnchantment());
 
     static void init() {
-        ENCHANTMENTS.keySet().forEach((enchantment) -> Registry.register(Registries.ENCHANTMENT, (Identifier)ENCHANTMENTS.get(enchantment), enchantment));
+        ENCHANTMENTS.keySet().forEach((enchantment) -> Registry.register(Registries.ENCHANTMENT,
+                (Identifier) ENCHANTMENTS.get(enchantment), enchantment));
     }
 
     static <T extends Enchantment> T createEnchantment(String name, T enchantment) {

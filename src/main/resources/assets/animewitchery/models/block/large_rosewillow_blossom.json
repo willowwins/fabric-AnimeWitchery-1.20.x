@@ -1,0 +1,7 @@
+{
+    "parent": "minecraft:block/spore_blossom",
+    "textures": {
+        "flower": "animewitchery:block/rosewillow_blossom",
+        "stem": "animewitchery:block/rosewillow_blossom_base"
+    }
+}

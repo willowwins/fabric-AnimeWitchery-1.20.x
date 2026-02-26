@@ -24,8 +24,7 @@
 		"client": [
 			"net.willowins.animewitchery.AnimeWitcheryClient",
 			"net.willowins.animewitchery.client.input.PlatformKeybindHandler",
-			"net.willowins.animewitchery.client.ManaHudOverlay",
-			"net.willowins.animewitchery.client.render.ObeliskCompassHud"
+			"net.willowins.animewitchery.client.ManaHudOverlay"
 		],
 		"fabric-datagen": [
 			"net.willowins.animewitchery.AnimeWitcheryDataGenerator"
@@ -49,7 +48,9 @@
 	},
 	"custom": {
 		"cardinal-components": [
-			"animewitchery:player_mana"
+			"animewitchery:player_mana",
+			"animewitchery:vanity",
+			"animewitchery:class_data"
 		]
 	}
 }

@@ -16,6 +16,7 @@ import net.willowins.animewitchery.block.ModBlocks;
 import net.willowins.animewitchery.block.custom.LemonCropBlock;
 import net.willowins.animewitchery.block.custom.StrawberryCropBlock;
 import net.willowins.animewitchery.item.ModItems;
+import net.willowins.animewitchery.AnimeWitchery;
 
 public class ModModelProvider extends FabricModelProvider {
         public ModModelProvider(FabricDataOutput output) {
@@ -203,7 +204,7 @@ public class ModModelProvider extends FabricModelProvider {
                 // Special items and catalysts
                 itemModelGenerator.register(ModItems.ALCHEMICAL_CATALYST, Models.GENERATED);
                 itemModelGenerator.register(ModItems.RESONANT_CATALYST, Models.GENERATED);
-                itemModelGenerator.register(ModItems.OBELISK_COMPASS, Models.GENERATED);
+
                 itemModelGenerator.register(ModItems.SILVER_PENDANT, Models.GENERATED);
                 itemModelGenerator.register(ModItems.FIRE_RES_CRYSTAL, Models.GENERATED);
                 itemModelGenerator.register(ModItems.SPEED_CRYSTAL, Models.GENERATED);
@@ -211,10 +212,14 @@ public class ModModelProvider extends FabricModelProvider {
 
                 // Special functional items
                 itemModelGenerator.register(ModItems.METAL_DETECTOR, Models.GENERATED);
-                itemModelGenerator.register(ModItems.WEATHERITEM, Models.GENERATED);
-                itemModelGenerator.register(ModItems.MOD_TOTEM, Models.GENERATED);
-                itemModelGenerator.register(ModItems.DIMENSION_HOPPER, Models.GENERATED);
-                itemModelGenerator.register(ModItems.RESPAWN_BEACON, Models.GENERATED);
+                // itemModelGenerator.register(ModItems.WEATHERITEM, Models.GENERATED);
+                // itemModelGenerator.register(ModItems.MOD_TOTEM, Models.GENERATED);
+                Models.GENERATED.upload(ModelIds.getItemModelId(ModItems.DIMENSION_HOPPER),
+                                TextureMap.layer0(new Identifier(AnimeWitchery.MOD_ID, "item/dfs")),
+                                itemModelGenerator.writer);
+                Models.GENERATED.upload(ModelIds.getItemModelId(ModItems.RESPAWN_BEACON),
+                                TextureMap.layer0(new Identifier(AnimeWitchery.MOD_ID, "item/dfs")),
+                                itemModelGenerator.writer);
                 itemModelGenerator.register(ModItems.DEFIANT_RIFT, Models.GENERATED);
                 itemModelGenerator.register(ModItems.JOB_APPLICATION, Models.GENERATED);
                 itemModelGenerator.register(ModItems.NBT_TOOL, Models.GENERATED);

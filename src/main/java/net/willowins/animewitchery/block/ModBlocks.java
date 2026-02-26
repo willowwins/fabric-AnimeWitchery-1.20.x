@@ -18,7 +18,16 @@ import net.willowins.animewitchery.block.entity.GrandShulkerBoxBlockEntity;
 
 import java.util.Objects;
 
+import net.willowins.animewitchery.fluid.ModFluids;
+import net.willowins.animewitchery.block.custom.StarlightFluidBlock;
+import net.minecraft.block.FluidBlock;
+
 public class ModBlocks {
+        public static final Block STARLIGHT_BLOCK = registerBlockWithoutItem("starlight_block",
+                        new StarlightFluidBlock(ModFluids.STILL_STARLIGHT,
+                                        FabricBlockSettings.copy(Blocks.WATER)
+                                                        .mapColor(net.minecraft.block.MapColor.WATER_BLUE)
+                                                        .luminance((state) -> 15).noCollision()));
 
         /*
          * ----------------------------------------------------------
@@ -34,6 +43,7 @@ public class ModBlocks {
          * ----------------------------------------------------------
          */
         public static Block PROTECTED_CHEST;
+        public static BlockEntityType<net.willowins.animewitchery.block.entity.ProtectedChestBlockEntity> PROTECTED_CHEST_ENTITY;
 
         /*
          * ----------------------------------------------------------
@@ -81,6 +91,12 @@ public class ModBlocks {
 
         public static final Block ALCHEMY_TABLE = registerBlock("alchemy_table",
                         new AlchemyTableBlock(FabricBlockSettings.copyOf(Blocks.STONE).nonOpaque()));
+
+        public static final Block ALCHEMICAL_ENCHANTER = registerBlock("alchemical_enchanter",
+                        new AlchemicalEnchanterBlock(FabricBlockSettings.copyOf(Blocks.ENCHANTING_TABLE).nonOpaque()));
+
+        public static final Block GACHA_ALTAR = registerBlock("gacha_altar",
+                        new GachaAltarBlock(FabricBlockSettings.copyOf(Blocks.STONE).nonOpaque()));
 
         public static final Block PLATE_BLOCK = registerBlock("plate",
                         new PlateBlock(FabricBlockSettings.copyOf(SILVER_BLOCK).nonOpaque()));
@@ -152,6 +168,9 @@ public class ModBlocks {
                         new ExperienceDroppingBlock(FabricBlockSettings.copyOf(Blocks.STONE).strength(1.5f),
                                         UniformIntProvider.create(5, 7)));
 
+        public static final Block SHIMMERING_FARMLAND = registerBlock("shimmering_farmland",
+                        new ShimmeringFarmlandBlock(FabricBlockSettings.copyOf(Blocks.FARMLAND).luminance(state -> 7)));
+
         public static final Block CHARCOAL_BLOCK = registerBlock("charcoal_block",
                         new Block(FabricBlockSettings.copyOf(Blocks.COAL_BLOCK)));
 
@@ -175,7 +194,8 @@ public class ModBlocks {
                                         FabricBlockSettings.copyOf(Blocks.STONE).strength(2.0f)));
 
         public static final Block TRANSMUTATION_PYRE_BLOCK = registerBlock("transmutation_pyre_block",
-                        new TransmutationPyreBlock(FabricBlockSettings.create().strength(2.0f).nonOpaque()));
+                        new TransmutationPyreBlock(FabricBlockSettings.create().strength(2.0f).nonOpaque()
+                                        .luminance(state -> 10)));
 
         public static final Block CAUTION_BLOCK = registerBlock("caution_block",
                         new Block(FabricBlockSettings.create().strength(2.0f)));
@@ -215,6 +235,13 @@ public class ModBlocks {
                                         FabricBlockSettings.copyOf(Blocks.NETHERITE_BLOCK)));
         public static final Block NETHERITE_SLAB = registerBlock("netherite_slab",
                         new SlabBlock(FabricBlockSettings.copyOf(Blocks.NETHERITE_BLOCK)));
+
+        // Deepslate Threshold
+        public static final Block MONSTER_STATUE = registerBlockWithoutItem("monster_statue",
+                        new MonsterStatueBlock(FabricBlockSettings.copyOf(Blocks.STONE).nonOpaque()));
+
+        public static final Block DEEPSLATE_THRESHOLD = registerBlock("deepslate_threshold",
+                        new DeepslateThresholdBlock(FabricBlockSettings.copyOf(Blocks.DEEPSLATE)));
 
         // Concrete Stairs and Slabs
         public static final Block WHITE_CONCRETE_STAIRS = registerBlock("white_concrete_stairs",
@@ -313,6 +340,55 @@ public class ModBlocks {
         public static final Block BLACK_CONCRETE_SLAB = registerBlock("black_concrete_slab",
                         new SlabBlock(FabricBlockSettings.copyOf(Blocks.BLACK_CONCRETE)));
 
+        // Rosewillow Wood Set
+        public static final Block ROSEWILLOW_LOG = registerBlock("rosewillow_log",
+                        new net.minecraft.block.PillarBlock(FabricBlockSettings.copyOf(Blocks.OAK_LOG).strength(2.0f)));
+
+        public static final Block ROSEWILLOW_LOG_BLOOMING = registerBlock("rosewillow_log_blooming",
+                        new net.minecraft.block.PillarBlock(FabricBlockSettings.copyOf(Blocks.OAK_LOG).strength(2.0f)));
+
+        public static final Block ROSEWILLOW_SAPLING = registerBlock("rosewillow_sapling",
+                        new RosewillowSaplingBlock(
+                                        new net.willowins.animewitchery.world.gen.RosewillowSaplingGenerator(),
+                                        FabricBlockSettings.copyOf(Blocks.OAK_SAPLING)));
+
+        public static final Block ROSEWILLOW_PLANKS = registerBlock("rosewillow_planks",
+                        new Block(FabricBlockSettings.copyOf(Blocks.OAK_PLANKS).strength(2.0f)));
+
+        public static final Block ROSEWILLOW_STAIRS = registerBlock("rosewillow_stairs",
+                        new RosewillowStairsBlock(ROSEWILLOW_PLANKS.getDefaultState(),
+                                        FabricBlockSettings.copyOf(Blocks.OAK_STAIRS)));
+
+        public static final Block ROSEWILLOW_SLAB = registerBlock("rosewillow_slab",
+                        new RosewillowSlabBlock(FabricBlockSettings.copyOf(Blocks.OAK_SLAB)));
+
+        public static final Block ROSEWILLOW_FENCE = registerBlock("rosewillow_fence",
+                        new RosewillowFenceBlock(FabricBlockSettings.copyOf(Blocks.OAK_FENCE)));
+
+        public static final Block ROSEWILLOW_FENCE_GATE = registerBlock("rosewillow_fence_gate",
+                        new RosewillowFenceGateBlock(FabricBlockSettings.copyOf(Blocks.OAK_FENCE_GATE), WoodType.OAK));
+
+        public static final Block LARGE_ROSEWILLOW_BLOSSOM = registerBlock("large_rosewillow_blossom",
+                        new LargeRosewillowBlossomBlock(FabricBlockSettings.copyOf(Blocks.SPORE_BLOSSOM)));
+
+        public static final Block ROSEWILLOW_LEAVES = registerBlock("rosewillow_leaves",
+                        new LeavesBlock(FabricBlockSettings.copyOf(Blocks.OAK_LEAVES)));
+
+        public static final Block ROSEWILLOW_VINES = Registry.register(Registries.BLOCK,
+                        new Identifier(AnimeWitchery.MOD_ID, "rosewillow_vines"),
+                        new RoseWillowVineBodyBlock(FabricBlockSettings.copyOf(Blocks.CAVE_VINES_PLANT)));
+
+        public static final Block ROSEWILLOW_VINES_TIP = Registry.register(Registries.BLOCK,
+                        new Identifier(AnimeWitchery.MOD_ID, "rosewillow_vines_tip"),
+                        new RoseWillowVineHeadBlock(FabricBlockSettings.copyOf(Blocks.CAVE_VINES)));
+
+        public static final Block ROSEWILLOW_ROOTS = registerBlock("rosewillow_roots",
+                        new RosewillowRootsBlock(FabricBlockSettings.copyOf(Blocks.ROOTED_DIRT).ticksRandomly()));
+
+        public static final Block ROSEWILLOW_BULB = registerBlock("rosewillow_bulb",
+                        new RosewillowBulbBlock(FabricBlockSettings.copyOf(Blocks.SHROOMLIGHT).ticksRandomly()
+                                        .luminance(10)));
+
         /*
          * ----------------------------------------------------------
          * 🧩 REGISTRATION LOGIC
@@ -345,7 +421,7 @@ public class ModBlocks {
 
                 // 🔒 Create & register Protected Chest
                 PROTECTED_CHEST = new ProtectedChestBlock(
-                                FabricBlockSettings.copyOf(Blocks.CHEST));
+                                FabricBlockSettings.copyOf(Blocks.IRON_BLOCK).strength(-1.0f, 3600000.0f));
 
                 // Register Protected Chest
                 Registry.register(Registries.BLOCK, new Identifier(AnimeWitchery.MOD_ID, "protected_chest"),
@@ -355,10 +431,15 @@ public class ModBlocks {
                 Registry.register(Registries.ITEM, new Identifier(AnimeWitchery.MOD_ID, "protected_chest"),
                                 new BlockItem(PROTECTED_CHEST, new FabricItemSettings()));
 
-                // Note: Protected Chest uses vanilla TrappedChestBlockEntity, no custom block
-                // entity type needed
-
                 AnimeWitchery.LOGGER.info("✅ Registered Protected Chest successfully.");
+
+                // Register Protected Chest Block Entity
+                PROTECTED_CHEST_ENTITY = Registry.register(
+                                Registries.BLOCK_ENTITY_TYPE,
+                                new Identifier(AnimeWitchery.MOD_ID, "protected_chest_entity"),
+                                FabricBlockEntityTypeBuilder.create(
+                                                net.willowins.animewitchery.block.entity.ProtectedChestBlockEntity::new,
+                                                PROTECTED_CHEST).build());
         }
 
         /*
@@ -366,6 +447,13 @@ public class ModBlocks {
          * ⚙️ HELPERS
          * ----------------------------------------------------------
          */
+        public static final Block LANDING_PLATFORM = registerBlock("landing_platform",
+                        new net.willowins.animewitchery.block.custom.LandingPlatformBlock(
+                                        FabricBlockSettings.copyOf(Blocks.BEDROCK)));
+        public static final Block ENEMY_LANDING_PLATFORM = registerBlock("enemy_landing_platform",
+                        new net.willowins.animewitchery.block.custom.EnemyLandingPlatformBlock(
+                                        FabricBlockSettings.copyOf(Blocks.BEDROCK)));
+
         private static Block registerBlock(String name, Block block) {
                 if (!Objects.equals(name, "float_block")) {
                         registerBlockItem(name, block);
@@ -378,6 +466,20 @@ public class ModBlocks {
                 return Registry.register(Registries.ITEM,
                                 new Identifier(AnimeWitchery.MOD_ID, name),
                                 new BlockItem(block, new FabricItemSettings()));
+        }
+
+        private static Block registerBlockWithoutItem(String name, Block block) {
+                return Registry.register(Registries.BLOCK,
+                                new Identifier(AnimeWitchery.MOD_ID, name), block);
+        }
+
+        // Static initializer to register custom block items
+        static {
+                // Monster Statue with tooltip
+                Registry.register(Registries.ITEM,
+                                new Identifier(AnimeWitchery.MOD_ID, "monster_statue"),
+                                new net.willowins.animewitchery.item.custom.MonsterStatueBlockItem(MONSTER_STATUE,
+                                                new FabricItemSettings()));
         }
 
         public static void registerModBlocks() {

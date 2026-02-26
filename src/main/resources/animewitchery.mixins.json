@@ -28,10 +28,10 @@
     "ParadiseLostMixin",
     "EntityDeathMixin",
     "CreativeDefiantRiftMixin",
-    "PortalTeleportMixin",
-    "GreatswordBlockingMixin",
     "GreatswordSweepingMixin",
     "GreatswordWardenBeamMixin",
+    "ResonantShieldWardenMixin",
+    "ResonantShieldDisableMixin",
     "PiglinGoldTrimMixin",
     "CreeperBlockDamageMixin",
     "VillagerMobGriefingMixin",
@@ -40,10 +40,24 @@
     "FluidBlockMixin",
     "MobEntityMixin",
     "GlobalTotemMixin",
-    "TorchflowerLightMixin"
+    "TorchflowerLightMixin",
+    "WolfFollowMixin",
+    "IronGolemFollowMixin",
+    "PacifismMixin",
+    "ButcherLootingLivingMixin",
+    "ButcherLootingEnchantmentMixin",
+    "BrewingStandFuelMixin",
+    "BrewingStandFuelSlotMixin",
+    "common.PlayerScreenHandlerMixin",
+    "BrewingStandBlockEntityMixin",
+    "PotionSlotMixin",
+    "LodestoneBlockMixin",
+    "FarmlandBlockMixin",
+    "entity.StarlightItemEntityMixin"
   ],
   "client": [
     "PlayerRendererMixin",
+    "LivingEntityRendererAccessor",
     "ItemRendererAccessor",
     "ItemRendererMixin",
     "ModelLoaderMixin",
@@ -55,7 +69,10 @@
     "HideOffhandMixin",
     "GreatswordRenderMixin",
     "client.ParadiseLostSkyMixin",
-    "client.ParadiseLostFogMixin"
+    "client.ParadiseLostFogMixin",
+    "client.VanityArmorMixin",
+    "client.VanityLivingEntityMixin",
+    "ResonantEyeGlowMixin"
   ],
   "injectors": {
     "defaultRequire": 1

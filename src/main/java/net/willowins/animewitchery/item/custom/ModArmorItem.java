@@ -27,7 +27,7 @@ public class ModArmorItem extends ArmorItem {
                     new StatusEffectInstance(StatusEffects.SATURATION, 200, 0, false, false, false))
             .put(ModArmorMaterials.SILVER, new StatusEffectInstance(StatusEffects.GLOWING, 200, 0, false, false, false))
             .put(ModArmorMaterials.SILVER,
-                    new StatusEffectInstance(StatusEffects.WEAKNESS, 200, 255, false, false, false))
+                    new StatusEffectInstance(ModEffect.PACIFISM, 200, 0, false, false, false))
 
             // Railgunner
             .put(ModArmorMaterials.RAILGUNNER,

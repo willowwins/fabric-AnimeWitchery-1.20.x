@@ -10,26 +10,33 @@ import net.minecraft.util.Identifier;
 import net.willowins.animewitchery.AnimeWitchery;
 
 public class ModEffect {
-    public static final StatusEffect BOUND = registerStatusEffect("bound",
-            new BoundEffect(StatusEffectCategory.BENEFICIAL,0x000099).addAttributeModifier(EntityAttributes.GENERIC_MOVEMENT_SPEED,
-                    "7107DE5E-7CE8-4030-940E-514C1F160890", (double)-5.0F, EntityAttributeModifier.Operation.MULTIPLY_TOTAL));
+        public static final StatusEffect BOUND = registerStatusEffect("bound",
+                        new BoundEffect(StatusEffectCategory.BENEFICIAL, 0x000099).addAttributeModifier(
+                                        EntityAttributes.GENERIC_MOVEMENT_SPEED,
+                                        "7107DE5E-7CE8-4030-940E-514C1F160890", (double) -5.0F,
+                                        EntityAttributeModifier.Operation.MULTIPLY_TOTAL));
 
-    public static final StatusEffect MARKED = registerStatusEffect("marked",
-            new MarkedEffect(StatusEffectCategory.NEUTRAL,0x672c12));
+        public static final StatusEffect MARKED = registerStatusEffect("marked",
+                        new MarkedEffect(StatusEffectCategory.NEUTRAL, 0x672c12));
 
-    public static final StatusEffect VOID_BOUND = registerStatusEffect("void_bound",
-            new VoidBoundEffect());
+        public static final StatusEffect VOID_BOUND = registerStatusEffect("void_bound",
+                        new VoidBoundEffect());
 
-    public static final StatusEffect KAMIKAZE_RITUAL = registerStatusEffect("kamikaze_ritual",
-            new KamikazeRitualEffect(StatusEffectCategory.NEUTRAL, 0x8B0000));
+        public static final StatusEffect KAMIKAZE_RITUAL = registerStatusEffect("kamikaze_ritual",
+                        new KamikazeRitualEffect(StatusEffectCategory.NEUTRAL, 0x8B0000));
 
-    public static final StatusEffect MANA_REGEN = registerStatusEffect("mana_regen",
-            new ManaRegenEffect(StatusEffectCategory.BENEFICIAL, 0x3B9EFF));
+        public static final StatusEffect MANA_REGEN = registerStatusEffect("mana_regen",
+                        new ManaRegenEffect(StatusEffectCategory.BENEFICIAL, 0x3B9EFF));
 
-    public static StatusEffect registerStatusEffect(String name, StatusEffect statusEffect){
-        return Registry.register(Registries.STATUS_EFFECT,new Identifier(AnimeWitchery.MOD_ID, name), statusEffect);
-    }
-    public static void registerEffects(){
-        AnimeWitchery.LOGGER.info("Registering Mod Effects For " + AnimeWitchery.MOD_ID);
-    }
+        public static final StatusEffect PACIFISM = registerStatusEffect("pacifism",
+                        new PacifismStatusEffect(StatusEffectCategory.BENEFICIAL, 0xFFFFFF));
+
+        public static StatusEffect registerStatusEffect(String name, StatusEffect statusEffect) {
+                return Registry.register(Registries.STATUS_EFFECT, new Identifier(AnimeWitchery.MOD_ID, name),
+                                statusEffect);
+        }
+
+        public static void registerEffects() {
+                AnimeWitchery.LOGGER.info("Registering Mod Effects For " + AnimeWitchery.MOD_ID);
+        }
 }

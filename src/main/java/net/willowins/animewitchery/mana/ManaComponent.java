@@ -23,8 +23,8 @@ public class ManaComponent implements IManaComponent, AutoSyncedComponent {
 
     @Override
     public int getMaxMana() {
-        int[] totalMax = {baseMaxMana}; // Use array to allow modification in lambda
-        
+        int[] totalMax = { baseMaxMana }; // Use array to allow modification in lambda
+
         // Check for Latent Mana Pendant in trinket slots
         if (TrinketsApi.getTrinketComponent(player).isPresent()) {
             var trinketComponent = TrinketsApi.getTrinketComponent(player).get();
@@ -35,8 +35,8 @@ public class ManaComponent implements IManaComponent, AutoSyncedComponent {
                 }
             });
         }
-        
-        return totalMax[0];
+
+        return totalMax[0] + ModComponents.CLASS_DATA.get(player).getManaBonus();
     }
 
     @Override

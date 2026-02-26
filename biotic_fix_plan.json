@@ -1,0 +1,14 @@
+{
+    "Goal": "Ensure full biotic coverage (Trees/Snow) on the ground floor, bypassing sky-access limitations.",
+    "Issue": "Uniform height probes (Y -64 to 150) with 32-step scans have a low success rate (~15%), resulting in bare ground.",
+    "Solution": "Stacked Constant Probes. Create multiple placement features that look down from Y=150, 118, 86, and 54.",
+    "Changes": {
+        "dimension": "Enforce Paradise Lost as the single fixed biome (Already done).",
+        "features": [
+            "Update spruce_ground_placed to use stacked probes.",
+            "Update mega_spruce_ground_placed to use stacked probes.",
+            "Update universal_snow_ground_placed to use stacked probes."
+        ],
+        "gen_router": "Keep clean grass/dirt rules for universal placement."
+    }
+}

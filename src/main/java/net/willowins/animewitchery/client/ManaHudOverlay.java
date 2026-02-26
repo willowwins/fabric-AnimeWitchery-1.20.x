@@ -214,7 +214,12 @@ public class ManaHudOverlay implements ClientModInitializer {
             if (entity instanceof net.minecraft.entity.ItemEntity)
                 continue; // Skip dropped items
 
-            // Check if entity is marked as an attacker (shows regardless of range)
+            if (entity instanceof net.minecraft.entity.ItemEntity)
+                continue; // Skip dropped items
+            if (entity instanceof net.minecraft.entity.decoration.ItemFrameEntity)
+                continue; // Skip item frames
+            if (entity instanceof net.minecraft.entity.decoration.ArmorStandEntity)
+                continue; // Skip armor stands
             boolean isMarkedAttacker = net.willowins.animewitchery.client.AttackerTracker.isMarked(entity.getUuid(),
                     currentTime);
 

@@ -1,4 +1,4 @@
-				plugins {
+plugins {
 	id 'fabric-loom' version '1.10-SNAPSHOT'
 	id 'maven-publish'
 }
@@ -6,6 +6,16 @@
 version = project.mod_version
 group = project.maven_group
 archivesBaseName = project.archives_base_name
+
+sourceSets {
+	main {
+		resources {
+			srcDirs += [
+				'src/main/generated'
+			]
+		}
+	}
+}
 
 repositories {
 	maven { url = 'https://maven.fabricmc.net/' } // Fabric Loader and Yarn
@@ -26,7 +36,7 @@ repositories {
 	maven { url = 'https://api.modrinth.com/maven' }
 	maven { url = 'https://maven.theillusivec4.top/' }
 	maven { url = 'https://maven.jamieswhiteshirt.com/libs-release' }
-	maven { url = 'https://maven.blamejared.com' }
+	maven { url = 'https://maven.blamejared.com' } // JEI
 	maven { url = 'https://maven.shedaniel.me/' }
 	maven { url = 'https://cursemaven.com' }
 }
@@ -62,7 +72,6 @@ dependencies {
 	implementation 'org.anarres:jcpp:1.4.14' // Fix for Iris NoClassDefFoundError
 	implementation 'io.github.douira:glsl-transformer:2.0.0-pre13' // Fix for Iris NoClassDefFoundError
 	// modImplementation "maven.modrinth:jade:11.8.0" // Removed at user request (Not working)
-
 
 }
 

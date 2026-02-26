@@ -13,6 +13,7 @@ import net.willowins.animewitchery.block.ModBlocks;
 import net.willowins.animewitchery.block.entity.ObeliskBlockEntity;
 import net.willowins.animewitchery.block.entity.ActiveObeliskBlockEntity;
 import net.willowins.animewitchery.block.entity.GuardianStatueBlockEntity;
+import net.willowins.animewitchery.block.entity.AlchemicalEnchanterBlockEntity;
 
 import static net.willowins.animewitchery.AnimeWitchery.MOD_ID;
 
@@ -132,11 +133,37 @@ public class ModBlockEntities {
                         FabricBlockEntityTypeBuilder.create(ServerButtonBlockEntity::new, ModBlocks.SERVER_BUTTON)
                                         .build(null));
 
+        public static final BlockEntityType<DeepslateThresholdBlockEntity> DEEPSLATE_THRESHOLD_ENTITY = Registry
+                        .register(
+                                        Registries.BLOCK_ENTITY_TYPE,
+                                        new Identifier(AnimeWitchery.MOD_ID, "deepslate_threshold_be"),
+                                        FabricBlockEntityTypeBuilder
+                                                        .create(DeepslateThresholdBlockEntity::new,
+                                                                        ModBlocks.DEEPSLATE_THRESHOLD)
+                                                        .build(null));
+
+        public static final BlockEntityType<net.willowins.animewitchery.entity.custom.MonsterStatueBlockEntity> MONSTER_STATUE_BLOCK_ENTITY = Registry
+                        .register(Registries.BLOCK_ENTITY_TYPE, new Identifier(MOD_ID, "monster_statue_be"),
+                                        FabricBlockEntityTypeBuilder.create(
+                                                        net.willowins.animewitchery.entity.custom.MonsterStatueBlockEntity::new,
+                                                        ModBlocks.MONSTER_STATUE).build(null));
+
+        public static final BlockEntityType<net.willowins.animewitchery.entity.custom.SoundBlockEntity> SOUND_BLOCK_ENTITY = Registry
+                        .register(Registries.BLOCK_ENTITY_TYPE, new Identifier(MOD_ID, "sound_block_be"),
+                                        FabricBlockEntityTypeBuilder.create(
+                                                        net.willowins.animewitchery.entity.custom.SoundBlockEntity::new,
+                                                        ModBlocks.SOUND_BLOCK).build(null));
+
+        public static final BlockEntityType<AlchemicalEnchanterBlockEntity> ALCHEMICAL_ENCHANTER_BLOCK_ENTITY = Registry
+                        .register(Registries.BLOCK_ENTITY_TYPE, new Identifier(MOD_ID, "alchemical_enchanter_be"),
+                                        FabricBlockEntityTypeBuilder.create(AlchemicalEnchanterBlockEntity::new,
+                                                        ModBlocks.ALCHEMICAL_ENCHANTER).build(null));
+
         public static void registerBlockEntities() {
                 TRANSMUTATION_PYRE_BLOCK_ENTITY = Registry.register(Registries.BLOCK_ENTITY_TYPE,
                                 new Identifier(AnimeWitchery.MOD_ID, "transmutation_pyre_be"),
                                 FabricBlockEntityTypeBuilder.create(TransmutationPyreBlockEntity::new,
                                                 ModBlocks.TRANSMUTATION_PYRE_BLOCK).build());
-                AnimeWitchery.LOGGER.info("Registering Block Entities For {}", MOD_ID);
+                AnimeWitchery.LOGGER.info("Registering Block Entities for " + AnimeWitchery.MOD_ID);
         }
 }

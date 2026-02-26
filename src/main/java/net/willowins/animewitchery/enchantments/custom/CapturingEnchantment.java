@@ -7,7 +7,7 @@ import net.minecraft.item.ItemStack;
 
 public class CapturingEnchantment extends Enchantment {
     public CapturingEnchantment() {
-        super(Rarity.VERY_RARE, EnchantmentTarget.WEAPON, new EquipmentSlot[]{EquipmentSlot.MAINHAND});
+        super(Rarity.VERY_RARE, EnchantmentTarget.WEAPON, new EquipmentSlot[] { EquipmentSlot.MAINHAND });
     }
 
     @Override
@@ -22,12 +22,6 @@ public class CapturingEnchantment extends Enchantment {
 
     @Override
     public boolean isAcceptableItem(ItemStack stack) {
-        // Can be applied to any weapon
-        return super.isAcceptableItem(stack);
+        return stack.isOf(net.willowins.animewitchery.item.ModItems.SOUL_SCYTHE);
     }
 }
-
-
-
-
-

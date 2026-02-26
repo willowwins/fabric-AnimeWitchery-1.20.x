@@ -4,15 +4,14 @@
     {
       "item": "minecraft:totem_of_undying"
     },
-    
     {
-        "item": "animewitchery:resonant_catalyst"
+      "item": "animewitchery:resonant_catalyst"
     },
     {
       "item": "animewitchery:silver_template"
     },
     {
-        "item": "animewitchery:silveringot"
+      "item": "animewitchery:silveringot"
     }
   ],
   "result": {
@@ -22,4 +21,3 @@
   "xp_cost": 50,
   "processing_time": 1000
 }
-

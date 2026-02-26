@@ -63,6 +63,14 @@ public class RailgunItem extends Item implements GeoItem {
     public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
         ItemStack itemStack = user.getStackInHand(hand);
 
+        // Check for Railgunner Armor
+        if (!isWearingRailgunnerArmor(user)) {
+            if (!world.isClient) {
+                user.sendMessage(Text.literal("🛑 Railgun requires full Railgunner Armor to operate."), true);
+            }
+            return TypedActionResult.fail(itemStack);
+        }
+
         // Already charged → fire
         if (isCharged(itemStack)) {
             if (!world.isClient) {
@@ -85,6 +93,11 @@ public class RailgunItem extends Item implements GeoItem {
     public void onStoppedUsing(ItemStack stack, World world, LivingEntity user, int remainingUseTicks) {
         if (!(user instanceof PlayerEntity player))
             return;
+
+        // Check armor again (prevent swapping during charge)
+        if (!isWearingRailgunnerArmor(player)) {
+            return;
+        }
 
         // Stop charge sound
         for (PlayerEntity p : world.getPlayers()) {
@@ -115,6 +128,14 @@ public class RailgunItem extends Item implements GeoItem {
             }
         }
         super.onStoppedUsing(stack, world, user, remainingUseTicks);
+    }
+
+    private boolean isWearingRailgunnerArmor(PlayerEntity player) {
+        return player.getEquippedStack(net.minecraft.entity.EquipmentSlot.HEAD).isOf(ModItems.RAILGUNNER_HELMET) &&
+                player.getEquippedStack(net.minecraft.entity.EquipmentSlot.CHEST).isOf(ModItems.RAILGUNNER_CHESTPLATE)
+                &&
+                player.getEquippedStack(net.minecraft.entity.EquipmentSlot.LEGS).isOf(ModItems.RAILGUNNER_LEGGINGS) &&
+                player.getEquippedStack(net.minecraft.entity.EquipmentSlot.FEET).isOf(ModItems.RAILGUNNER_BOOTS);
     }
 
     // === Fire Laser ===

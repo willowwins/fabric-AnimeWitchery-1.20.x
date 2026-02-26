@@ -20,12 +20,9 @@ import net.willowins.animewitchery.particle.ModParticles;
 import java.util.List;
 
 public class ResonantGreatSwordItem extends SwordItem {
-    private static final int MAX_USE_TIME = 72000; // Can block indefinitely
-    private static final float BLOCK_DAMAGE_REDUCTION = 0.5f; // 50% damage reduction when blocking
-    private static final float CHARGE_GAIN_PER_DAMAGE = 0.1f; // Gain 0.1 charge per damage point blocked
-    private static final float CHARGE_LOSS_PER_ATTACK = 2.0f; // Lose 2 charge per attack (regardless of damage)
-    private static final float MAX_CHARGE = 20.0f; // Max charge value
-    private static final float DAMAGE_MULTIPLIER = 2.0f; // Bonus damage = charge * multiplier
+    private static final int MANA_COST_PER_HIT = 500; // Mana consumed per powered hit
+    private static final float DAMAGE_MULTIPLIER = 0.05f; // Bonus damage = total_mana * multiplier
+    private static final float MAX_BONUS_DAMAGE = 20.0f; // Cap bonus damage
 
     public ResonantGreatSwordItem(ToolMaterial toolMaterial, int attackDamage, float attackSpeed, Settings settings) {
         super(toolMaterial, attackDamage, attackSpeed, settings);
@@ -33,123 +30,76 @@ public class ResonantGreatSwordItem extends SwordItem {
 
     @Override
     public UseAction getUseAction(ItemStack stack) {
-        return UseAction.BLOCK;
-    }
-
-    @Override
-    public int getMaxUseTime(ItemStack stack) {
-        return MAX_USE_TIME;
+        return UseAction.NONE;
     }
 
     @Override
     public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
-        ItemStack stack = user.getStackInHand(hand);
-        
-        // Always start blocking/using
-        user.setCurrentHand(hand);
-        return TypedActionResult.consume(stack);
+        return TypedActionResult.pass(user.getStackInHand(hand));
     }
 
     @Override
     public boolean postHit(ItemStack stack, LivingEntity target, LivingEntity attacker) {
-        // Get current charge
-        float charge = stack.getOrCreateNbt().getFloat("charge");
-        
-        if (charge > 0 && attacker instanceof PlayerEntity player) {
-            // Calculate bonus damage based on current charge (charge * multiplier)
-            float bonusDamage = charge * DAMAGE_MULTIPLIER;
-            
-            // Deal bonus damage
-            target.damage(target.getWorld().getDamageSources().playerAttack(player), bonusDamage);
-            
-            // Reduce charge by a fixed amount per attack
-            float newCharge = Math.max(0, charge - CHARGE_LOSS_PER_ATTACK);
-            stack.getOrCreateNbt().putFloat("charge", newCharge);
-            
-            // Spawn shockwave particles on hit (more particles for higher charge)
-            if (target.getWorld() instanceof ServerWorld serverWorld) {
-                int particleCount = Math.max(3, Math.round(charge / 4));
-                serverWorld.spawnParticles(ModParticles.LASER_PARTICLE,
-                    target.getX(), target.getY() + target.getHeight() / 2, target.getZ(),
-                    particleCount, 0.3, 0.3, 0.3, 0.1);
+        if (!attacker.getWorld().isClient && attacker instanceof PlayerEntity player) {
+            int currentMana = net.willowins.animewitchery.mana.ManaHelper.getTotalMana(player);
+
+            if (currentMana >= MANA_COST_PER_HIT) {
+                // Calculate bonus damage based on current mana
+                float bonusDamage = Math.min(MAX_BONUS_DAMAGE, currentMana * DAMAGE_MULTIPLIER / 10.0f);
+
+                // Consume mana
+                if (net.willowins.animewitchery.mana.ManaHelper.consumeCostFromPlayerAndCatalysts(player,
+                        MANA_COST_PER_HIT)) {
+                    // Deal bonus damage
+                    target.damage(target.getWorld().getDamageSources().playerAttack(player), bonusDamage);
+
+                    // Update immediate NBT for bar responsiveness
+                    stack.getOrCreateNbt().putInt("current_mana", currentMana - MANA_COST_PER_HIT);
+
+                    // Spawn shockwave particles on hit
+                    if (target.getWorld() instanceof ServerWorld serverWorld) {
+                        serverWorld.spawnParticles(ModParticles.LASER_PARTICLE,
+                                target.getX(), target.getY() + target.getHeight() / 2, target.getZ(),
+                                5, 0.3, 0.3, 0.3, 0.1);
+                    }
+
+                    // Play sound effect
+                    target.getWorld().playSound(null, target.getX(), target.getY(), target.getZ(),
+                            SoundEvents.ENTITY_PLAYER_ATTACK_CRIT, SoundCategory.PLAYERS,
+                            1.0f, 1.2f);
+                }
             }
-            
-            // Play sound effect (pitch based on charge)
-            float pitch = 0.8f + (charge / MAX_CHARGE) * 0.4f;
-            target.getWorld().playSound(null, target.getX(), target.getY(), target.getZ(),
-                SoundEvents.ENTITY_PLAYER_ATTACK_CRIT, SoundCategory.PLAYERS,
-                1.0f, pitch);
         }
-        
+
         return super.postHit(stack, target, attacker);
     }
 
-    // This method will be called by a mixin when the player blocks damage
-    public static void addChargeFromBlockedDamage(ItemStack stack, float damageBlocked) {
-        float currentCharge = stack.getOrCreateNbt().getFloat("charge");
-        float newCharge = Math.min(MAX_CHARGE, currentCharge + (damageBlocked * CHARGE_GAIN_PER_DAMAGE));
-        stack.getOrCreateNbt().putFloat("charge", newCharge);
-    }
+    @Override
+    public void inventoryTick(ItemStack stack, World world, net.minecraft.entity.Entity entity, int slot,
+            boolean selected) {
+        if (!world.isClient && entity instanceof PlayerEntity player && (selected || slot < 9)) {
+            // Regularly sync mana to NBT for the durability bar display
+            int totalCurrent = net.willowins.animewitchery.mana.ManaHelper.getTotalMana(player);
+            int totalMax = net.willowins.animewitchery.mana.ManaHelper.getTotalMaxMana(player);
 
-    public static float getBlockDamageReduction() {
-        return BLOCK_DAMAGE_REDUCTION;
+            stack.getOrCreateNbt().putInt("current_mana", totalCurrent);
+            stack.getOrCreateNbt().putInt("max_mana", totalMax);
+        }
     }
 
     @Override
     public boolean isItemBarVisible(ItemStack stack) {
-        // Always show the bar
-        return true;
-    }
-
-    @Override
-    public int getItemBarStep(ItemStack stack) {
-        // Convert charge (0-100) to bar steps (0-13)
-        float charge = stack.getOrCreateNbt().getFloat("charge");
-        return Math.round((charge / MAX_CHARGE) * 13.0f);
-    }
-
-    @Override
-    public int getItemBarColor(ItemStack stack) {
-        // Purple color (similar to enchanted items)
-        return 0xAA00FF; // Bright purple
-    }
-
-    // Method to get current charge (for mixin access)
-    public static float getCharge(ItemStack stack) {
-        return stack.getOrCreateNbt().getFloat("charge");
-    }
-
-    public static float getMaxCharge() {
-        return MAX_CHARGE;
+        return false;
     }
 
     @Override
     public void appendTooltip(ItemStack stack, World world, List<Text> tooltip, TooltipContext context) {
         super.appendTooltip(stack, world, tooltip, context);
-        
-        float charge = stack.getOrCreateNbt().getFloat("charge");
-        float chargePercent = (charge / MAX_CHARGE) * 100.0f;
-        int displayPercent = Math.round(chargePercent);
-        
-        // Color the charge text based on the charge level
-        Formatting color;
-        if (chargePercent >= 100) {
-            color = Formatting.LIGHT_PURPLE; // Full charge - bright purple
-        } else if (chargePercent >= 75) {
-            color = Formatting.DARK_PURPLE; // High charge - dark purple
-        } else if (chargePercent >= 50) {
-            color = Formatting.BLUE; // Medium charge - blue
-        } else if (chargePercent >= 25) {
-            color = Formatting.DARK_BLUE; // Low charge - dark blue
-        } else {
-            color = Formatting.GRAY; // Very low charge - gray
-        }
-        
-        tooltip.add(Text.literal("Charge: " + displayPercent + "%").formatted(color));
-        
-        if (charge > 0) {
-            float bonusDamage = charge * DAMAGE_MULTIPLIER;
-            tooltip.add(Text.literal("Bonus Damage: +" + String.format("%.1f", bonusDamage)).formatted(Formatting.RED));
-        }
+
+        int current = stack.getOrCreateNbt().getInt("current_mana");
+        int max = stack.getOrCreateNbt().getInt("max_mana");
+
+        tooltip.add(Text.literal("Mana: " + current + " / " + max).formatted(Formatting.AQUA));
+        tooltip.add(Text.literal("Consumes 500 Mana per hit for bonus damage").formatted(Formatting.GRAY));
     }
 }

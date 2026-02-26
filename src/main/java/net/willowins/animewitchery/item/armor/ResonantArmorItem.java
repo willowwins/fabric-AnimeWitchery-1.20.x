@@ -1,14 +1,11 @@
 package net.willowins.animewitchery.item.armor;
 
-import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import net.minecraft.client.render.entity.model.BipedEntityModel;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.decoration.ArmorStandEntity;
-import net.minecraft.item.ArmorItem;
 import net.minecraft.item.ArmorMaterial;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.world.World;
@@ -26,7 +23,6 @@ import software.bernie.geckolib.core.object.PlayState;
 import software.bernie.geckolib.renderer.GeoArmorRenderer;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
-import java.util.Set;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
@@ -128,10 +124,10 @@ public final class ResonantArmorItem extends ModArmorItem implements GeoItem {
             return false;
         }
 
-        // 3. Check for >75% Charge
-        float charge = net.willowins.animewitchery.item.custom.ResonantGreatSwordItem.getCharge(mainHand);
-        float maxCharge = net.willowins.animewitchery.item.custom.ResonantGreatSwordItem.getMaxCharge();
-        return charge >= (maxCharge * 0.75f);
+        // 3. Check for >75% Global Mana (Player + Catalysts)
+        int currentMana = net.willowins.animewitchery.mana.ManaHelper.getTotalMana(player);
+        int maxMana = net.willowins.animewitchery.mana.ManaHelper.getTotalMaxMana(player);
+        return currentMana >= (maxMana * 0.75f);
     }
 
     private void spawnResonantAura(World world, PlayerEntity player) {

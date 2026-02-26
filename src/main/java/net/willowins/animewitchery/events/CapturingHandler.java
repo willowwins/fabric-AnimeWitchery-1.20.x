@@ -30,7 +30,7 @@ public class CapturingHandler {
         int capturingLevel = EnchantmentHelper.getLevel(ModEnchantments.CAPTURING, weapon);
         boolean hasScythe = weapon.getItem() instanceof SoulScytheItem;
 
-        if (capturingLevel <= 0 && !hasScythe)
+        if (!hasScythe)
             return;
 
         // Check gamerule and player permission

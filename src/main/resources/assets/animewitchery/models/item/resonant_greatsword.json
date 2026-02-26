@@ -3,8 +3,8 @@
 	"credit": "Made with Blockbench",
 	"texture_size": [64, 64],
 	"textures": {
-		"0": "animewitchery:item/resonant_longsword",
-		"particle": "animewitchery:item/resonant_longsword"
+		"0": "animewitchery:item/resonant_greatword",
+		"particle": "animewitchery:item/resonant_greatword"
 	},
 	"elements": [
 		{
@@ -1048,14 +1048,19 @@
 		"ground": {
 			"translation": [0, 8, 0]
 		},
+		"gui": {
+			"rotation": [-90, -45, -90],
+			"translation": [0, 0.25, 0]
+		},
 		"head": {
 			"rotation": [90, 45, 90],
 			"translation": [5.5, -15.25, 4],
 			"scale": [2, 2, 2]
 		},
 		"fixed": {
-			"rotation": [-88.23, 44.98, 88.74],
-			"scale": [2, 1, 1]
+			"rotation": [101.92, 88.72, -11.96],
+			"translation": [1.25, 0, -31.75],
+			"scale": [4, 4, 4]
 		},
 		"on_shelf": {
 			"rotation": [-90, -58, -90]

@@ -14,8 +14,18 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.willowins.animewitchery.block.entity.*;
-import net.willowins.animewitchery.screen.*;
 import net.willowins.animewitchery.screen.AlchemyTableScreenHandler;
+import net.willowins.animewitchery.screen.AdvancedSpellbookScreenHandler;
+import net.willowins.animewitchery.screen.AlchemicalEnchanterScreenHandler;
+import net.willowins.animewitchery.screen.AutoCrafterScreenHandler;
+import net.willowins.animewitchery.screen.BlockMinerScreenHandler;
+import net.willowins.animewitchery.screen.BlockPlacerScreenHandler;
+import net.willowins.animewitchery.screen.CosmeticBagScreenHandler;
+import net.willowins.animewitchery.screen.GrandShulkerBoxScreenHandler;
+import net.willowins.animewitchery.screen.GrowthAcceleratorScreenHandler;
+import net.willowins.animewitchery.screen.ItemActionScreenHandler;
+import net.willowins.animewitchery.screen.PlayerUseDispenserScreenHandler;
+import net.willowins.animewitchery.screen.SoulJarScreenHandler;
 import net.minecraft.entity.player.PlayerInventory;
 
 import static net.willowins.animewitchery.AnimeWitchery.MOD_ID;
@@ -31,7 +41,11 @@ public class ModScreenHandlers {
     public static ScreenHandlerType<AlchemyTableScreenHandler> ALCHEMY_TABLE_SCREEN_HANDLER;
     public static ScreenHandlerType<GrandShulkerBoxScreenHandler> GRAND_SHULKER_BOX_SCREEN_HANDLER;
     public static ScreenHandlerType<AdvancedSpellbookScreenHandler> ADVANCED_SPELLBOOK_SCREEN_HANDLER;
+    public static final ScreenHandlerType<CosmeticBagScreenHandler> COSMETIC_BAG_HANDLER = ScreenHandlerRegistry
+            .registerSimple(new Identifier(AnimeWitchery.MOD_ID, "cosmetic_bag"),
+                    CosmeticBagScreenHandler::new);
     public static ScreenHandlerType<SoulJarScreenHandler> SOUL_JAR_SCREEN_HANDLER;
+    public static ScreenHandlerType<AlchemicalEnchanterScreenHandler> ALCHEMICAL_ENCHANTER_SCREEN_HANDLER;
 
     public static void registerAll() {
 
@@ -121,5 +135,9 @@ public class ModScreenHandlers {
         SOUL_JAR_SCREEN_HANDLER = ScreenHandlerRegistry.registerSimple(
                 new Identifier(MOD_ID, "soul_jar"),
                 (syncId, playerInventory) -> new SoulJarScreenHandler(syncId, playerInventory));
+
+        ALCHEMICAL_ENCHANTER_SCREEN_HANDLER = ScreenHandlerRegistry.registerSimple(
+                new Identifier(MOD_ID, "alchemical_enchanter"),
+                AlchemicalEnchanterScreenHandler::new);
     }
 }

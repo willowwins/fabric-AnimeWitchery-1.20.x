@@ -2,6 +2,7 @@ package net.willowins.animewitchery.item.custom;
 
 import dev.emi.trinkets.api.TrinketComponent;
 import dev.emi.trinkets.api.TrinketsApi;
+import net.minecraft.util.Hand;
 import net.minecraft.client.render.item.BuiltinModelItemRenderer;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffectInstance;
@@ -68,9 +69,9 @@ public class HealingStaff extends Item implements GeoItem {
                 // Try to pay the cost using total mana (player + catalysts)
                 if (!tryConsumeFromPlayerAndCatalysts(player, USE_MANA_COST)) {
                     player.sendMessage(
-                            Text.literal("You need " + USE_MANA_COST + " mana (or catalysts) to use the staff").formatted(net.minecraft.util.Formatting.RED),
-                            true
-                    );
+                            Text.literal("You need " + USE_MANA_COST + " mana (or catalysts) to use the staff")
+                                    .formatted(net.minecraft.util.Formatting.RED),
+                            true);
                     return;
                 }
 
@@ -122,8 +123,7 @@ public class HealingStaff extends Item implements GeoItem {
 
         Box box = new Box(
                 pos.getX() - radius, pos.getY() - radius, pos.getZ() - radius,
-                pos.getX() + radius, pos.getY() + radius, pos.getZ() + radius
-        );
+                pos.getX() + radius, pos.getY() + radius, pos.getZ() + radius);
 
         List<PlayerEntity> players = serverWorld.getEntitiesByClass(PlayerEntity.class, box, ent -> true);
         List<HostileEntity> mobs = serverWorld.getEntitiesByClass(HostileEntity.class, box, ent -> true);
@@ -180,7 +180,8 @@ public class HealingStaff extends Item implements GeoItem {
         for (ItemStack stack : player.getInventory().main) {
             if (stack.getItem() instanceof AlchemicalCatalystItem) {
                 int stored = AlchemicalCatalystItem.getStoredMana(stack);
-                if (stored <= 0) continue;
+                if (stored <= 0)
+                    continue;
                 int take = Math.min(stored, remaining);
                 AlchemicalCatalystItem.setStoredMana(stack, stored - take);
                 remaining -= take;
