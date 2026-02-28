@@ -35,14 +35,14 @@ public class ModDimensions {
                                 false, // natural (No day cycle logic)
                                 1.0, // coordinateScale
                                 true, // bedWorks
-                                false, // respawnAnchorWorks
+                                true, // respawnAnchorWorks
                                 -64, // minY
                                 640, // height
                                 640, // logicalHeight
                                 BlockTags.INFINIBURN_OVERWORLD, // infiniburn - allows nether portals
                                 new Identifier(AnimeWitchery.MOD_ID, "paradiselost"), // effectsLocation (Custom Fog)
                                 0.0f, // ambientLight (Set to 0 as requested)
-                                new DimensionType.MonsterSettings(true, false, UniformIntProvider.create(0, 0), 0))); // piglinSafe
+                                new DimensionType.MonsterSettings(true, true, UniformIntProvider.create(0, 0), 0))); // piglinSafe
                                                                                                                       // =
                                                                                                                       // true
         }

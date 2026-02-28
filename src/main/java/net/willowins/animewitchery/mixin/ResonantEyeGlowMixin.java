@@ -14,6 +14,4 @@ public abstract class ResonantEyeGlowMixin extends PlayerEntity {
         super(world, pos, yaw, gameProfile);
     }
 
-    // Particle effect disabled in favor of ResonantEyeFeatureRenderer (Emissive
-    // Pixels)
 }

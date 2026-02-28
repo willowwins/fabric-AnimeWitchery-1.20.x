@@ -1,8 +1,5 @@
 package net.willowins.animewitchery.mixin;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.mob.HostileEntity;
-import net.minecraft.registry.RegistryKey;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.world.World;
@@ -13,7 +10,6 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.function.BooleanSupplier;
 
@@ -48,15 +44,4 @@ public abstract class ParadiseLostMixin {
         return instance.nextInt(bound);
     }
 
-    // 3. No Hostile Mobs
-    // Intercept spawnEntity to block Hostile entities
-    @Inject(method = "spawnEntity", at = @At("HEAD"), cancellable = true)
-    private void preventHostileSpawns(Entity entity, CallbackInfoReturnable<Boolean> cir) {
-        ServerWorld world = (ServerWorld) (Object) this;
-        if (world.getRegistryKey().equals(ModDimensions.PARADISELOSTDIM_LEVEL_KEY)) {
-            if (entity instanceof HostileEntity) {
-                cir.setReturnValue(false);
-            }
-        }
-    }
 }

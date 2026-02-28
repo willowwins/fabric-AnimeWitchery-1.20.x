@@ -19,7 +19,6 @@ import net.willowins.animewitchery.item.custom.*;
 
 import net.willowins.animewitchery.fluid.ModFluids;
 import net.willowins.animewitchery.item.custom.StarlightBucketItem;
-import net.minecraft.item.BucketItem;
 import net.minecraft.item.Items;
 
 public class ModItems {
@@ -76,6 +75,9 @@ public class ModItems {
         public static final Item RESONANT_GREATSWORD = registerItem("resonant_greatsword",
                         new ResonantGreatSwordItem(ModToolMaterial.RESONANT, 7, -2.5f,
                                         new FabricItemSettings().maxCount(1)));
+
+        public static final Item STAR_TEAR = registerItem("star_tear",
+                        new StarTearItem(new FabricItemSettings()));
 
         public static final Item SILVER_SWORD = registerItem("silver_sword",
                         new SwordItem(ModToolMaterial.SILVER, 3, -2.4f, new FabricItemSettings()));

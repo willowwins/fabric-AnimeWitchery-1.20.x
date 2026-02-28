@@ -38,3 +38,17 @@ hs_err_*.log
 replay_*.log
 *.hprof
 *.jfr
+/src/main/resources/assets/animewitchery/textures/block/deepslate_threshold.aseprite
+/src/main/resources/assets/animewitchery/textures/block/gacha_altar.aseprite
+/gen_end.py
+/gen_router.py
+/generate_blockstates.py
+/merge_json.py
+/reconstruct_json.py
+/reconstruct_router.py
+/src/main/resources/assets/animewitchery/textures/item/resonant_spark.aseprite
+/src/main/resources/assets/animewitchery/textures/block/rosewillow_bud.aseprite
+/src/main/resources/assets/animewitchery/textures/block/rosewillow_log_blooming.aseprite
+/sim_end.py
+/sim_terrain.py
+/src/main/resources/assets/animewitchery/textures/item/stardust.aseprite

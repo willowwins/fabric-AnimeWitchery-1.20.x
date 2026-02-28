@@ -157,8 +157,6 @@ public class AnimeWitchery implements ModInitializer {
 
 		ChestplateElytraFlight.register();
 
-		NetherrackTransformHandler.register();
-
 		SpawnerNbtHandler.register();
 
 		net.willowins.animewitchery.events.SoulRecoveryHandler.register();
