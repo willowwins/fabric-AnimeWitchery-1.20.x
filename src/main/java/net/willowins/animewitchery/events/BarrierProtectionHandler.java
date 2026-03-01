@@ -18,10 +18,6 @@ import net.minecraft.world.World;
 import net.willowins.animewitchery.block.ModBlocks;
 import net.willowins.animewitchery.block.entity.BarrierCircleBlockEntity;
 
-/**
- * Prevents unauthorized players from breaking or interacting with blocks inside
- * barriers
- */
 public class BarrierProtectionHandler {
 
     public static void register() {
@@ -31,14 +27,18 @@ public class BarrierProtectionHandler {
         // Prevent block interaction (except barrier circles themselves for allowlist
         // management)
         UseBlockCallback.EVENT.register(BarrierProtectionHandler::onUseBlock);
+
     }
 
     private static boolean onBlockBreak(World world, PlayerEntity player, BlockPos pos, BlockState state,
             BlockEntity blockEntity) {
+
         if (world.isClient || !(player instanceof ServerPlayerEntity serverPlayer)) {
             return true; // Allow on client
-        }
 
+        }
+        if (player.isCreative()) return true; // Creative mode bypasses protection
+        if (player.isSpectator()) return true; // Spectator mode bypasses protection
         // Check if the BLOCK being broken is in a barrier area
         // We check the block's position, not the player's.
         // BarrierCircleBlockEntity.findBarrierAt ignores Y, so this covers Bedrock to
@@ -51,6 +51,7 @@ public class BarrierProtectionHandler {
                     Text.literal("⚠️ This area is protected by a magical barrier.")
                             .formatted(Formatting.RED),
                     true);
+
             return false; // Cancel block break
         }
 
@@ -77,7 +78,7 @@ public class BarrierProtectionHandler {
         if (barrier != null && !barrier.isPlayerAllowedByUuid(serverPlayer.getUuid())) {
             // Player is unauthorized and trying to interact inside a protected barrier
             serverPlayer.sendMessage(
-                    Text.literal("⚠️ This area is protected by a magical barrier.")
+                    Text.literal("This area is protected by a magical barrier.")
                             .formatted(Formatting.RED),
                     true);
             return ActionResult.FAIL; // Cancel interaction

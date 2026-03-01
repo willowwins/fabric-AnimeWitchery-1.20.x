@@ -21,13 +21,13 @@ public class BarrierInteractionHandler {
     public static void register() {
         UseBlockCallback.EVENT.register(BarrierInteractionHandler::onUseBlock);
     }
-    
+
     private static ActionResult onUseBlock(PlayerEntity player, World world, Hand hand, BlockHitResult hitResult) {
         // Only process on server side
+        if(player.isCreative()){return ActionResult.PASS;}
         if (world.isClient || !(player instanceof ServerPlayerEntity serverPlayer)) {
             return ActionResult.PASS;
         }
-        
         BlockPos pos = hitResult.getBlockPos();
         BlockState state = world.getBlockState(pos);
         
@@ -35,9 +35,11 @@ public class BarrierInteractionHandler {
         if (state.isOf(ModBlocks.BARRIER_CIRCLE) || state.isOf(ModBlocks.BARRIER_DISTANCE_GLYPH)) {
             // Find the nearest barrier to check if player is inside one
             BarrierCircleBlockEntity barrier = BarrierCircleBlockEntity.findBarrierAt(world, player.getPos());
-            
+
             if (barrier != null) {
                 // Check if player is unauthorized
+
+
                 if (!barrier.isPlayerAllowedByUuid(serverPlayer.getUuid())) {
                     // Allow the interaction to proceed anyway - don't cancel it
                     // This is handled by returning PASS, which lets the normal block interaction happen

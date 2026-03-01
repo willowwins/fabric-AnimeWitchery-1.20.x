@@ -20,13 +20,13 @@ public class BarrierBlockProtectionHandler {
             
             // Check if this block is inside any active barrier
             BarrierCircleBlockEntity barrier = findActiveBarrierContaining(serverWorld, pos);
-            
+
             if (barrier != null) {
                 // Check if player is authorized
                 if (!barrier.isPlayerAllowedByUuid(player.getUuid())) {
                     // Player is not authorized - prevent breaking
                     if (player instanceof ServerPlayerEntity serverPlayer) {
-                        serverPlayer.sendMessage(Text.literal("§c⛔ This area is protected by a barrier!"), true);
+                        serverPlayer.sendMessage(Text.literal("§c This area is protected by a barrier!"), true);
                     }
                     return false;
                 }
@@ -45,7 +45,7 @@ public class BarrierBlockProtectionHandler {
         
         // Search nearby chunks for barrier circles
         // We need to search a reasonable radius - let's use 128 blocks
-        int searchRadius = 128;
+        int searchRadius = 256;
         int centerX = blockPos.getX();
         int centerZ = blockPos.getZ();
         

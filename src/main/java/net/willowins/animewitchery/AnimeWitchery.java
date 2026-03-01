@@ -223,13 +223,6 @@ public class AnimeWitchery implements ModInitializer {
 
 		ModExplosionManager.init();
 
-		CustomPortalBuilder.beginPortal()
-				.frameBlock(Blocks.REINFORCED_DEEPSLATE)
-				.lightWithItem(ModItems.NEEDLE)
-				.destDimID(new Identifier(AnimeWitchery.MOD_ID, "paradiselostdim"))
-				.returnDim(new Identifier("minecraft", "overworld"), false)
-				.tintColor(0x94ecff)
-				.registerPortal();
 
 		ServerTickEvents.END_SERVER_TICK.register(minecraftServer -> {
 			if (EffigyFountainBlock.active) {
