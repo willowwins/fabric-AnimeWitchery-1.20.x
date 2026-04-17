@@ -307,6 +307,21 @@ public class ModItems {
         public static final Item COPPER_WARHAMMER = registerItem("copper_warhammer", new CopperWarhammerItem(
                         ModToolMaterial.COPPER, 9, -3.2f, new FabricItemSettings().maxCount(1)));
 
+        // Tiered Scythes (axe damage/speed scaling)
+        public static final Item WOODEN_SCYTHE = registerItem("wooden_scythe",
+                        new ScytheItem(net.minecraft.item.ToolMaterials.WOOD, 6.0f, -3.2f, 1, new FabricItemSettings()));
+        public static final Item STONE_SCYTHE = registerItem("stone_scythe",
+                        new ScytheItem(net.minecraft.item.ToolMaterials.STONE, 7.0f, -3.2f, 1, new FabricItemSettings()));
+        public static final Item COPPER_SCYTHE = registerItem("copper_scythe",
+                        new ScytheItem(ModToolMaterial.COPPER, 6.0f, -3.1f, 2, new FabricItemSettings()));
+        public static final Item IRON_SCYTHE = registerItem("iron_scythe",
+                        new ScytheItem(net.minecraft.item.ToolMaterials.IRON, 6.0f, -3.1f, 2, new FabricItemSettings()));
+        public static final Item DIAMOND_SCYTHE = registerItem("diamond_scythe",
+                        new ScytheItem(net.minecraft.item.ToolMaterials.DIAMOND, 5.0f, -3.0f, 3, new FabricItemSettings()));
+        public static final Item NETHERITE_SCYTHE = registerItem("netherite_scythe",
+                        new ScytheItem(net.minecraft.item.ToolMaterials.NETHERITE, 5.0f, -3.0f, 4, new FabricItemSettings().fireproof()));
+
+
         // New alchemy and magic items
         public static final Item MORTAR_AND_PESTLE = registerItem("mortar_and_pestle",
                         new Item(new FabricItemSettings().maxCount(1)));
@@ -534,8 +549,8 @@ public class ModItems {
                         new ArmorItem(ModArmorMaterials.SANGUINE, ArmorItem.Type.BOOTS,
                                         new FabricItemSettings().maxCount(1).rarity(Rarity.RARE)));
 
-        public static final Item SCYTHE = registerItem("scythe",
-                        new ScytheItem(ModToolMaterial.SILVER, 6, -2.5f,
+        public static final Item DEATHBRINGER_SCYTHE = registerItem("deathbringer_scythe",
+                        new ScytheItem(ModToolMaterial.SILVER, 6, -2.5f, 4,
                                         new FabricItemSettings().maxCount(1).rarity(Rarity.RARE)));
         public static final Item DEATHBRINGER_HOOD = registerItem("deathbringer_hood",
                         new DeathbringerRobesItem(ModArmorMaterials.DEATHBRINGER, ArmorItem.Type.HELMET,
@@ -927,7 +942,7 @@ public class ModItems {
                 entries.add(PALADIN_LEGGINGS);
                 entries.add(PALADIN_BOOTS);
 
-                entries.add(SCYTHE);
+                entries.add(DEATHBRINGER_SCYTHE);
                 entries.add(DEATHBRINGER_HOOD);
                 entries.add(DEATHBRINGER_ROBES);
                 entries.add(DEATHBRINGER_LEGGINGS);
@@ -1030,6 +1045,12 @@ public class ModItems {
                 entries.add(SPELLBOOK_PAGE);
                 entries.add(COPPER_WARHAMMER);
                 entries.add(SOUL_SCYTHE);
+                entries.add(WOODEN_SCYTHE);
+                entries.add(STONE_SCYTHE);
+                entries.add(COPPER_SCYTHE);
+                entries.add(IRON_SCYTHE);
+                entries.add(DIAMOND_SCYTHE);
+                entries.add(NETHERITE_SCYTHE);
                 entries.add(SUMMONER_STAFF);
                 entries.add(SOUL_JAR);
 

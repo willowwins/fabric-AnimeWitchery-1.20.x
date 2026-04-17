@@ -28,6 +28,17 @@ public class PlayerEntityMixin {
         PlayerEntity player = (PlayerEntity)(Object)this;
         if (!VoidBoundEffect.canInteractWithWorld(player)) {
             ci.cancel(); // Can't attack in void phase
+            return;
+        }
+    }
+
+    @Inject(method = "damage", at = @At("HEAD"), cancellable = true)
+    private void onDamage(net.minecraft.entity.damage.DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {
+        if (amount != 8.0f && source.getAttacker() instanceof PlayerEntity attacker) {
+            if (attacker.getMainHandStack().getItem() instanceof net.willowins.animewitchery.item.custom.SoulScytheItem) {
+                // Soul Scythe does exactly 8 damage to players
+                cir.setReturnValue(((PlayerEntity) (Object) this).damage(source, 8.0f));
+            }
         }
     }
 

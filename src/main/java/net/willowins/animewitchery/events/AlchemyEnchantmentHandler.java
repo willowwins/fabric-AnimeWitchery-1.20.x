@@ -10,6 +10,7 @@ import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.world.World;
 import net.willowins.animewitchery.block.entity.AlchemyTableBlockEntity;
+import net.willowins.animewitchery.item.custom.ScytheItem;
 
 import java.util.Map;
 
@@ -106,7 +107,7 @@ public class AlchemyEnchantmentHandler {
         } else {
             // Book + Tool combination - check if any enchantment can be applied
             for (Map.Entry<Enchantment, Integer> entry : bookEnchantments.entrySet()) {
-                boolean canApply = entry.getKey().isAcceptableItem(recipientItem);
+                boolean canApply = ScytheItem.isEnchantmentCompatible(recipientItem, entry.getKey());
                 if (canApply) {
                     return true;
                 }
@@ -212,7 +213,7 @@ public class AlchemyEnchantmentHandler {
             // Check if any enchantment from the book can be applied to the tool
             boolean canApply = false;
             for (Map.Entry<Enchantment, Integer> entry : bookEnchantments.entrySet()) {
-                if (entry.getKey().isAcceptableItem(recipientItem)) {
+                if (ScytheItem.isEnchantmentCompatible(recipientItem, entry.getKey())) {
                     canApply = true;
                     break;
                 }
@@ -227,7 +228,7 @@ public class AlchemyEnchantmentHandler {
                 Enchantment ench = entry.getKey();
                 int bookLevel = entry.getValue();
                 
-                if (!ench.isAcceptableItem(recipientItem)) continue;
+                if (!ScytheItem.isEnchantmentCompatible(recipientItem, ench)) continue;
                 
                 // Combine with existing level
                 int existingLevel = toolEnchantments.getOrDefault(ench, 0);
@@ -259,4 +260,3 @@ public class AlchemyEnchantmentHandler {
         return true;
     }
 }
-

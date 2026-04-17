@@ -17,7 +17,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.willowins.animewitchery.block.ModBlocks;
 import net.willowins.animewitchery.block.entity.BarrierCircleBlockEntity;
-
 public class BarrierProtectionHandler {
 
     public static void register() {

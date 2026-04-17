@@ -22,6 +22,7 @@ import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.willowins.animewitchery.networking.ModPackets;
 import net.willowins.animewitchery.screen.AlchemicalEnchanterScreenHandler;
+import net.willowins.animewitchery.item.custom.ScytheItem;
 import net.willowins.animewitchery.util.ImplementedInventory;
 import org.jetbrains.annotations.Nullable;
 
@@ -75,7 +76,7 @@ public class AlchemicalEnchanterBlockEntity extends BlockEntity
         if (!itemStack.isEmpty()) {
             System.out.println("[AnimeWitchery] Generating dynamic enchants for: " + itemStack.getName().getString());
             for (Enchantment enchantment : Registries.ENCHANTMENT) {
-                if (enchantment.isAcceptableItem(itemStack)) {
+                if (isAcceptableEnchanterItem(enchantment, itemStack)) {
                     // Store the max level available for this item
                     availableEnchantments.add(new EnchantmentLevelEntry(enchantment, enchantment.getMaxLevel()));
                 }
@@ -87,6 +88,10 @@ public class AlchemicalEnchanterBlockEntity extends BlockEntity
         // This will be handled by the screen handler itself requesting a sync on open,
         // and then potentially by a block update if the screen handler listens to it.
         // For now, we'll assume the screen handler will request on open.
+    }
+
+    private boolean isAcceptableEnchanterItem(Enchantment enchantment, ItemStack itemStack) {
+        return ScytheItem.isEnchantmentCompatible(itemStack, enchantment);
     }
 
     public void syncToPlayer(PlayerEntity player) {

@@ -166,6 +166,13 @@ public class ModItemGroups {
                         entries.add(ModItems.SOUL_JAR);
                         entries.add(ModItems.SUMMONER_STAFF);
                         entries.add(ModItems.SOUL_SCYTHE);
+
+                        entries.add(ModItems.WOODEN_SCYTHE);
+                        entries.add(ModItems.STONE_SCYTHE);
+                        entries.add(ModItems.COPPER_SCYTHE);
+                        entries.add(ModItems.IRON_SCYTHE);
+                        entries.add(ModItems.DIAMOND_SCYTHE);
+                        entries.add(ModItems.NETHERITE_SCYTHE);
                     }).build());
 
     public static final ItemGroup RPG_CLASSES = Registry.register(Registries.ITEM_GROUP,
@@ -273,7 +280,7 @@ public class ModItemGroups {
                         entries.add(ModItems.PALADIN_BOOTS);
 
                         // Deathbringer
-                        entries.add(ModItems.SCYTHE);
+                        entries.add(ModItems.DEATHBRINGER_SCYTHE);
                         entries.add(ModItems.DEATHBRINGER_HOOD);
                         entries.add(ModItems.DEATHBRINGER_ROBES);
                         entries.add(ModItems.DEATHBRINGER_LEGGINGS);

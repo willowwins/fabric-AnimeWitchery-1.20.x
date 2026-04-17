@@ -17,7 +17,7 @@ import net.willowins.animewitchery.block.ModBlocks;
 @Mixin(FarmlandBlock.class)
 public class FarmlandBlockMixin {
 
-    @Inject(method = "randomTick", at = @At("HEAD"))
+    @Inject(method = "randomTick", at = @At("HEAD"), cancellable = true)
     private void convertToShimmering(BlockState state, ServerWorld world, BlockPos pos,
             net.minecraft.util.math.random.Random random, CallbackInfo ci) {
         if (state.get(FarmlandBlock.MOISTURE) < 7) {

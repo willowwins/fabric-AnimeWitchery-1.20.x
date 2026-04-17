@@ -21,7 +21,7 @@
       "type": "patchouli:text",
       "title": "Repair Charm",
       "text": "$(l)Repair Charm Recipe:$()$(br2)$(violet)Ingredients:$()$(br)• Totem of Undying$(br)• 2x Full Resonant Catalyst$(br)• Silver Template$(br)• Netherite Ingot$(br)• Diamond$(br2)$(gold)Cost: 30 XP, 800 ticks$()$(br2)Automatically repairs equipped items over time!"
-    },
+    }
   ]
 }
 

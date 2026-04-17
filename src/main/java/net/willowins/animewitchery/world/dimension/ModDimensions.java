@@ -61,7 +61,7 @@ public class ModDimensions {
                                 true, // hasSkylight
                                 false, // hasCeiling
                                 false, // ultraWarm
-                                false, // natural (False for fixed time)
+                                true, // natural (Must be true to allow players to trySleep and set spawn)
                                 1.0, // coordinateScale
                                 true, // bedWorks (Allow sleeping/setting spawn)
                                 true, // respawnAnchorWorks
